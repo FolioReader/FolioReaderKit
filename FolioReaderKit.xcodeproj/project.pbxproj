@@ -12,6 +12,7 @@
 		99EF282A1AD588D6007848FF /* FolioReaderKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EF28291AD588D6007848FF /* FolioReaderKitTests.swift */; };
 		99EF28741AD59013007848FF /* FolioReaderKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EF28731AD59013007848FF /* FolioReaderKit.swift */; };
 		99EF28761AD5905A007848FF /* FolioReaderConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EF28751AD5905A007848FF /* FolioReaderConfig.swift */; };
+		99EF28781AD594E1007848FF /* FolioReaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EF28771AD594E1007848FF /* FolioReaderViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +34,7 @@
 		99EF28291AD588D6007848FF /* FolioReaderKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolioReaderKitTests.swift; sourceTree = "<group>"; };
 		99EF28731AD59013007848FF /* FolioReaderKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderKit.swift; sourceTree = "<group>"; };
 		99EF28751AD5905A007848FF /* FolioReaderConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderConfig.swift; sourceTree = "<group>"; };
+		99EF28771AD594E1007848FF /* FolioReaderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 				99EF281C1AD588D6007848FF /* FolioReaderKit.h */,
 				99EF28731AD59013007848FF /* FolioReaderKit.swift */,
 				99EF28751AD5905A007848FF /* FolioReaderConfig.swift */,
+				99EF28771AD594E1007848FF /* FolioReaderViewController.swift */,
 				99EF281A1AD588D6007848FF /* Supporting Files */,
 			);
 			path = FolioReaderKit;
@@ -215,6 +218,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				99EF28781AD594E1007848FF /* FolioReaderViewController.swift in Sources */,
 				99EF28761AD5905A007848FF /* FolioReaderConfig.swift in Sources */,
 				99EF28741AD59013007848FF /* FolioReaderKit.swift in Sources */,
 			);
@@ -332,6 +336,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				INFOPLIST_FILE = FolioReaderKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -349,6 +354,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				INFOPLIST_FILE = FolioReaderKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";

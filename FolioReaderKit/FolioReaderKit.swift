@@ -29,7 +29,8 @@ Present a Folio Reader for a Parent View Controller.
 */
 public func presentReaderForParentViewController(parentViewController: UIViewController, #animated: Bool, andConfig config: FolioReaderConfig) {
     println("present reader")
-//    let first = FirstViewController(nibName: kFirstNibName, bundle: kFrameworkBundle, config: config)
-//    let navigationController = UINavigationController(rootViewController: first)
-//    parentViewController.presentViewController(navigationController, animated: animated, completion: nil)
+    
+    let reader = FolioReaderViewController()
+//    let navigationController = UINavigationController(rootViewController: reader)
+    parentViewController.presentViewController(reader, animated: animated, completion: nil)
 }

@@ -12,6 +12,8 @@
 		99EF28471AD58E1F007848FF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 99EF28451AD58E1F007848FF /* Main.storyboard */; };
 		99EF28491AD58E1F007848FF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99EF28481AD58E1F007848FF /* Images.xcassets */; };
 		99EF284C1AD58E1F007848FF /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 99EF284A1AD58E1F007848FF /* LaunchScreen.xib */; };
+		99EF287A1AD5C5F0007848FF /* FolioReaderKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 99EF286E1AD58F68007848FF /* FolioReaderKit.framework */; };
+		99EF287C1AD5C64D007848FF /* FolioReaderKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 99EF286E1AD58F68007848FF /* FolioReaderKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +40,19 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		99EF287B1AD5C635007848FF /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				99EF287C1AD5C64D007848FF /* FolioReaderKit.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		99EF283C1AD58E1F007848FF /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		99EF28401AD58E1F007848FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -54,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				99EF287A1AD5C5F0007848FF /* FolioReaderKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,6 +133,7 @@
 				99EF28381AD58E1F007848FF /* Sources */,
 				99EF28391AD58E1F007848FF /* Frameworks */,
 				99EF283A1AD58E1F007848FF /* Resources */,
+				99EF287B1AD5C635007848FF /* CopyFiles */,
 			);
 			buildRules = (
 			);
