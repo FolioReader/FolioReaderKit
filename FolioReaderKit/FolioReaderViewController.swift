@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol FolioReaderViewControllerDelegate {
+    func readerDidAppear()
+}
+
 class FolioReaderViewController: UIViewController {
 
     var scrollView: UIScrollView!
@@ -18,13 +22,14 @@ class FolioReaderViewController: UIViewController {
     var pageHeight: CGFloat!
     var screenBounds: CGRect!
     var currentPage: FolioReaderPage!
+    var delegate: FolioReaderViewControllerDelegate!
     
     // MARK: - View life cicle
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let pages = ["Page 1", "Page 2", "Page 3", "Page 4", "Page 5"]
+        let pages = ["Page 1", "Page 2", "Page 3"]
         
         screenBounds = UIScreen.mainScreen().bounds
         setPageSize(UIApplication.sharedApplication().statusBarOrientation)
@@ -44,6 +49,12 @@ class FolioReaderViewController: UIViewController {
         }
         
         scrollView.contentSize = CGSizeMake(pageWidth, pageHeight * CGFloat(totalPages))
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        delegate.readerDidAppear()
     }
 
     override func didReceiveMemoryWarning() {
