@@ -9,7 +9,8 @@
 /* Begin PBXBuildFile section */
 		99D5A99B1AD6C2B1001C747A /* FolioReaderBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D5A99A1AD6C2B1001C747A /* FolioReaderBook.swift */; };
 		99D5A99D1AD6C2C4001C747A /* FolioReaderIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D5A99C1AD6C2C4001C747A /* FolioReaderIndex.swift */; };
-		99D5A99F1AD6C7B3001C747A /* FolioReaderPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D5A99E1AD6C7B3001C747A /* FolioReaderPage.swift */; };
+		99D5A9A21AD7FC73001C747A /* FolioReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D5A9A11AD7FC73001C747A /* FolioReader.swift */; };
+		99D5A9A41AD80628001C747A /* FolioReaderPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D5A9A31AD80628001C747A /* FolioReaderPage.swift */; };
 		99EF281D1AD588D6007848FF /* FolioReaderKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 99EF281C1AD588D6007848FF /* FolioReaderKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		99EF28231AD588D6007848FF /* FolioReaderKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 99EF28171AD588D6007848FF /* FolioReaderKit.framework */; };
 		99EF282A1AD588D6007848FF /* FolioReaderKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EF28291AD588D6007848FF /* FolioReaderKitTests.swift */; };
@@ -31,7 +32,8 @@
 /* Begin PBXFileReference section */
 		99D5A99A1AD6C2B1001C747A /* FolioReaderBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderBook.swift; sourceTree = "<group>"; };
 		99D5A99C1AD6C2C4001C747A /* FolioReaderIndex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderIndex.swift; sourceTree = "<group>"; };
-		99D5A99E1AD6C7B3001C747A /* FolioReaderPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderPage.swift; sourceTree = "<group>"; };
+		99D5A9A11AD7FC73001C747A /* FolioReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReader.swift; sourceTree = "<group>"; };
+		99D5A9A31AD80628001C747A /* FolioReaderPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderPage.swift; sourceTree = "<group>"; };
 		99EF28171AD588D6007848FF /* FolioReaderKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FolioReaderKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		99EF281B1AD588D6007848FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		99EF281C1AD588D6007848FF /* FolioReaderKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FolioReaderKit.h; sourceTree = "<group>"; };
@@ -85,11 +87,12 @@
 			children = (
 				99EF281C1AD588D6007848FF /* FolioReaderKit.h */,
 				99EF28731AD59013007848FF /* FolioReaderKit.swift */,
+				99D5A9A11AD7FC73001C747A /* FolioReader.swift */,
 				99EF28751AD5905A007848FF /* FolioReaderConfig.swift */,
 				99EF28771AD594E1007848FF /* FolioReaderViewController.swift */,
+				99D5A9A31AD80628001C747A /* FolioReaderPage.swift */,
 				99D5A99A1AD6C2B1001C747A /* FolioReaderBook.swift */,
 				99D5A99C1AD6C2C4001C747A /* FolioReaderIndex.swift */,
-				99D5A99E1AD6C7B3001C747A /* FolioReaderPage.swift */,
 				99EF281A1AD588D6007848FF /* Supporting Files */,
 			);
 			path = FolioReaderKit;
@@ -228,11 +231,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				99D5A99D1AD6C2C4001C747A /* FolioReaderIndex.swift in Sources */,
-				99D5A99F1AD6C7B3001C747A /* FolioReaderPage.swift in Sources */,
 				99EF28781AD594E1007848FF /* FolioReaderViewController.swift in Sources */,
 				99EF28761AD5905A007848FF /* FolioReaderConfig.swift in Sources */,
 				99EF28741AD59013007848FF /* FolioReaderKit.swift in Sources */,
+				99D5A9A41AD80628001C747A /* FolioReaderPage.swift in Sources */,
 				99D5A99B1AD6C2B1001C747A /* FolioReaderBook.swift in Sources */,
+				99D5A9A21AD7FC73001C747A /* FolioReader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
