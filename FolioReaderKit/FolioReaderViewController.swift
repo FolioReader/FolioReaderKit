@@ -152,7 +152,45 @@ class FolioReaderViewController: UIViewController, UICollectionViewDelegate, UIC
     
     override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
         setPageSize(toInterfaceOrientation)
+        
+        currentPageNumber = collectionView.contentOffset.y / collectionView.bounds.size.height
+        
+//        int currentPage = collectionMedia.contentOffset.x / collectionMedia.bounds.size.width;
+//        float width = collectionMedia.bounds.size.height;
+//        
+//        [UIView animateWithDuration:duration animations:^{
+//            [self.collectionMedia setContentOffset:CGPointMake(width * currentPage, 0.0) animated:NO];
+//            [[self.collectionMedia collectionViewLayout] invalidateLayout];
+//            }];
+        
         collectionView.collectionViewLayout.invalidateLayout()
+        
+//        // Gets the first (and only) visible cell.
+//        let indexPath = self.collectionView.indexPathsForVisibleItems().first as! NSIndexPath
+//        let cell = self.collectionView.cellForItemAtIndexPath(indexPath) as! FolioReaderPage
+//        
+//        cell.hidden = true
+//        
+//        currentPageNumber = indexPath.row+1;
+//        collectionView.collectionViewLayout.invalidateLayout()
+        /////////////////
+        
+//        NSIndexPath *indexPath = [[self.collectionView indexPathsForVisibleItems] firstObject];
+//        KSPhotoViewCell *cell = (id)[self.collectionView cellForItemAtIndexPath:indexPath];
+//        
+//        // Creates a temporary imageView that will occupy the full screen and rotate.
+//        UIImageView *imageView = [[UIImageView alloc] initWithImage:[[cell imageView] image]];
+//        [imageView setFrame:[self.view bounds]];
+//        [imageView setTag:kTemporaryImageTag];
+//        [imageView setBackgroundColor:[UIColor blackColor]];
+//        [imageView setContentMode:[[cell imageView] contentMode]];
+//        [imageView setAutoresizingMask:0xff];
+//        [self.view insertSubview:imageView aboveSubview:self.collectionView];
+//        
+//        // Invalidate layout and calculate (next) contentOffset.
+//        contentOffsetAfterRotation = CGPointMake(indexPath.item * [self.view bounds].size.height, 0);
+//        [[self.collectionView collectionViewLayout] invalidateLayout];
+        
         
 //        currentPageNumber = Int(scrollView.contentOffset.y / pageHeight)+1;
 //        
@@ -168,6 +206,16 @@ class FolioReaderViewController: UIViewController, UICollectionViewDelegate, UIC
     }
     
     override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
+        
+//        let cell = self.collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: currentPageNumber-1, inSection: 0)) as! FolioReaderPage
+//        cell.hidden = false
+//        
+//        collectionView.collectionViewLayout.invalidateLayout()
+//        self.collectionView.setContentOffset(frameForPage(currentPageNumber).origin, animated: true)
+        
+        ///////////////////
+        
+        
 //        setPageSize(UIApplication.sharedApplication().statusBarOrientation)
 //        scrollView.contentSize = CGSizeMake(pageWidth, pageHeight * CGFloat(totalPages))
 //        
