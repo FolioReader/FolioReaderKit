@@ -9,7 +9,7 @@
 import UIKit
 import WebKit
 
-class FolioReaderPage: UICollectionViewCell {
+class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate {
     
     var webView: AnyObject!
     
@@ -22,6 +22,7 @@ class FolioReaderPage: UICollectionViewCell {
             if (NSClassFromString("WKWebView") != nil) {
                 let config = WKWebViewConfiguration()
                 webView = WKWebView(frame: self.bounds, configuration: config)
+                (webView as! WKWebView).navigationDelegate = self
                 (webView as! WKWebView).backgroundColor = getRandomColor()
                 (webView as! WKWebView).autoresizingMask = .FlexibleWidth | .FlexibleHeight
                 self.addSubview(webView as! WKWebView)
@@ -48,5 +49,8 @@ class FolioReaderPage: UICollectionViewCell {
         var randomGreen:CGFloat = CGFloat(drand48())
         var randomBlue:CGFloat = CGFloat(drand48())
         return UIColor(red: randomRed, green: randomGreen, blue: randomBlue, alpha: 1.0)
+    }
+    
+    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
     }
 }
