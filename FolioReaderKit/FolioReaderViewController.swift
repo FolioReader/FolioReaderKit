@@ -32,7 +32,7 @@ class FolioReaderViewController: UIViewController, UICollectionViewDelegate, UIC
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let pages = ["Page 1", "Page 2", "Page 3"]
+        let pages = ["Page", "Page", "Page", "Page", "Page", "Page"]
         
         screenBounds = UIScreen.mainScreen().bounds
         setPageSize(UIApplication.sharedApplication().statusBarOrientation)
@@ -99,7 +99,7 @@ class FolioReaderViewController: UIViewController, UICollectionViewDelegate, UIC
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! FolioReaderPage
         
         // Configure the cell
-        let demoStr = "<?xml version=\"1.0\" encoding=\"utf-8\"?> <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\"> <head> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, user-scalable=no\"> <meta name=\"generator\" content= \"HTML Tidy for FreeBSD (vers 7 December 2008), see www.w3.org\" /> <title>Romeo and Juliet</title> <style>* { padding: 0; margin: 0; outline: none; list-style: none; border: 0 none; } /* Typography & Colors */ body { font: 19px/1.6em helvetica, sans-serif; padding: 40px 30px; color: #383737; } .content-title { font: 35px/1.3em helvetica, sans-serif; margin-bottom: 35px; color: black; } .author { font: 20px/1.5em helvetica, sans-serif; margin-bottom: 25px; color: lightgray; } b, strong { font-family: helvetica, sans-serif; } i, em { font-family: helvetica, sans-serif; } a { color: #004270; } .wp-caption p.wp-caption-text { color: #888; margin: 0 5px; font-size: 14px; } .gallery-caption { font-size: 14px; line-height: 1.3; } /* Layout */ .alignleft { float: left; } img.alignleft { padding: 5px; margin-right: 20px; display: inline; background: #f1f1f1; } p { padding-top: 0.8em; padding-bottom: 0.6em; } .gallery-icon { margin: 10px 0; } .wp-caption.alignleft { margin: 1em 20px 0 0; } .wp-caption { background: #f1f1f1; line-height: 18px; margin-bottom: 20px; max-width: 100% !important; padding-top: 5px; text-align: center; }</style> <meta http-equiv=\"Content-Type\" content= \"application/xhtml+xml; charset=utf-8\" /> </head> <body> <div class=\"body\"> <div id=\"chapter_3521\" class=\"chapter\"> <h2><span class=\"chapterHeader\"><span class= \"translation\">Chapter</span> <span class= \"count\">12</span></span></h2> <p>&#160;</p> <div class=\"text\"> <p>In the evening Andrew and Pierre got into the open carriage and drove to Bald Hills. Prince Andrew, glancing at Pierre, broke the silence now and then with remarks which showed that he was in a good temper.</p> <p>Pointing to the fields, he spoke of the improvements he was making in his husbandry.</p> <p>Pierre remained gloomily silent, answering in monosyllables and apparently immersed in his own thoughts.</p> <p>He was thinking that Prince Andrew was unhappy, had gone astray, did not see the true light, and that he, Pierre, ought to aid, enlighten, and raise him. But as soon as he thought of what he should say, he felt that Prince Andrew with one word, one argument, would upset all his teaching, and he shrank from beginning, afraid of exposing to possible ridicule what to him was precious and sacred.</p> <p>\"No, but why do you think so?\" Pierre suddenly began, lowering his head and looking like a bull about to charge, \"why do you think so? You should not think so.\"</p> </div> </div> </div> </body> </html>"
+        let demoStr = "<?xml version=\"1.0\" encoding=\"utf-8\"?> <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\"> <head> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, user-scalable=no\"> <meta name=\"generator\" content= \"HTML Tidy for FreeBSD (vers 7 December 2008), see www.w3.org\" /> <title>Romeo and Juliet</title> <style>* { padding: 0; margin: 0; outline: none; list-style: none; border: 0 none; } /* Typography & Colors */ body { font: 19px/1.6em helvetica, sans-serif; padding: 40px 30px; color: #383737; } .content-title { font: 35px/1.3em helvetica, sans-serif; margin-bottom: 35px; color: black; } .author { font: 20px/1.5em helvetica, sans-serif; margin-bottom: 25px; color: lightgray; } b, strong { font-family: helvetica, sans-serif; } i, em { font-family: helvetica, sans-serif; } a { color: #004270; } .wp-caption p.wp-caption-text { color: #888; margin: 0 5px; font-size: 14px; } .gallery-caption { font-size: 14px; line-height: 1.3; } /* Layout */ .alignleft { float: left; } img.alignleft { padding: 5px; margin-right: 20px; display: inline; background: #f1f1f1; } p { padding-top: 0.8em; padding-bottom: 0.6em; } .gallery-icon { margin: 10px 0; } .wp-caption.alignleft { margin: 1em 20px 0 0; } .wp-caption { background: #f1f1f1; line-height: 18px; margin-bottom: 20px; max-width: 100% !important; padding-top: 5px; text-align: center; }</style> <meta http-equiv=\"Content-Type\" content= \"application/xhtml+xml; charset=utf-8\" /> </head> <body> <div class=\"body\"> <div id=\"chapter_3521\" class=\"chapter\"> <h2><span class=\"chapterHeader\"><span class= \"translation\">Chapter</span> <span class= \"count\">\(indexPath.row+1)</span></span></h2> <p>&#160;</p> <div class=\"text\"> <p>In the evening Andrew and Pierre got into the open carriage and drove to Bald Hills. Prince Andrew, glancing at Pierre, broke the silence now and then with remarks which showed that he was in a good temper.</p> <p>Pointing to the fields, he spoke of the improvements he was making in his husbandry.</p> <p>Pierre remained gloomily silent, answering in monosyllables and apparently immersed in his own thoughts.</p> <p>He was thinking that Prince Andrew was unhappy, had gone astray, did not see the true light, and that he, Pierre, ought to aid, enlighten, and raise him. But as soon as he thought of what he should say, he felt that Prince Andrew with one word, one argument, would upset all his teaching, and he shrank from beginning, afraid of exposing to possible ridicule what to him was precious and sacred.</p> <p>\"No, but why do you think so?\" Pierre suddenly began, lowering his head and looking like a bull about to charge, \"why do you think so? You should not think so.\"</p> </div> </div> </div> </body> </html>"
         
         cell.loadHTMLString(demoStr)
         
@@ -149,100 +149,33 @@ class FolioReaderViewController: UIViewController, UICollectionViewDelegate, UIC
     }
     
     // MARK: - Device rotation
-    
+
     override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
         setPageSize(toInterfaceOrientation)
         
-        currentPageNumber = collectionView.contentOffset.y / collectionView.bounds.size.height
+        // Gets the first (and only) visible cell.
+        let indexPath = self.collectionView.indexPathsForVisibleItems().first as! NSIndexPath
+        currentPageNumber = indexPath.row;
         
-//        int currentPage = collectionMedia.contentOffset.x / collectionMedia.bounds.size.width;
-//        float width = collectionMedia.bounds.size.height;
-//        
-//        [UIView animateWithDuration:duration animations:^{
-//            [self.collectionMedia setContentOffset:CGPointMake(width * currentPage, 0.0) animated:NO];
-//            [[self.collectionMedia collectionViewLayout] invalidateLayout];
-//            }];
-        
-        collectionView.collectionViewLayout.invalidateLayout()
-        
-//        // Gets the first (and only) visible cell.
-//        let indexPath = self.collectionView.indexPathsForVisibleItems().first as! NSIndexPath
-//        let cell = self.collectionView.cellForItemAtIndexPath(indexPath) as! FolioReaderPage
-//        
-//        cell.hidden = true
-//        
-//        currentPageNumber = indexPath.row+1;
-//        collectionView.collectionViewLayout.invalidateLayout()
-        /////////////////
-        
-//        NSIndexPath *indexPath = [[self.collectionView indexPathsForVisibleItems] firstObject];
-//        KSPhotoViewCell *cell = (id)[self.collectionView cellForItemAtIndexPath:indexPath];
-//        
-//        // Creates a temporary imageView that will occupy the full screen and rotate.
-//        UIImageView *imageView = [[UIImageView alloc] initWithImage:[[cell imageView] image]];
-//        [imageView setFrame:[self.view bounds]];
-//        [imageView setTag:kTemporaryImageTag];
-//        [imageView setBackgroundColor:[UIColor blackColor]];
-//        [imageView setContentMode:[[cell imageView] contentMode]];
-//        [imageView setAutoresizingMask:0xff];
-//        [self.view insertSubview:imageView aboveSubview:self.collectionView];
-//        
-//        // Invalidate layout and calculate (next) contentOffset.
-//        contentOffsetAfterRotation = CGPointMake(indexPath.item * [self.view bounds].size.height, 0);
-//        [[self.collectionView collectionViewLayout] invalidateLayout];
-        
-        
-//        currentPageNumber = Int(scrollView.contentOffset.y / pageHeight)+1;
-//        
-//        for (index, page) in enumerate(self.scrollView.subviews) {
-//            if page is FolioReaderPage {
-//                var page = (page as! FolioReaderPage)
-//                
-//                if currentPageNumber != index+1 {
-//                    page.hidden = true
-//                }
-//            }
-//        }
+        UIView.animateWithDuration(duration, animations: { () -> Void in
+            self.collectionView.contentSize = CGSizeMake(self.pageWidth, self.pageHeight * CGFloat(self.totalPages))
+            self.collectionView.setContentOffset(self.frameForPage(self.currentPageNumber).origin, animated: false)
+            self.collectionView.collectionViewLayout.invalidateLayout()
+        })
     }
     
     override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
-        
-//        let cell = self.collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: currentPageNumber-1, inSection: 0)) as! FolioReaderPage
-//        cell.hidden = false
-//        
-//        collectionView.collectionViewLayout.invalidateLayout()
-//        self.collectionView.setContentOffset(frameForPage(currentPageNumber).origin, animated: true)
-        
-        ///////////////////
-        
-        
-//        setPageSize(UIApplication.sharedApplication().statusBarOrientation)
-//        scrollView.contentSize = CGSizeMake(pageWidth, pageHeight * CGFloat(totalPages))
-//        
-//        for (index, page) in enumerate(self.scrollView.subviews) {
-//            if page is FolioReaderPage {
-//                var page = (page as! FolioReaderPage)
-//                let pageNumber = index+1
-//                
-//                page.frame = frameForPage(pageNumber)
-//                page.hidden = false
-//            
-//                if currentPageNumber == pageNumber {
-//                    currentPage = page
-//                }
-//            }
-//        }
-//        scrollView.scrollRectToVisible(frameForPage(currentPageNumber), animated: false)
+        self.collectionView.setContentOffset(self.frameForPage(self.currentPageNumber).origin, animated: false)
     }
     
     // MARK: - Page
     
     func setPageSize(orientation: UIInterfaceOrientation) {
-        pageWidth = orientation.isLandscape ? screenBounds.size.height : screenBounds.size.width;
-        pageHeight = orientation.isLandscape ? screenBounds.size.width : screenBounds.size.height;
+        pageWidth = orientation.isPortrait ? screenBounds.size.width : screenBounds.size.height;
+        pageHeight = orientation.isPortrait ? screenBounds.size.height : screenBounds.size.width;
     }
     
-    func frameForPage(page: Int) -> CGRect {
-        return CGRectMake(0, pageHeight * CGFloat(page - 1), pageWidth, pageHeight);
+    func frameForPage(pageIndex: Int) -> CGRect {
+        return CGRectMake(0, pageHeight * CGFloat(pageIndex), pageWidth, pageHeight);
     }
 }
