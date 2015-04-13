@@ -15,8 +15,7 @@ protocol FolioReaderViewControllerDelegate {
 }
 
 class FolioReaderViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-
-    var scrollView: UIScrollView!
+    
     var collectionView: UICollectionView!
     var pages: [String]!
     var totalPages: Int!
@@ -41,7 +40,6 @@ class FolioReaderViewController: UIViewController, UICollectionViewDelegate, UIC
         // Layout
         var layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsetsZero
-//        layout.itemSize = CGSize(width: pageWidth, height: pageHeight)
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
         layout.scrollDirection = UICollectionViewScrollDirection.Vertical;
@@ -57,21 +55,6 @@ class FolioReaderViewController: UIViewController, UICollectionViewDelegate, UIC
         
         // Register cell classes
         self.collectionView!.registerClass(FolioReaderPage.self, forCellWithReuseIdentifier: reuseIdentifier)
-        
-        // ScroolView
-//        scrollView = UIScrollView(frame: self.view.bounds)
-//        scrollView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
-//        scrollView.pagingEnabled = true
-//        scrollView.showsVerticalScrollIndicator = false
-//        self.view.addSubview(scrollView)
-//        
-//        for (index, page) in enumerate(pages) {
-//            let bookPage  = FolioReaderPage(frame: frameForPage(index+1))
-//            bookPage.autoresizingMask = .FlexibleWidth | .FlexibleHeight
-//            scrollView.addSubview(bookPage)
-//        }
-//        
-//        scrollView.contentSize = CGSizeMake(pageWidth, pageHeight * CGFloat(totalPages))
     }
     
     override func viewDidAppear(animated: Bool) {
