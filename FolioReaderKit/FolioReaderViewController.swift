@@ -51,6 +51,7 @@ class FolioReaderViewController: UIViewController, UICollectionViewDelegate, UIC
         collectionView.dataSource = self
         collectionView.pagingEnabled = true
         collectionView.showsVerticalScrollIndicator = false
+        collectionView.backgroundColor = UIColor.whiteColor()
         self.view.addSubview(collectionView)
         
         // Register cell classes
@@ -59,6 +60,8 @@ class FolioReaderViewController: UIViewController, UICollectionViewDelegate, UIC
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        
+        setCurrentPageNumber()
         
 //        delegate.readerDidAppear()
     }
@@ -132,13 +135,10 @@ class FolioReaderViewController: UIViewController, UICollectionViewDelegate, UIC
     }
     
     // MARK: - Device rotation
-
+    
     override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
         setPageSize(toInterfaceOrientation)
-        
-        // Gets the first (and only) visible cell.
-        let indexPath = self.collectionView.indexPathsForVisibleItems().first as! NSIndexPath
-        currentPageNumber = indexPath.row;
+        setCurrentPageNumber()
         
         UIView.animateWithDuration(duration, animations: { () -> Void in
             self.collectionView.contentSize = CGSizeMake(self.pageWidth, self.pageHeight * CGFloat(self.totalPages))
@@ -147,8 +147,12 @@ class FolioReaderViewController: UIViewController, UICollectionViewDelegate, UIC
         })
     }
     
-    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
-        self.collectionView.setContentOffset(self.frameForPage(self.currentPageNumber).origin, animated: false)
+    override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
+        if currentPageNumber+1 >= totalPages {
+            UIView.animateWithDuration(duration, animations: { () -> Void in
+                self.collectionView.setContentOffset(self.frameForPage(self.currentPageNumber).origin, animated: false)
+            })
+        }
     }
     
     // MARK: - Page
@@ -158,7 +162,12 @@ class FolioReaderViewController: UIViewController, UICollectionViewDelegate, UIC
         pageHeight = orientation.isPortrait ? screenBounds.size.height : screenBounds.size.width;
     }
     
-    func frameForPage(pageIndex: Int) -> CGRect {
-        return CGRectMake(0, pageHeight * CGFloat(pageIndex), pageWidth, pageHeight);
+    func setCurrentPageNumber() {
+        let indexPath = self.collectionView.indexPathsForVisibleItems().first as! NSIndexPath
+        currentPageNumber = indexPath.row+1;
+    }
+    
+    func frameForPage(page: Int) -> CGRect {
+        return CGRectMake(0, pageHeight * CGFloat(page-1), pageWidth, pageHeight);
     }
 }
