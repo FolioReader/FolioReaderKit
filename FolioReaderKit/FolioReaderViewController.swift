@@ -75,10 +75,8 @@ class FolioReaderViewController: UIViewController, UICollectionViewDelegate, UIC
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
         setCurrentPageNumber()
-        
-//        delegate.readerDidAppear()
+        delegate.readerDidAppear()
     }
 
     override func didReceiveMemoryWarning() {
@@ -114,39 +112,7 @@ class FolioReaderViewController: UIViewController, UICollectionViewDelegate, UIC
         return CGSizeMake(pageWidth, pageHeight)
     }
     
-    
-    // MARK: UICollectionViewDelegate
-    
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(collectionView: UICollectionView, shouldHighlightItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-    return true
-    }
-    */
-    
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-    return true
-    }
-    */
-    
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(collectionView: UICollectionView, shouldShowMenuForItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-    return false
-    }
-    
-    override func collectionView(collectionView: UICollectionView, canPerformAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) -> Bool {
-    return false
-    }
-    
-    override func collectionView(collectionView: UICollectionView, performAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) {
-    
-    }
-    */
-    
-    // MARK: - StatusBar
+    // MARK: - Status Bar
     
     override func prefersStatusBarHidden() -> Bool {
         return true
@@ -196,25 +162,21 @@ class FolioReaderViewController: UIViewController, UICollectionViewDelegate, UIC
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        if scrollView.contentOffset.y < pointNow.y {
-            scrollDirection = .Down
-        } else if scrollView.contentOffset.y > pointNow.y {
-            scrollDirection = .Up
-        }
-        
+        scrollDirection = scrollView.contentOffset.y < pointNow.y ? .Down : .Up
+
         if scrollView is UICollectionView {
+            
         } else {
             let contentHeight = scrollView.contentSize.height - scrollView.bounds.height
             if scrollView.contentOffset.y >= contentHeight {
                 return
             }
-//            println("class: \(scrollView.classForCoder) content: \(contentHeight) contentOffset: \(scrollView.contentOffset.y)")
         }
     }
     
     // MARK: - Folio Page Delegate
     
-    func pageDidAppear(page: FolioReaderPage) {
+    func pageDidLoad(page: FolioReaderPage) {
         println("page did load")
     }
     

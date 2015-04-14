@@ -30,8 +30,7 @@ Present a Folio Reader for a Parent View Controller.
 public func presentReaderForParentViewController(parentViewController: UIViewController, #animated: Bool, andConfig config: FolioReaderConfig) {
     println("present reader")
     
-    let reader = FolioReaderViewController()    
-//    let reader = FolioReader()
+    let reader = FolioReaderViewController()
 //    let navigationController = UINavigationController(rootViewController: reader)
     parentViewController.presentViewController(reader, animated: animated, completion: nil)
 }

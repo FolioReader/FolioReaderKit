@@ -10,7 +10,7 @@ import UIKit
 import WebKit
 
 protocol FolioPageDelegate {
-    func pageDidAppear(page: FolioReaderPage)
+    func pageDidLoad(page: FolioReaderPage)
 }
 
 //private let hasWebKit = NSClassFromString("WKWebView") != nil
@@ -83,7 +83,7 @@ class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIWebViewDele
             webView.alpha = 1
         })
         
-        delegate.pageDidAppear(self)
+        delegate.pageDidLoad(self)
     }
     
     // MARK: - UIWebView Delegate
@@ -102,7 +102,7 @@ class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIWebViewDele
             webView.alpha = 1
         })
         
-        delegate.pageDidAppear(self)
+        delegate.pageDidLoad(self)
     }
     
 }
