@@ -76,7 +76,7 @@ class FolioReaderViewController: UIViewController, UICollectionViewDelegate, UIC
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         setCurrentPageNumber()
-        delegate.readerDidAppear()
+//        delegate.readerDidAppear()
     }
 
     override func didReceiveMemoryWarning() {
