@@ -13,7 +13,10 @@ protocol FolioPageDelegate {
     func pageDidAppear(page: FolioReaderPage)
 }
 
-class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate {
+//private let hasWebKit = NSClassFromString("WKWebView") != nil
+private let hasWebKit = false
+
+class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIWebViewDelegate {
     
     var webView: AnyObject!
     var delegate: FolioPageDelegate!
@@ -21,21 +24,30 @@ class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor = getRandomColor()
+        self.backgroundColor = UIColor.whiteColor()
         
         if webView == nil {
-            if (NSClassFromString("WKWebView") != nil) {
+            if hasWebKit {
                 let config = WKWebViewConfiguration()
                 webView = WKWebView(frame: self.bounds, configuration: config)
-                (webView as! WKWebView).navigationDelegate = self
-                (webView as! WKWebView).autoresizingMask = .FlexibleWidth | .FlexibleHeight
-                self.addSubview(webView as! WKWebView)
-            }
-            else {
+            } else {
                 webView = UIWebView(frame: self.bounds)
-                (webView as! UIWebView).autoresizingMask = .FlexibleWidth | .FlexibleHeight
-                self.addSubview(webView as! UIWebView)
             }
+        }
+        
+        if hasWebKit {
+            let wkWebView = (webView as! WKWebView)
+            wkWebView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+            wkWebView.navigationDelegate = self
+            wkWebView.backgroundColor = UIColor.whiteColor()
+            self.addSubview(wkWebView)
+        }
+        else {
+            let uiWebView = (webView as! UIWebView)
+            uiWebView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+            uiWebView.delegate = self
+            uiWebView.backgroundColor = UIColor.whiteColor()
+            self.addSubview(uiWebView)
         }
     }
 
@@ -44,18 +56,53 @@ class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate {
     }
     
     func loadHTMLString(string: String) {
-        var castWebView = (webView as! WKWebView)
-        castWebView.loadHTMLString(string, baseURL: nil)
+        if hasWebKit {
+            var castWebView = (webView as! WKWebView)
+            castWebView.alpha = 0
+            castWebView.loadHTMLString(string, baseURL: nil)
+        } else {
+            var castWebView = (webView as! UIWebView)
+            castWebView.alpha = 0
+            castWebView.loadHTMLString(string, baseURL: nil)
+        }
     }
     
-    func getRandomColor() -> UIColor {
-        var randomRed:CGFloat = CGFloat(drand48())
-        var randomGreen:CGFloat = CGFloat(drand48())
-        var randomBlue:CGFloat = CGFloat(drand48())
-        return UIColor(red: randomRed, green: randomGreen, blue: randomBlue, alpha: 1.0)
-    }
+    // MARK: - WKWebView Navigation Delegate
     
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+        if scrollDirection == .Down {
+            let bottomOffset = CGPointMake(0, webView.scrollView.contentSize.height - webView.scrollView.bounds.height)
+            if bottomOffset.y >= 0 {
+                dispatch_async(dispatch_get_main_queue(), {
+                    webView.scrollView.setContentOffset(bottomOffset, animated: false)
+                })
+            }
+        }
+        
+        UIView.animateWithDuration(0.2, animations: { () -> Void in
+            webView.alpha = 1
+        })
+        
         delegate.pageDidAppear(self)
     }
+    
+    // MARK: - UIWebView Delegate
+    
+    func webViewDidFinishLoad(webView: UIWebView) {
+        if scrollDirection == .Down {
+            let bottomOffset = CGPointMake(0, webView.scrollView.contentSize.height - webView.scrollView.bounds.height)
+            if bottomOffset.y >= 0 {
+                dispatch_async(dispatch_get_main_queue(), {
+                    webView.scrollView.setContentOffset(bottomOffset, animated: false)
+                })
+            }
+        }
+        
+        UIView.animateWithDuration(0.2, animations: { () -> Void in
+            webView.alpha = 1
+        })
+        
+        delegate.pageDidAppear(self)
+    }
+    
 }

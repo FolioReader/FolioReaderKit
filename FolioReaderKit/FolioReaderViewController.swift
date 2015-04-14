@@ -9,6 +9,7 @@
 import UIKit
 
 let reuseIdentifier = "Cell"
+var scrollDirection = ScrollDirection()
 
 enum ScrollDirection: Int {
     case None
@@ -38,8 +39,7 @@ class FolioReaderViewController: UIViewController, UICollectionViewDelegate, UIC
     var delegate: FolioReaderViewControllerDelegate!
     
     private var screenBounds: CGRect!
-    private var pointNow: CGPoint!
-    private var scrollDirection = ScrollDirection()
+    private var pointNow = CGPointZero
     
     // MARK: - View life cicle
     
@@ -203,28 +203,19 @@ class FolioReaderViewController: UIViewController, UICollectionViewDelegate, UIC
         }
         
         if scrollView is UICollectionView {
-//            println("class: \(scrollView.classForCoder) content: \(scrollView.contentSize.height) contentOffset: \(scrollView.contentOffset.y)")
         } else {
             let contentHeight = scrollView.contentSize.height - scrollView.bounds.height
             if scrollView.contentOffset.y >= contentHeight {
                 return
             }
-            
 //            println("class: \(scrollView.classForCoder) content: \(contentHeight) contentOffset: \(scrollView.contentOffset.y)")
         }
     }
     
     // MARK: - Folio Page Delegate
+    
     func pageDidAppear(page: FolioReaderPage) {
-        if scrollDirection == .Down {
-            let bottomOffset = CGPointMake(0, page.webView.scrollView.contentSize.height - page.webView.scrollView.bounds.height)
-            if bottomOffset.y >= 0 {
-                dispatch_async(dispatch_get_main_queue(), {
-                    println("bottomOffset.y: \(bottomOffset.y)")
-                    page.webView.scrollView.setContentOffset(bottomOffset, animated: false)
-                })
-            }
-        }
+        println("page did load")
     }
     
 }
