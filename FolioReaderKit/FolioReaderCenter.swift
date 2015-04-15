@@ -1,5 +1,5 @@
 //
-//  FolioReaderViewController.swift
+//  FolioReaderCenter.swift
 //  FolioReaderKit
 //
 //  Created by Heberti Almeida on 08/04/15.
@@ -23,11 +23,11 @@ enum ScrollDirection: Int {
     }
 }
 
-protocol FolioReaderViewControllerDelegate {
-    func readerDidAppear()
+@objc protocol FolioReaderCenterDelegate {
+    optional func readerDidAppear()
 }
 
-class FolioReaderViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, FolioPageDelegate {
+class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, FolioPageDelegate {
     
     var collectionView: UICollectionView!
     var pages: [String]!
@@ -36,7 +36,7 @@ class FolioReaderViewController: UIViewController, UICollectionViewDelegate, UIC
     var pageHeight: CGFloat!
     var currentPageNumber: Int!
     var currentPage: FolioReaderPage!
-    var delegate: FolioReaderViewControllerDelegate!
+    var delegate: FolioReaderCenterDelegate!
     
     private var screenBounds: CGRect!
     private var pointNow = CGPointZero
