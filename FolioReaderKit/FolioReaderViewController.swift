@@ -215,7 +215,7 @@ class FolioReaderViewController: UIViewController, UICollectionViewDelegate, UIC
     // MARK: - Folio Page Delegate
     
     func pageDidLoad(page: FolioReaderPage) {
-        println("page did load")
+        println("Page did load")
     }
     
 }
