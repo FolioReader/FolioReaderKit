@@ -14,7 +14,13 @@ enum SlideOutState {
     case LeftPanelExpanded
 }
 
+protocol FolioReaderContainerDelegate {
+    func didExpandedLeftPanel()
+    func didCollapsedLeftPanel()
+}
+
 class FolioReaderContainer: UIViewController, FolioReaderCenterDelegate, UIGestureRecognizerDelegate {
+    var delegate: FolioReaderContainerDelegate!
     var centerNavigationController: UINavigationController!
     var centerViewController: FolioReaderCenter!
     var leftViewController: FolioReaderSidePanel!
@@ -31,6 +37,7 @@ class FolioReaderContainer: UIViewController, FolioReaderCenterDelegate, UIGestu
         super.viewDidLoad()
         
         centerViewController = FolioReaderCenter()
+        centerViewController.folioReaderContainer = self
 //        centerViewController.delegate = self
         
         // wrap the centerViewController in a navigation controller, so we can push views to it
@@ -88,9 +95,11 @@ class FolioReaderContainer: UIViewController, FolioReaderCenterDelegate, UIGestu
     func animateLeftPanel(#shouldExpand: Bool) {
         if (shouldExpand) {
             currentState = .LeftPanelExpanded
+            delegate.didExpandedLeftPanel()
             animateCenterPanelXPosition(targetPosition: CGRectGetWidth(centerNavigationController.view.frame) - centerPanelExpandedOffset)
         } else {
             animateCenterPanelXPosition(targetPosition: 0) { finished in
+                self.delegate.didCollapsedLeftPanel()
                 self.currentState = .BothCollapsed
                 self.leftViewController!.view.removeFromSuperview()
                 self.leftViewController = nil;

@@ -27,7 +27,7 @@ enum ScrollDirection: Int {
     optional func readerDidAppear()
 }
 
-class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, FolioPageDelegate {
+class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, FolioPageDelegate, FolioReaderContainerDelegate {
     
     var collectionView: UICollectionView!
     var pages: [String]!
@@ -37,6 +37,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     var currentPageNumber: Int!
     var currentPage: FolioReaderPage!
     var delegate: FolioReaderCenterDelegate!
+    var folioReaderContainer: FolioReaderContainer!
     
     private var screenBounds: CGRect!
     private var pointNow = CGPointZero
@@ -72,6 +73,9 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         
         // Register cell classes
         self.collectionView!.registerClass(FolioReaderPage.self, forCellWithReuseIdentifier: reuseIdentifier)
+        
+        // Delegate container
+        folioReaderContainer.delegate = self
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -215,6 +219,18 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     func pageDidLoad(page: FolioReaderPage) {
         println("Page did load")
+    }
+    
+    // MARK: - Folio container delegate
+    
+    func didExpandedLeftPanel() {
+        collectionView.scrollEnabled = false
+        currentPage.webView.scrollView.scrollEnabled = false
+    }
+    
+    func didCollapsedLeftPanel() {
+        collectionView.scrollEnabled = true
+        currentPage.webView.scrollView.scrollEnabled = true
     }
     
 }
