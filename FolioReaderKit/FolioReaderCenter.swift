@@ -193,15 +193,15 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     // MARK: - ScrollView Delegate
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        if scrollView is UICollectionView {
+//        if scrollView is UICollectionView {
             pointNow = scrollView.contentOffset
-        }
+//        }
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        if scrollView is UICollectionView {
+//        if scrollView is UICollectionView {
             scrollDirection = scrollView.contentOffset.y < pointNow.y ? .Down : .Up
-        }
+//        }
     }
     
     func scrollViewWillBeginDecelerating(scrollView: UIScrollView) {
