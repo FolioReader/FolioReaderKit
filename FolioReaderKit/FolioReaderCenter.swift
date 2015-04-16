@@ -189,26 +189,25 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     // MARK: - ScrollView Delegate
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        pointNow = scrollView.contentOffset
+        if scrollView is UICollectionView {
+            pointNow = scrollView.contentOffset
+        }
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        scrollDirection = scrollView.contentOffset.y < pointNow.y ? .Down : .Up
-        
         if scrollView is UICollectionView {
-
-        } else {
-//            let contentHeight = scrollView.contentSize.height - scrollView.bounds.height
-//            if scrollView.contentOffset.y >= contentHeight {
-//                return
-//            }
+            scrollDirection = scrollView.contentOffset.y < pointNow.y ? .Down : .Up
         }
+    }
+    
+    func scrollViewWillBeginDecelerating(scrollView: UIScrollView) {
+        println("decelerate")
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         if scrollView is UICollectionView {
             setCurrentPage()
-            println("page: \(currentPageNumber)")
+            println("Page: \(currentPageNumber)")
         }
     }
     
