@@ -9,5 +9,5 @@
 import UIKit
 
 class FolioReaderBook: NSObject {
-   
+    var index: FolioReaderIndex!
 }

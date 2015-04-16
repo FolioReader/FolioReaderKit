@@ -9,5 +9,8 @@
 import UIKit
 
 class FolioReaderIndex: NSObject {
-   
+    var text: String!
+    var src: String!
+    var playOrder: Int!
+    var chapters: [FolioReaderIndex]!
 }
