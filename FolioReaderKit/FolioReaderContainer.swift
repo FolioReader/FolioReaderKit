@@ -19,7 +19,7 @@ protocol FolioReaderContainerDelegate {
     func didCollapsedLeftPanel()
 }
 
-class FolioReaderContainer: UIViewController, FolioReaderCenterDelegate, UIGestureRecognizerDelegate {
+class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, FolioReaderCenterDelegate, FolioReaderSidePanelDelegate {
     var delegate: FolioReaderContainerDelegate!
     var centerNavigationController: UINavigationController!
     var centerViewController: FolioReaderCenter!
@@ -77,8 +77,7 @@ class FolioReaderContainer: UIViewController, FolioReaderCenterDelegate, UIGestu
     func addLeftPanelViewController() {
         if (leftViewController == nil) {
             leftViewController = FolioReaderSidePanel()
-//            leftViewController!.animals = Animal.allCats()
-            
+            leftViewController.delegate = self
             addChildSidePanelController(leftViewController!)
         }
     }
@@ -108,7 +107,7 @@ class FolioReaderContainer: UIViewController, FolioReaderCenterDelegate, UIGestu
     }
     
     func animateCenterPanelXPosition(#targetPosition: CGFloat, completion: ((Bool) -> Void)! = nil) {
-        UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .CurveEaseInOut, animations: {
+        UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .CurveEaseInOut, animations: {
             self.centerNavigationController.view.frame.origin.x = targetPosition
             }, completion: completion)
     }
@@ -156,5 +155,12 @@ class FolioReaderContainer: UIViewController, FolioReaderCenterDelegate, UIGestu
     
     override func prefersStatusBarHidden() -> Bool {
         return true
+    }
+    
+    // MARK: - Folio Reader side panel delegate
+    
+    func didSelectedIndex(index: Int) {
+        println("select: \(index)")
+        collapseSidePanels()
     }
 }
