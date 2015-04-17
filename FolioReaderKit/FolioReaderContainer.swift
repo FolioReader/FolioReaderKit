@@ -116,6 +116,8 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
         if (shouldShowShadow) {
             centerNavigationController.view.layer.shadowOpacity = 0.2
             centerNavigationController.view.layer.shadowRadius = 6
+            centerNavigationController.view.layer.shadowPath = UIBezierPath(rect: centerNavigationController.view.bounds).CGPath
+            centerNavigationController.view.clipsToBounds = false
         } else {
             centerNavigationController.view.layer.shadowOpacity = 0
             centerNavigationController.view.layer.shadowRadius = 0
@@ -142,9 +144,11 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
             }
         case .Ended:
             if (leftViewController != nil) {
-                // animate the side panel open or closed based on whether the view has moved more or less than halfway
-                let hasMovedGreaterThanHalfway = recognizer.view!.center.x > view.bounds.size.width
-                animateLeftPanel(shouldExpand: hasMovedGreaterThanHalfway)
+                let gap = 20 as CGFloat
+                let xPos = recognizer.view!.frame.origin.x
+                let width = view.bounds.size.width
+                var canFinishAnimation = gestureIsDraggingFromLeftToRight && xPos > gap ? true : false
+                animateLeftPanel(shouldExpand: canFinishAnimation)
             }
         default:
             break
