@@ -12,6 +12,7 @@ import QuartzCore
 enum SlideOutState {
     case BothCollapsed
     case LeftPanelExpanded
+    case Expanding
     
     init () {
         self = .BothCollapsed
@@ -128,18 +129,17 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
         
         switch(recognizer.state) {
         case .Began:
-            if (currentState == .BothCollapsed) {
-                if (gestureIsDraggingFromLeftToRight) {
-                    addLeftPanelViewController()
-                }
+            if currentState == .BothCollapsed && gestureIsDraggingFromLeftToRight {
+                addLeftPanelViewController()
+                currentState = .Expanding
             }
         case .Changed:
-            if (gestureIsDraggingFromLeftToRight || currentState == .LeftPanelExpanded) {
+            if currentState == .LeftPanelExpanded || currentState == .Expanding && recognizer.view!.frame.origin.x >= 0 {
                 recognizer.view!.center.x = recognizer.view!.center.x + recognizer.translationInView(view).x
                 recognizer.setTranslation(CGPointZero, inView: view)
             }
         case .Ended:
-            if (leftViewController != nil) {
+            if leftViewController != nil {
                 let gap = 20 as CGFloat
                 let xPos = recognizer.view!.frame.origin.x
                 let width = view.bounds.size.width
