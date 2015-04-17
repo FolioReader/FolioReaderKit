@@ -12,6 +12,10 @@ import QuartzCore
 enum SlideOutState {
     case BothCollapsed
     case LeftPanelExpanded
+    
+    init () {
+        self = .BothCollapsed
+    }
 }
 
 protocol FolioReaderContainerDelegate {
@@ -25,32 +29,28 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
     var centerViewController: FolioReaderCenter!
     var leftViewController: FolioReaderSidePanel!
     let centerPanelExpandedOffset: CGFloat = 70
-    var currentState: SlideOutState = .BothCollapsed {
-        didSet {
-            let shouldShowShadow = currentState != .BothCollapsed
-            showShadowForCenterViewController(shouldShowShadow)
-        }
-    }
+    var currentState = SlideOutState()
     
+    // MARK: - View life cicle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         centerViewController = FolioReaderCenter()
         centerViewController.folioReaderContainer = self
-//        centerViewController.delegate = self
-        
-        // wrap the centerViewController in a navigation controller, so we can push views to it
-        // and display bar button items in the navigation bar
         centerNavigationController = UINavigationController(rootViewController: centerViewController)
         centerNavigationController.setNavigationBarHidden(true, animated: false)
         view.addSubview(centerNavigationController.view)
         addChildViewController(centerNavigationController)
-        
         centerNavigationController.didMoveToParentViewController(self)
         
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handlePanGesture:")
         centerNavigationController.view.addGestureRecognizer(panGestureRecognizer)
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        showShadowForCenterViewController(true)
     }
     
     // MARK: CenterViewController delegate methods
@@ -83,10 +83,7 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
     }
     
     func addChildSidePanelController(sidePanelController: FolioReaderSidePanel) {
-//        sidePanelController.delegate = centerViewController
-        
         view.insertSubview(sidePanelController.view, atIndex: 0)
-        
         addChildViewController(sidePanelController)
         sidePanelController.didMoveToParentViewController(self)
     }
@@ -135,7 +132,6 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
                 if (gestureIsDraggingFromLeftToRight) {
                     addLeftPanelViewController()
                 }
-                showShadowForCenterViewController(true)
             }
         case .Changed:
             if (gestureIsDraggingFromLeftToRight || currentState == .LeftPanelExpanded) {
