@@ -10,6 +10,8 @@ import UIKit
 
 let reuseIdentifier = "Cell"
 var scrollDirection = ScrollDirection()
+var pageWidth: CGFloat!
+var pageHeight: CGFloat!
 
 enum ScrollDirection: Int {
     case None
@@ -32,8 +34,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     var collectionView: UICollectionView!
     var pages: [String]!
     var totalPages: Int!
-    var pageWidth: CGFloat!
-    var pageHeight: CGFloat!
     var currentPageNumber: Int!
     var currentPage: FolioReaderPage!
     var delegate: FolioReaderCenterDelegate!
@@ -130,7 +130,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         setCurrentPage()
         
         UIView.animateWithDuration(duration, animations: { () -> Void in
-            self.collectionView.contentSize = CGSizeMake(self.pageWidth, self.pageHeight * CGFloat(self.totalPages))
+            self.collectionView.contentSize = CGSizeMake(pageWidth, pageHeight * CGFloat(self.totalPages))
             self.collectionView.setContentOffset(self.frameForPage(self.currentPageNumber).origin, animated: false)
             self.collectionView.collectionViewLayout.invalidateLayout()
         })

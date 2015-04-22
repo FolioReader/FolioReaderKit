@@ -13,17 +13,37 @@ protocol FolioReaderSidePanelDelegate {
     func didSelectedIndex(index: Int)
 }
 
-class FolioReaderSidePanel: UITableViewController {
+class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     var delegate: FolioReaderSidePanelDelegate?
+    var tableView: UITableView!
+    var toolBar: UIToolbar!
+    let toolBarHeight: CGFloat = 50
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.tableView.backgroundColor = UIColor(rgba: "#F5F5F5")
-        self.tableView.separatorColor = UIColor(rgba: "#D7D7D7")
+        
+        var tableViewFrame = screenBounds()
+        tableViewFrame.size.height = tableViewFrame.height-toolBarHeight
+        
+        tableView = UITableView(frame: tableViewFrame)
+        tableView.delaysContentTouches = true
+        tableView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+        tableView.backgroundColor = UIColor(rgba: "#F5F5F5")
+        tableView.separatorColor = UIColor(rgba: "#D7D7D7")
+        tableView.delegate = self
+        tableView.dataSource = self
+        view.addSubview(tableView)
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
+        
+        toolBar = UIToolbar(frame: CGRectMake(0, screenBounds().height-toolBarHeight, view.frame.width, toolBarHeight))
+        toolBar.autoresizingMask = .FlexibleWidth
+        toolBar.barTintColor = UIColor(rgba: "#FF7900")
+        toolBar.clipsToBounds = true
+        toolBar.translucent = false
+        view.addSubview(toolBar)
         
         // Register cell classes
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
@@ -36,15 +56,15 @@ class FolioReaderSidePanel: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 15
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) as! UITableViewCell
 
         // Configure the cell...
@@ -59,14 +79,30 @@ class FolioReaderSidePanel: UITableViewController {
     
     // MARK: - Table view delegate
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         delegate?.didSelectedIndex(indexPath.row)
     }
     
     // MARK: - Table view data source
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 60
+    }
+    
+    // MARK: - Get Screen bounds
+    
+    func screenBounds() -> CGRect {
+        return UIScreen.mainScreen().bounds
+    }
+    
+    // MARK: - Rotation
+    
+    override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
+        UIView.animateWithDuration(duration, animations: { () -> Void in
+            var frame = self.toolBar.frame
+            frame.origin.y = pageHeight-self.toolBarHeight
+            self.toolBar.frame = frame
+        })
     }
 
 }

@@ -33,6 +33,8 @@ public func presentReaderForParentViewController(parentViewController: UIViewCon
     let reader = FolioReaderContainer()
 //    let reader = FolioReaderCenter()
 //    let navigationController = UINavigationController(rootViewController: reader)
+//    navigationController.setNavigationBarHidden(true, animated: false)
+//    navigationController.toolbarHidden = false
     parentViewController.presentViewController(reader, animated: animated, completion: nil)
 }
 
