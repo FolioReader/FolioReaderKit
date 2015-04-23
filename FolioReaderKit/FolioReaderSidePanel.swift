@@ -19,6 +19,7 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
     var tableView: UITableView!
     var toolBar: UIToolbar!
     let toolBarHeight: CGFloat = 50
+    let traits = UITraitCollection(displayScale: UIScreen.mainScreen().scale)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,9 +42,27 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
         toolBar = UIToolbar(frame: CGRectMake(0, screenBounds().height-toolBarHeight, view.frame.width, toolBarHeight))
         toolBar.autoresizingMask = .FlexibleWidth
         toolBar.barTintColor = UIColor(rgba: "#FF7900")
+        toolBar.tintColor = UIColor.whiteColor()
         toolBar.clipsToBounds = true
         toolBar.translucent = false
         view.addSubview(toolBar)
+        
+        
+        let imageHighlight = UIImage(named: "icon-highlight", inBundle: kFrameworkBundle, compatibleWithTraitCollection: traits)
+        let imageSearch = UIImage(named: "icon-search", inBundle: kFrameworkBundle, compatibleWithTraitCollection: traits)
+        let imageFont = UIImage(named: "icon-font", inBundle: kFrameworkBundle, compatibleWithTraitCollection: traits)
+        
+//        let space = pageWidth/4
+        let space = 80 as CGFloat
+        
+        let iconHighlight = UIBarButtonItem(image: imageHighlight, style: .Plain, target: self, action: "didSelectHighlight:")
+        iconHighlight.width = space
+        let iconSearch = UIBarButtonItem(image: imageSearch, style: .Plain, target: self, action: "didSelectHighlight:")
+        iconSearch.width = space
+        let iconFont = UIBarButtonItem(image: imageFont, style: .Plain, target: self, action: "didSelectHighlight:")
+        iconFont.width = space
+        toolBar.setItems([iconHighlight, iconSearch, iconFont], animated: false)
+        
         
         // Register cell classes
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
@@ -103,6 +122,10 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
             frame.origin.y = pageHeight-self.toolBarHeight
             self.toolBar.frame = frame
         })
+    }
+    
+    func didSelectHighlight(sender: UIBarButtonItem) {
+        println("highlight")
     }
 
 }

@@ -10,6 +10,7 @@ import Foundation
 
 // MARK: - Internal constants
 
+internal let kFrameworkBundle = NSBundle(identifier: "com.folioreader.FolioReaderKit")
 internal let isPad = UIDevice.currentDevice().userInterfaceIdiom == .Pad
 internal let isPhone = UIDevice.currentDevice().userInterfaceIdiom == .Phone
 internal let isPhone4 = (UIScreen.mainScreen().bounds.size.height == 480)
