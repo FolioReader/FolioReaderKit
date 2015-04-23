@@ -18,23 +18,10 @@ internal let isPhone5 = (UIScreen.mainScreen().bounds.size.height == 568)
 // MARK: - Present Folio Reader
 
 /**
-Present a animated login for a Parent View Controller.
-*/
-public func presentReaderForParentViewController(parentViewController: UIViewController, andConfig config: FolioReaderConfig) {
-    presentReaderForParentViewController(parentViewController, animated: true, andConfig: config)
-}
-
-/**
 Present a Folio Reader for a Parent View Controller.
 */
-public func presentReaderForParentViewController(parentViewController: UIViewController, #animated: Bool, andConfig config: FolioReaderConfig) {
-    println("present reader")
-    
+public func presentReader(#parentViewController: UIViewController, andConfig config: FolioReaderConfig, animated: Bool = true) {
     let reader = FolioReaderContainer()
-//    let reader = FolioReaderCenter()
-//    let navigationController = UINavigationController(rootViewController: reader)
-//    navigationController.setNavigationBarHidden(true, animated: false)
-//    navigationController.toolbarHidden = false
     parentViewController.presentViewController(reader, animated: animated, completion: nil)
 }
 

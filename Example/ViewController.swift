@@ -18,7 +18,7 @@ class ViewController: UIViewController {
 
     @IBAction func didOpen(sender: AnyObject) {
         let config = FolioReaderConfig()
-        FolioReaderKit.presentReaderForParentViewController(self, andConfig: config)
+        FolioReaderKit.presentReader(parentViewController: self, andConfig: config)
     }
 }
 
