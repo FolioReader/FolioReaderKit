@@ -233,4 +233,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         currentPage.webView.scrollView.scrollEnabled = true
     }
     
+    func didSelectedIndex(indexPath: NSIndexPath) {
+        println("selected: \(indexPath)")
+    }
+    
 }

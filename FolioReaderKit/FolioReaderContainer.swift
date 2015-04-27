@@ -22,6 +22,7 @@ enum SlideOutState {
 protocol FolioReaderContainerDelegate {
     func didExpandedLeftPanel()
     func didCollapsedLeftPanel()
+    func didSelectedIndex(indexPath: NSIndexPath)
 }
 
 class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, FolioReaderCenterDelegate, FolioReaderSidePanelDelegate {
@@ -162,8 +163,8 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
     // MARK: - Folio Reader side panel delegate
     
     func didSelectedIndex(indexPath: NSIndexPath) {
-        println("select: \(indexPath)")
         currentSelectedIndex = indexPath
         collapseSidePanels()
+        delegate.didSelectedIndex(indexPath)
     }
 }
