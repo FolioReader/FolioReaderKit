@@ -22,7 +22,7 @@ internal let isPhone5 = (UIScreen.mainScreen().bounds.size.height == 568)
 Present a Folio Reader for a Parent View Controller.
 */
 public func presentReader(#parentViewController: UIViewController, andConfig config: FolioReaderConfig, animated: Bool = true) {
-    let reader = FolioReaderContainer()
+    let reader = FolioReaderContainer(config: config)
     parentViewController.presentViewController(reader, animated: animated, completion: nil)
 }
 

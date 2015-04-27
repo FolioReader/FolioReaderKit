@@ -26,10 +26,6 @@ enum ScrollDirection: Int {
     }
 }
 
-@objc protocol FolioReaderCenterDelegate {
-    optional func readerDidAppear()
-}
-
 class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, FolioPageDelegate, FolioReaderContainerDelegate {
     
     var collectionView: UICollectionView!
@@ -37,7 +33,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     var totalPages: Int!
     var currentPageNumber: Int!
     var currentPage: FolioReaderPage!
-    var delegate: FolioReaderCenterDelegate!
     var folioReaderContainer: FolioReaderContainer!
     
     private var screenBounds: CGRect!
@@ -80,7 +75,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         setCurrentPage()
-//        delegate.readerDidAppear()
     }
 
     override func didReceiveMemoryWarning() {
@@ -224,21 +218,19 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         println("Page did load")
     }
     
-    // MARK: - Folio container delegate
+    // MARK: - Container delegate
     
-    func didExpandedLeftPanel() {
+    func container(didExpandLeftPanel sidePanel: FolioReaderSidePanel) {
         collectionView.scrollEnabled = false
         currentPage.webView.scrollView.scrollEnabled = false
     }
     
-    func didCollapsedLeftPanel() {
+    func container(didCollapseLeftPanel sidePanel: FolioReaderSidePanel) {
         collectionView.scrollEnabled = true
         currentPage.webView.scrollView.scrollEnabled = true
     }
     
-    func didSelectedIndex(indexPath: NSIndexPath) {
-        println("selected: \(indexPath)")
-        
+    func container(sidePanel: FolioReaderSidePanel, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: UICollectionViewScrollPosition.Top, animated: false)
     }
     

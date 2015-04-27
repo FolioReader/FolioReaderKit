@@ -18,6 +18,11 @@ class ViewController: UIViewController {
 
     @IBAction func didOpen(sender: AnyObject) {
         let config = FolioReaderConfig()
+//        config.toolBarTintColor = UIColor.redColor()
+//        config.toolBarBackgroundColor = UIColor.purpleColor()
+//        config.menuTextColor = UIColor.brownColor()
+//        config.menuBackgroundColor = UIColor.magentaColor()
+        
         FolioReaderKit.presentReader(parentViewController: self, andConfig: config)
     }
 }

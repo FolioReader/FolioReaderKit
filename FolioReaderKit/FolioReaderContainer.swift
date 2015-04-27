@@ -9,6 +9,8 @@
 import UIKit
 import QuartzCore
 
+var readerConfig: FolioReaderConfig!
+
 enum SlideOutState {
     case BothCollapsed
     case LeftPanelExpanded
@@ -20,12 +22,23 @@ enum SlideOutState {
 }
 
 protocol FolioReaderContainerDelegate {
-    func didExpandedLeftPanel()
-    func didCollapsedLeftPanel()
-    func didSelectedIndex(indexPath: NSIndexPath)
+    /**
+    Notifies that the menu was expanded.
+    */
+    func container(didExpandLeftPanel sidePanel: FolioReaderSidePanel)
+    
+    /**
+    Notifies that the menu was closed.
+    */
+    func container(didCollapseLeftPanel sidePanel: FolioReaderSidePanel)
+    
+    /**
+    Notifies when the user selected some item on menu.
+    */
+    func container(sidePanel: FolioReaderSidePanel, didSelectRowAtIndexPath indexPath: NSIndexPath)
 }
 
-class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, FolioReaderCenterDelegate, FolioReaderSidePanelDelegate {
+class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, FolioReaderSidePanelDelegate {
     var delegate: FolioReaderContainerDelegate!
     var centerNavigationController: UINavigationController!
     var centerViewController: FolioReaderCenter!
@@ -33,6 +46,17 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
     let centerPanelExpandedOffset: CGFloat = 70
     var currentState = SlideOutState()
     var currentSelectedIndex: NSIndexPath!
+    
+    // MARK: - Init
+    
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    init(config configOrNil: FolioReaderConfig!) {
+        readerConfig = configOrNil
+        super.init(nibName: nil, bundle: kFrameworkBundle)
+    }
     
     // MARK: - View life cicle
     
@@ -94,14 +118,14 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
     func animateLeftPanel(#shouldExpand: Bool) {
         if (shouldExpand) {
             currentState = .LeftPanelExpanded
-            delegate.didExpandedLeftPanel()
+            delegate.container(didExpandLeftPanel: leftViewController)
             animateCenterPanelXPosition(targetPosition: CGRectGetWidth(centerNavigationController.view.frame) - centerPanelExpandedOffset)
             if currentSelectedIndex != nil {
                 leftViewController.tableView.deselectRowAtIndexPath(currentSelectedIndex, animated: true)
             }
         } else {
             animateCenterPanelXPosition(targetPosition: 0) { finished in
-                self.delegate.didCollapsedLeftPanel()
+                self.delegate.container(didCollapseLeftPanel: self.leftViewController)
                 self.currentState = .BothCollapsed
             }
         }
@@ -160,11 +184,11 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
         return true
     }
     
-    // MARK: - Folio Reader side panel delegate
+    // MARK: - Side Panel delegate
     
-    func didSelectedIndex(indexPath: NSIndexPath) {
+    func sidePanel(sidePanel: FolioReaderSidePanel, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         currentSelectedIndex = indexPath
         collapseSidePanels()
-        delegate.didSelectedIndex(indexPath)
+        delegate.container(sidePanel, didSelectRowAtIndexPath: indexPath)
     }
 }

@@ -10,7 +10,10 @@ import UIKit
 
 @objc
 protocol FolioReaderSidePanelDelegate {
-    func didSelectedIndex(indexPath: NSIndexPath)
+    /**
+    Notifies when the user selected some item on menu.
+    */
+    func sidePanel(sidePanel: FolioReaderSidePanel, didSelectRowAtIndexPath indexPath: NSIndexPath)
 }
 
 class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -30,16 +33,16 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
         tableView = UITableView(frame: tableViewFrame)
         tableView.delaysContentTouches = true
         tableView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
-        tableView.backgroundColor = UIColor(rgba: "#F5F5F5")
-        tableView.separatorColor = UIColor(rgba: "#D7D7D7")
+        tableView.backgroundColor =  readerConfig.menuBackgroundColor
+        tableView.separatorColor = readerConfig.menuSeparatorColor
         tableView.delegate = self
         tableView.dataSource = self
         view.addSubview(tableView)
         
         toolBar = UIToolbar(frame: CGRectMake(0, screenBounds().height-toolBarHeight, view.frame.width, toolBarHeight))
         toolBar.autoresizingMask = .FlexibleWidth
-        toolBar.barTintColor = UIColor(rgba: "#FF7900")
-        toolBar.tintColor = UIColor.whiteColor()
+        toolBar.barTintColor = readerConfig.toolBarBackgroundColor
+        toolBar.tintColor = readerConfig.toolBarTintColor
         toolBar.clipsToBounds = true
         toolBar.translucent = false
         view.addSubview(toolBar)
@@ -53,9 +56,9 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
         
         let iconHighlight = UIBarButtonItem(image: imageHighlight, style: .Plain, target: self, action: "didSelectHighlight:")
         iconHighlight.width = space
-        let iconSearch = UIBarButtonItem(image: imageSearch, style: .Plain, target: self, action: "didSelectHighlight:")
+        let iconSearch = UIBarButtonItem(image: imageSearch, style: .Plain, target: self, action: "didSelectSearch:")
         iconSearch.width = space
-        let iconFont = UIBarButtonItem(image: imageFont, style: .Plain, target: self, action: "didSelectHighlight:")
+        let iconFont = UIBarButtonItem(image: imageFont, style: .Plain, target: self, action: "didSelectFont:")
         iconFont.width = space
         toolBar.setItems([iconHighlight, iconSearch, iconFont], animated: false)
         
@@ -85,7 +88,7 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
         // Configure the cell...
         cell.textLabel?.text = "Chapter \(indexPath.row+1)"
         cell.textLabel?.font = UIFont(name: "Avenir-Light", size: 17)
-        cell.textLabel?.textColor = UIColor(rgba: "#575757")
+        cell.textLabel?.textColor = readerConfig.menuTextColor
         
         cell.backgroundColor = UIColor.clearColor()
 
@@ -95,7 +98,7 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
     // MARK: - Table view delegate
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        delegate?.didSelectedIndex(indexPath)
+        delegate?.sidePanel(self, didSelectRowAtIndexPath: indexPath)
     }
     
     // MARK: - Table view data source
@@ -120,8 +123,18 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
         })
     }
     
+    // MARK: - Toolbar actions
+    
     func didSelectHighlight(sender: UIBarButtonItem) {
-        println("highlight")
+        println("Highlight")
+    }
+    
+    func didSelectSearch(sender: UIBarButtonItem) {
+        println("Search")
+    }
+    
+    func didSelectFont(sender: UIBarButtonItem) {
+        println("Font")
     }
 
 }
