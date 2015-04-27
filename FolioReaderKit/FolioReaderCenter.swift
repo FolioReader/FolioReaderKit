@@ -9,6 +9,7 @@
 import UIKit
 
 let reuseIdentifier = "Cell"
+var isScrolling = false
 var scrollDirection = ScrollDirection()
 var pageWidth: CGFloat!
 var pageHeight: CGFloat!
@@ -46,12 +47,10 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        let pages = ["Page", "Page", "Page", "Page", "Page", "Page"]
         
         screenBounds = UIScreen.mainScreen().bounds
         setPageSize(UIApplication.sharedApplication().statusBarOrientation)
-        totalPages = pages.count
+        totalPages = 15
         
         // Layout
         var layout = UICollectionViewFlowLayout()
@@ -193,6 +192,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     // MARK: - ScrollView Delegate
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        isScrolling = true
+        
 //        if scrollView is UICollectionView {
             pointNow = scrollView.contentOffset
 //        }
@@ -209,6 +210,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        isScrolling = false
+        
         if scrollView is UICollectionView {
             setCurrentPage()
             println("Page: \(currentPageNumber)")
@@ -235,6 +238,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     func didSelectedIndex(indexPath: NSIndexPath) {
         println("selected: \(indexPath)")
+        
+        collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: UICollectionViewScrollPosition.Top, animated: false)
     }
     
 }

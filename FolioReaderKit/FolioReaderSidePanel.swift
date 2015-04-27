@@ -44,7 +44,6 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
         toolBar.translucent = false
         view.addSubview(toolBar)
         
-        
         let imageHighlight = UIImage(named: "icon-highlight", inBundle: kFrameworkBundle, compatibleWithTraitCollection: traits)
         let imageSearch = UIImage(named: "icon-search", inBundle: kFrameworkBundle, compatibleWithTraitCollection: traits)
         let imageFont = UIImage(named: "icon-font", inBundle: kFrameworkBundle, compatibleWithTraitCollection: traits)
@@ -85,7 +84,7 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
 
         // Configure the cell...
         cell.textLabel?.text = "Chapter \(indexPath.row+1)"
-        cell.textLabel?.font = UIFont(name: "Avenir-Light ", size: 17)
+        cell.textLabel?.font = UIFont(name: "Avenir-Light", size: 17)
         cell.textLabel?.textColor = UIColor(rgba: "#575757")
         
         cell.backgroundColor = UIColor.clearColor()
