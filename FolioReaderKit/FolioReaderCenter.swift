@@ -205,7 +205,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     func scrollViewWillBeginDecelerating(scrollView: UIScrollView) {
-        println("decelerate")
+//        println("decelerate")
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {

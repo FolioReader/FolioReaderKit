@@ -31,6 +31,7 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
     var leftViewController: FolioReaderSidePanel!
     let centerPanelExpandedOffset: CGFloat = 70
     var currentState = SlideOutState()
+    var currentSelectedIndex: NSIndexPath!
     
     // MARK: - View life cicle
     
@@ -94,6 +95,9 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
             currentState = .LeftPanelExpanded
             delegate.didExpandedLeftPanel()
             animateCenterPanelXPosition(targetPosition: CGRectGetWidth(centerNavigationController.view.frame) - centerPanelExpandedOffset)
+            if currentSelectedIndex != nil {
+                leftViewController.tableView.deselectRowAtIndexPath(currentSelectedIndex, animated: true)
+            }
         } else {
             animateCenterPanelXPosition(targetPosition: 0) { finished in
                 self.delegate.didCollapsedLeftPanel()
@@ -157,8 +161,9 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
     
     // MARK: - Folio Reader side panel delegate
     
-    func didSelectedIndex(index: Int) {
-        println("select: \(index)")
+    func didSelectedIndex(indexPath: NSIndexPath) {
+        println("select: \(indexPath)")
+        currentSelectedIndex = indexPath
         collapseSidePanels()
     }
 }

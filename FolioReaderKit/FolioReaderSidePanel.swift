@@ -10,7 +10,7 @@ import UIKit
 
 @objc
 protocol FolioReaderSidePanelDelegate {
-    func didSelectedIndex(index: Int)
+    func didSelectedIndex(indexPath: NSIndexPath)
 }
 
 class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -35,9 +35,6 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.delegate = self
         tableView.dataSource = self
         view.addSubview(tableView)
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
         
         toolBar = UIToolbar(frame: CGRectMake(0, screenBounds().height-toolBarHeight, view.frame.width, toolBarHeight))
         toolBar.autoresizingMask = .FlexibleWidth
@@ -99,7 +96,7 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
     // MARK: - Table view delegate
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        delegate?.didSelectedIndex(indexPath.row)
+        delegate?.didSelectedIndex(indexPath)
     }
     
     // MARK: - Table view data source
