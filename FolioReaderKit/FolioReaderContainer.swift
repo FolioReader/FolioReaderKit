@@ -98,8 +98,6 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
             animateCenterPanelXPosition(targetPosition: 0) { finished in
                 self.delegate.didCollapsedLeftPanel()
                 self.currentState = .BothCollapsed
-                self.leftViewController!.view.removeFromSuperview()
-                self.leftViewController = nil;
             }
         }
     }
