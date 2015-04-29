@@ -16,9 +16,12 @@
 		9943382B1AE95F9400AC774E /* icon-search.png in Resources */ = {isa = PBXBuildFile; fileRef = 994338221AE95F9400AC774E /* icon-search.png */; };
 		9943382C1AE95F9400AC774E /* icon-search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 994338231AE95F9400AC774E /* icon-search@2x.png */; };
 		9943382D1AE95F9400AC774E /* icon-search@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 994338241AE95F9400AC774E /* icon-search@3x.png */; };
+		994338301AF11F4D00AC774E /* FRResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9943382F1AF11F4C00AC774E /* FRResources.swift */; };
+		994338321AF1203600AC774E /* FRResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994338311AF1203600AC774E /* FRResource.swift */; };
+		994338341AF13D7200AC774E /* FRMediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994338331AF13D7200AC774E /* FRMediaType.swift */; };
 		999ABFEB1ADED11700E3871C /* FolioReaderContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999ABFEA1ADED11700E3871C /* FolioReaderContainer.swift */; };
 		999ABFED1ADED31700E3871C /* FolioReaderSidePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999ABFEC1ADED31700E3871C /* FolioReaderSidePanel.swift */; };
-		99D5A99B1AD6C2B1001C747A /* FolioReaderBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D5A99A1AD6C2B1001C747A /* FolioReaderBook.swift */; };
+		99D5A99B1AD6C2B1001C747A /* FRBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D5A99A1AD6C2B1001C747A /* FRBook.swift */; };
 		99D5A99D1AD6C2C4001C747A /* FolioReaderIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D5A99C1AD6C2C4001C747A /* FolioReaderIndex.swift */; };
 		99D5A9A41AD80628001C747A /* FolioReaderPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D5A9A31AD80628001C747A /* FolioReaderPage.swift */; };
 		99EF281D1AD588D6007848FF /* FolioReaderKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 99EF281C1AD588D6007848FF /* FolioReaderKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -49,9 +52,12 @@
 		994338221AE95F9400AC774E /* icon-search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-search.png"; sourceTree = "<group>"; };
 		994338231AE95F9400AC774E /* icon-search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-search@2x.png"; sourceTree = "<group>"; };
 		994338241AE95F9400AC774E /* icon-search@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-search@3x.png"; sourceTree = "<group>"; };
+		9943382F1AF11F4C00AC774E /* FRResources.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRResources.swift; sourceTree = "<group>"; };
+		994338311AF1203600AC774E /* FRResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRResource.swift; sourceTree = "<group>"; };
+		994338331AF13D7200AC774E /* FRMediaType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRMediaType.swift; sourceTree = "<group>"; };
 		999ABFEA1ADED11700E3871C /* FolioReaderContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderContainer.swift; sourceTree = "<group>"; };
 		999ABFEC1ADED31700E3871C /* FolioReaderSidePanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderSidePanel.swift; sourceTree = "<group>"; };
-		99D5A99A1AD6C2B1001C747A /* FolioReaderBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderBook.swift; sourceTree = "<group>"; };
+		99D5A99A1AD6C2B1001C747A /* FRBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRBook.swift; sourceTree = "<group>"; };
 		99D5A99C1AD6C2C4001C747A /* FolioReaderIndex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderIndex.swift; sourceTree = "<group>"; };
 		99D5A9A31AD80628001C747A /* FolioReaderPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderPage.swift; sourceTree = "<group>"; };
 		99EF28171AD588D6007848FF /* FolioReaderKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FolioReaderKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,6 +106,18 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		9943382E1AF11D1D00AC774E /* Epub */ = {
+			isa = PBXGroup;
+			children = (
+				99D5A99A1AD6C2B1001C747A /* FRBook.swift */,
+				994338311AF1203600AC774E /* FRResource.swift */,
+				9943382F1AF11F4C00AC774E /* FRResources.swift */,
+				994338331AF13D7200AC774E /* FRMediaType.swift */,
+				99D5A99C1AD6C2C4001C747A /* FolioReaderIndex.swift */,
+			);
+			name = Epub;
+			sourceTree = "<group>";
+		};
 		99EF280D1AD588D6007848FF = {
 			isa = PBXGroup;
 			children = (
@@ -128,8 +146,7 @@
 				99EF28771AD594E1007848FF /* FolioReaderCenter.swift */,
 				999ABFEC1ADED31700E3871C /* FolioReaderSidePanel.swift */,
 				99D5A9A31AD80628001C747A /* FolioReaderPage.swift */,
-				99D5A99A1AD6C2B1001C747A /* FolioReaderBook.swift */,
-				99D5A99C1AD6C2C4001C747A /* FolioReaderIndex.swift */,
+				9943382E1AF11D1D00AC774E /* Epub */,
 				9943381B1AE95F9400AC774E /* Resources */,
 				99EF281A1AD588D6007848FF /* Supporting Files */,
 			);
@@ -278,12 +295,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				99D5A99D1AD6C2C4001C747A /* FolioReaderIndex.swift in Sources */,
+				994338301AF11F4D00AC774E /* FRResources.swift in Sources */,
 				99EF28781AD594E1007848FF /* FolioReaderCenter.swift in Sources */,
 				99EF28761AD5905A007848FF /* FolioReaderConfig.swift in Sources */,
 				99EF28741AD59013007848FF /* FolioReaderKit.swift in Sources */,
 				99D5A9A41AD80628001C747A /* FolioReaderPage.swift in Sources */,
-				99D5A99B1AD6C2B1001C747A /* FolioReaderBook.swift in Sources */,
+				99D5A99B1AD6C2B1001C747A /* FRBook.swift in Sources */,
+				994338341AF13D7200AC774E /* FRMediaType.swift in Sources */,
 				999ABFED1ADED31700E3871C /* FolioReaderSidePanel.swift in Sources */,
+				994338321AF1203600AC774E /* FRResource.swift in Sources */,
 				999ABFEB1ADED11700E3871C /* FolioReaderContainer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
