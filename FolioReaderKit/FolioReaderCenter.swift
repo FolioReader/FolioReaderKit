@@ -13,6 +13,9 @@ var isScrolling = false
 var scrollDirection = ScrollDirection()
 var pageWidth: CGFloat!
 var pageHeight: CGFloat!
+var previousPageNumber: Int!
+var currentPageNumber: Int!
+var nextPageNumber: Int!
 
 enum ScrollDirection: Int {
     case None
@@ -31,7 +34,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     var collectionView: UICollectionView!
     var pages: [String]!
     var totalPages: Int!
-    var currentPageNumber: Int!
     var currentPage: FolioReaderPage!
     var folioReaderContainer: FolioReaderContainer!
     
@@ -124,7 +126,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         
         UIView.animateWithDuration(duration, animations: { () -> Void in
             self.collectionView.contentSize = CGSizeMake(pageWidth, pageHeight * CGFloat(self.totalPages))
-            self.collectionView.setContentOffset(self.frameForPage(self.currentPageNumber).origin, animated: false)
+            self.collectionView.setContentOffset(self.frameForPage(currentPageNumber).origin, animated: false)
             self.collectionView.collectionViewLayout.invalidateLayout()
         })
     }
@@ -132,7 +134,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
         if currentPageNumber+1 >= totalPages {
             UIView.animateWithDuration(duration, animations: { () -> Void in
-                self.collectionView.setContentOffset(self.frameForPage(self.currentPageNumber).origin, animated: false)
+                self.collectionView.setContentOffset(self.frameForPage(currentPageNumber).origin, animated: false)
             })
         }
     }
@@ -147,7 +149,10 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     func setCurrentPage() {
         let currentIndexPath = getCurrentIndexPath()
         currentPage = collectionView.cellForItemAtIndexPath(currentIndexPath) as! FolioReaderPage
+        
+        previousPageNumber = currentIndexPath.row == 0 ? currentIndexPath.row : currentIndexPath.row
         currentPageNumber = currentIndexPath.row+1
+        nextPageNumber = currentPageNumber+1 <= totalPages ? currentPageNumber+1 : currentPageNumber
     }
     
     func getCurrentIndexPath() -> NSIndexPath {
@@ -215,7 +220,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     // MARK: - Folio Page Delegate
     
     func pageDidLoad(page: FolioReaderPage) {
-        println("Page did load")
+//        println("Page did load")
     }
     
     // MARK: - Container delegate
