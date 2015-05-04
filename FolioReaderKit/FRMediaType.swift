@@ -30,8 +30,20 @@ struct MediaType {
     }
 }
 
+// MARK: Equatable
+
+extension MediaType: Equatable {}
+
 /**
-Manages mediatypes that are used by epubs
+Compare if two mediatypes are equal or different.
+*/
+func ==(lhs: MediaType, rhs: MediaType) -> Bool {
+    return lhs.name == rhs.name && lhs.defaultExtension == rhs.defaultExtension
+}
+
+
+/**
+Manages mediatypes that are used by epubs.
 */
 class FRMediaType: NSObject {
     var XHTML = MediaType(name: "application/xhtml+xml", defaultExtension: ".xhtml", extensions: [".htm", ".html", ".xhtml"])
@@ -64,12 +76,6 @@ class FRMediaType: NSObject {
 //    var mediatypes: [MediaType] = [XHTML, EPUB, JPG, PNG, GIF, CSS, SVG, TTF, NCX, XPGT, OPENTYPE, WOFF, SMIL, PLS, JAVASCRIPT, MP3, MP4, OGG]
     
     func isBitmapImage(mediaType: MediaType) -> Bool {
-//        if mediaType == JPG || mediaType == PNG || mediaType == GIF {
-//            
-//        }
-        
-        
-        
-        return true
+        return mediaType == JPG || mediaType == PNG || mediaType == GIF
     }
 }

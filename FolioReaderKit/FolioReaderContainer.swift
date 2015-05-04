@@ -63,6 +63,8 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        var book = FRBook()
+        
         centerViewController = FolioReaderCenter()
         centerViewController.folioReaderContainer = self
         centerNavigationController = UINavigationController(rootViewController: centerViewController)
