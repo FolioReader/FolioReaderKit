@@ -20,6 +20,21 @@
 		994338321AF1203600AC774E /* FRResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994338311AF1203600AC774E /* FRResource.swift */; };
 		994338341AF13D7200AC774E /* FRMediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994338331AF13D7200AC774E /* FRMediaType.swift */; };
 		995B456B1AF7A64600F1C6EC /* FRMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995B456A1AF7A64600F1C6EC /* FRMetadata.swift */; };
+		995B45781AF7BFD500F1C6EC /* module.map in Sources */ = {isa = PBXBuildFile; fileRef = 995B45771AF7BFD500F1C6EC /* module.map */; };
+		995B45861AF7D48600F1C6EC /* crypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 995B457B1AF7D48600F1C6EC /* crypt.h */; };
+		995B45871AF7D48600F1C6EC /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 995B457C1AF7D48600F1C6EC /* ioapi.c */; };
+		995B45881AF7D48600F1C6EC /* ioapi.h in Headers */ = {isa = PBXBuildFile; fileRef = 995B457D1AF7D48600F1C6EC /* ioapi.h */; };
+		995B45891AF7D48600F1C6EC /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 995B457E1AF7D48600F1C6EC /* mztools.c */; };
+		995B458A1AF7D48600F1C6EC /* mztools.h in Headers */ = {isa = PBXBuildFile; fileRef = 995B457F1AF7D48600F1C6EC /* mztools.h */; };
+		995B458B1AF7D48600F1C6EC /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 995B45801AF7D48600F1C6EC /* unzip.c */; };
+		995B458C1AF7D48600F1C6EC /* unzip.h in Headers */ = {isa = PBXBuildFile; fileRef = 995B45811AF7D48600F1C6EC /* unzip.h */; };
+		995B458D1AF7D48600F1C6EC /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 995B45821AF7D48600F1C6EC /* zip.c */; };
+		995B458E1AF7D48600F1C6EC /* zip.h in Headers */ = {isa = PBXBuildFile; fileRef = 995B45831AF7D48600F1C6EC /* zip.h */; };
+		995B458F1AF7D48600F1C6EC /* SSZipArchive.h in Headers */ = {isa = PBXBuildFile; fileRef = 995B45841AF7D48600F1C6EC /* SSZipArchive.h */; };
+		995B45901AF7D48600F1C6EC /* SSZipArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 995B45851AF7D48600F1C6EC /* SSZipArchive.m */; };
+		995B45921AF7D7E000F1C6EC /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 995B45911AF7D7E000F1C6EC /* libz.dylib */; };
+		995B45981AF7F05500F1C6EC /* FREpubParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995B45971AF7F05500F1C6EC /* FREpubParser.swift */; };
+		995B459E1AF809AB00F1C6EC /* AEXML.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995B459D1AF809AB00F1C6EC /* AEXML.swift */; };
 		999ABFEB1ADED11700E3871C /* FolioReaderContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999ABFEA1ADED11700E3871C /* FolioReaderContainer.swift */; };
 		999ABFED1ADED31700E3871C /* FolioReaderSidePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999ABFEC1ADED31700E3871C /* FolioReaderSidePanel.swift */; };
 		99D5A99B1AD6C2B1001C747A /* FRBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D5A99A1AD6C2B1001C747A /* FRBook.swift */; };
@@ -57,7 +72,21 @@
 		994338311AF1203600AC774E /* FRResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRResource.swift; sourceTree = "<group>"; };
 		994338331AF13D7200AC774E /* FRMediaType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRMediaType.swift; sourceTree = "<group>"; };
 		995B456A1AF7A64600F1C6EC /* FRMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRMetadata.swift; sourceTree = "<group>"; };
-		995B456C1AF7B0D200F1C6EC /* feedbooks_book_2936.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = feedbooks_book_2936.epub; sourceTree = "<group>"; };
+		995B45771AF7BFD500F1C6EC /* module.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.map; sourceTree = "<group>"; };
+		995B457B1AF7D48600F1C6EC /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
+		995B457C1AF7D48600F1C6EC /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
+		995B457D1AF7D48600F1C6EC /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
+		995B457E1AF7D48600F1C6EC /* mztools.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mztools.c; sourceTree = "<group>"; };
+		995B457F1AF7D48600F1C6EC /* mztools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mztools.h; sourceTree = "<group>"; };
+		995B45801AF7D48600F1C6EC /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
+		995B45811AF7D48600F1C6EC /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
+		995B45821AF7D48600F1C6EC /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
+		995B45831AF7D48600F1C6EC /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
+		995B45841AF7D48600F1C6EC /* SSZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSZipArchive.h; sourceTree = "<group>"; };
+		995B45851AF7D48600F1C6EC /* SSZipArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSZipArchive.m; sourceTree = "<group>"; };
+		995B45911AF7D7E000F1C6EC /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		995B45971AF7F05500F1C6EC /* FREpubParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FREpubParser.swift; sourceTree = "<group>"; };
+		995B459D1AF809AB00F1C6EC /* AEXML.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEXML.swift; sourceTree = "<group>"; };
 		999ABFEA1ADED11700E3871C /* FolioReaderContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderContainer.swift; sourceTree = "<group>"; };
 		999ABFEC1ADED31700E3871C /* FolioReaderSidePanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderSidePanel.swift; sourceTree = "<group>"; };
 		99D5A99A1AD6C2B1001C747A /* FRBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRBook.swift; sourceTree = "<group>"; };
@@ -79,6 +108,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				995B45921AF7D7E000F1C6EC /* libz.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,7 +126,6 @@
 		9943381B1AE95F9400AC774E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				995B456C1AF7B0D200F1C6EC /* feedbooks_book_2936.epub */,
 				9943381C1AE95F9400AC774E /* icon-font.png */,
 				9943381D1AE95F9400AC774E /* icon-font@2x.png */,
 				9943381E1AE95F9400AC774E /* icon-font@3x.png */,
@@ -119,8 +148,45 @@
 				994338331AF13D7200AC774E /* FRMediaType.swift */,
 				995B456A1AF7A64600F1C6EC /* FRMetadata.swift */,
 				99D5A99C1AD6C2C4001C747A /* FolioReaderIndex.swift */,
+				995B45971AF7F05500F1C6EC /* FREpubParser.swift */,
 			);
 			name = Epub;
+			sourceTree = "<group>";
+		};
+		995B45791AF7D48600F1C6EC /* SSZipArchive */ = {
+			isa = PBXGroup;
+			children = (
+				995B45911AF7D7E000F1C6EC /* libz.dylib */,
+				995B45771AF7BFD500F1C6EC /* module.map */,
+				995B457A1AF7D48600F1C6EC /* minizip */,
+				995B45841AF7D48600F1C6EC /* SSZipArchive.h */,
+				995B45851AF7D48600F1C6EC /* SSZipArchive.m */,
+			);
+			path = SSZipArchive;
+			sourceTree = "<group>";
+		};
+		995B457A1AF7D48600F1C6EC /* minizip */ = {
+			isa = PBXGroup;
+			children = (
+				995B457B1AF7D48600F1C6EC /* crypt.h */,
+				995B457C1AF7D48600F1C6EC /* ioapi.c */,
+				995B457D1AF7D48600F1C6EC /* ioapi.h */,
+				995B457E1AF7D48600F1C6EC /* mztools.c */,
+				995B457F1AF7D48600F1C6EC /* mztools.h */,
+				995B45801AF7D48600F1C6EC /* unzip.c */,
+				995B45811AF7D48600F1C6EC /* unzip.h */,
+				995B45821AF7D48600F1C6EC /* zip.c */,
+				995B45831AF7D48600F1C6EC /* zip.h */,
+			);
+			path = minizip;
+			sourceTree = "<group>";
+		};
+		995B459C1AF809AB00F1C6EC /* AEXML */ = {
+			isa = PBXGroup;
+			children = (
+				995B459D1AF809AB00F1C6EC /* AEXML.swift */,
+			);
+			path = AEXML;
 			sourceTree = "<group>";
 		};
 		99EF280D1AD588D6007848FF = {
@@ -154,6 +220,8 @@
 				9943382E1AF11D1D00AC774E /* Epub */,
 				9943381B1AE95F9400AC774E /* Resources */,
 				99EF281A1AD588D6007848FF /* Supporting Files */,
+				995B459C1AF809AB00F1C6EC /* AEXML */,
+				995B45791AF7D48600F1C6EC /* SSZipArchive */,
 			);
 			path = FolioReaderKit;
 			sourceTree = "<group>";
@@ -190,7 +258,13 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				995B45861AF7D48600F1C6EC /* crypt.h in Headers */,
+				995B458E1AF7D48600F1C6EC /* zip.h in Headers */,
 				99EF281D1AD588D6007848FF /* FolioReaderKit.h in Headers */,
+				995B458C1AF7D48600F1C6EC /* unzip.h in Headers */,
+				995B45881AF7D48600F1C6EC /* ioapi.h in Headers */,
+				995B458A1AF7D48600F1C6EC /* mztools.h in Headers */,
+				995B458F1AF7D48600F1C6EC /* SSZipArchive.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,14 +375,22 @@
 			files = (
 				995B456B1AF7A64600F1C6EC /* FRMetadata.swift in Sources */,
 				99D5A99D1AD6C2C4001C747A /* FolioReaderIndex.swift in Sources */,
+				995B45891AF7D48600F1C6EC /* mztools.c in Sources */,
+				995B458D1AF7D48600F1C6EC /* zip.c in Sources */,
+				995B45901AF7D48600F1C6EC /* SSZipArchive.m in Sources */,
+				995B459E1AF809AB00F1C6EC /* AEXML.swift in Sources */,
 				994338301AF11F4D00AC774E /* FRResources.swift in Sources */,
 				99EF28781AD594E1007848FF /* FolioReaderCenter.swift in Sources */,
 				99EF28761AD5905A007848FF /* FolioReaderConfig.swift in Sources */,
 				99EF28741AD59013007848FF /* FolioReaderKit.swift in Sources */,
+				995B45781AF7BFD500F1C6EC /* module.map in Sources */,
 				99D5A9A41AD80628001C747A /* FolioReaderPage.swift in Sources */,
+				995B45871AF7D48600F1C6EC /* ioapi.c in Sources */,
+				995B458B1AF7D48600F1C6EC /* unzip.c in Sources */,
 				99D5A99B1AD6C2B1001C747A /* FRBook.swift in Sources */,
 				994338341AF13D7200AC774E /* FRMediaType.swift in Sources */,
 				999ABFED1ADED31700E3871C /* FolioReaderSidePanel.swift in Sources */,
+				995B45981AF7F05500F1C6EC /* FREpubParser.swift in Sources */,
 				994338321AF1203600AC774E /* FRResource.swift in Sources */,
 				999ABFEB1ADED11700E3871C /* FolioReaderContainer.swift in Sources */,
 			);
@@ -432,6 +514,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "${SRCROOT}/FolioReaderKit/SSZipArchive";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -450,6 +533,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "${SRCROOT}/FolioReaderKit/SSZipArchive";
 			};
 			name = Release;
 		};

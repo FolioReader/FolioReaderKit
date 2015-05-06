@@ -11,12 +11,21 @@ import Foundation
 // MARK: - Internal constants
 
 internal let kFrameworkBundle = NSBundle(identifier: "com.folioreader.FolioReaderKit")
+internal let kApplicationDocumentsDirectory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! String
 internal let isPad = UIDevice.currentDevice().userInterfaceIdiom == .Pad
 internal let isPhone = UIDevice.currentDevice().userInterfaceIdiom == .Phone
 internal let isPhone4 = (UIScreen.mainScreen().bounds.size.height == 480)
 internal let isPhone5 = (UIScreen.mainScreen().bounds.size.height == 568)
 
 // MARK: - Present Folio Reader
+
+/**
+Present a Folio Reader for a Parent View Controller.
+*/
+public func presentReader(#parentViewController: UIViewController, withEpubPath epubPath: String, andConfig config: FolioReaderConfig, animated: Bool = true) {
+    let reader = FolioReaderContainer(config: config, epubPath: epubPath)
+    parentViewController.presentViewController(reader, animated: animated, completion: nil)
+}
 
 /**
 Present a Folio Reader for a Parent View Controller.

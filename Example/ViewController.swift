@@ -23,7 +23,10 @@ class ViewController: UIViewController {
 //        config.menuTextColor = UIColor.brownColor()
 //        config.menuBackgroundColor = UIColor.magentaColor()
         
-        FolioReaderKit.presentReader(parentViewController: self, andConfig: config)
+        let bookPath = NSBundle.mainBundle().pathForResource("book", ofType: "epub")
+        
+//        FolioReaderKit.presentReader(parentViewController: self, andConfig: config)
+        FolioReaderKit.presentReader(parentViewController: self, withEpubPath: bookPath!, andConfig: config)
     }
 }
 

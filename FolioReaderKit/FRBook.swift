@@ -10,7 +10,7 @@ import UIKit
 
 class FRBook: NSObject {
     var resources = FRResources()
-//    var metadata = Metadata()
+    var metadata = FRMetadata()
 //    var spine = Spine()
 //    var tableOfContents = TableOfContents()
 //    var guide = Guide()

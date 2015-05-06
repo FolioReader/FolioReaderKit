@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		995B45951AF7DCFB00F1C6EC /* book.epub in Resources */ = {isa = PBXBuildFile; fileRef = 995B45931AF7DCF800F1C6EC /* book.epub */; };
 		99EF28421AD58E1F007848FF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EF28411AD58E1F007848FF /* AppDelegate.swift */; };
 		99EF28441AD58E1F007848FF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EF28431AD58E1F007848FF /* ViewController.swift */; };
 		99EF28471AD58E1F007848FF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 99EF28451AD58E1F007848FF /* Main.storyboard */; };
@@ -54,6 +55,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		995B45931AF7DCF800F1C6EC /* book.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = book.epub; sourceTree = "<group>"; };
 		99EF283C1AD58E1F007848FF /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		99EF28401AD58E1F007848FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		99EF28411AD58E1F007848FF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 		99EF283F1AD58E1F007848FF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				995B45931AF7DCF800F1C6EC /* book.epub */,
 				99EF28401AD58E1F007848FF /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -207,6 +210,7 @@
 			files = (
 				99EF28471AD58E1F007848FF /* Main.storyboard in Resources */,
 				99EF284C1AD58E1F007848FF /* LaunchScreen.xib in Resources */,
+				995B45951AF7DCFB00F1C6EC /* book.epub in Resources */,
 				99EF28491AD58E1F007848FF /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
