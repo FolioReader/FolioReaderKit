@@ -10,6 +10,7 @@ import UIKit
 import QuartzCore
 
 var readerConfig: FolioReaderConfig!
+var epubPath: String?
 
 enum SlideOutState {
     case BothCollapsed
@@ -53,8 +54,14 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
         super.init(coder: aDecoder)
     }
     
-    init(config configOrNil: FolioReaderConfig!) {
+    init(config configOrNil: FolioReaderConfig!, epubPath epubPathOrNil: String? = nil) {
         readerConfig = configOrNil
+        epubPath = epubPathOrNil
+        
+        if (epubPath != nil) {
+            var book = FREpubParser().readEpub(epubPath: epubPath!)
+        }
+        
         super.init(nibName: nil, bundle: kFrameworkBundle)
     }
     
@@ -62,8 +69,6 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        var book = FRBook()
         
         centerViewController = FolioReaderCenter()
         centerViewController.folioReaderContainer = self
