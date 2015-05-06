@@ -96,6 +96,9 @@ class FREpubParser: NSObject {
             if (coverImageID != nil && book.resources.containsById(coverImageID!)) {
                 book.coverImage = book.resources.getById(coverImageID!)
             }
+            
+            // Read Spine
+            book.spine = readSpine(xmlDoc.root["spine"].children)
         }
     }
     
@@ -184,5 +187,19 @@ class FREpubParser: NSObject {
             
         }
         return metadata
+    }
+    
+    private func readSpine(tags: [AEXMLElement]) -> FRSpine {
+        let spine = FRSpine()
+        
+        for tag in tags {
+            
+            let idref = tag.attributes["idref"] as! String
+            let linear = tag.attributes["linear"] as! String == "yes" ? true : false
+            
+            spine.spineReferences.append(Spine(resource: book.resources.getById(idref), linear: linear))
+        }
+        
+        return spine
     }
 }

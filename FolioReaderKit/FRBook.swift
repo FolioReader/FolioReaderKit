@@ -11,7 +11,7 @@ import UIKit
 class FRBook: NSObject {
     var resources = FRResources()
     var metadata = FRMetadata()
-//    var spine = Spine()
+    var spine = FRSpine()
     var tableOfContents: [FRTOCReference]!
 //    var guide = Guide()
     var opfResource: FRResource!
