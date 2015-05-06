@@ -60,6 +60,8 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
         
         if (epubPath != nil) {
             var book = FREpubParser().readEpub(epubPath: epubPath!)
+            
+            println(book)
         }
         
         super.init(nibName: nil, bundle: kFrameworkBundle)

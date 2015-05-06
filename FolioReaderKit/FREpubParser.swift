@@ -93,7 +93,7 @@ class FREpubParser: NSObject {
             
             // Read the cover image
             let coverImageID = book.metadata.findMetaByName("cover")
-            if (coverImageID != nil) {
+            if (coverImageID != nil && book.resources.containsById(coverImageID!)) {
                 book.coverImage = book.resources.getById(coverImageID!)
             }
         }

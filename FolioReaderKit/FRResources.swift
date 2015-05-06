@@ -34,6 +34,33 @@ class FRResources: NSObject {
     }
     
     /**
+    Whether there exists a resource with the given href.
+    */
+    func containsByHref(href: String) -> Bool {
+        if href.isEmpty {
+            return false
+        }
+        
+        return contains(resources.keys, href)
+    }
+    
+    /**
+    Whether there exists a resource with the given id.
+    */
+    func containsById(id: String) -> Bool {
+        if id.isEmpty {
+            return false
+        }
+        
+        for resource in resources.values {
+            if resource.id == id {
+                return true
+            }
+        }
+        return false
+    }
+    
+    /**
     Gets the resource with the given href.
     */
     func getByHref(href: String) -> FRResource? {
