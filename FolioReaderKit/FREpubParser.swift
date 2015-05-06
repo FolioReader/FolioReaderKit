@@ -90,6 +90,12 @@ class FREpubParser: NSObject {
             
             // Read metadata
             book.metadata = readMetadata(xmlDoc.root["metadata"].children)
+            
+            // Read the cover image
+            let coverImageID = book.metadata.findMetaByName("cover")
+            if (coverImageID != nil) {
+                book.coverImage = book.resources.getById(coverImageID!)
+            }
         }
     }
     
@@ -132,8 +138,6 @@ class FREpubParser: NSObject {
         let metadata = FRMetadata()
         
         for tag in tags {
-            println(tag.xmlString)
-            
             if tag.name == "dc:title" {
                 metadata.titles.append(tag.value!)
             }

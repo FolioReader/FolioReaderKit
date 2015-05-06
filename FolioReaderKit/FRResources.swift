@@ -33,10 +33,25 @@ class FRResources: NSObject {
         return nil
     }
     
+    /**
+    Gets the resource with the given href.
+    */
     func getByHref(href: String) -> FRResource? {
         if href.isEmpty {
             return nil
         }
         return resources[href]
+    }
+    
+    /**
+    Gets the resource with the given href.
+    */
+    func getById(id: String) -> FRResource? {
+        for resource in resources.values {
+            if resource.id == id {
+                return resource
+            }
+        }
+        return nil
     }
 }

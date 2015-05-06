@@ -16,5 +16,5 @@ class FRBook: NSObject {
 //    var guide = Guide()
     var opfResource: FRResource!
     var ncxResource: FRResource!
-    var coverImage: FRResource?
+    var coverImage: FRResource!
 }
