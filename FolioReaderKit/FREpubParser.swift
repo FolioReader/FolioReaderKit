@@ -69,8 +69,7 @@ class FREpubParser: NSObject {
         var error: NSError?
         
         if let xmlDoc = AEXMLDocument(xmlData: opfData!, error: &error) {
-            println(xmlDoc.xmlString)
-            // Parse manifest resources
+//            println(xmlDoc.xmlString)
             for item in xmlDoc.root["manifest"]["item"].all! {
                 let resource = FRResource()
                 resource.id = item.attributes["id"] as! String
@@ -86,23 +85,100 @@ class FREpubParser: NSObject {
                 println("ERROR: Could not find table of contents resource. The book don't have a NCX resource.")
             }
             
-            findTableOfContents()
+            // The book TOC
+            book.tableOfContents = findTableOfContents()
+            
+            // Read metadata
+            book.metadata = readMetadata(xmlDoc.root["metadata"].children)
         }
     }
     
-    private func findTableOfContents() {        
+    private func findTableOfContents() -> [FRTOCReference] {
         let ncxPath = resourcesBasePath + book.ncxResource.href
         let ncxData = NSData(contentsOfFile: ncxPath, options: .DataReadingMappedAlways, error: nil)
         var error: NSError?
         
+        var tableOfContent = [FRTOCReference]()
+        
         if let xmlDoc = AEXMLDocument(xmlData: ncxData!, error: &error) {
-            println(xmlDoc.xmlString)
-            
-            for item in xmlDoc.root["navMap"]["item"].all! {}
+            for item in xmlDoc.root["navMap"]["navPoint"].all! {
+                tableOfContent.append(readTOCReference(item))
+            }
         }
+        
+        return tableOfContent
     }
     
-    private func readTOCReference() {
+    private func readTOCReference(navpointElement: AEXMLElement) -> FRTOCReference {
+        let label = navpointElement["navLabel"]["text"].value as String!
+        let reference = navpointElement["content"].attributes["src"] as! String!
         
+        let hrefSplit = split(reference) {$0 == "#"}
+        let fragmentID = hrefSplit.count > 1 ? hrefSplit[1] : ""
+        let href = hrefSplit[0]
+        
+        let resource = book.resources.getByHref(href)
+        let toc = FRTOCReference(title: label, resource: resource!, fragmentID: fragmentID)
+        
+        if navpointElement["navPoint"].all != nil {
+            for navPoint in navpointElement["navPoint"].all! {
+                toc.children.append(readTOCReference(navPoint))
+            }
+        }        
+        return toc
+    }
+    
+    private func readMetadata(tags: [AEXMLElement]) -> FRMetadata {
+        let metadata = FRMetadata()
+        
+        for tag in tags {
+            println(tag.xmlString)
+            
+            if tag.name == "dc:title" {
+                metadata.titles.append(tag.value!)
+            }
+            
+            if tag.name == "dc:identifier" {
+                metadata.identifiers.append(Identifier(scheme: tag.attributes["opf:scheme"] as! String, value: tag.value!))
+            }
+            
+            if tag.name == "dc:language" {
+                metadata.language = tag.value != nil ? tag.value! : ""
+            }
+            
+            if tag.name == "dc:creator" {
+                metadata.creators.append(Author(name: tag.value!, role: tag.attributes["opf:role"] as! String, fileAs: tag.attributes["opf:file-as"] as! String))
+            }
+            
+            if tag.name == "dc:contributor" {
+                metadata.creators.append(Author(name: tag.value!, role: tag.attributes["opf:role"] as! String, fileAs: tag.attributes["opf:file-as"] as! String))
+            }
+            
+            if tag.name == "dc:publisher" {
+                metadata.publishers.append(tag.value != nil ? tag.value! : "")
+            }
+            
+            if tag.name == "dc:description" {
+                metadata.descriptions.append(tag.value != nil ? tag.value! : "")
+            }
+            
+            if tag.name == "dc:subject" {
+                metadata.subjects.append(tag.value != nil ? tag.value! : "")
+            }
+            
+            if tag.name == "dc:rights" {
+                metadata.rights.append(tag.value != nil ? tag.value! : "")
+            }
+            
+            if tag.name == "dc:date" {
+                metadata.dates.append(Date(date: tag.value!, event: tag.attributes["opf:event"] as! String))
+            }
+            
+            if tag.name == "meta" {
+                metadata.metaAttributes = [tag.attributes["name"] as! String: tag.attributes["content"] as! String]
+            }
+            
+        }
+        return metadata
     }
 }

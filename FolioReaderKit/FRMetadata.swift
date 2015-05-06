@@ -8,24 +8,68 @@
 
 import UIKit
 
+/**
+Represents one of the authors of the book.
+*/
 struct Author {
-    var firstName: String!
-    var lastName: String!
+    var name: String!
+    var role: String!
+    var fileAs: String!
+    
+    init(name: String, role: String, fileAs: String) {
+        self.name = name
+        self.role = role
+        self.fileAs = fileAs
+    }
 }
 
+/**
+A Book's identifier.
+*/
+struct Identifier {
+    var scheme: String!
+    var value: String!
+    
+    init(scheme: String, value: String) {
+        self.scheme = scheme
+        self.value = value
+    }
+}
+
+/**
+A date and his event.
+*/
+struct Date {
+    var date: String!
+    var event: String!
+    
+    init(date: String, event: String!) {
+        self.date = date
+        self.event = event
+    }
+}
+
+/**
+Manages book metadata.
+*/
 class FRMetadata: NSObject {
-    var authors: [Author] = [Author]()
-//    var List<Author> contributors = new ArrayList<Author>();
-//    var List<Date> dates = new ArrayList<Date>();
-//    var String language = DEFAULT_LANGUAGE;
-//    var Map<QName, String> otherProperties = new HashMap<QName, String>();
-//    var List<String> rights = new ArrayList<String>();
-//    var List<String> titles = new ArrayList<String>();
-//    var List<Identifier> identifiers = new ArrayList<Identifier>();
-//    var List<String> subjects = new ArrayList<String>();
-//    var String format = MediatypeService.EPUB.getName();
-//    var List<String> types = new ArrayList<String>();
-//    var List<String> descriptions = new ArrayList<String>();
-//    var List<String> publishers = new ArrayList<String>();
-//    var Map<String, String> metaAttributes = new HashMap<String, String>();
+    var creators = [Author]()
+    var contributors = [Author]()
+    var dates = [Date]()
+    var language = "en"
+    var titles = [String]()
+    var identifiers = [Identifier]()
+    var subjects = [String]()
+    var descriptions = [String]()
+    var publishers = [String]()
+    var format = FRMediaType.EPUB.name
+    var rights = [String]()
+    var metaAttributes = [String: String]()
+    
+    func findMetaByName(name: String) -> String? {
+        if name.isEmpty {
+            return nil
+        }
+        return metaAttributes[name]
+    }
 }

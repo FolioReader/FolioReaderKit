@@ -12,7 +12,6 @@ class FRResource: NSObject {
     var id: String!
     var title: String!
     var href: String!
-//    var originalHref: String!
     var mediaType: MediaType!
     var inputEncoding: String!
 }

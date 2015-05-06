@@ -32,4 +32,11 @@ class FRResources: NSObject {
         }
         return nil
     }
+    
+    func getByHref(href: String) -> FRResource? {
+        if href.isEmpty {
+            return nil
+        }
+        return resources[href]
+    }
 }
