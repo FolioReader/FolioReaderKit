@@ -51,7 +51,6 @@ class FREpubParser: NSObject {
         var error: NSError?
         
         if let xmlDoc = AEXMLDocument(xmlData: containerData!, error: &error) {
-//            println(xmlDoc.xmlString)
             let opfResource = FRResource()
             opfResource.href = xmlDoc.root["rootfiles"]["rootfile"].attributes["full-path"] as! String
             opfResource.mediaType = FRMediaType.determineMediaType(xmlDoc.root["rootfiles"]["rootfile"].attributes["full-path"] as! String)
@@ -69,7 +68,6 @@ class FREpubParser: NSObject {
         var error: NSError?
         
         if let xmlDoc = AEXMLDocument(xmlData: opfData!, error: &error) {
-//            println(xmlDoc.xmlString)
             for item in xmlDoc.root["manifest"]["item"].all! {
                 let resource = FRResource()
                 resource.id = item.attributes["id"] as! String
@@ -102,6 +100,9 @@ class FREpubParser: NSObject {
         }
     }
     
+    /**
+    Read and parse the Table of Contents.
+    */
     private func findTableOfContents() -> [FRTocReference] {
         let ncxPath = resourcesBasePath + book.ncxResource.href
         let ncxData = NSData(contentsOfFile: ncxPath, options: .DataReadingMappedAlways, error: nil)
@@ -137,6 +138,9 @@ class FREpubParser: NSObject {
         return toc
     }
     
+    /**
+    Read and parse <metadata>.
+    */
     private func readMetadata(tags: [AEXMLElement]) -> FRMetadata {
         let metadata = FRMetadata()
         
@@ -189,6 +193,9 @@ class FREpubParser: NSObject {
         return metadata
     }
     
+    /**
+    Read and parse <spine>.
+    */
     private func readSpine(tags: [AEXMLElement]) -> FRSpine {
         let spine = FRSpine()
         

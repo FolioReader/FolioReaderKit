@@ -141,7 +141,7 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		9943382E1AF11D1D00AC774E /* Epub */ = {
+		9943382E1AF11D1D00AC774E /* EpubCore */ = {
 			isa = PBXGroup;
 			children = (
 				99D5A99A1AD6C2B1001C747A /* FRBook.swift */,
@@ -153,7 +153,7 @@
 				99EE55701AFA3757001BE607 /* FRTocReference.swift */,
 				995B45971AF7F05500F1C6EC /* FREpubParser.swift */,
 			);
-			name = Epub;
+			name = EpubCore;
 			sourceTree = "<group>";
 		};
 		995B45791AF7D48600F1C6EC /* SSZipArchive */ = {
@@ -220,7 +220,7 @@
 				99EF28771AD594E1007848FF /* FolioReaderCenter.swift */,
 				999ABFEC1ADED31700E3871C /* FolioReaderSidePanel.swift */,
 				99D5A9A31AD80628001C747A /* FolioReaderPage.swift */,
-				9943382E1AF11D1D00AC774E /* Epub */,
+				9943382E1AF11D1D00AC774E /* EpubCore */,
 				9943381B1AE95F9400AC774E /* Resources */,
 				99EF281A1AD588D6007848FF /* Supporting Files */,
 				995B459C1AF809AB00F1C6EC /* AEXML */,
