@@ -21,7 +21,7 @@ class ViewController: UIViewController {
 //        config.toolBarTintColor = UIColor.redColor()
 //        config.toolBarBackgroundColor = UIColor.purpleColor()
 //        config.menuTextColor = UIColor.brownColor()
-//        config.menuBackgroundColor = UIColor.magentaColor()
+//        config.menuBackgroundColor = UIColor.lightGrayColor()
         
         let bookPath = NSBundle.mainBundle().pathForResource("book", ofType: "epub")
         

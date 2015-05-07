@@ -19,6 +19,5 @@ struct Spine {
 }
 
 class FRSpine: NSObject {
-    var tocReference: FRResources!
     var spineReferences = [Spine]()
 }

@@ -148,7 +148,7 @@ class FREpubParser: NSObject {
             }
             
             if tag.name == "dc:identifier" {
-                metadata.identifiers.append(Identifier(scheme: tag.attributes["opf:scheme"] as! String, value: tag.value!))
+                metadata.identifiers.append(Identifier(scheme: tag.attributes["opf:scheme"] != nil ? tag.attributes["opf:scheme"] as! String : "", value: tag.value!))
             }
             
             if tag.name == "dc:language" {
@@ -156,11 +156,11 @@ class FREpubParser: NSObject {
             }
             
             if tag.name == "dc:creator" {
-                metadata.creators.append(Author(name: tag.value!, role: tag.attributes["opf:role"] as! String, fileAs: tag.attributes["opf:file-as"] as! String))
+                metadata.creators.append(Author(name: tag.value!, role: tag.attributes["opf:role"] != nil ? tag.attributes["opf:role"] as! String : "", fileAs: tag.attributes["opf:file-as"] != nil ? tag.attributes["opf:file-as"] as! String : ""))
             }
             
             if tag.name == "dc:contributor" {
-                metadata.creators.append(Author(name: tag.value!, role: tag.attributes["opf:role"] as! String, fileAs: tag.attributes["opf:file-as"] as! String))
+                metadata.creators.append(Author(name: tag.value!, role: tag.attributes["opf:role"] != nil ? tag.attributes["opf:role"] as! String : "", fileAs: tag.attributes["opf:file-as"] != nil ? tag.attributes["opf:file-as"] as! String : ""))
             }
             
             if tag.name == "dc:publisher" {
@@ -180,11 +180,11 @@ class FREpubParser: NSObject {
             }
             
             if tag.name == "dc:date" {
-                metadata.dates.append(Date(date: tag.value!, event: tag.attributes["opf:event"] as! String))
+                metadata.dates.append(Date(date: tag.value!, event: tag.attributes["opf:event"] != nil ? tag.attributes["opf:event"] as! String : ""))
             }
             
             if tag.name == "meta" {
-                metadata.metaAttributes = [tag.attributes["name"] as! String: tag.attributes["content"] as! String]
+                metadata.metaAttributes = [tag.attributes["name"] as! String: tag.attributes["content"] != nil ? tag.attributes["content"] as! String : ""]
             }
             
         }
@@ -199,7 +199,11 @@ class FREpubParser: NSObject {
         
         for tag in tags {
             let idref = tag.attributes["idref"] as! String
-            let linear = tag.attributes["linear"] as! String == "yes" ? true : false
+            var linear = true
+            
+            if tag.attributes["linear"] != nil {
+                linear = tag.attributes["linear"] as! String == "yes" ? true : false
+            }
             
             if book.resources.containsById(idref) {
                 spine.spineReferences.append(Spine(resource: book.resources.getById(idref)!, linear: linear))

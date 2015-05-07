@@ -103,7 +103,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         
         // Configure the cell
         let resource = book.spine.spineReferences[indexPath.row].resource
-        let html = String(contentsOfFile: resource.fullHref, encoding: NSUTF8StringEncoding, error: nil)
+        let html = String(contentsOfFile: resource.fullHref.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!, encoding: NSUTF8StringEncoding, error: nil)
         cell.loadHTMLString(html, baseURL: NSURL(fileURLWithPath: resource.fullHref.stringByDeletingLastPathComponent))
         
         return cell
