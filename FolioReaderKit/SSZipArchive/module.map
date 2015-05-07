@@ -1,4 +1,4 @@
 module SSZipArchive [system] {
-    header "/Users/heberti.almeida/Projetos/2015/FolioReaderKit/FolioReaderKit/SSZipArchive/SSZipArchive.h"
+    header "../SSZipArchive/SSZipArchive.h"
     export *
 }
