@@ -1,5 +1,5 @@
 //
-//  FRTOCReference.swift
+//  FRTocReference.swift
 //  FolioReaderKit
 //
 //  Created by Heberti Almeida on 06/05/15.
@@ -8,17 +8,17 @@
 
 import UIKit
 
-class FRTOCReference: NSObject {
+class FRTocReference: NSObject {
     var resource: FRResource!
     var title: String!
     var fragmentID: String?
-    var children: [FRTOCReference]!
+    var children: [FRTocReference]!
     
     convenience init(title:String, resource: FRResource, fragmentID: String = "") {
-        self.init(title: title, resource: resource, fragmentID: fragmentID, children: [FRTOCReference]())
+        self.init(title: title, resource: resource, fragmentID: fragmentID, children: [FRTocReference]())
     }
     
-    init(title:String, resource: FRResource, fragmentID: String, children: [FRTOCReference]) {
+    init(title:String, resource: FRResource, fragmentID: String, children: [FRTocReference]) {
         self.resource = resource
         self.title = title
         self.fragmentID = fragmentID
@@ -26,7 +26,7 @@ class FRTOCReference: NSObject {
     }
     
     override func isEqual(object: AnyObject?) -> Bool {
-        let obj = object as! FRTOCReference
+        let obj = object as! FRTocReference
         return obj.title == self.title && obj.fragmentID == self.fragmentID
     }
 }

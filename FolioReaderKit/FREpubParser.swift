@@ -24,7 +24,7 @@ class FREpubParser: NSObject {
         let bookName = withEpubPath.lastPathComponent.stringByDeletingPathExtension
         let separator = "/"
         bookBasePath = kApplicationDocumentsDirectory + separator + bookName + separator
-//        SSZipArchive.unzipFileAtPath(withEpubPath, toDestination: bookBasePath)
+        SSZipArchive.unzipFileAtPath(withEpubPath, toDestination: bookBasePath)
         
         readContainer()
         readOpf()
@@ -102,12 +102,12 @@ class FREpubParser: NSObject {
         }
     }
     
-    private func findTableOfContents() -> [FRTOCReference] {
+    private func findTableOfContents() -> [FRTocReference] {
         let ncxPath = resourcesBasePath + book.ncxResource.href
         let ncxData = NSData(contentsOfFile: ncxPath, options: .DataReadingMappedAlways, error: nil)
         var error: NSError?
         
-        var tableOfContent = [FRTOCReference]()
+        var tableOfContent = [FRTocReference]()
         
         if let xmlDoc = AEXMLDocument(xmlData: ncxData!, error: &error) {
             for item in xmlDoc.root["navMap"]["navPoint"].all! {
@@ -118,7 +118,7 @@ class FREpubParser: NSObject {
         return tableOfContent
     }
     
-    private func readTOCReference(navpointElement: AEXMLElement) -> FRTOCReference {
+    private func readTOCReference(navpointElement: AEXMLElement) -> FRTocReference {
         let label = navpointElement["navLabel"]["text"].value as String!
         let reference = navpointElement["content"].attributes["src"] as! String!
         
@@ -127,7 +127,7 @@ class FREpubParser: NSObject {
         let href = hrefSplit[0]
         
         let resource = book.resources.getByHref(href)
-        let toc = FRTOCReference(title: label, resource: resource!, fragmentID: fragmentID)
+        let toc = FRTocReference(title: label, resource: resource!, fragmentID: fragmentID)
         
         if navpointElement["navPoint"].all != nil {
             for navPoint in navpointElement["navPoint"].all! {
@@ -193,11 +193,12 @@ class FREpubParser: NSObject {
         let spine = FRSpine()
         
         for tag in tags {
-            
             let idref = tag.attributes["idref"] as! String
             let linear = tag.attributes["linear"] as! String == "yes" ? true : false
             
-            spine.spineReferences.append(Spine(resource: book.resources.getById(idref), linear: linear))
+            if book.resources.containsById(idref) {
+                spine.spineReferences.append(Spine(resource: book.resources.getById(idref)!, linear: linear))
+            }
         }
         
         return spine

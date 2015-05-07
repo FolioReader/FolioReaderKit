@@ -10,9 +10,9 @@ import UIKit
 
 struct Spine {
     var linear: Bool!
-    var resource: FRResources!
+    var resource: FRResource!
     
-    init(resource: FRResources, linear: Bool = true) {
+    init(resource: FRResource, linear: Bool = true) {
         self.resource = resource
         self.linear = linear
     }
@@ -20,5 +20,5 @@ struct Spine {
 
 class FRSpine: NSObject {
     var tocReference: FRResources!
-    var spineReferences: [Spine]!
+    var spineReferences = [Spine]()
 }
