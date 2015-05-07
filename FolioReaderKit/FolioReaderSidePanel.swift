@@ -13,7 +13,7 @@ protocol FolioReaderSidePanelDelegate {
     /**
     Notifies when the user selected some item on menu.
     */
-    func sidePanel(sidePanel: FolioReaderSidePanel, didSelectRowAtIndexPath indexPath: NSIndexPath)
+    func sidePanel(sidePanel: FolioReaderSidePanel, didSelectRowAtIndexPath indexPath: NSIndexPath, withTocReference reference: FRTocReference)
 }
 
 class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -23,6 +23,7 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
     var toolBar: UIToolbar!
     let toolBarHeight: CGFloat = 50
     let traits = UITraitCollection(displayScale: UIScreen.mainScreen().scale)
+    var tocItems = [FRTocReference]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,12 +65,33 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
         
         
         // Register cell classes
-        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
+        self.tableView.registerClass(FolioReaderSidePanelCell.self, forCellReuseIdentifier: reuseIdentifier)
+        self.tableView.separatorInset = UIEdgeInsetsZero
+        
+        // Create TOC list
+        createTocList()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    // MARK: - Recursive add items to a list
+    
+    func createTocList() {
+        for item in book.tableOfContents {
+            tocItems.append(item)
+            countTocChild(item)
+        }
+    }
+    
+    func countTocChild(item: FRTocReference) {
+        if item.children.count > 0 {
+            for item in item.children {
+                tocItems.append(item)
+            }
+        }
     }
 
     // MARK: - Table view data source
@@ -79,18 +101,32 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 15
+        return tocItems.count
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) as! UITableViewCell
-
-        // Configure the cell...
-        cell.textLabel?.text = "Chapter \(indexPath.row+1)"
-        cell.textLabel?.font = UIFont(name: "Avenir-Light", size: 17)
-        cell.textLabel?.textColor = readerConfig.menuTextColor
+        let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) as! FolioReaderSidePanelCell
         
+        var tocReference = tocItems[indexPath.row]
+        let isSection = tocReference.fragmentID != ""
+        
+        cell.indexLabel.text = tocReference.title
+        cell.indexLabel.font = UIFont(name: "Avenir-Light", size: 17)
+        cell.indexLabel.textColor = readerConfig.menuTextColor
+        
+        if cell.respondsToSelector("layoutMargins") {
+            cell.layoutMargins = UIEdgeInsetsZero
+            cell.preservesSuperviewLayoutMargins = false
+        }
+        
+        cell.contentView.backgroundColor = isSection ? UIColor(white: 0.7, alpha: 0.1) : UIColor.clearColor()
         cell.backgroundColor = UIColor.clearColor()
+        
+        // Adjust text position
+        cell.indexLabel.center = cell.contentView.center
+        var frame = cell.indexLabel.frame
+        frame.origin = isSection ? CGPoint(x: 40, y: frame.origin.y) : CGPoint(x: 20, y: frame.origin.y)
+        cell.indexLabel.frame = frame
 
         return cell
     }
@@ -98,7 +134,8 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
     // MARK: - Table view delegate
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        delegate?.sidePanel(self, didSelectRowAtIndexPath: indexPath)
+        var tocReference = tocItems[indexPath.row]
+        delegate?.sidePanel(self, didSelectRowAtIndexPath: indexPath, withTocReference: tocReference)
     }
     
     // MARK: - Table view data source

@@ -11,6 +11,7 @@ import QuartzCore
 
 var readerConfig: FolioReaderConfig!
 var epubPath: String?
+var book: FRBook!
 
 enum SlideOutState {
     case BothCollapsed
@@ -36,7 +37,7 @@ protocol FolioReaderContainerDelegate {
     /**
     Notifies when the user selected some item on menu.
     */
-    func container(sidePanel: FolioReaderSidePanel, didSelectRowAtIndexPath indexPath: NSIndexPath)
+    func container(sidePanel: FolioReaderSidePanel, didSelectRowAtIndexPath indexPath: NSIndexPath, withTocReference reference: FRTocReference)
 }
 
 class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, FolioReaderSidePanelDelegate {
@@ -59,8 +60,7 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
         epubPath = epubPathOrNil
         
         if (epubPath != nil) {
-            var book = FREpubParser().readEpub(epubPath: epubPath!)
-            
+            book = FREpubParser().readEpub(epubPath: epubPath!)
             println(book)
         }
         
@@ -195,9 +195,9 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
     
     // MARK: - Side Panel delegate
     
-    func sidePanel(sidePanel: FolioReaderSidePanel, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func sidePanel(sidePanel: FolioReaderSidePanel, didSelectRowAtIndexPath indexPath: NSIndexPath, withTocReference reference: FRTocReference) {
         currentSelectedIndex = indexPath
         collapseSidePanels()
-        delegate.container(sidePanel, didSelectRowAtIndexPath: indexPath)
+        delegate.container(sidePanel, didSelectRowAtIndexPath: indexPath, withTocReference: reference)
     }
 }

@@ -36,9 +36,9 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate {
         super.init(coder: aDecoder)
     }
     
-    func loadHTMLString(string: String) {
+    func loadHTMLString(string: String!, baseURL: NSURL!) {
         webView.alpha = 0
-        webView.loadHTMLString(string, baseURL: nil)
+        webView.loadHTMLString(string, baseURL: baseURL)
     }
     
     // MARK: - UIWebView Delegate

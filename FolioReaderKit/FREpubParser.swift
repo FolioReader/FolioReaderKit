@@ -22,14 +22,11 @@ class FREpubParser: NSObject {
         
         // Unzip   
         let bookName = withEpubPath.lastPathComponent.stringByDeletingPathExtension
-        let separator = "/"
-        bookBasePath = kApplicationDocumentsDirectory + separator + bookName + separator
+        bookBasePath = kApplicationDocumentsDirectory.stringByAppendingPathComponent(bookName)
         SSZipArchive.unzipFileAtPath(withEpubPath, toDestination: bookBasePath)
         
         readContainer()
         readOpf()
-        
-
         return book
     }
     
@@ -47,7 +44,7 @@ class FREpubParser: NSObject {
     */
     private func readContainer() {
         let containerPath = "META-INF/container.xml"
-        let containerData = NSData(contentsOfFile: bookBasePath+containerPath, options: .DataReadingMappedAlways, error: nil)
+        let containerData = NSData(contentsOfFile: bookBasePath.stringByAppendingPathComponent(containerPath), options: .DataReadingMappedAlways, error: nil)
         var error: NSError?
         
         if let xmlDoc = AEXMLDocument(xmlData: containerData!, error: &error) {
@@ -55,7 +52,7 @@ class FREpubParser: NSObject {
             opfResource.href = xmlDoc.root["rootfiles"]["rootfile"].attributes["full-path"] as! String
             opfResource.mediaType = FRMediaType.determineMediaType(xmlDoc.root["rootfiles"]["rootfile"].attributes["full-path"] as! String)
             book.opfResource = opfResource
-            resourcesBasePath = bookBasePath + book.opfResource.href.stringByDeletingLastPathComponent + "/"
+            resourcesBasePath = bookBasePath.stringByAppendingPathComponent(book.opfResource.href.stringByDeletingLastPathComponent)
         }
     }
     
@@ -63,7 +60,7 @@ class FREpubParser: NSObject {
     Read and parse .opf file.
     */
     private func readOpf() {
-        let opfPath = bookBasePath + book.opfResource.href
+        let opfPath = bookBasePath.stringByAppendingPathComponent(book.opfResource.href)
         let opfData = NSData(contentsOfFile: opfPath, options: .DataReadingMappedAlways, error: nil)
         var error: NSError?
         
@@ -72,6 +69,7 @@ class FREpubParser: NSObject {
                 let resource = FRResource()
                 resource.id = item.attributes["id"] as! String
                 resource.href = item.attributes["href"] as! String
+                resource.fullHref = resourcesBasePath.stringByAppendingPathComponent(item.attributes["href"] as! String)
                 resource.mediaType = FRMediaType.mediaTypesByName[item.attributes["media-type"] as! String]
                 book.resources.add(resource)
             }
@@ -104,7 +102,7 @@ class FREpubParser: NSObject {
     Read and parse the Table of Contents.
     */
     private func findTableOfContents() -> [FRTocReference] {
-        let ncxPath = resourcesBasePath + book.ncxResource.href
+        let ncxPath = resourcesBasePath.stringByAppendingPathComponent(book.ncxResource.href)
         let ncxData = NSData(contentsOfFile: ncxPath, options: .DataReadingMappedAlways, error: nil)
         var error: NSError?
         
