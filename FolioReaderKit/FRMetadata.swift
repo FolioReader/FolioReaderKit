@@ -50,6 +50,28 @@ struct Date {
 }
 
 /**
+A metadata tag data.
+*/
+struct Meta {
+    var name: String?
+    var content: String?
+    var id: String?
+    var property: String?
+    var value: String?
+    
+    init(name: String, content: String) {
+        self.name = name
+        self.content = content
+    }
+    
+    init(id: String, property: String, value: String) {
+        self.id = id
+        self.property = property
+        self.value = value
+    }
+}
+
+/**
 Manages book metadata.
 */
 class FRMetadata: NSObject {
@@ -64,12 +86,21 @@ class FRMetadata: NSObject {
     var publishers = [String]()
     var format = FRMediaType.EPUB.name
     var rights = [String]()
-    var metaAttributes = [String: String]()
+    var metaAttributes = [Meta]()
     
     func findMetaByName(name: String) -> String? {
         if name.isEmpty {
             return nil
         }
-        return metaAttributes[name]
+        
+        for meta in metaAttributes {
+            if meta.name != nil {
+                if meta.name == name {
+                    return meta.content
+                }
+            }
+        }
+        
+        return nil
     }
 }

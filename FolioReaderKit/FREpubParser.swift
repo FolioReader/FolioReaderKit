@@ -69,7 +69,7 @@ class FREpubParser: NSObject {
                 let resource = FRResource()
                 resource.id = item.attributes["id"] as! String
                 resource.href = item.attributes["href"] as! String
-                resource.fullHref = resourcesBasePath.stringByAppendingPathComponent(item.attributes["href"] as! String)
+                resource.fullHref = resourcesBasePath.stringByAppendingPathComponent(item.attributes["href"] as! String).stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
                 resource.mediaType = FRMediaType.mediaTypesByName[item.attributes["media-type"] as! String]
                 book.resources.add(resource)
             }
@@ -184,7 +184,13 @@ class FREpubParser: NSObject {
             }
             
             if tag.name == "meta" {
-                metadata.metaAttributes = [tag.attributes["name"] as! String: tag.attributes["content"] != nil ? tag.attributes["content"] as! String : ""]
+                if tag.attributes["name"] != nil {
+                    metadata.metaAttributes.append(Meta(name: tag.attributes["name"] as! String, content: (tag.attributes["content"] != nil ? tag.attributes["content"] as! String : "")))
+                }
+                
+                if tag.attributes["property"] != nil && tag.attributes["id"] != nil {
+                    metadata.metaAttributes.append(Meta(id: tag.attributes["id"] as! String, property: tag.attributes["property"] as! String, value: tag.value != nil ? tag.value! : ""))
+                }
             }
             
         }
