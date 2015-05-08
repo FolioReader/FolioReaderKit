@@ -103,7 +103,15 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         
         // Configure the cell
         let resource = book.spine.spineReferences[indexPath.row].resource
-        let html = String(contentsOfFile: resource.fullHref.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!, encoding: NSUTF8StringEncoding, error: nil)
+        var html = String(contentsOfFile: resource.fullHref, encoding: NSUTF8StringEncoding, error: nil)
+        
+        // Inject CSS
+        let cssFilePath = NSBundle(forClass: self.dynamicType).pathForResource("style", ofType: "css")
+        let cssTag = "<link rel=\"stylesheet\" type=\"text/css\" href=\"\(cssFilePath!)\">"
+        
+        let toInject = "\n\(cssTag) \n</head>"
+        html = html?.stringByReplacingOccurrencesOfString("</head>", withString: toInject)
+        
         cell.loadHTMLString(html, baseURL: NSURL(fileURLWithPath: resource.fullHref.stringByDeletingLastPathComponent))
         
         return cell
