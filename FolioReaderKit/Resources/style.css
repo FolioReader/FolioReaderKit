@@ -1,62 +1,74 @@
-* {
-    border: 0 none;
-    list-style: none;
+/* CSS Reset */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
     margin: 0;
-    outline: none;
     padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+body {
+    line-height: 1;
+}
+ol, ul {
+    list-style: none;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
+
+/* Epub */
 html {
-    webkit-text-size-adjust: none;
+    -webkit-text-size-adjust: none; /* Never autoresize text */
 }
 
 body {
     color: #383737;
-    font: 19px/1.6em helvetica, sans-serif;
+/*    font: 1.3em/1.5em Helvetica, sans-serif;*/
     padding: 40px 20px !important;
 }
 
 a {
-    color: #004270;
     -webkit-touch-callout: none; /* Disable link callback */
 }
 
-.content-title {
-    color: black;
-    font: 35px/1.3em helvetica, sans-serif;
-    margin-bottom: 35px;
+img {
+    max-width: 100% !important
 }
 
-.author {
-    color: lightgray;
-    font: 20px/1.5em helvetica, sans-serif;
-    margin-bottom: 25px;
+body {
+    font-size: 100% !important
 }
 
-b, strong {
-    font-family: helvetica, sans-serif;
-}
-
-i, em {
-    font-family: helvetica, sans-serif;
-}
-
-.alignleft {
-    float: left;
-}
-
-img.alignleft {
-    background: #f1f1f1;
-    display: inline;
-    margin-right: 20px;
-    padding: 5px;
-}
-
-p {
-    padding-bottom: 0.6em;
-    padding-top: 0.8em;
-}
-
-.gallery-icon {
-    margin: 10px 0;
+body p {
+    font-size: 1.288em;
+    margin: 1.3em 0 1.5em 0;
+    line-height: 1.40em;
 }
