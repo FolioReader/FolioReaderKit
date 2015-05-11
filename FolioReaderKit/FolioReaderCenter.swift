@@ -75,6 +75,11 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         totalPages = book.spine.spineReferences.count
     }
     
+    func reloadData() {
+        totalPages = book.spine.spineReferences.count
+        collectionView.reloadData()
+    }
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         setCurrentPage()
@@ -157,7 +162,9 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     func setCurrentPage() {
         let currentIndexPath = getCurrentIndexPath()
-        currentPage = collectionView.cellForItemAtIndexPath(currentIndexPath) as! FolioReaderPage
+        if currentIndexPath != NSIndexPath(forRow: 0, inSection: 0) {
+            currentPage = collectionView.cellForItemAtIndexPath(currentIndexPath) as! FolioReaderPage
+        }
         
         previousPageNumber = currentIndexPath.row == 0 ? currentIndexPath.row : currentIndexPath.row
         currentPageNumber = currentIndexPath.row+1
@@ -187,7 +194,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
                 }
             }
         } else {
-            indexPath = indexPaths.first as! NSIndexPath
+            indexPath = indexPaths.first != nil ? indexPaths.first as! NSIndexPath : NSIndexPath(forRow: 0, inSection: 0)
         }
         
         return indexPath

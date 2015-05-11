@@ -58,13 +58,10 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
     init(config configOrNil: FolioReaderConfig!, epubPath epubPathOrNil: String? = nil) {
         readerConfig = configOrNil
         epubPath = epubPathOrNil
-        
-        if (epubPath != nil) {
-            book = FREpubParser().readEpub(epubPath: epubPath!)
-            println(book)
-        }
-        
         super.init(nibName: nil, bundle: kFrameworkBundle)
+        
+        // Init with empty book
+        book = FRBook()
     }
     
     // MARK: - View life cicle
@@ -82,6 +79,19 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
         
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handlePanGesture:")
         centerNavigationController.view.addGestureRecognizer(panGestureRecognizer)
+
+        // Read async book
+        if (epubPath != nil) {
+            let priority = DISPATCH_QUEUE_PRIORITY_HIGH
+            dispatch_async(dispatch_get_global_queue(priority, 0), { () -> Void in
+                book = FREpubParser().readEpub(epubPath: epubPath!)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.centerViewController.reloadData()
+                })
+            })
+        } else {
+            println("Epub path is nil.")
+        }
     }
     
     override func viewDidAppear(animated: Bool) {
