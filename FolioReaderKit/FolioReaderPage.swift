@@ -26,6 +26,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate {
         if webView == nil {
             webView = UIWebView(frame: self.bounds)
             webView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+            webView.dataDetectorTypes = .None | .Link
             webView.backgroundColor = UIColor.whiteColor()
             self.addSubview(webView)
         }
@@ -44,6 +45,9 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate {
     // MARK: - UIWebView Delegate
     
     func webViewDidFinishLoad(webView: UIWebView) {
+        
+        webView.scrollView.contentSize = CGSizeMake(pageWidth, webView.scrollView.contentSize.height)
+        
         if scrollDirection == .Down && isScrolling {
             let bottomOffset = CGPointMake(0, webView.scrollView.contentSize.height - webView.scrollView.bounds.height)
             if bottomOffset.y >= 0 {

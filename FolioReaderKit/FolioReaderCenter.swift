@@ -71,13 +71,13 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         
         // Delegate container
         folioReaderContainer.delegate = self
-        
         totalPages = book.spine.spineReferences.count
     }
     
     func reloadData() {
         totalPages = book.spine.spineReferences.count
         collectionView.reloadData()
+        setCurrentPage()
     }
     
     override func viewDidAppear(animated: Bool) {
