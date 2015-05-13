@@ -5,7 +5,7 @@ a, abbr, acronym, address, big, cite, code,
 del, dfn, em, img, ins, kbd, q, s, samp,
 small, strike, strong, sub, sup, tt, var,
 b, u, i, center,
-dl, dt, dd, ol, ul, li,
+dl, dt, dd, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed,
@@ -13,30 +13,12 @@ figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
     margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
     vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
     display: block;
-}
-body {
-    line-height: 1;
-}
-ol, ul {
-    list-style: none;
-}
-blockquote, q {
-    quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-    content: '';
-    content: none;
 }
 table {
     border-collapse: collapse;
@@ -47,28 +29,121 @@ table {
 /* Epub */
 html {
     -webkit-text-size-adjust: none; /* Never autoresize text */
+    padding: 0 0 !important;
+    overflow: hidden;
+    text-align:
 }
 
 body {
-    color: #383737;
-/*    font: 1.3em/1.5em Helvetica, sans-serif;*/
+/*    font: 1.188em/1.4em "IowanOldStyle-Roman", sans-serif !important;*/
+    font-family: "IowanOldStyle-Roman", sans-serif !important;
     padding: 40px 20px !important;
+    overflow: hidden;
+}
+
+/* Custom padding for tablets */
+@media only screen and (min-device-width: 768px){
+    body {
+        padding: 60px 80px !important;
+    }
 }
 
 a {
     -webkit-touch-callout: none; /* Disable link callback */
 }
 
-img {
-    max-width: 100% !important
-}
-
-body {
-    font-size: 100% !important
-}
-
 body p {
-    font-size: 1.288em;
+    font-family: "IowanOldStyle-Roman", sans-serif !important;
+    font-size: 1.188em;
     margin: 1.3em 0 1.5em 0;
     line-height: 1.40em;
 }
+
+/*div {*/
+/*    margin: 1.3em 0 1.4em 0*/
+/*}*/
+
+
+/* iBooks like */
+a { text-decoration: none; }
+pre { white-space: pre-wrap; }
+@page { margin: 0 0 !important; }
+table,ol,il { text-align: -webkit-auto; }
+h1,h2,h3,h4,h5,h6 {
+    text-align: -webkit-auto;
+    text-rendering: optimizelegibility;
+}
+
+/* Begin Ted */
+img {
+    max-height: 95% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    object-fit: contain;
+    page-break-inside: avoid;
+}
+
+svg {
+    max-height: 95% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    object-fit: contain;
+    page-break-inside: avoid;
+}
+
+audio {
+    max-height: 95% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    object-fit: contain;
+    page-break-inside: avoid;
+}
+
+video {
+    max-height: 95% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    object-fit: contain;
+    page-break-inside: avoid;
+}
+/* End Ted */
+
+/* Divs are also used to size images so make sure the authors get what they intended */
+/* which is for the images boxed in them to be completely visible on screen */
+div {
+    max-width: 100%;
+}
+
+aside[epub|type~="footnote"] {
+    display: none !important;
+}
+
+ruby > rt, ruby > rp {
+    -webkit-user-select: none;
+}
+
+/*
+body {
+    line-height: {{.lineHeight}};
+    font-family: 'iBooks_{{.fontFamily}}'{{range fontFallbacks}}, '{{.}}'{{end}} !important;
+}
+math {
+    font-family: STIXGeneral, Symbol, 'iBooks_{{.fontFamily}}'{{range fontFallbacks}}, '{{.}}'{{end}} !important;
+}
+
+/* allow breaking of words on headers and anchors as they tend to be larger font size or contain longer words *
+a, h1, h2, h3, h4, h5, h6 {
+    word-break: break-word !important;
+}
+
+/* forced font overrides *
+p, span, div {
+    font-family: 'iBooks_{{.fontFamily}}'{{range fontFallbacks}}, '{{.}}'{{end}} !important;
+}
+/* forced justification *
+p, span, div {
+    text-align: {{.justification}} !important;
+}
+*/
+
+* { -webkit-font-smoothing: subpixel-antialiased }
