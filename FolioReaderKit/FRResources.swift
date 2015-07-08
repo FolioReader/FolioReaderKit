@@ -41,7 +41,7 @@ class FRResources: NSObject {
             return false
         }
         
-        return contains(resources.keys, href)
+        return resources.keys.contains(href)
     }
     
     /**

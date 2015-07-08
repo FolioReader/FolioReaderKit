@@ -33,7 +33,7 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
         
         tableView = UITableView(frame: tableViewFrame)
         tableView.delaysContentTouches = true
-        tableView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+        tableView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         tableView.backgroundColor =  readerConfig.menuBackgroundColor
         tableView.separatorColor = readerConfig.menuSeparatorColor
         tableView.delegate = self
@@ -107,7 +107,7 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) as! FolioReaderSidePanelCell
         
-        var tocReference = tocItems[indexPath.row]
+        let tocReference = tocItems[indexPath.row]
         let isSection = tocReference.fragmentID != ""
         
         cell.indexLabel.text = tocReference.title
@@ -134,7 +134,7 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
     // MARK: - Table view delegate
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        var tocReference = tocItems[indexPath.row]
+        let tocReference = tocItems[indexPath.row]
         delegate?.sidePanel(self, didSelectRowAtIndexPath: indexPath, withTocReference: tocReference)
     }
     
@@ -163,15 +163,15 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
     // MARK: - Toolbar actions
     
     func didSelectHighlight(sender: UIBarButtonItem) {
-        println("Highlight")
+        print("Highlight")
     }
     
     func didSelectSearch(sender: UIBarButtonItem) {
-        println("Search")
+        print("Search")
     }
     
     func didSelectFont(sender: UIBarButtonItem) {
-        println("Font")
+        print("Font")
     }
 
 }

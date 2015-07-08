@@ -49,7 +49,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         setPageSize(UIApplication.sharedApplication().statusBarOrientation)
         
         // Layout
-        var layout = UICollectionViewFlowLayout()
+        let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsetsZero
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
@@ -57,7 +57,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         
         // CollectionView
         collectionView = UICollectionView(frame: screenBounds, collectionViewLayout: layout)
-        collectionView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+        collectionView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.pagingEnabled = true
@@ -108,7 +108,12 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         
         // Configure the cell
         let resource = book.spine.spineReferences[indexPath.row].resource
-        var html = String(contentsOfFile: resource.fullHref, encoding: NSUTF8StringEncoding, error: nil)
+        var html: String?
+        do {
+            html = try String(contentsOfFile: resource.fullHref, encoding: NSUTF8StringEncoding)
+        } catch _ {
+            html = nil
+        }
         
         // Inject CSS
         let cssFilePath = NSBundle(forClass: self.dynamicType).pathForResource("style", ofType: "css")
@@ -176,8 +181,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         var indexPath = NSIndexPath()
         
         if indexPaths.count > 1 {
-            let first = indexPaths.first as! NSIndexPath
-            let last = indexPaths.last as! NSIndexPath
+            let first = indexPaths.first as NSIndexPath!
+            let last = indexPaths.last as NSIndexPath!
             
             switch scrollDirection {
             case .Up:
@@ -194,7 +199,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
                 }
             }
         } else {
-            indexPath = indexPaths.first != nil ? indexPaths.first as! NSIndexPath : NSIndexPath(forRow: 0, inSection: 0)
+            indexPath = indexPaths.first != nil ? indexPaths.first as NSIndexPath! : NSIndexPath(forRow: 0, inSection: 0)
         }
         
         return indexPath
@@ -229,7 +234,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         
         if scrollView is UICollectionView {
             setCurrentPage()
-            println("Page: \(currentPageNumber)")
+            print("Page: \(currentPageNumber)")
         }
     }
     
