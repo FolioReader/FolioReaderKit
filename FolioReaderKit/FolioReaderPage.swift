@@ -25,8 +25,8 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate {
         
         if webView == nil {
             webView = UIWebView(frame: self.bounds)
-            webView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
-            webView.dataDetectorTypes = .None | .Link
+            webView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+            webView.dataDetectorTypes = [.None, .Link]
             webView.backgroundColor = UIColor.whiteColor()
             self.addSubview(webView)
         }

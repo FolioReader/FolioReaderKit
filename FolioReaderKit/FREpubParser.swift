@@ -44,15 +44,21 @@ class FREpubParser: NSObject {
     */
     private func readContainer() {
         let containerPath = "META-INF/container.xml"
-        let containerData = NSData(contentsOfFile: bookBasePath.stringByAppendingPathComponent(containerPath), options: .DataReadingMappedAlways, error: nil)
-        var error: NSError?
-        
-        if let xmlDoc = AEXMLDocument(xmlData: containerData!, error: &error) {
+        let containerData: NSData?
+        do {
+            containerData = try NSData(contentsOfFile: bookBasePath.stringByAppendingPathComponent(containerPath), options: .DataReadingMappedAlways)
+        } catch _ {
+            containerData = nil
+        }
+
+        do {
+            let xmlDoc = try AEXMLDocument(xmlData: containerData!)
             let opfResource = FRResource()
             opfResource.href = xmlDoc.root["rootfiles"]["rootfile"].attributes["full-path"] as! String
             opfResource.mediaType = FRMediaType.determineMediaType(xmlDoc.root["rootfiles"]["rootfile"].attributes["full-path"] as! String)
             book.opfResource = opfResource
             resourcesBasePath = bookBasePath.stringByAppendingPathComponent(book.opfResource.href.stringByDeletingLastPathComponent)
+        } catch _ {
         }
     }
     
@@ -61,10 +67,15 @@ class FREpubParser: NSObject {
     */
     private func readOpf() {
         let opfPath = bookBasePath.stringByAppendingPathComponent(book.opfResource.href)
-        let opfData = NSData(contentsOfFile: opfPath, options: .DataReadingMappedAlways, error: nil)
-        var error: NSError?
-        
-        if let xmlDoc = AEXMLDocument(xmlData: opfData!, error: &error) {
+        let opfData: NSData?
+        do {
+            opfData = try NSData(contentsOfFile: opfPath, options: .DataReadingMappedAlways)
+        } catch _ {
+            opfData = nil
+        }
+
+        do {
+            let xmlDoc = try AEXMLDocument(xmlData: opfData!)
             for item in xmlDoc.root["manifest"]["item"].all! {
                 let resource = FRResource()
                 resource.id = item.attributes["id"] as! String
@@ -78,7 +89,7 @@ class FREpubParser: NSObject {
             book.ncxResource = book.resources.findFirstResource(byMediaType: FRMediaType.NCX)
             
             if book.ncxResource == nil {
-                println("ERROR: Could not find table of contents resource. The book don't have a NCX resource.")
+                print("ERROR: Could not find table of contents resource. The book don't have a NCX resource.")
             }
             
             // The book TOC
@@ -95,6 +106,7 @@ class FREpubParser: NSObject {
             
             // Read Spine
             book.spine = readSpine(xmlDoc.root["spine"].children)
+        } catch _ {
         }
     }
     
@@ -103,15 +115,21 @@ class FREpubParser: NSObject {
     */
     private func findTableOfContents() -> [FRTocReference] {
         let ncxPath = resourcesBasePath.stringByAppendingPathComponent(book.ncxResource.href)
-        let ncxData = NSData(contentsOfFile: ncxPath, options: .DataReadingMappedAlways, error: nil)
-        var error: NSError?
+        let ncxData: NSData?
+        do {
+            ncxData = try NSData(contentsOfFile: ncxPath, options: .DataReadingMappedAlways)
+        } catch _ {
+            ncxData = nil
+        }
         
         var tableOfContent = [FRTocReference]()
         
-        if let xmlDoc = AEXMLDocument(xmlData: ncxData!, error: &error) {
+        do {
+            let xmlDoc = try AEXMLDocument(xmlData: ncxData!)
             for item in xmlDoc.root["navMap"]["navPoint"].all! {
                 tableOfContent.append(readTOCReference(item))
             }
+        } catch _ {
         }
         
         return tableOfContent
@@ -121,7 +139,7 @@ class FREpubParser: NSObject {
         let label = navpointElement["navLabel"]["text"].value as String!
         let reference = navpointElement["content"].attributes["src"] as! String!
         
-        let hrefSplit = split(reference) {$0 == "#"}
+        let hrefSplit = split(reference.characters) {$0 == "#"}.map { String($0) }
         let fragmentID = hrefSplit.count > 1 ? hrefSplit[1] : ""
         let href = hrefSplit[0]
         

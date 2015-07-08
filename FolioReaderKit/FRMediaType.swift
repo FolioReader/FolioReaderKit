@@ -102,7 +102,7 @@ class FRMediaType: NSObject {
     static func determineMediaType(filename: String) -> MediaType? {
         for mediatype in mediatypes {
             let ext = "."+filename.pathExtension
-            if contains(mediatype.extensions, ext) {
+            if mediatype.extensions.contains(ext) {
                 return mediatype
             }
         }

@@ -90,7 +90,7 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
                 })
             })
         } else {
-            println("Epub path is nil.")
+            print("Epub path is nil.")
         }
     }
     
@@ -134,7 +134,7 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
         sidePanelController.didMoveToParentViewController(self)
     }
     
-    func animateLeftPanel(#shouldExpand: Bool) {
+    func animateLeftPanel(shouldExpand shouldExpand: Bool) {
         if (shouldExpand) {
             currentState = .LeftPanelExpanded
             delegate.container(didExpandLeftPanel: leftViewController)
@@ -150,7 +150,7 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
         }
     }
     
-    func animateCenterPanelXPosition(#targetPosition: CGFloat, completion: ((Bool) -> Void)! = nil) {
+    func animateCenterPanelXPosition(targetPosition targetPosition: CGFloat, completion: ((Bool) -> Void)! = nil) {
         UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .CurveEaseInOut, animations: {
             self.centerNavigationController.view.frame.origin.x = targetPosition
             }, completion: completion)
@@ -188,8 +188,8 @@ class FolioReaderContainer: UIViewController,  UIGestureRecognizerDelegate, Foli
             if leftViewController != nil {
                 let gap = 20 as CGFloat
                 let xPos = recognizer.view!.frame.origin.x
-                let width = view.bounds.size.width
-                var canFinishAnimation = gestureIsDraggingFromLeftToRight && xPos > gap ? true : false
+                //let width = view.bounds.size.width
+                let canFinishAnimation = gestureIsDraggingFromLeftToRight && xPos > gap ? true : false
                 animateLeftPanel(shouldExpand: canFinishAnimation)
             }
         default:
