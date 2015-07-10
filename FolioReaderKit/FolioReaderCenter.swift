@@ -248,12 +248,12 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     func container(didExpandLeftPanel sidePanel: FolioReaderSidePanel) {
         collectionView.scrollEnabled = false
-        currentPage.webView.scrollView.scrollEnabled = false
+        currentPage?.webView.scrollView.scrollEnabled = false
     }
     
     func container(didCollapseLeftPanel sidePanel: FolioReaderSidePanel) {
         collectionView.scrollEnabled = true
-        currentPage.webView.scrollView.scrollEnabled = true
+        currentPage?.webView.scrollView.scrollEnabled = true
     }
     
     func container(sidePanel: FolioReaderSidePanel, didSelectRowAtIndexPath indexPath: NSIndexPath, withTocReference reference: FRTocReference) {
