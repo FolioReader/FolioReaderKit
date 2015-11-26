@@ -62,7 +62,9 @@ class FRMediaType: NSObject {
     static var SVG = MediaType(name: "image/svg+xml", defaultExtension: ".svg")
 
     // fonts
-    static var TTF = MediaType(name: "application/x-truetype-font", defaultExtension: ".ttf")
+    static var TTF = MediaType(name: "application/x-font-ttf", defaultExtension: ".ttf")
+    static var TTF1 = MediaType(name: "application/x-font-truetype", defaultExtension: ".ttf")
+    static var TTF2 = MediaType(name: "application/x-truetype-font", defaultExtension: ".ttf")
     static var OPENTYPE = MediaType(name: "application/vnd.ms-opentype", defaultExtension: ".otf")
     static var WOFF = MediaType(name: "application/font-woff", defaultExtension: ".woff")
 
@@ -75,7 +77,7 @@ class FRMediaType: NSObject {
     static var XPGT = MediaType(name: "application/adobe-page-template+xml", defaultExtension: ".xpgt")
     static var PLS = MediaType(name: "application/pls+xml", defaultExtension: ".pls")
 
-    static var mediatypes = [XHTML, EPUB, NCX, OPF, JPG, PNG, GIF, CSS, SVG, TTF, XPGT, OPENTYPE, WOFF, SMIL, PLS, JAVASCRIPT, MP3, MP4, OGG]
+    static var mediatypes = [XHTML, EPUB, NCX, OPF, JPG, PNG, GIF, CSS, SVG, TTF, TTF1, TTF2, OPENTYPE, WOFF, SMIL, XPGT, PLS, JAVASCRIPT, MP3, MP4, OGG]
     
     /**
     Gets the MediaType based on the file mimetype.
@@ -101,8 +103,8 @@ class FRMediaType: NSObject {
     */
     static func determineMediaType(filename: String) -> MediaType? {
         for mediatype in mediatypes {
-            let ext = "."+filename.pathExtension
-            if contains(mediatype.extensions, ext) {
+            let ext = "."+(filename as NSString).pathExtension
+            if mediatype.extensions.contains(ext) {
                 return mediatype
             }
         }

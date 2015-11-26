@@ -19,7 +19,7 @@ class FolioReaderSidePanelCell: UITableViewCell {
         contentView.addSubview(indexLabel)
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
 }

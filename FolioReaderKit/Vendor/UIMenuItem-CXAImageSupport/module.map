@@ -1,0 +1,4 @@
+module UIMenuItem_CXAImageSupport [system] {
+    header "../UIMenuItem-CXAImageSupport/UIMenuItem+CXAImageSupport.h"
+    export *
+}

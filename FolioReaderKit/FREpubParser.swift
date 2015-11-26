@@ -9,22 +9,29 @@
 import UIKit
 import SSZipArchive
 
-class FREpubParser: NSObject {
+class FREpubParser: NSObject, SSZipArchiveDelegate {
     let book = FRBook()
     var bookBasePath: String!
     var resourcesBasePath: String!
+    private var epubPathToRemove: String?
     
     /**
-    Unzip and read an epub file.
+    Unzip, delete and read an epub file.
     Returns a FRBook.
     */
     func readEpub(epubPath withEpubPath: String) -> FRBook {
         
-        // Unzip   
-        let bookName = withEpubPath.lastPathComponent.stringByDeletingPathExtension
-        bookBasePath = kApplicationDocumentsDirectory.stringByAppendingPathComponent(bookName)
-        SSZipArchive.unzipFileAtPath(withEpubPath, toDestination: bookBasePath)
+        epubPathToRemove = withEpubPath
         
+        // Unzip   
+        let bookName = (withEpubPath as NSString).lastPathComponent
+        bookBasePath = (kApplicationDocumentsDirectory as NSString).stringByAppendingPathComponent(bookName)
+        SSZipArchive.unzipFileAtPath(withEpubPath, toDestination: bookBasePath, delegate: self)
+        
+        // Skip from backup this folder
+        addSkipBackupAttributeToItemAtURL(NSURL(fileURLWithPath: bookBasePath, isDirectory: true))
+        
+        kBookId = bookName
         readContainer()
         readOpf()
         return book
@@ -36,6 +43,11 @@ class FREpubParser: NSObject {
     */
     func readEpub(filePath withFilePath: String) -> FRBook {
         
+        bookBasePath = withFilePath
+        
+        kBookId = (withFilePath as NSString).lastPathComponent
+        readContainer()
+        readOpf()
         return book
     }
     
@@ -44,15 +56,17 @@ class FREpubParser: NSObject {
     */
     private func readContainer() {
         let containerPath = "META-INF/container.xml"
-        let containerData = NSData(contentsOfFile: bookBasePath.stringByAppendingPathComponent(containerPath), options: .DataReadingMappedAlways, error: nil)
-        var error: NSError?
+        let containerData = try? NSData(contentsOfFile: (bookBasePath as NSString).stringByAppendingPathComponent(containerPath), options: .DataReadingMappedAlways)
         
-        if let xmlDoc = AEXMLDocument(xmlData: containerData!, error: &error) {
+        do {
+            let xmlDoc = try AEXMLDocument(xmlData: containerData!)
             let opfResource = FRResource()
-            opfResource.href = xmlDoc.root["rootfiles"]["rootfile"].attributes["full-path"] as! String
-            opfResource.mediaType = FRMediaType.determineMediaType(xmlDoc.root["rootfiles"]["rootfile"].attributes["full-path"] as! String)
+            opfResource.href = xmlDoc.root["rootfiles"]["rootfile"].attributes["full-path"]
+            opfResource.mediaType = FRMediaType.determineMediaType(xmlDoc.root["rootfiles"]["rootfile"].attributes["full-path"]!)
             book.opfResource = opfResource
-            resourcesBasePath = bookBasePath.stringByAppendingPathComponent(book.opfResource.href.stringByDeletingLastPathComponent)
+            resourcesBasePath = (bookBasePath as NSString).stringByAppendingPathComponent((book.opfResource.href as NSString).stringByDeletingLastPathComponent)
+        } catch {
+            print("Cannot read container.xml")
         }
     }
     
@@ -60,17 +74,17 @@ class FREpubParser: NSObject {
     Read and parse .opf file.
     */
     private func readOpf() {
-        let opfPath = bookBasePath.stringByAppendingPathComponent(book.opfResource.href)
-        let opfData = NSData(contentsOfFile: opfPath, options: .DataReadingMappedAlways, error: nil)
-        var error: NSError?
+        let opfPath = (bookBasePath as NSString).stringByAppendingPathComponent(book.opfResource.href)
+        let opfData = try? NSData(contentsOfFile: opfPath, options: .DataReadingMappedAlways)
         
-        if let xmlDoc = AEXMLDocument(xmlData: opfData!, error: &error) {
+        do {
+            let xmlDoc = try AEXMLDocument(xmlData: opfData!)
             for item in xmlDoc.root["manifest"]["item"].all! {
                 let resource = FRResource()
-                resource.id = item.attributes["id"] as! String
-                resource.href = item.attributes["href"] as! String
-                resource.fullHref = resourcesBasePath.stringByAppendingPathComponent(item.attributes["href"] as! String).stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-                resource.mediaType = FRMediaType.mediaTypesByName[item.attributes["media-type"] as! String]
+                resource.id = item.attributes["id"]
+                resource.href = item.attributes["href"]
+                resource.fullHref = (resourcesBasePath as NSString).stringByAppendingPathComponent(item.attributes["href"]!).stringByRemovingPercentEncoding
+                resource.mediaType = FRMediaType.mediaTypesByName[item.attributes["media-type"]!]
                 book.resources.add(resource)
             }
             
@@ -78,7 +92,7 @@ class FREpubParser: NSObject {
             book.ncxResource = book.resources.findFirstResource(byMediaType: FRMediaType.NCX)
             
             if book.ncxResource == nil {
-                println("ERROR: Could not find table of contents resource. The book don't have a NCX resource.")
+                print("ERROR: Could not find table of contents resource. The book don't have a NCX resource.")
             }
             
             // The book TOC
@@ -95,6 +109,8 @@ class FREpubParser: NSObject {
             
             // Read Spine
             book.spine = readSpine(xmlDoc.root["spine"].children)
+        } catch {
+            print("Cannot read .opf file")
         }
     }
     
@@ -102,26 +118,31 @@ class FREpubParser: NSObject {
     Read and parse the Table of Contents.
     */
     private func findTableOfContents() -> [FRTocReference] {
-        let ncxPath = resourcesBasePath.stringByAppendingPathComponent(book.ncxResource.href)
-        let ncxData = NSData(contentsOfFile: ncxPath, options: .DataReadingMappedAlways, error: nil)
-        var error: NSError?
-        
+        let ncxPath = (resourcesBasePath as NSString).stringByAppendingPathComponent(book.ncxResource.href)
+        let ncxData = try? NSData(contentsOfFile: ncxPath, options: .DataReadingMappedAlways)
         var tableOfContent = [FRTocReference]()
         
-        if let xmlDoc = AEXMLDocument(xmlData: ncxData!, error: &error) {
+        do {
+            let xmlDoc = try AEXMLDocument(xmlData: ncxData!)
             for item in xmlDoc.root["navMap"]["navPoint"].all! {
                 tableOfContent.append(readTOCReference(item))
             }
+        } catch {
+            print("Cannot find Table of Contents")
         }
         
         return tableOfContent
     }
     
     private func readTOCReference(navpointElement: AEXMLElement) -> FRTocReference {
-        let label = navpointElement["navLabel"]["text"].value as String!
-        let reference = navpointElement["content"].attributes["src"] as! String!
+        var label = ""
         
-        let hrefSplit = split(reference) {$0 == "#"}
+        if let labelText = navpointElement["navLabel"]["text"].value {
+            label = labelText
+        }
+        
+        let reference = navpointElement["content"].attributes["src"]
+        let hrefSplit = reference!.characters.split {$0 == "#"}.map { String($0) }
         let fragmentID = hrefSplit.count > 1 ? hrefSplit[1] : ""
         let href = hrefSplit[0]
         
@@ -148,7 +169,7 @@ class FREpubParser: NSObject {
             }
             
             if tag.name == "dc:identifier" {
-                metadata.identifiers.append(Identifier(scheme: tag.attributes["opf:scheme"] != nil ? tag.attributes["opf:scheme"] as! String : "", value: tag.value!))
+                metadata.identifiers.append(Identifier(scheme: tag.attributes["opf:scheme"] != nil ? tag.attributes["opf:scheme"]! : "", value: tag.value!))
             }
             
             if tag.name == "dc:language" {
@@ -156,11 +177,11 @@ class FREpubParser: NSObject {
             }
             
             if tag.name == "dc:creator" {
-                metadata.creators.append(Author(name: tag.value!, role: tag.attributes["opf:role"] != nil ? tag.attributes["opf:role"] as! String : "", fileAs: tag.attributes["opf:file-as"] != nil ? tag.attributes["opf:file-as"] as! String : ""))
+                metadata.creators.append(Author(name: tag.value!, role: tag.attributes["opf:role"] != nil ? tag.attributes["opf:role"]! : "", fileAs: tag.attributes["opf:file-as"] != nil ? tag.attributes["opf:file-as"]! : ""))
             }
             
             if tag.name == "dc:contributor" {
-                metadata.creators.append(Author(name: tag.value!, role: tag.attributes["opf:role"] != nil ? tag.attributes["opf:role"] as! String : "", fileAs: tag.attributes["opf:file-as"] != nil ? tag.attributes["opf:file-as"] as! String : ""))
+                metadata.creators.append(Author(name: tag.value!, role: tag.attributes["opf:role"] != nil ? tag.attributes["opf:role"]! : "", fileAs: tag.attributes["opf:file-as"] != nil ? tag.attributes["opf:file-as"]! : ""))
             }
             
             if tag.name == "dc:publisher" {
@@ -180,16 +201,16 @@ class FREpubParser: NSObject {
             }
             
             if tag.name == "dc:date" {
-                metadata.dates.append(Date(date: tag.value!, event: tag.attributes["opf:event"] != nil ? tag.attributes["opf:event"] as! String : ""))
+                metadata.dates.append(Date(date: tag.value!, event: tag.attributes["opf:event"] != nil ? tag.attributes["opf:event"]! : ""))
             }
             
             if tag.name == "meta" {
                 if tag.attributes["name"] != nil {
-                    metadata.metaAttributes.append(Meta(name: tag.attributes["name"] as! String, content: (tag.attributes["content"] != nil ? tag.attributes["content"] as! String : "")))
+                    metadata.metaAttributes.append(Meta(name: tag.attributes["name"]!, content: (tag.attributes["content"] != nil ? tag.attributes["content"]! : "")))
                 }
                 
                 if tag.attributes["property"] != nil && tag.attributes["id"] != nil {
-                    metadata.metaAttributes.append(Meta(id: tag.attributes["id"] as! String, property: tag.attributes["property"] as! String, value: tag.value != nil ? tag.value! : ""))
+                    metadata.metaAttributes.append(Meta(id: tag.attributes["id"]!, property: tag.attributes["property"]!, value: tag.value != nil ? tag.value! : ""))
                 }
             }
             
@@ -204,11 +225,11 @@ class FREpubParser: NSObject {
         let spine = FRSpine()
         
         for tag in tags {
-            let idref = tag.attributes["idref"] as! String
+            let idref = tag.attributes["idref"]!
             var linear = true
             
             if tag.attributes["linear"] != nil {
-                linear = tag.attributes["linear"] as! String == "yes" ? true : false
+                linear = tag.attributes["linear"] == "yes" ? true : false
             }
             
             if book.resources.containsById(idref) {
@@ -217,5 +238,40 @@ class FREpubParser: NSObject {
         }
         
         return spine
+    }
+    
+    /**
+    Add skip to backup file.
+    */
+    private func addSkipBackupAttributeToItemAtURL(URL: NSURL) -> Bool {
+        assert(NSFileManager.defaultManager().fileExistsAtPath(URL.path!))
+        
+        var error: NSError? = nil
+        var success: Bool
+        do {
+            try URL.setResourceValue(true, forKey: NSURLIsExcludedFromBackupKey)
+            success = true
+        } catch let error1 as NSError {
+            error = error1
+            success = false
+        }
+        
+        if !success {
+            print("Error excluding \(URL.lastPathComponent) from backup \(error)")
+        }
+        
+        return success;
+    }
+    
+    // MARK: - SSZipArchive delegate
+    
+    func zipArchiveWillUnzipArchiveAtPath(path: String!, zipInfo: unz_global_info) {
+        if epubPathToRemove != nil {
+            do {
+                try NSFileManager.defaultManager().removeItemAtPath(epubPathToRemove!)
+            } catch let error as NSError {
+                print(error)
+            }
+        }
     }
 }

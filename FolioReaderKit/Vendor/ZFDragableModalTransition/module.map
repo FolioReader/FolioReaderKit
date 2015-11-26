@@ -1,0 +1,4 @@
+module ZFDragableModalTransition [system] {
+    header "../ZFDragableModalTransition/ZFModalTransitionAnimator.h"
+    export *
+}

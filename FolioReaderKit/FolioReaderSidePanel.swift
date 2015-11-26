@@ -22,7 +22,6 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
     var tableView: UITableView!
     var toolBar: UIToolbar!
     let toolBarHeight: CGFloat = 50
-    let traits = UITraitCollection(displayScale: UIScreen.mainScreen().scale)
     var tocItems = [FRTocReference]()
     
     override func viewDidLoad() {
@@ -33,9 +32,9 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
         
         tableView = UITableView(frame: tableViewFrame)
         tableView.delaysContentTouches = true
-        tableView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
-        tableView.backgroundColor =  readerConfig.menuBackgroundColor
-        tableView.separatorColor = readerConfig.menuSeparatorColor
+        tableView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        tableView.backgroundColor = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeMenuBackground : readerConfig.menuBackgroundColor
+        tableView.separatorColor = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeSeparatorColor : readerConfig.menuSeparatorColor
         tableView.delegate = self
         tableView.dataSource = self
         view.addSubview(tableView)
@@ -48,25 +47,34 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
         toolBar.translucent = false
         view.addSubview(toolBar)
         
-        let imageHighlight = UIImage(named: "icon-highlight", inBundle: kFrameworkBundle, compatibleWithTraitCollection: traits)
-        let imageSearch = UIImage(named: "icon-search", inBundle: kFrameworkBundle, compatibleWithTraitCollection: traits)
-        let imageFont = UIImage(named: "icon-font", inBundle: kFrameworkBundle, compatibleWithTraitCollection: traits)
+        let imageHighlight = UIImage(readerImageNamed: "icon-highlight")
+        let imageClose = UIImage(readerImageNamed: "icon-close")
+        let imageFont = UIImage(readerImageNamed: "icon-font")
+        let space = 70 as CGFloat
         
-//        let space = pageWidth/4
-        let space = 80 as CGFloat
+        let blackImage = UIImage.imageWithColor(UIColor(white: 0, alpha: 0.2))
+        let closeButton = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        closeButton.setImage(imageClose, forState: UIControlState.Normal)
+        closeButton.setBackgroundImage(blackImage, forState: UIControlState.Normal)
+        closeButton.addTarget(self, action: "didSelectClose:", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        let noSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FixedSpace, target: nil, action: nil)
+        noSpace.width = isPad || isLargePhone ? -20 : -16
+        let iconClose = UIBarButtonItem(customView: closeButton)
         
         let iconHighlight = UIBarButtonItem(image: imageHighlight, style: .Plain, target: self, action: "didSelectHighlight:")
         iconHighlight.width = space
-        let iconSearch = UIBarButtonItem(image: imageSearch, style: .Plain, target: self, action: "didSelectSearch:")
-        iconSearch.width = space
+        
         let iconFont = UIBarButtonItem(image: imageFont, style: .Plain, target: self, action: "didSelectFont:")
         iconFont.width = space
-        toolBar.setItems([iconHighlight, iconSearch, iconFont], animated: false)
+        
+        toolBar.setItems([noSpace, iconClose, iconFont, iconHighlight], animated: false)
         
         
         // Register cell classes
-        self.tableView.registerClass(FolioReaderSidePanelCell.self, forCellReuseIdentifier: reuseIdentifier)
-        self.tableView.separatorInset = UIEdgeInsetsZero
+        tableView.registerClass(FolioReaderSidePanelCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.separatorInset = UIEdgeInsetsZero
+        tableView.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
         
         // Create TOC list
         createTocList()
@@ -107,18 +115,22 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) as! FolioReaderSidePanelCell
         
-        var tocReference = tocItems[indexPath.row]
-        let isSection = tocReference.fragmentID != ""
+        let tocReference = tocItems[indexPath.row]
+        let isSection = tocReference.children.count > 0
         
-        cell.indexLabel.text = tocReference.title
+        cell.indexLabel.text = tocReference.title.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
         cell.indexLabel.font = UIFont(name: "Avenir-Light", size: 17)
         cell.indexLabel.textColor = readerConfig.menuTextColor
         
-        if cell.respondsToSelector("layoutMargins") {
-            cell.layoutMargins = UIEdgeInsetsZero
-            cell.preservesSuperviewLayoutMargins = false
+        // Mark current reading chapter
+        if let currentPageNumber = currentPageNumber {
+            if let resource = book.spine.spineReferences[currentPageNumber-1].resource {
+                cell.indexLabel.textColor = tocReference.resource.href == resource.href ? readerConfig.toolBarBackgroundColor : readerConfig.menuTextColor
+            }
         }
         
+        cell.layoutMargins = UIEdgeInsetsZero
+        cell.preservesSuperviewLayoutMargins = false
         cell.contentView.backgroundColor = isSection ? UIColor(white: 0.7, alpha: 0.1) : UIColor.clearColor()
         cell.backgroundColor = UIColor.clearColor()
         
@@ -134,8 +146,10 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
     // MARK: - Table view delegate
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        var tocReference = tocItems[indexPath.row]
+        let tocReference = tocItems[indexPath.row]
         delegate?.sidePanel(self, didSelectRowAtIndexPath: indexPath, withTocReference: tocReference)
+        
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
     // MARK: - Table view data source
@@ -163,15 +177,19 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
     // MARK: - Toolbar actions
     
     func didSelectHighlight(sender: UIBarButtonItem) {
-        println("Highlight")
+        FolioReader.sharedInstance.readerContainer.toggleLeftPanel()
+        FolioReader.sharedInstance.readerCenter.presentHighlightsList()
     }
     
-    func didSelectSearch(sender: UIBarButtonItem) {
-        println("Search")
+    func didSelectClose(sender: UIBarButtonItem) {
+        self.dismissViewControllerAnimated(true, completion: {
+            FolioReader.sharedInstance.isReaderOpen = false
+        })
     }
     
     func didSelectFont(sender: UIBarButtonItem) {
-        println("Font")
+        FolioReader.sharedInstance.readerContainer.toggleLeftPanel()
+        FolioReader.sharedInstance.readerCenter.presentFontsMenu()
     }
 
 }
