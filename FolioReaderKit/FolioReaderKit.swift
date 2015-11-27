@@ -21,7 +21,6 @@ internal let isLargePhone = isPhone6P
 
 // MARK: - Internal constants
 
-internal let kFrameworkBundle = NSBundle(identifier: "com.folioreader.FolioReaderKit")
 internal let kApplicationDocumentsDirectory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] 
 internal let kCurrentFontFamily = "kCurrentFontFamily"
 internal let kCurrentFontSize = "kCurrentFontSize"
@@ -119,6 +118,14 @@ public class FolioReader {
     }
 }
 
+// MARK: - Extensions
+
+extension NSBundle {
+    class func frameworkBundle() -> NSBundle {
+        return NSBundle(identifier: "com.folioreader.FolioReaderKit")!
+    }
+}
+
 extension UIColor {
     convenience init(rgba: String) {
         var red:   CGFloat = 0.0
@@ -188,7 +195,7 @@ extension String {
 extension UIImage {
     convenience init?(readerImageNamed: String) {
         let traits = UITraitCollection(displayScale: UIScreen.mainScreen().scale)
-        self.init(named: readerImageNamed, inBundle: kFrameworkBundle, compatibleWithTraitCollection: traits)
+        self.init(named: readerImageNamed, inBundle: NSBundle.frameworkBundle(), compatibleWithTraitCollection: traits)
     }
     
     func imageTintColor(tintColor: UIColor) -> UIImage {

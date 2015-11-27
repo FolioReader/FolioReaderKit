@@ -350,7 +350,7 @@
 			path = SMSegmentView;
 			sourceTree = "<group>";
 		};
-		1A25129B1C0779E100604BB8 /* Core */ = {
+		1A25129B1C0779E100604BB8 /* EpubCore */ = {
 			isa = PBXGroup;
 			children = (
 				1A25120F1C0779D800604BB8 /* FRBook.swift */,
@@ -358,13 +358,12 @@
 				1A2512111C0779D800604BB8 /* FRHighlight.swift */,
 				1A2512121C0779D800604BB8 /* FRMediaType.swift */,
 				1A2512131C0779D800604BB8 /* FRMetadata.swift */,
-				1A2512141C0779D800604BB8 /* FRPageIndicatorView.swift */,
 				1A2512151C0779D800604BB8 /* FRResource.swift */,
 				1A2512161C0779D800604BB8 /* FRResources.swift */,
 				1A2512171C0779D800604BB8 /* FRSpine.swift */,
 				1A2512181C0779D800604BB8 /* FRTocReference.swift */,
 			);
-			name = Core;
+			name = EpubCore;
 			sourceTree = "<group>";
 		};
 		1A25129C1C077A0C00604BB8 /* Reader */ = {
@@ -379,6 +378,7 @@
 				1A25120D1C0779D800604BB8 /* FolioReaderSidePanel.swift */,
 				1A25120E1C0779D800604BB8 /* FolioReaderSidePanelCell.swift */,
 				1A2512EE1C07891200604BB8 /* FolioReaderSharing.swift */,
+				1A2512141C0779D800604BB8 /* FRPageIndicatorView.swift */,
 			);
 			name = Reader;
 			sourceTree = "<group>";
@@ -490,7 +490,7 @@
 				1A2512FA1C07938900604BB8 /* CoreDataManager.swift */,
 				1A2512F81C0790FA00604BB8 /* Highlight.swift */,
 				1A25129C1C077A0C00604BB8 /* Reader */,
-				1A25129B1C0779E100604BB8 /* Core */,
+				1A25129B1C0779E100604BB8 /* EpubCore */,
 				1A2512191C0779D800604BB8 /* Resources */,
 				1A25124E1C0779D800604BB8 /* Vendor */,
 				99EF281A1AD588D6007848FF /* Supporting Files */,

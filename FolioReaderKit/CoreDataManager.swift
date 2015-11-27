@@ -19,7 +19,7 @@ class CoreDataManager: NSObject {
     }()
     
     lazy var managedObjectModel: NSManagedObjectModel = {
-        let modelURL = NSBundle.mainBundle().URLForResource("FolioReader", withExtension: "momd")!
+        let modelURL = NSBundle.frameworkBundle().URLForResource("FolioReader", withExtension: "momd")!
         return NSManagedObjectModel(contentsOfURL: modelURL)!
     }()
     

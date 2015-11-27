@@ -59,7 +59,7 @@ class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
     init(config configOrNil: FolioReaderConfig!, epubPath epubPathOrNil: String? = nil) {
         readerConfig = configOrNil
         epubPath = epubPathOrNil
-        super.init(nibName: nil, bundle: kFrameworkBundle)
+        super.init(nibName: nil, bundle: NSBundle.frameworkBundle())
         
         // Init with empty book
         book = FRBook()
