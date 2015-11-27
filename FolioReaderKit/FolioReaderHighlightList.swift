@@ -78,12 +78,12 @@ class FolioReaderHighlightList: UITableViewController {
         dateLabel.textColor = UIColor.lightGrayColor()
         dateLabel.frame = CGRect(x: 20, y: 20, width: view.frame.width-40, height: dateLabel.frame.height)
         
-        
         // Text
-        let text = NSMutableAttributedString(string: highlight.content.stripHtml().truncate(250, trailing: "..."))
+        let cleanString = highlight.content.stripHtml().truncate(250, trailing: "...").stripLineBreaks()
+        let text = NSMutableAttributedString(string: cleanString)
         let range = NSRange(location: 0, length: text.length)
         let paragraph = NSMutableParagraphStyle()
-        paragraph.lineSpacing = 4
+        paragraph.lineSpacing = 3
         
         text.addAttribute(NSParagraphStyleAttributeName, value: paragraph, range: range)
         text.addAttribute(NSFontAttributeName, value: UIFont(name: "Avenir-Light", size: 16)!, range: range)
@@ -119,10 +119,11 @@ class FolioReaderHighlightList: UITableViewController {
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         let highlight = highlights[indexPath.row]
         
-        let text = NSMutableAttributedString(string: highlight.content.stripHtml().truncate(250, trailing: "..."))
+        let cleanString = highlight.content.stripHtml().truncate(250, trailing: "...").stripLineBreaks()
+        let text = NSMutableAttributedString(string: cleanString)
         let range = NSRange(location: 0, length: text.length)
         let paragraph = NSMutableParagraphStyle()
-        paragraph.lineSpacing = 4
+        paragraph.lineSpacing = 3
         text.addAttribute(NSParagraphStyleAttributeName, value: paragraph, range: range)
         text.addAttribute(NSFontAttributeName, value: UIFont(name: "Avenir-Light", size: 16)!, range: range)
         

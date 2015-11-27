@@ -188,7 +188,11 @@ extension String {
     }
     
     func stripHtml() -> String {
-        return self.stringByReplacingOccurrencesOfString("<[^>]+>", withString: "", options: .RegularExpressionSearch, range: nil)
+        return self.stringByReplacingOccurrencesOfString("<[^>]+>", withString: "", options: .RegularExpressionSearch)
+    }
+    
+    func stripLineBreaks() -> String {
+        return self.stringByReplacingOccurrencesOfString("\n", withString: "", options: .RegularExpressionSearch)
     }
 }
 
@@ -294,7 +298,6 @@ extension UINavigationBar {
                 return imageView
             }
         }
-        
         return nil
     }
     
