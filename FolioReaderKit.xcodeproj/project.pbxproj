@@ -244,10 +244,8 @@
 		1A2512BC1C07835600604BB8 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
 		1A2512BD1C07835600604BB8 /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
 		1A2512BE1C07835600604BB8 /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
-		1A2512BF1C07835600604BB8 /* module.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.map; sourceTree = "<group>"; };
 		1A2512C01C07835600604BB8 /* SSZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSZipArchive.h; sourceTree = "<group>"; };
 		1A2512C11C07835600604BB8 /* SSZipArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSZipArchive.m; sourceTree = "<group>"; };
-		1A2512C31C07835600604BB8 /* module.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.map; sourceTree = "<group>"; };
 		1A2512C41C07835600604BB8 /* TGPCamelLabels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TGPCamelLabels.h; sourceTree = "<group>"; };
 		1A2512C51C07835600604BB8 /* TGPCamelLabels.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TGPCamelLabels.m; sourceTree = "<group>"; };
 		1A2512C61C07835600604BB8 /* TGPCamelLabels7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TGPCamelLabels7.h; sourceTree = "<group>"; };
@@ -259,8 +257,6 @@
 		1A2512CC1C07835600604BB8 /* TGPDiscreteSlider7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TGPDiscreteSlider7.m; sourceTree = "<group>"; };
 		1A2512E21C0783A900604BB8 /* UIMenuItem+CXAImageSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIMenuItem+CXAImageSupport.h"; sourceTree = "<group>"; };
 		1A2512E31C0783A900604BB8 /* UIMenuItem+CXAImageSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIMenuItem+CXAImageSupport.m"; sourceTree = "<group>"; };
-		1A2512E61C0783CF00604BB8 /* module.map */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.map; sourceTree = "<group>"; };
-		1A2512E81C07849600604BB8 /* module.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.map; sourceTree = "<group>"; };
 		1A2512E91C07849600604BB8 /* ZFModalTransitionAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZFModalTransitionAnimator.h; sourceTree = "<group>"; };
 		1A2512EA1C07849600604BB8 /* ZFModalTransitionAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZFModalTransitionAnimator.m; sourceTree = "<group>"; };
 		1A2512EE1C07891200604BB8 /* FolioReaderSharing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderSharing.swift; sourceTree = "<group>"; };
@@ -496,7 +492,6 @@
 			children = (
 				1A03BD801C07E32700E000E9 /* libz.tbd */,
 				1A2512B51C07835600604BB8 /* minizip */,
-				1A2512BF1C07835600604BB8 /* module.map */,
 				1A2512C01C07835600604BB8 /* SSZipArchive.h */,
 				1A2512C11C07835600604BB8 /* SSZipArchive.m */,
 			);
@@ -522,7 +517,6 @@
 		1A2512C21C07835600604BB8 /* TGPControls */ = {
 			isa = PBXGroup;
 			children = (
-				1A2512C31C07835600604BB8 /* module.map */,
 				1A2512C41C07835600604BB8 /* TGPCamelLabels.h */,
 				1A2512C51C07835600604BB8 /* TGPCamelLabels.m */,
 				1A2512C61C07835600604BB8 /* TGPCamelLabels7.h */,
@@ -539,7 +533,6 @@
 		1A2512E11C0783A900604BB8 /* UIMenuItem-CXAImageSupport */ = {
 			isa = PBXGroup;
 			children = (
-				1A2512E61C0783CF00604BB8 /* module.map */,
 				1A2512E21C0783A900604BB8 /* UIMenuItem+CXAImageSupport.h */,
 				1A2512E31C0783A900604BB8 /* UIMenuItem+CXAImageSupport.m */,
 			);
@@ -549,7 +542,6 @@
 		1A2512E71C07849600604BB8 /* ZFDragableModalTransition */ = {
 			isa = PBXGroup;
 			children = (
-				1A2512E81C07849600604BB8 /* module.map */,
 				1A2512E91C07849600604BB8 /* ZFModalTransitionAnimator.h */,
 				1A2512EA1C07849600604BB8 /* ZFModalTransitionAnimator.m */,
 			);
