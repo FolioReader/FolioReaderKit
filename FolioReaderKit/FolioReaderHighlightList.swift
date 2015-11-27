@@ -24,8 +24,15 @@ class FolioReaderHighlightList: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
-        setNavigationBarColor(color: readerConfig.toolBarBackgroundColor)
+        configureNavBar()
+    }
+    
+    func configureNavBar() {
+        let navBackground = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeMenuBackground : UIColor.whiteColor()
+        let tintColor = readerConfig.toolBarBackgroundColor
+        let navText = FolioReader.sharedInstance.nightMode ? UIColor.whiteColor() : UIColor.blackColor()
+        let font = UIFont(name: "Avenir-Light", size: 17)!
+        setTranslucentNavigation(color: navBackground, tintColor: tintColor, titleColor: navText, andFont: font)
     }
     
     override func didReceiveMemoryWarning() {
@@ -155,11 +162,4 @@ class FolioReaderHighlightList: UITableViewController {
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }
     }
-    
-    // MARK: - Status bar style
-    
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent
-    }
-
 }

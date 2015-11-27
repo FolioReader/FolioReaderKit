@@ -255,20 +255,19 @@ extension UIViewController: UIGestureRecognizerDelegate {
         navBar?.translucent = true
     }
     
-    func setTranslucentNavigation(color color: UIColor, tintColor: UIColor = UIColor.whiteColor(), andFont font: UIFont = UIFont.systemFontOfSize(17)) {
+    func setTranslucentNavigation(translucent: Bool = true, color: UIColor, tintColor: UIColor = UIColor.whiteColor(), titleColor: UIColor = UIColor.blackColor(), andFont font: UIFont = UIFont.systemFontOfSize(17)) {
         let navBar = self.navigationController?.navigationBar
         navBar?.setBackgroundImage(UIImage.imageWithColor(color), forBarMetrics: UIBarMetrics.Default)
         navBar?.showBottomHairline()
-        navBar?.translucent = true
+        navBar?.translucent = translucent
         navBar?.tintColor = tintColor
-        navBar?.titleTextAttributes = [NSForegroundColorAttributeName: tintColor, NSFontAttributeName: font]
+        navBar?.titleTextAttributes = [NSForegroundColorAttributeName: titleColor, NSFontAttributeName: font]
     }
-    
-    func setNavigationBarColor(color color: UIColor) {
-        let navBar = self.navigationController?.navigationBar
-        navBar?.setBackgroundImage(UIImage.imageWithColor(color), forBarMetrics: UIBarMetrics.Default)
-        navBar?.showBottomHairline()
-        navBar?.translucent = false
+}
+
+extension UINavigationController {
+    override public func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return FolioReader.sharedInstance.nightMode ? .LightContent : .Default
     }
 }
 

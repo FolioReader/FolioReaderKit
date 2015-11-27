@@ -113,11 +113,10 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     func configureNavBar() {
         let navBackground = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeMenuBackground : UIColor.whiteColor()
+        let tintColor = readerConfig.toolBarBackgroundColor
         let navText = FolioReader.sharedInstance.nightMode ? UIColor.whiteColor() : UIColor.blackColor()
-        
-        setTranslucentNavigation(color: navBackground,
-            tintColor: navText,
-            andFont: UIFont(name: "Avenir-Light", size: 17)!)
+        let font = UIFont(name: "Avenir-Light", size: 17)!
+        setTranslucentNavigation(color: navBackground, tintColor: tintColor, titleColor: navText, andFont: font)
     }
     
     func reloadData() {
