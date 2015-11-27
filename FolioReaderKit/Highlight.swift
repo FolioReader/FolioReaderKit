@@ -61,16 +61,14 @@ extension Highlight {
         }
 
         // Save
-        if coreDataManager.managedObjectContext.hasChanges {
-            do {
-                try coreDataManager.managedObjectContext.save()
-                if (completion != nil) {
-                    completion!(error: nil)
-                }
-            } catch let error as NSError {
-                if (completion != nil) {
-                    completion!(error: error)
-                }
+        do {
+            try coreDataManager.managedObjectContext.save()
+            if (completion != nil) {
+                completion!(error: nil)
+            }
+        } catch let error as NSError {
+            if (completion != nil) {
+                completion!(error: error)
             }
         }
     }
@@ -81,15 +79,12 @@ extension Highlight {
         do {
             let fetchRequest = NSFetchRequest(entityName: "Highlight")
             fetchRequest.predicate = NSPredicate(format:"highlightId = %@", highlightId)
+            
             highlight = try coreDataManager.managedObjectContext.executeFetchRequest(fetchRequest).last as? Highlight
-        } catch let error as NSError {
-            print(error)
-            highlight = nil
-        }
-        
-        if highlight != nil {
             coreDataManager.managedObjectContext.deleteObject(highlight!)
             coreDataManager.saveContext()
+        } catch let error as NSError {
+            print("Error on remove highlight: \(error)")
         }
     }
     
@@ -99,15 +94,12 @@ extension Highlight {
         do {
             let fetchRequest = NSFetchRequest(entityName: "Highlight")
             fetchRequest.predicate = NSPredicate(format:"highlightId = %@", highlightId)
+            
             highlight = try coreDataManager.managedObjectContext.executeFetchRequest(fetchRequest).last as? Highlight
-        } catch let error as NSError {
-            print(error)
-            highlight = nil
-        }
-        
-        if highlight != nil {
             highlight?.type = type.hashValue
             coreDataManager.saveContext()
+        } catch let error as NSError {
+            print("Error on update highlight: \(error)")
         }
     }
     
@@ -117,15 +109,10 @@ extension Highlight {
         do {
             let fetchRequest = NSFetchRequest(entityName: "Highlight")
             fetchRequest.predicate = NSPredicate(format: "bookId = %@ && page = %@", bookId, page)
+            
             highlights = try coreDataManager.managedObjectContext.executeFetchRequest(fetchRequest) as? [Highlight]
-        } catch let error as NSError {
-            print(error)
-            highlights = nil
-        }
-        
-        if highlights != nil {
             return highlights!
-        } else {
+        } catch {
             return [Highlight]()
         }
     }
@@ -136,18 +123,12 @@ extension Highlight {
         do {
             let fetchRequest = NSFetchRequest(entityName: "Highlight")
             let sorter: NSSortDescriptor = NSSortDescriptor(key: "date" , ascending: true)
-            
             fetchRequest.predicate = NSPredicate(format: "bookId = %@", bookId)
             fetchRequest.sortDescriptors = [sorter]
+            
             highlights = try coreDataManager.managedObjectContext.executeFetchRequest(fetchRequest) as? [Highlight]
-        } catch let error as NSError {
-            print(error)
-            highlights = nil
-        }
-        
-        if highlights != nil {
             return highlights!
-        } else {
+        } catch {
             return [Highlight]()
         }
     }

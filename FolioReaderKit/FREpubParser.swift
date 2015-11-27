@@ -246,32 +246,22 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     private func addSkipBackupAttributeToItemAtURL(URL: NSURL) -> Bool {
         assert(NSFileManager.defaultManager().fileExistsAtPath(URL.path!))
         
-        var error: NSError? = nil
-        var success: Bool
         do {
             try URL.setResourceValue(true, forKey: NSURLIsExcludedFromBackupKey)
-            success = true
-        } catch let error1 as NSError {
-            error = error1
-            success = false
-        }
-        
-        if !success {
+            return true
+        } catch let error as NSError {
             print("Error excluding \(URL.lastPathComponent) from backup \(error)")
+            return false
         }
-        
-        return success;
     }
     
     // MARK: - SSZipArchive delegate
     
     func zipArchiveWillUnzipArchiveAtPath(path: String!, zipInfo: unz_global_info) {
-        if epubPathToRemove != nil {
-            do {
-                try NSFileManager.defaultManager().removeItemAtPath(epubPathToRemove!)
-            } catch let error as NSError {
-                print(error)
-            }
+        do {
+            try NSFileManager.defaultManager().removeItemAtPath(epubPathToRemove!)
+        } catch let error as NSError {
+            print(error)
         }
     }
 }
