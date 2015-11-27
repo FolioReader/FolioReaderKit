@@ -355,6 +355,16 @@
 			path = FolioReaderKit/Vendor/FontBlaster;
 			sourceTree = SOURCE_ROOT;
 		};
+		1A0AAA421C08BC9C00C3BCA1 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				1A2512F51C07907300604BB8 /* FolioReader.xcdatamodeld */,
+				1A2512FA1C07938900604BB8 /* CoreDataManager.swift */,
+				1A2512F81C0790FA00604BB8 /* Highlight.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		1A2512191C0779D800604BB8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -446,7 +456,7 @@
 			path = SMSegmentView;
 			sourceTree = "<group>";
 		};
-		1A25129B1C0779E100604BB8 /* EpubCore */ = {
+		1A25129B1C0779E100604BB8 /* EPUBCore */ = {
 			isa = PBXGroup;
 			children = (
 				1A25120F1C0779D800604BB8 /* FRBook.swift */,
@@ -459,7 +469,7 @@
 				1A2512171C0779D800604BB8 /* FRSpine.swift */,
 				1A2512181C0779D800604BB8 /* FRTocReference.swift */,
 			);
-			name = EpubCore;
+			name = EPUBCore;
 			sourceTree = "<group>";
 		};
 		1A25129C1C077A0C00604BB8 /* Reader */ = {
@@ -578,11 +588,9 @@
 			isa = PBXGroup;
 			children = (
 				1A25120B1C0779D800604BB8 /* FolioReaderKit.swift */,
-				1A2512F51C07907300604BB8 /* FolioReader.xcdatamodeld */,
-				1A2512FA1C07938900604BB8 /* CoreDataManager.swift */,
-				1A2512F81C0790FA00604BB8 /* Highlight.swift */,
+				1A0AAA421C08BC9C00C3BCA1 /* Model */,
 				1A25129C1C077A0C00604BB8 /* Reader */,
-				1A25129B1C0779E100604BB8 /* EpubCore */,
+				1A25129B1C0779E100604BB8 /* EPUBCore */,
 				1A2512191C0779D800604BB8 /* Resources */,
 				1A25124E1C0779D800604BB8 /* Vendor */,
 				99EF281A1AD588D6007848FF /* Supporting Files */,
