@@ -8,6 +8,23 @@
 
 /* Begin PBXBuildFile section */
 		1A03BD811C07E32700E000E9 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A03BD801C07E32700E000E9 /* libz.tbd */; };
+		1A03BD971C07EF9000E000E9 /* Andada-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1A03BD841C07EF9000E000E9 /* Andada-Bold.otf */; };
+		1A03BD981C07EF9000E000E9 /* Andada-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1A03BD851C07EF9000E000E9 /* Andada-BoldItalic.otf */; };
+		1A03BD991C07EF9000E000E9 /* Andada-Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1A03BD861C07EF9000E000E9 /* Andada-Italic.otf */; };
+		1A03BD9A1C07EF9000E000E9 /* Andada-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1A03BD871C07EF9000E000E9 /* Andada-Regular.otf */; };
+		1A03BD9B1C07EF9000E000E9 /* Lato-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A03BD891C07EF9000E000E9 /* Lato-Bold.ttf */; };
+		1A03BD9C1C07EF9000E000E9 /* Lato-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A03BD8A1C07EF9000E000E9 /* Lato-BoldItalic.ttf */; };
+		1A03BD9D1C07EF9000E000E9 /* Lato-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A03BD8B1C07EF9000E000E9 /* Lato-Italic.ttf */; };
+		1A03BD9E1C07EF9000E000E9 /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A03BD8C1C07EF9000E000E9 /* Lato-Regular.ttf */; };
+		1A03BD9F1C07EF9000E000E9 /* Lora-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A03BD8E1C07EF9000E000E9 /* Lora-Bold.ttf */; };
+		1A03BDA01C07EF9000E000E9 /* Lora-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A03BD8F1C07EF9000E000E9 /* Lora-BoldItalic.ttf */; };
+		1A03BDA11C07EF9000E000E9 /* Lora-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A03BD901C07EF9000E000E9 /* Lora-Italic.ttf */; };
+		1A03BDA21C07EF9000E000E9 /* Lora-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A03BD911C07EF9000E000E9 /* Lora-Regular.ttf */; };
+		1A03BDA31C07EF9000E000E9 /* Raleway-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A03BD931C07EF9000E000E9 /* Raleway-Bold.ttf */; };
+		1A03BDA41C07EF9000E000E9 /* Raleway-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A03BD941C07EF9000E000E9 /* Raleway-BoldItalic.ttf */; };
+		1A03BDA51C07EF9000E000E9 /* Raleway-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A03BD951C07EF9000E000E9 /* Raleway-Italic.ttf */; };
+		1A03BDA61C07EF9000E000E9 /* Raleway-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A03BD961C07EF9000E000E9 /* Raleway-Regular.ttf */; };
+		1A03BDA91C07F46000E000E9 /* FontBlaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A03BDA81C07F46000E000E9 /* FontBlaster.swift */; };
 		1A2512521C0779D800604BB8 /* FolioReaderCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512051C0779D800604BB8 /* FolioReaderCenter.swift */; };
 		1A2512531C0779D800604BB8 /* FolioReaderConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512061C0779D800604BB8 /* FolioReaderConfig.swift */; };
 		1A2512541C0779D800604BB8 /* FolioReaderContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512071C0779D800604BB8 /* FolioReaderContainer.swift */; };
@@ -127,6 +144,23 @@
 
 /* Begin PBXFileReference section */
 		1A03BD801C07E32700E000E9 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		1A03BD841C07EF9000E000E9 /* Andada-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Andada-Bold.otf"; sourceTree = "<group>"; };
+		1A03BD851C07EF9000E000E9 /* Andada-BoldItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Andada-BoldItalic.otf"; sourceTree = "<group>"; };
+		1A03BD861C07EF9000E000E9 /* Andada-Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Andada-Italic.otf"; sourceTree = "<group>"; };
+		1A03BD871C07EF9000E000E9 /* Andada-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Andada-Regular.otf"; sourceTree = "<group>"; };
+		1A03BD891C07EF9000E000E9 /* Lato-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Bold.ttf"; sourceTree = "<group>"; };
+		1A03BD8A1C07EF9000E000E9 /* Lato-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-BoldItalic.ttf"; sourceTree = "<group>"; };
+		1A03BD8B1C07EF9000E000E9 /* Lato-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Italic.ttf"; sourceTree = "<group>"; };
+		1A03BD8C1C07EF9000E000E9 /* Lato-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Regular.ttf"; sourceTree = "<group>"; };
+		1A03BD8E1C07EF9000E000E9 /* Lora-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lora-Bold.ttf"; sourceTree = "<group>"; };
+		1A03BD8F1C07EF9000E000E9 /* Lora-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lora-BoldItalic.ttf"; sourceTree = "<group>"; };
+		1A03BD901C07EF9000E000E9 /* Lora-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lora-Italic.ttf"; sourceTree = "<group>"; };
+		1A03BD911C07EF9000E000E9 /* Lora-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lora-Regular.ttf"; sourceTree = "<group>"; };
+		1A03BD931C07EF9000E000E9 /* Raleway-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Raleway-Bold.ttf"; sourceTree = "<group>"; };
+		1A03BD941C07EF9000E000E9 /* Raleway-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Raleway-BoldItalic.ttf"; sourceTree = "<group>"; };
+		1A03BD951C07EF9000E000E9 /* Raleway-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Raleway-Italic.ttf"; sourceTree = "<group>"; };
+		1A03BD961C07EF9000E000E9 /* Raleway-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Raleway-Regular.ttf"; sourceTree = "<group>"; };
+		1A03BDA81C07F46000E000E9 /* FontBlaster.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontBlaster.swift; sourceTree = "<group>"; };
 		1A2512051C0779D800604BB8 /* FolioReaderCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderCenter.swift; sourceTree = "<group>"; };
 		1A2512061C0779D800604BB8 /* FolioReaderConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderConfig.swift; sourceTree = "<group>"; };
 		1A2512071C0779D800604BB8 /* FolioReaderContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderContainer.swift; sourceTree = "<group>"; };
@@ -261,11 +295,76 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A03BD821C07EF9000E000E9 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				1A03BD831C07EF9000E000E9 /* Andada */,
+				1A03BD881C07EF9000E000E9 /* Lato */,
+				1A03BD8D1C07EF9000E000E9 /* Lora */,
+				1A03BD921C07EF9000E000E9 /* Raleway */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		1A03BD831C07EF9000E000E9 /* Andada */ = {
+			isa = PBXGroup;
+			children = (
+				1A03BD841C07EF9000E000E9 /* Andada-Bold.otf */,
+				1A03BD851C07EF9000E000E9 /* Andada-BoldItalic.otf */,
+				1A03BD861C07EF9000E000E9 /* Andada-Italic.otf */,
+				1A03BD871C07EF9000E000E9 /* Andada-Regular.otf */,
+			);
+			path = Andada;
+			sourceTree = "<group>";
+		};
+		1A03BD881C07EF9000E000E9 /* Lato */ = {
+			isa = PBXGroup;
+			children = (
+				1A03BD891C07EF9000E000E9 /* Lato-Bold.ttf */,
+				1A03BD8A1C07EF9000E000E9 /* Lato-BoldItalic.ttf */,
+				1A03BD8B1C07EF9000E000E9 /* Lato-Italic.ttf */,
+				1A03BD8C1C07EF9000E000E9 /* Lato-Regular.ttf */,
+			);
+			path = Lato;
+			sourceTree = "<group>";
+		};
+		1A03BD8D1C07EF9000E000E9 /* Lora */ = {
+			isa = PBXGroup;
+			children = (
+				1A03BD8E1C07EF9000E000E9 /* Lora-Bold.ttf */,
+				1A03BD8F1C07EF9000E000E9 /* Lora-BoldItalic.ttf */,
+				1A03BD901C07EF9000E000E9 /* Lora-Italic.ttf */,
+				1A03BD911C07EF9000E000E9 /* Lora-Regular.ttf */,
+			);
+			path = Lora;
+			sourceTree = "<group>";
+		};
+		1A03BD921C07EF9000E000E9 /* Raleway */ = {
+			isa = PBXGroup;
+			children = (
+				1A03BD931C07EF9000E000E9 /* Raleway-Bold.ttf */,
+				1A03BD941C07EF9000E000E9 /* Raleway-BoldItalic.ttf */,
+				1A03BD951C07EF9000E000E9 /* Raleway-Italic.ttf */,
+				1A03BD961C07EF9000E000E9 /* Raleway-Regular.ttf */,
+			);
+			path = Raleway;
+			sourceTree = "<group>";
+		};
+		1A03BDA71C07F46000E000E9 /* FontBlaster */ = {
+			isa = PBXGroup;
+			children = (
+				1A03BDA81C07F46000E000E9 /* FontBlaster.swift */,
+			);
+			name = FontBlaster;
+			path = FolioReaderKit/Vendor/FontBlaster;
+			sourceTree = SOURCE_ROOT;
+		};
 		1A2512191C0779D800604BB8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				1A25121A1C0779D800604BB8 /* Bridge.js */,
 				1A25124D1C0779D800604BB8 /* Style.css */,
+				1A03BD821C07EF9000E000E9 /* Fonts */,
 				1A25121B1C0779D800604BB8 /* Images */,
 			);
 			path = Resources;
@@ -331,6 +430,7 @@
 			isa = PBXGroup;
 			children = (
 				1A2512F01C078ABE00604BB8 /* AEXML */,
+				1A03BDA71C07F46000E000E9 /* FontBlaster */,
 				1A2512B11C07828000604BB8 /* JSQWebViewController */,
 				1A25124F1C0779D800604BB8 /* SMSegmentView */,
 				1A2512B41C07835600604BB8 /* SSZipArchive */,
@@ -628,6 +728,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A03BD9C1C07EF9000E000E9 /* Lato-BoldItalic.ttf in Resources */,
 				1A25127B1C0779D800604BB8 /* icon-font-small@2x.png in Resources */,
 				1A2512721C0779D800604BB8 /* green-marker.png in Resources */,
 				1A2512971C0779D800604BB8 /* yellow-marker@2x.png in Resources */,
@@ -635,10 +736,15 @@
 				1A2512681C0779D800604BB8 /* blue-marker@2x.png in Resources */,
 				1A25126B1C0779D800604BB8 /* btn-navbar-menu@3x.png in Resources */,
 				1A2512701C0779D800604BB8 /* colors-marker@2x.png in Resources */,
+				1A03BD9B1C07EF9000E000E9 /* Lato-Bold.ttf in Resources */,
+				1A03BDA61C07EF9000E000E9 /* Raleway-Regular.ttf in Resources */,
 				1A2512741C0779D800604BB8 /* icon-close.png in Resources */,
 				1A2512881C0779D800604BB8 /* icon-search@3x.png in Resources */,
 				1A25128E1C0779D800604BB8 /* no-marker@3x.png in Resources */,
+				1A03BD991C07EF9000E000E9 /* Andada-Italic.otf in Resources */,
+				1A03BD981C07EF9000E000E9 /* Andada-BoldItalic.otf in Resources */,
 				1A2512711C0779D800604BB8 /* colors-marker@3x.png in Resources */,
+				1A03BDA31C07EF9000E000E9 /* Raleway-Bold.ttf in Resources */,
 				1A2512661C0779D800604BB8 /* Bridge.js in Resources */,
 				1A2512811C0779D800604BB8 /* icon-highlight@2x.png in Resources */,
 				1A2512671C0779D800604BB8 /* blue-marker.png in Resources */,
@@ -655,29 +761,39 @@
 				1A2512901C0779D800604BB8 /* pink-marker@2x.png in Resources */,
 				1A2512691C0779D800604BB8 /* btn-navbar-menu.png in Resources */,
 				1A2512761C0779D800604BB8 /* icon-close@3x.png in Resources */,
+				1A03BDA21C07EF9000E000E9 /* Lora-Regular.ttf in Resources */,
 				1A2512781C0779D800604BB8 /* icon-font-big@2x.png in Resources */,
 				1A2512731C0779D800604BB8 /* green-marker@2x.png in Resources */,
+				1A03BD9F1C07EF9000E000E9 /* Lora-Bold.ttf in Resources */,
+				1A03BD9A1C07EF9000E000E9 /* Andada-Regular.otf in Resources */,
 				1A25127E1C0779D800604BB8 /* icon-font@2x.png in Resources */,
 				1A2512831C0779D800604BB8 /* icon-moon.png in Resources */,
 				1A25126F1C0779D800604BB8 /* colors-marker.png in Resources */,
 				1A2512981C0779D800604BB8 /* Style.css in Resources */,
 				1A25126E1C0779D800604BB8 /* btn-navbar-share@3x.png in Resources */,
+				1A03BDA11C07EF9000E000E9 /* Lora-Italic.ttf in Resources */,
 				1A25127F1C0779D800604BB8 /* icon-font@3x.png in Resources */,
 				1A2512911C0779D800604BB8 /* share-marker.png in Resources */,
 				1A2512861C0779D800604BB8 /* icon-search.png in Resources */,
+				1A03BDA51C07EF9000E000E9 /* Raleway-Italic.ttf in Resources */,
+				1A03BD9D1C07EF9000E000E9 /* Lato-Italic.ttf in Resources */,
 				1A2512941C0779D800604BB8 /* underline-marker.png in Resources */,
 				1A2512931C0779D800604BB8 /* share-marker@3x.png in Resources */,
 				1A2512771C0779D800604BB8 /* icon-font-big.png in Resources */,
 				1A25127D1C0779D800604BB8 /* icon-font.png in Resources */,
+				1A03BD971C07EF9000E000E9 /* Andada-Bold.otf in Resources */,
 				1A25128F1C0779D800604BB8 /* pink-marker.png in Resources */,
 				1A2512961C0779D800604BB8 /* yellow-marker.png in Resources */,
 				1A2512921C0779D800604BB8 /* share-marker@2x.png in Resources */,
 				1A2512951C0779D800604BB8 /* underline-marker@2x.png in Resources */,
 				1A2512871C0779D800604BB8 /* icon-search@2x.png in Resources */,
+				1A03BDA41C07EF9000E000E9 /* Raleway-BoldItalic.ttf in Resources */,
 				1A2512791C0779D800604BB8 /* icon-font-big@3x.png in Resources */,
 				1A2512851C0779D800604BB8 /* icon-moon@3x.png in Resources */,
 				1A25126D1C0779D800604BB8 /* btn-navbar-share@2x.png in Resources */,
+				1A03BD9E1C07EF9000E000E9 /* Lato-Regular.ttf in Resources */,
 				1A25128C1C0779D800604BB8 /* no-marker.png in Resources */,
+				1A03BDA01C07EF9000E000E9 /* Lora-BoldItalic.ttf in Resources */,
 				1A2512801C0779D800604BB8 /* icon-highlight.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -720,6 +836,7 @@
 				1A2512DE1C07835600604BB8 /* TGPDiscreteSlider.m in Sources */,
 				1A2512FB1C07938A00604BB8 /* CoreDataManager.swift in Sources */,
 				1A2512F91C0790FA00604BB8 /* Highlight.swift in Sources */,
+				1A03BDA91C07F46000E000E9 /* FontBlaster.swift in Sources */,
 				1A2512561C0779D800604BB8 /* FolioReaderHighlightList.swift in Sources */,
 				1A2512551C0779D800604BB8 /* FolioReaderFontsMenu.swift in Sources */,
 				1A25125B1C0779D800604BB8 /* FolioReaderSidePanelCell.swift in Sources */,

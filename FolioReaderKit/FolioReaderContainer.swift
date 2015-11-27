@@ -64,7 +64,10 @@ class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
         // Init with empty book
         book = FRBook()
         
-        // Registe initial defaults
+        // Register custom fonts
+        FontBlaster.blast(NSBundle.frameworkBundle())
+        
+        // Register initial defaults
         FolioReader.defaults.registerDefaults([
             kCurrentFontFamily: 0,
             kNightMode: false,
