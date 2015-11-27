@@ -51,7 +51,7 @@ static NSMutableDictionary *titleHidesShadowPairs;
                   image:(UIImage *)image
             hidesShadow:(BOOL)hidesShadow
 {
-  id item = [self initWithTitle:nil action:action];
+  id item = [self initWithTitle:@"" action:action];
   if (item)
     [item cxa_setImage:image hidesShadow:hidesShadow forTitle:title];
   
@@ -147,9 +147,8 @@ static void newDrawTextInRect(UILabel *self, SEL _cmd, CGRect rect)
   point.y = ceilf(point.y - size.height/2);
   
   BOOL drawsShadow = ![titleHidesShadowPairs[self.text] boolValue];
-  CGContextRef context;
+  CGContextRef context = UIGraphicsGetCurrentContext();
   if (drawsShadow){
-    context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
     CGContextSetShadowWithColor(context, CGSizeMake(0, -1), 0, [[UIColor blackColor] colorWithAlphaComponent:1./3.].CGColor);
   }
