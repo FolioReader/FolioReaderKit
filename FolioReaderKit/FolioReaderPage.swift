@@ -148,8 +148,8 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         } else if request.URL!.absoluteString != "about:blank" && navigationType == .LinkClicked {
             
             let webViewController = WebViewController(url: request.URL!)
-//            webViewController.barsTintColor = UIColor.whiteColor()
-            FolioReader.sharedInstance.readerCenter.presentViewController(webViewController, animated: true, completion: nil)
+            let nav = UINavigationController(rootViewController: webViewController)
+            FolioReader.sharedInstance.readerCenter.presentViewController(nav, animated: true, completion: nil)
             
             return false
         }
