@@ -1,4 +1,0 @@
-module SSZipArchive [system] {
-    header "../SSZipArchive/SSZipArchive.h"
-    export *
-}

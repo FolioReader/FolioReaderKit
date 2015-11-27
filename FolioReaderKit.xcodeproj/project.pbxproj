@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A03BD811C07E32700E000E9 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A03BD801C07E32700E000E9 /* libz.tbd */; };
 		1A2512521C0779D800604BB8 /* FolioReaderCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512051C0779D800604BB8 /* FolioReaderCenter.swift */; };
 		1A2512531C0779D800604BB8 /* FolioReaderConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512061C0779D800604BB8 /* FolioReaderConfig.swift */; };
 		1A2512541C0779D800604BB8 /* FolioReaderContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512071C0779D800604BB8 /* FolioReaderContainer.swift */; };
@@ -107,6 +108,9 @@
 		1A2512EC1C07849600604BB8 /* ZFModalTransitionAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512EA1C07849600604BB8 /* ZFModalTransitionAnimator.m */; };
 		1A2512EF1C07891200604BB8 /* FolioReaderSharing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512EE1C07891200604BB8 /* FolioReaderSharing.swift */; };
 		1A2512F21C078ABE00604BB8 /* AEXML.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512F11C078ABE00604BB8 /* AEXML.swift */; };
+		1A2512F71C07907300604BB8 /* FolioReader.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512F51C07907300604BB8 /* FolioReader.xcdatamodeld */; };
+		1A2512F91C0790FA00604BB8 /* Highlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512F81C0790FA00604BB8 /* Highlight.swift */; };
+		1A2512FB1C07938A00604BB8 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512FA1C07938900604BB8 /* CoreDataManager.swift */; };
 		99EF28231AD588D6007848FF /* FolioReaderKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 99EF28171AD588D6007848FF /* FolioReaderKit.framework */; };
 		99EF282A1AD588D6007848FF /* FolioReaderKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EF28291AD588D6007848FF /* FolioReaderKitTests.swift */; };
 /* End PBXBuildFile section */
@@ -122,6 +126,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1A03BD801C07E32700E000E9 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		1A2512051C0779D800604BB8 /* FolioReaderCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderCenter.swift; sourceTree = "<group>"; };
 		1A2512061C0779D800604BB8 /* FolioReaderConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderConfig.swift; sourceTree = "<group>"; };
 		1A2512071C0779D800604BB8 /* FolioReaderContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderContainer.swift; sourceTree = "<group>"; };
@@ -226,6 +231,9 @@
 		1A2512EA1C07849600604BB8 /* ZFModalTransitionAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZFModalTransitionAnimator.m; sourceTree = "<group>"; };
 		1A2512EE1C07891200604BB8 /* FolioReaderSharing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderSharing.swift; sourceTree = "<group>"; };
 		1A2512F11C078ABE00604BB8 /* AEXML.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEXML.swift; sourceTree = "<group>"; };
+		1A2512F61C07907300604BB8 /* FolioReader.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FolioReader.xcdatamodel; sourceTree = "<group>"; };
+		1A2512F81C0790FA00604BB8 /* Highlight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Highlight.swift; sourceTree = "<group>"; };
+		1A2512FA1C07938900604BB8 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		99EF28171AD588D6007848FF /* FolioReaderKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FolioReaderKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		99EF281B1AD588D6007848FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		99EF28221AD588D6007848FF /* FolioReaderKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FolioReaderKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -238,6 +246,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A03BD811C07E32700E000E9 /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,6 +394,7 @@
 		1A2512B41C07835600604BB8 /* SSZipArchive */ = {
 			isa = PBXGroup;
 			children = (
+				1A03BD801C07E32700E000E9 /* libz.tbd */,
 				1A2512B51C07835600604BB8 /* minizip */,
 				1A2512BF1C07835600604BB8 /* module.map */,
 				1A2512C01C07835600604BB8 /* SSZipArchive.h */,
@@ -476,6 +486,9 @@
 			isa = PBXGroup;
 			children = (
 				1A25120B1C0779D800604BB8 /* FolioReaderKit.swift */,
+				1A2512F51C07907300604BB8 /* FolioReader.xcdatamodeld */,
+				1A2512FA1C07938900604BB8 /* CoreDataManager.swift */,
+				1A2512F81C0790FA00604BB8 /* Highlight.swift */,
 				1A25129C1C077A0C00604BB8 /* Reader */,
 				1A25129B1C0779E100604BB8 /* Core */,
 				1A2512191C0779D800604BB8 /* Resources */,
@@ -695,6 +708,7 @@
 				1A2512E01C07835600604BB8 /* TGPDiscreteSlider7.m in Sources */,
 				1A25125C1C0779D800604BB8 /* FRBook.swift in Sources */,
 				1A2512611C0779D800604BB8 /* FRPageIndicatorView.swift in Sources */,
+				1A2512F71C07907300604BB8 /* FolioReader.xcdatamodeld in Sources */,
 				1A2512651C0779D800604BB8 /* FRTocReference.swift in Sources */,
 				1A25125A1C0779D800604BB8 /* FolioReaderSidePanel.swift in Sources */,
 				1A2512D01C07835600604BB8 /* mztools.c in Sources */,
@@ -704,6 +718,8 @@
 				1A2512D41C07835600604BB8 /* zip.c in Sources */,
 				1A2512541C0779D800604BB8 /* FolioReaderContainer.swift in Sources */,
 				1A2512DE1C07835600604BB8 /* TGPDiscreteSlider.m in Sources */,
+				1A2512FB1C07938A00604BB8 /* CoreDataManager.swift in Sources */,
+				1A2512F91C0790FA00604BB8 /* Highlight.swift in Sources */,
 				1A2512561C0779D800604BB8 /* FolioReaderHighlightList.swift in Sources */,
 				1A2512551C0779D800604BB8 /* FolioReaderFontsMenu.swift in Sources */,
 				1A25125B1C0779D800604BB8 /* FolioReaderSidePanelCell.swift in Sources */,
@@ -838,6 +854,7 @@
 				INFOPLIST_FILE = FolioReaderKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.folioreader.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -858,6 +875,7 @@
 				INFOPLIST_FILE = FolioReaderKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.folioreader.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -928,6 +946,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		1A2512F51C07907300604BB8 /* FolioReader.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				1A2512F61C07907300604BB8 /* FolioReader.xcdatamodel */,
+			);
+			currentVersion = 1A2512F61C07907300604BB8 /* FolioReader.xcdatamodel */;
+			path = FolioReader.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 99EF280E1AD588D6007848FF /* Project object */;
 }

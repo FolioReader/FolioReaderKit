@@ -26,7 +26,7 @@ class ViewController: UIViewController {
         let bookPath = NSBundle.mainBundle().pathForResource("book", ofType: "epub")
         
 //        FolioReaderKit.presentReader(parentViewController: self, andConfig: config)
-        FolioReaderKit.presentReader(parentViewController: self, withEpubPath: bookPath!, andConfig: config)
+        FolioReader.presentReader(parentViewController: self, withEpubPath: bookPath!, andConfig: config)
     }
 }
 
