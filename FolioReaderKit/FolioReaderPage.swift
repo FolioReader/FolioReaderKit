@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SafariServices
 import UIMenuItem_CXAImageSupport
 
 @objc protocol FolioPageDelegate {
@@ -147,9 +148,16 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
             return true
         } else if request.URL!.absoluteString != "about:blank" && navigationType == .LinkClicked {
             
-            let webViewController = WebViewController(url: request.URL!)
-            let nav = UINavigationController(rootViewController: webViewController)
-            FolioReader.sharedInstance.readerCenter.presentViewController(nav, animated: true, completion: nil)
+            if #available(iOS 9.0, *) {
+                let safariVC = SFSafariViewController(URL: request.URL!)
+                safariVC.view.tintColor = readerConfig.toolBarBackgroundColor
+                FolioReader.sharedInstance.readerCenter.presentViewController(safariVC, animated: true, completion: nil)
+            } else {
+                let webViewController = WebViewController(url: request.URL!)
+                let nav = UINavigationController(rootViewController: webViewController)
+                nav.view.tintColor = readerConfig.toolBarBackgroundColor
+                FolioReader.sharedInstance.readerCenter.presentViewController(nav, animated: true, completion: nil)
+            }
             
             return false
         }
