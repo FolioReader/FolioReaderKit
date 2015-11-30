@@ -20,7 +20,6 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     Returns a FRBook.
     */
     func readEpub(epubPath withEpubPath: String) -> FRBook {
-        
         epubPathToRemove = withEpubPath
         
         // Unzip   
@@ -42,9 +41,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     Returns a FRBook.
     */
     func readEpub(filePath withFilePath: String) -> FRBook {
-        
         bookBasePath = withFilePath
-        
         kBookId = (withFilePath as NSString).lastPathComponent
         readContainer()
         readOpf()
@@ -110,7 +107,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             // Read Spine
             book.spine = readSpine(xmlDoc.root["spine"].children)
         } catch {
-            print("Cannot read .opf file")
+            print("Cannot read .opf file.")
         }
     }
     
@@ -128,7 +125,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
                 tableOfContent.append(readTOCReference(item))
             }
         } catch {
-            print("Cannot find Table of Contents")
+            print("Cannot find Table of Contents.")
         }
         
         return tableOfContent
