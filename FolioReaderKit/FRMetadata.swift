@@ -100,7 +100,6 @@ class FRMetadata: NSObject {
                 }
             }
         }
-        
         return nil
     }
 }

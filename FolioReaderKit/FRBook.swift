@@ -13,7 +13,6 @@ class FRBook: NSObject {
     var metadata = FRMetadata()
     var spine = FRSpine()
     var tableOfContents: [FRTocReference]!
-//    var guide = Guide()
     var opfResource: FRResource!
     var ncxResource: FRResource!
     var coverImage: FRResource!

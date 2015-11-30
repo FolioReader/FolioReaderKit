@@ -132,7 +132,6 @@ class FRHighlight: NSObject {
             
             return highlight
         }
-        
         return mapped.first
     }
 }

@@ -1,5 +1,5 @@
 //
-//  FRPageIndicatorView.swift
+//  FolioReaderPageIndicator.swift
 //  FolioReaderKit
 //
 //  Created by Heberti Almeida on 10/09/15.
@@ -8,22 +8,19 @@
 
 import UIKit
 
-class FRPageIndicatorView: UIView {
+class FolioReaderPageIndicator: UIView {
     var pagesLabel: UILabel!
     var minutesLabel: UILabel!
     var totalMinutes: Int!
     var totalPages: Int!
     var currentPage: Int = 1 {
-        didSet {
-            self.reloadViewWithPage(self.currentPage)
-        }
+        didSet { self.reloadViewWithPage(self.currentPage) }
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         let color = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeBackground : UIColor.whiteColor()
-        
         backgroundColor = color
         layer.shadowColor = color.CGColor
         layer.shadowOffset = CGSize(width: 0, height: -6)
@@ -33,7 +30,6 @@ class FRPageIndicatorView: UIView {
         layer.rasterizationScale = UIScreen.mainScreen().scale
         layer.shouldRasterize = true
         
-        //
         pagesLabel = UILabel(frame: CGRectZero)
         pagesLabel.font = UIFont(name: "Avenir-Light", size: 10)!
         pagesLabel.textColor = UIColor(white: 0, alpha: 0.9)

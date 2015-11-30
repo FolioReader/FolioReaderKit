@@ -127,7 +127,6 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         } catch {
             print("Cannot find Table of Contents.")
         }
-        
         return tableOfContent
     }
     
@@ -210,7 +209,6 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
                     metadata.metaAttributes.append(Meta(id: tag.attributes["id"]!, property: tag.attributes["property"]!, value: tag.value != nil ? tag.value! : ""))
                 }
             }
-            
         }
         return metadata
     }
@@ -233,7 +231,6 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
                 spine.spineReferences.append(Spine(resource: book.resources.getById(idref)!, linear: linear))
             }
         }
-        
         return spine
     }
     

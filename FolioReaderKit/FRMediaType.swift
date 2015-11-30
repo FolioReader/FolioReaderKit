@@ -108,7 +108,6 @@ class FRMediaType: NSObject {
                 return mediatype
             }
         }
-        
         return nil
     }
 }

@@ -40,7 +40,7 @@
 		1A25125E1C0779D800604BB8 /* FRHighlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512111C0779D800604BB8 /* FRHighlight.swift */; };
 		1A25125F1C0779D800604BB8 /* FRMediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512121C0779D800604BB8 /* FRMediaType.swift */; };
 		1A2512601C0779D800604BB8 /* FRMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512131C0779D800604BB8 /* FRMetadata.swift */; };
-		1A2512611C0779D800604BB8 /* FRPageIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512141C0779D800604BB8 /* FRPageIndicatorView.swift */; };
+		1A2512611C0779D800604BB8 /* FolioReaderPageIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512141C0779D800604BB8 /* FolioReaderPageIndicator.swift */; };
 		1A2512621C0779D800604BB8 /* FRResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512151C0779D800604BB8 /* FRResource.swift */; };
 		1A2512631C0779D800604BB8 /* FRResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512161C0779D800604BB8 /* FRResources.swift */; };
 		1A2512641C0779D800604BB8 /* FRSpine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512171C0779D800604BB8 /* FRSpine.swift */; };
@@ -123,7 +123,7 @@
 		1A2512E51C0783A900604BB8 /* UIMenuItem+CXAImageSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512E31C0783A900604BB8 /* UIMenuItem+CXAImageSupport.m */; };
 		1A2512EB1C07849600604BB8 /* ZFModalTransitionAnimator.h in Headers */ = {isa = PBXBuildFile; fileRef = 1A2512E91C07849600604BB8 /* ZFModalTransitionAnimator.h */; };
 		1A2512EC1C07849600604BB8 /* ZFModalTransitionAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512EA1C07849600604BB8 /* ZFModalTransitionAnimator.m */; };
-		1A2512EF1C07891200604BB8 /* FolioReaderSharing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512EE1C07891200604BB8 /* FolioReaderSharing.swift */; };
+		1A2512EF1C07891200604BB8 /* FolioReaderSharingProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512EE1C07891200604BB8 /* FolioReaderSharingProvider.swift */; };
 		1A2512F21C078ABE00604BB8 /* AEXML.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512F11C078ABE00604BB8 /* AEXML.swift */; };
 		1A2512F71C07907300604BB8 /* FolioReader.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512F51C07907300604BB8 /* FolioReader.xcdatamodeld */; };
 		1A2512F91C0790FA00604BB8 /* Highlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2512F81C0790FA00604BB8 /* Highlight.swift */; };
@@ -176,7 +176,7 @@
 		1A2512111C0779D800604BB8 /* FRHighlight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRHighlight.swift; sourceTree = "<group>"; };
 		1A2512121C0779D800604BB8 /* FRMediaType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRMediaType.swift; sourceTree = "<group>"; };
 		1A2512131C0779D800604BB8 /* FRMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRMetadata.swift; sourceTree = "<group>"; };
-		1A2512141C0779D800604BB8 /* FRPageIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRPageIndicatorView.swift; sourceTree = "<group>"; };
+		1A2512141C0779D800604BB8 /* FolioReaderPageIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderPageIndicator.swift; sourceTree = "<group>"; };
 		1A2512151C0779D800604BB8 /* FRResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRResource.swift; sourceTree = "<group>"; };
 		1A2512161C0779D800604BB8 /* FRResources.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRResources.swift; sourceTree = "<group>"; };
 		1A2512171C0779D800604BB8 /* FRSpine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRSpine.swift; sourceTree = "<group>"; };
@@ -259,7 +259,7 @@
 		1A2512E31C0783A900604BB8 /* UIMenuItem+CXAImageSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIMenuItem+CXAImageSupport.m"; sourceTree = "<group>"; };
 		1A2512E91C07849600604BB8 /* ZFModalTransitionAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZFModalTransitionAnimator.h; sourceTree = "<group>"; };
 		1A2512EA1C07849600604BB8 /* ZFModalTransitionAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZFModalTransitionAnimator.m; sourceTree = "<group>"; };
-		1A2512EE1C07891200604BB8 /* FolioReaderSharing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderSharing.swift; sourceTree = "<group>"; };
+		1A2512EE1C07891200604BB8 /* FolioReaderSharingProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderSharingProvider.swift; sourceTree = "<group>"; };
 		1A2512F11C078ABE00604BB8 /* AEXML.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEXML.swift; sourceTree = "<group>"; };
 		1A2512F61C07907300604BB8 /* FolioReader.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FolioReader.xcdatamodel; sourceTree = "<group>"; };
 		1A2512F81C0790FA00604BB8 /* Highlight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Highlight.swift; sourceTree = "<group>"; };
@@ -459,7 +459,6 @@
 		1A25129B1C0779E100604BB8 /* EPUBCore */ = {
 			isa = PBXGroup;
 			children = (
-				1A25120D1C0779D800604BB8 /* FolioReaderSidePanel.swift */,
 				1A25120F1C0779D800604BB8 /* FRBook.swift */,
 				1A2512101C0779D800604BB8 /* FREpubParser.swift */,
 				1A2512111C0779D800604BB8 /* FRHighlight.swift */,
@@ -476,15 +475,16 @@
 		1A25129C1C077A0C00604BB8 /* Reader */ = {
 			isa = PBXGroup;
 			children = (
-				1A2512051C0779D800604BB8 /* FolioReaderCenter.swift */,
 				1A2512061C0779D800604BB8 /* FolioReaderConfig.swift */,
 				1A2512071C0779D800604BB8 /* FolioReaderContainer.swift */,
+				1A2512051C0779D800604BB8 /* FolioReaderCenter.swift */,
+				1A25120D1C0779D800604BB8 /* FolioReaderSidePanel.swift */,
+				1A25120E1C0779D800604BB8 /* FolioReaderSidePanelCell.swift */,
+				1A25120C1C0779D800604BB8 /* FolioReaderPage.swift */,
 				1A2512081C0779D800604BB8 /* FolioReaderFontsMenu.swift */,
 				1A2512091C0779D800604BB8 /* FolioReaderHighlightList.swift */,
-				1A25120C1C0779D800604BB8 /* FolioReaderPage.swift */,
-				1A25120E1C0779D800604BB8 /* FolioReaderSidePanelCell.swift */,
-				1A2512EE1C07891200604BB8 /* FolioReaderSharing.swift */,
-				1A2512141C0779D800604BB8 /* FRPageIndicatorView.swift */,
+				1A2512EE1C07891200604BB8 /* FolioReaderSharingProvider.swift */,
+				1A2512141C0779D800604BB8 /* FolioReaderPageIndicator.swift */,
 			);
 			name = Reader;
 			sourceTree = "<group>";
@@ -823,7 +823,7 @@
 				1A2512E51C0783A900604BB8 /* UIMenuItem+CXAImageSupport.m in Sources */,
 				1A2512E01C07835600604BB8 /* TGPDiscreteSlider7.m in Sources */,
 				1A25125C1C0779D800604BB8 /* FRBook.swift in Sources */,
-				1A2512611C0779D800604BB8 /* FRPageIndicatorView.swift in Sources */,
+				1A2512611C0779D800604BB8 /* FolioReaderPageIndicator.swift in Sources */,
 				1A2512F71C07907300604BB8 /* FolioReader.xcdatamodeld in Sources */,
 				1A2512651C0779D800604BB8 /* FRTocReference.swift in Sources */,
 				1A25125A1C0779D800604BB8 /* FolioReaderSidePanel.swift in Sources */,
@@ -847,7 +847,7 @@
 				1A2512CE1C07835600604BB8 /* ioapi.c in Sources */,
 				1A25125D1C0779D800604BB8 /* FREpubParser.swift in Sources */,
 				1A2512601C0779D800604BB8 /* FRMetadata.swift in Sources */,
-				1A2512EF1C07891200604BB8 /* FolioReaderSharing.swift in Sources */,
+				1A2512EF1C07891200604BB8 /* FolioReaderSharingProvider.swift in Sources */,
 				1A25125F1C0779D800604BB8 /* FRMediaType.swift in Sources */,
 				1A2512521C0779D800604BB8 /* FolioReaderCenter.swift in Sources */,
 				1A2512631C0779D800604BB8 /* FRResources.swift in Sources */,

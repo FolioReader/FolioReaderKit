@@ -134,14 +134,7 @@ class FolioReaderHighlightList: UITableViewController {
         return s.size.height + 66
     }
     
-    //
-    
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        tableView.reloadData()
-    }
-
-    
-    //
+    // MARK: - Table view delegate
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let highlight = highlights[indexPath.row]
@@ -151,16 +144,18 @@ class FolioReaderHighlightList: UITableViewController {
         dismissViewControllerAnimated(true, completion: nil)
     }
     
-    // Override to support editing the table view.
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            
             let highlight = highlights[indexPath.row]
-            Highlight.removeHighlightId(highlight.highlightId)
+            Highlight.removeById(highlight.highlightId)
             highlights.removeAtIndex(indexPath.row)
-            
-            // Delete the row from the data source
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }
+    }
+    
+    // MARK: - Handle rotation transition
+    
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        tableView.reloadData()
     }
 }

@@ -73,7 +73,7 @@ extension Highlight {
         }
     }
     
-    static func removeHighlightId(highlightId: String) {
+    static func removeById(highlightId: String) {
         var highlight: Highlight?
         
         do {
@@ -88,7 +88,7 @@ extension Highlight {
         }
     }
     
-    static func updateHighlightId(highlightId: String, type: HighlightStyle) {
+    static func updateById(highlightId: String, type: HighlightStyle) {
         var highlight: Highlight?
         
         do {
@@ -103,27 +103,14 @@ extension Highlight {
         }
     }
     
-    static func allByBookId(bookId: String, andPage page: NSNumber) -> [Highlight] {
+    static func allByBookId(bookId: String, andPage page: NSNumber? = nil) -> [Highlight] {
         var highlights: [Highlight]?
+        let predicate = (page != nil) ? NSPredicate(format: "bookId = %@ && page = %@", bookId, page!) : NSPredicate(format: "bookId = %@", bookId)
         
         do {
             let fetchRequest = NSFetchRequest(entityName: "Highlight")
-            fetchRequest.predicate = NSPredicate(format: "bookId = %@ && page = %@", bookId, page)
-            
-            highlights = try coreDataManager.managedObjectContext.executeFetchRequest(fetchRequest) as? [Highlight]
-            return highlights!
-        } catch {
-            return [Highlight]()
-        }
-    }
-    
-    static func allByBookId(bookId: String) -> [Highlight] {
-        var highlights: [Highlight]?
-        
-        do {
-            let fetchRequest = NSFetchRequest(entityName: "Highlight")
-            let sorter: NSSortDescriptor = NSSortDescriptor(key: "date" , ascending: true)
-            fetchRequest.predicate = NSPredicate(format: "bookId = %@", bookId)
+            let sorter: NSSortDescriptor = NSSortDescriptor(key: "date" , ascending: false)
+            fetchRequest.predicate = predicate
             fetchRequest.sortDescriptors = [sorter]
             
             highlights = try coreDataManager.managedObjectContext.executeFetchRequest(fetchRequest) as? [Highlight]

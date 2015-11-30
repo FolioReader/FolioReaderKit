@@ -1,5 +1,5 @@
 //
-//  FolioReaderSharing.swift
+//  FolioReaderSharingProvider.swift
 //  FolioReaderKit
 //
 //  Created by Heberti Almeida on 02/09/15.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FolioReaderSharing: UIActivityItemProvider {
+class FolioReaderSharingProvider: UIActivityItemProvider {
     
     var subject: String!
     var text: String!

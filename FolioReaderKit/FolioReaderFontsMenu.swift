@@ -164,7 +164,6 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate {
     // MARK: - SMSegmentView delegate
     
     func segmentView(segmentView: SMSegmentView, didSelectSegmentAtIndex index: Int) {
-        
         let currentPage = FolioReader.sharedInstance.readerCenter.currentPage
         
         if segmentView.tag == 1 {
@@ -215,7 +214,6 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate {
     // MARK: - Font slider changed
     
     func sliderValueChanged(sender: TGPDiscreteSlider7) {
-        
         let currentPage = FolioReader.sharedInstance.readerCenter.currentPage
         let index = Int(sender.value)
         
@@ -240,12 +238,6 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate {
         }
         
         FolioReader.sharedInstance.currentFontSize = index
-        
-        
-//        // Update number of webview pages
-//        if let page = currentPage {
-//            FolioReader.sharedInstance.readerCenter.pagesForCurrentPage(page)
-//        }
     }
     
     // MARK: - Gestures
@@ -258,8 +250,6 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate {
         if gestureRecognizer is UITapGestureRecognizer && touch.view == view {
             return true
         }
-        
         return false
     }
-
 }

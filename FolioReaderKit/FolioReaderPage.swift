@@ -319,7 +319,7 @@ extension UIWebView {
     
     func remove(sender: UIMenuController?) {
         if let removedId = js("removeThisHighlight()") {
-            Highlight.removeHighlightId(removedId)
+            Highlight.removeById(removedId)
         }
         
         setMenuVisible(false)
@@ -355,35 +355,35 @@ extension UIWebView {
     
     func setYellow(sender: UIMenuController?) {
         if let updateId = js("setYellow()") {
-            Highlight.updateHighlightId(updateId, type: .Yellow)
+            Highlight.updateById(updateId, type: .Yellow)
         }
         colors(sender)
     }
     
     func setGreen(sender: UIMenuController?) {
         if let updateId = js("setGreen()") {
-            Highlight.updateHighlightId(updateId, type: .Green)
+            Highlight.updateById(updateId, type: .Green)
         }
         colors(sender)
     }
     
     func setBlue(sender: UIMenuController?) {
         if let updateId = js("setBlue()") {
-            Highlight.updateHighlightId(updateId, type: .Blue)
+            Highlight.updateById(updateId, type: .Blue)
         }
         colors(sender)
     }
     
     func setPink(sender: UIMenuController?) {
         if let updateId = js("setPink()") {
-            Highlight.updateHighlightId(updateId, type: .Pink)
+            Highlight.updateById(updateId, type: .Pink)
         }
         colors(sender)
     }
     
     func setUnderline(sender: UIMenuController?) {
         if let updateId = js("setUnderline()") {
-            Highlight.updateHighlightId(updateId, type: .Underline)
+            Highlight.updateById(updateId, type: .Underline)
         }
         colors(sender)
     }

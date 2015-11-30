@@ -41,7 +41,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     var currentPage: FolioReaderPage!
     var folioReaderContainer: FolioReaderContainer!
     var animator: ZFModalTransitionAnimator!
-    var pageIndicatorView: FRPageIndicatorView!
+    var pageIndicatorView: FolioReaderPageIndicator!
     var bookShareLink: String?
     
     private var screenBounds: CGRect!
@@ -96,7 +96,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: menuIcon, style: UIBarButtonItemStyle.Plain, target: self, action:"toggleMenu:")
         
         // Page indicator view
-        pageIndicatorView = FRPageIndicatorView(frame: CGRect(x: 0, y: view.frame.height-pageIndicatorHeight, width: view.frame.width, height: pageIndicatorHeight))
+        pageIndicatorView = FolioReaderPageIndicator(frame: CGRect(x: 0, y: view.frame.height-pageIndicatorHeight, width: view.frame.width, height: pageIndicatorHeight))
         view.addSubview(pageIndicatorView)
     }
     
@@ -527,7 +527,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             if (bookShareLink != nil) { text += " \n\(bookShareLink!)" }
             
             
-            let act = FolioReaderSharing(subject: subject, text: text, html: html)
+            let act = FolioReaderSharingProvider(subject: subject, text: text, html: html)
             let shareItems = [act, ""]
             let activityViewController = UIActivityViewController(activityItems: shareItems, applicationActivities: nil)
             activityViewController.excludedActivityTypes = [UIActivityTypePrint, UIActivityTypePostToVimeo, UIActivityTypePostToFacebook]
@@ -582,7 +582,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         if (bookShareLink != nil) { text += " \n\(bookShareLink!)" }
         
         
-        let act = FolioReaderSharing(subject: subject, text: text, html: html)
+        let act = FolioReaderSharingProvider(subject: subject, text: text, html: html)
         let shareItems = [act, ""]
         let activityViewController = UIActivityViewController(activityItems: shareItems, applicationActivities: nil)
         activityViewController.excludedActivityTypes = [UIActivityTypePrint, UIActivityTypePostToVimeo, UIActivityTypePostToFacebook]
