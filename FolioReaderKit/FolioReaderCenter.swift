@@ -151,7 +151,21 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         navigationController?.setNavigationBarHidden(shouldHide, animated: true)
     }
     
+    func showBars() {
+        configureNavBar()
+        
+        let shouldHide = false
+        FolioReader.sharedInstance.readerContainer.shouldHideStatusBar = shouldHide
+        
+        UIView.animateWithDuration(0.25, animations: {
+            FolioReader.sharedInstance.readerContainer.setNeedsStatusBarAppearanceUpdate()
+        })
+        navigationController?.setNavigationBarHidden(shouldHide, animated: true)
+    }
+    
     func toggleBars() {
+        if readerConfig.shouldHideNavigationOnTap == false { return }
+        
         let shouldHide = !navigationController!.navigationBarHidden
         if !shouldHide { configureNavBar() }
         

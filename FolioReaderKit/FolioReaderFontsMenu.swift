@@ -170,17 +170,21 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate {
             switch index {
             case 0:
                 currentPage.webView.js("nightMode(false)")
-                UIView.animateWithDuration(0.6, animations: { self.menuView.backgroundColor = UIColor.whiteColor() })
+                UIView.animateWithDuration(0.6, animations: {
+                    self.menuView.backgroundColor = UIColor.whiteColor()
+                    FolioReader.sharedInstance.readerCenter.collectionView.backgroundColor = UIColor.whiteColor()
+                })
                 FolioReader.sharedInstance.readerSidePanel.tableView.backgroundColor = readerConfig.menuBackgroundColor
                 FolioReader.sharedInstance.readerSidePanel.tableView.separatorColor = readerConfig.menuSeparatorColor
-                FolioReader.sharedInstance.readerCenter.collectionView.backgroundColor = UIColor.whiteColor()
                 break
             case 1:
                 currentPage.webView.js("nightMode(true)")
-                UIView.animateWithDuration(0.6, animations: { self.menuView.backgroundColor = readerConfig.nightModeMenuBackground })
+                UIView.animateWithDuration(0.6, animations: {
+                    self.menuView.backgroundColor = readerConfig.nightModeMenuBackground
+                    FolioReader.sharedInstance.readerCenter.collectionView.backgroundColor = readerConfig.nightModeBackground
+                })
                 FolioReader.sharedInstance.readerSidePanel.tableView.backgroundColor = readerConfig.nightModeMenuBackground
                 FolioReader.sharedInstance.readerSidePanel.tableView.separatorColor = readerConfig.nightModeSeparatorColor
-                FolioReader.sharedInstance.readerCenter.collectionView.backgroundColor = readerConfig.nightModeBackground
                 break
             default:
                 break
@@ -244,6 +248,10 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate {
     
     func tapGesture() {
         dismissViewControllerAnimated(true, completion: nil)
+        
+        if readerConfig.shouldHideNavigationOnTap == false {
+            FolioReader.sharedInstance.readerCenter.showBars()
+        }
     }
     
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {

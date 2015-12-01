@@ -85,11 +85,10 @@ class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
         FolioReader.sharedInstance.readerCenter = centerViewController
         
         centerNavigationController = UINavigationController(rootViewController: centerViewController)
-        centerNavigationController.setNavigationBarHidden(true, animated: false)
+        centerNavigationController.setNavigationBarHidden(readerConfig.shouldHideNavigationOnTap, animated: false)
         view.addSubview(centerNavigationController.view)
         addChildViewController(centerNavigationController)
         centerNavigationController.didMoveToParentViewController(self)
-        
         
         // Add gestures
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "handleTapGesture:")
@@ -265,7 +264,7 @@ class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
     // MARK: - Status Bar
     
     override func prefersStatusBarHidden() -> Bool {
-        return shouldHideStatusBar
+        return readerConfig.shouldHideNavigationOnTap == false ? false : shouldHideStatusBar
     }
     
     override func preferredStatusBarUpdateAnimation() -> UIStatusBarAnimation {
@@ -275,6 +274,8 @@ class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return FolioReader.sharedInstance.nightMode ? .LightContent : .Default
     }
+    
+    
     
     // MARK: - Side Panel delegate
     

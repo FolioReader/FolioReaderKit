@@ -29,7 +29,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         self.backgroundColor = UIColor.whiteColor()
         
         if webView == nil {
-            webView = UIWebView(frame: self.bounds)
+            webView = UIWebView(frame: webViewFrame())
             webView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
             webView.dataDetectorTypes = [.None, .Link]
             webView.backgroundColor = UIColor.clearColor()
@@ -45,6 +45,24 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        webView.frame = webViewFrame()
+    }
+    
+    func webViewFrame() -> CGRect {
+        if readerConfig.shouldHideNavigationOnTap == false {
+            let statusbarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
+            let navBarHeight = FolioReader.sharedInstance.readerCenter.navigationController?.navigationBar.frame.size.height
+            let navTotal = statusbarHeight + navBarHeight!
+            let newFrame = CGRect(x: self.bounds.origin.x, y: self.bounds.origin.y+navTotal, width: self.bounds.width, height: self.bounds.height-navTotal)
+            return newFrame
+        } else {
+            return self.bounds
+        }
     }
     
     func loadHTMLString(string: String!, baseURL: NSURL!) {
@@ -202,7 +220,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
                     })
                 }
             }
-        } else {
+        } else if readerConfig.shouldHideNavigationOnTap == true {
             FolioReader.sharedInstance.readerCenter.hideBars()
         }
         

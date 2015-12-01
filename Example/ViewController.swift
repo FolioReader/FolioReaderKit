@@ -18,6 +18,7 @@ class ViewController: UIViewController {
 
     @IBAction func didOpen(sender: AnyObject) {
         let config = FolioReaderConfig()
+//        config.shouldHideNavigationOnTap = false
 //        config.toolBarTintColor = UIColor.redColor()
 //        config.toolBarBackgroundColor = UIColor.purpleColor()
 //        config.menuTextColor = UIColor.brownColor()
