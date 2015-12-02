@@ -1,0 +1,4 @@
+module TGPControls {
+    header "TGPDiscreteSlider7.h"
+    export *
+}
