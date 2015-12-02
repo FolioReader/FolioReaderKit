@@ -108,7 +108,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate {
         menuView.addSubview(line2)
         
         // Font slider size
-        let slider = TGPDiscreteSlider7(frame: CGRect(x: 60, y: line2.frame.origin.y+2, width: view.frame.width-120, height: 55))
+        let slider = HADiscreteSlider(frame: CGRect(x: 60, y: line2.frame.origin.y+2, width: view.frame.width-120, height: 55))
         slider.tickStyle = ComponentStyle.Rounded
         slider.tickCount = 5
         slider.tickSize = CGSize(width: 8, height: 8)

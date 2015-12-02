@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
   s.source_files = [
     'Source/*.{h,swift}',
     'Source/**/*.swift',
-    'Vendor/**/*.{swift,h,m}', # Temporary
+    'Vendor/**/*.swift',
   ]
   s.resources = [
     'Source/**/*.{js,css,xcdatamodeld}',
@@ -37,6 +37,5 @@ Pod::Spec.new do |s|
   s.dependency 'AEXML'
   s.dependency 'FontBlaster'
   s.dependency 'JSQWebViewController'
-  s.dependency 'TGPControls'
   # s.dependency 'SMSegmentView'
 end
