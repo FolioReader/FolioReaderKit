@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import TGPControls
 
 class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate {
     
