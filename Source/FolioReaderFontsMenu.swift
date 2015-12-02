@@ -216,7 +216,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate {
     
     // MARK: - Font slider changed
     
-    func sliderValueChanged(sender: TGPDiscreteSlider7) {
+    func sliderValueChanged(sender: HADiscreteSlider) {
         let currentPage = FolioReader.sharedInstance.readerCenter.currentPage
         let index = Int(sender.value)
         
