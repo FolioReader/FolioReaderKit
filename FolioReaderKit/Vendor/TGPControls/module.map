@@ -1,4 +1,0 @@
-module TGPControls [system] {
-    header "../TGPControls/TGPDiscreteSlider7.h"
-    export *
-}
