@@ -5,11 +5,13 @@ PODS:
     - FontBlaster
     - JSQWebViewController
     - SSZipArchive
+    - TGPControls
     - UIMenuItem-CXAImageSupport
     - ZFDragableModalTransition
   - FontBlaster (2.0.2)
   - JSQWebViewController (2.0.1)
   - SSZipArchive (1.0.1)
+  - TGPControls (1.0.0)
   - UIMenuItem-CXAImageSupport (0.0.1)
   - ZFDragableModalTransition (0.5.1)
 
@@ -22,10 +24,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AEXML: d6bb5b994521fcf3667ee8ccc1ed533f31b19218
-  FolioReaderKit: 6428b0d09360b739c6a9f3f1ff694ffd10fdb486
+  FolioReaderKit: 2d959f64e0103895708e2a952efeff7d1d755135
   FontBlaster: 8165fef7f0556ba766836a2f5654a16cd0251e27
   JSQWebViewController: 2e416ae6604676510812bbda050d63a1488003a4
   SSZipArchive: 5f30a0af2cb3d48c0ff83b1e18029f7041ac3c38
+  TGPControls: cb814ac463c21d64a428aaad37d55d1763fb2e90
   UIMenuItem-CXAImageSupport: 2945e2af4487414caad801ed8ff6ac8db274e986
   ZFDragableModalTransition: 048189eda437f91944ce6d5151618b8bf770196d
 
