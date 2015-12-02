@@ -8,11 +8,6 @@
 
 import UIKit
 
-protocol HAControlsTicksProtocol: NSObjectProtocol {
-    func ticksDistanceChanged(ticksDistance: CGFloat, sender: AnyObject)
-    func valueChanged(value: CGFloat)
-}
-
 enum ComponentStyle: Int {
     case IOS
     case Rectangular
@@ -24,7 +19,7 @@ enum ComponentStyle: Int {
 let iOSThumbShadowRadius: CGFloat = 4.0
 let iosThumbShadowOffset = CGSizeMake(0, 3)
 
-class HADiscreteSlider : UIControl, HAControlsTicksProtocol {
+class HADiscreteSlider : UIControl {
 
     func ticksDistanceChanged(ticksDistance: CGFloat, sender: AnyObject) { }
     func valueChanged(value: CGFloat) { }
@@ -135,7 +130,6 @@ class HADiscreteSlider : UIControl, HAControlsTicksProtocol {
     
     var thumbColor: UIColor?
     var thumbShadowOffset: CGSize?
-    var ticksListener: HAControlsTicksProtocol!
     var _intValue: Int?
 	var _intMinimumValue: Int?
 	var ticksAbscisses = [CGPoint]()
@@ -143,7 +137,6 @@ class HADiscreteSlider : UIControl, HAControlsTicksProtocol {
 	var thumbLayer: CALayer?
 	var colorTrackLayer: CALayer?
 	var trackRectangle: CGRect!
-	
 	
 	// When bounds change, recalculate layout
 //    func setBounds(bounds: CGRect) {
@@ -167,16 +160,12 @@ class HADiscreteSlider : UIControl, HAControlsTicksProtocol {
 	}
 	
 	func sendActionsForControlEvents() {
-		// Automatic UIControlEventValueChanged notification
-		if self.ticksListener.respondsToSelector("valueChanged:") {
-			self.ticksListener.valueChanged(self.value)
-		}
         self.sendActionsForControlEvents(UIControlEvents.ValueChanged)
 	}
 	
 	// MARK: HADiscreteSlider
+    
 	func initProperties() {
-        self.ticksListener = self
 		self.thumbColor = UIColor.lightGrayColor()
 		self.thumbShadowOffset = CGSizeZero
 		_intMinimumValue = -5
@@ -201,26 +190,23 @@ class HADiscreteSlider : UIControl, HAControlsTicksProtocol {
 		let ctx = UIGraphicsGetCurrentContext()
 		// Track
 		switch self.trackStyle {
-			case .Rectangular:
-                CGContextAddRect(ctx, self.trackRectangle)
-			break
-			case .Image:
-			
-				// Draw image if exists
-				if let imageName = self.trackImage {
-                    let image = UIImage(named:imageName)!
-					//[NSBundle bundleForClass:[self class]]
-//					if image != nil {
-                    let centered = CGRectMake((self.frame.size.width/2)-(image.size.width/2), (self.frame.size.height/2)-(image.size.height/2), image.size.width, image.size.height)
-						CGContextDrawImage(ctx, centered, image.CGImage)
-//					}
-				}
-				break
-			
-            case .Invisible, .Rounded, .IOS:
-				let path: UIBezierPath = UIBezierPath(roundedRect: self.trackRectangle, cornerRadius: self.trackRectangle.size.height/2)
-				CGContextAddPath(ctx, path.CGPath)
-				break
+        case .Rectangular:
+            CGContextAddRect(ctx, self.trackRectangle)
+        break
+        case .Image:
+        
+            // Draw image if exists
+            if let imageName = self.trackImage {
+                let image = UIImage(named:imageName)!
+                let centered = CGRectMake((self.frame.size.width/2)-(image.size.width/2), (self.frame.size.height/2)-(image.size.height/2), image.size.width, image.size.height)
+                    CGContextDrawImage(ctx, centered, image.CGImage)
+            }
+            break
+        
+        case .Invisible, .Rounded, .IOS:
+            let path: UIBezierPath = UIBezierPath(roundedRect: self.trackRectangle, cornerRadius: self.trackRectangle.size.height/2)
+            CGContextAddPath(ctx, path.CGPath)
+            break
 		}
         
 		// Ticks
@@ -229,25 +215,25 @@ class HADiscreteSlider : UIControl, HAControlsTicksProtocol {
                 let originPoint = originValue
                 let rectangle = CGRectMake(originPoint.x-(self.tickSize.width/2), originPoint.y-(self.tickSize.height/2), self.tickSize.width, self.tickSize.height)
                 switch self.tickStyle {
-                    case .Rounded:
-                        let path = UIBezierPath(roundedRect: rectangle, cornerRadius: rectangle.size.height/2)
-                        CGContextAddPath(ctx, path.CGPath)
-                        break
-                    case .Rectangular:
-                        CGContextAddRect(ctx, rectangle)
-                        break
-                    case .Image:
-                        // Draw image if exists
-                        
-                        if let imageName = self.tickImage {
-                            let image = UIImage(named: imageName)!
-                            let centered = CGRectMake(rectangle.origin.x+(rectangle.size.width/2)-(image.size.width/2), rectangle.origin.y+(rectangle.size.height/2)-(image.size.height/2), image.size.width, image.size.height)
-                                CGContextDrawImage(ctx, centered, image.CGImage)
-                        }
-                        break
+                case .Rounded:
+                    let path = UIBezierPath(roundedRect: rectangle, cornerRadius: rectangle.size.height/2)
+                    CGContextAddPath(ctx, path.CGPath)
+                    break
+                case .Rectangular:
+                    CGContextAddRect(ctx, rectangle)
+                    break
+                case .Image:
+                    // Draw image if exists
                     
-                    case .Invisible: break
-                    case .IOS: break
+                    if let imageName = self.tickImage {
+                        let image = UIImage(named: imageName)!
+                        let centered = CGRectMake(rectangle.origin.x+(rectangle.size.width/2)-(image.size.width/2), rectangle.origin.y+(rectangle.size.height/2)-(image.size.height/2), image.size.width, image.size.height)
+                            CGContextDrawImage(ctx, centered, image.CGImage)
+                    }
+                    break
+                
+                case .Invisible: break
+                case .IOS: break
                 }
             }
 		}
@@ -360,8 +346,6 @@ class HADiscreteSlider : UIControl, HAControlsTicksProtocol {
 		}
         
 		self.layoutThumb()
-		// If we have a HADiscreteSliderTicksListener (such as HACamelLabels), broadcast new spacing
-		self.ticksListener.ticksDistanceChanged(self.ticksDistance, sender: self)
 	}
 	
 	func layoutThumb() {
@@ -376,22 +360,22 @@ class HADiscreteSlider : UIControl, HAControlsTicksProtocol {
 	
 	func thumbSizeIncludingShadow() -> CGSize {
 		switch self.thumbStyle {
-			case .Invisible: break
-			case .Rectangular: break
-			case .Rounded:
-			return ((self.thumbShadowRadius != 0.0) ? CGSizeMake(self.thumbSize.width+(self.thumbShadowRadius*2)+(self.thumbShadowOffset!.width*2), self.thumbSize.height+(self.thumbShadowRadius*2)+(self.thumbShadowOffset!.height*2)) : self.thumbSize)
-			
-            case .IOS:
-			return CGSizeMake(33.0+(iOSThumbShadowRadius*2)+(iosThumbShadowOffset.width*2), 33.0+(iOSThumbShadowRadius*2)+(iosThumbShadowOffset.height*2))
-			case .Image:
-				if let imageName = self.thumbImage {
-					return UIImage(named: imageName)!.size
-				}
+        case .Invisible: break
+        case .Rectangular: break
+        case .Rounded:
+            return ((self.thumbShadowRadius != 0.0) ? CGSizeMake(self.thumbSize.width+(self.thumbShadowRadius*2)+(self.thumbShadowOffset!.width*2), self.thumbSize.height+(self.thumbShadowRadius*2)+(self.thumbShadowOffset!.height*2)) : self.thumbSize)
+        case .IOS:
+            return CGSizeMake(33.0+(iOSThumbShadowRadius*2)+(iosThumbShadowOffset.width*2), 33.0+(iOSThumbShadowRadius*2)+(iosThumbShadowOffset.height*2))
+        case .Image:
+            if let imageName = self.thumbImage {
+                return UIImage(named: imageName)!.size
+            }
 		}
         return CGSizeMake(33.0, 33.0)
 	}
 	
 	// MARK: Touches
+    
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
 		self.touchDown(touches, duration: 0.1)
 	}
@@ -426,6 +410,7 @@ class HADiscreteSlider : UIControl, HAControlsTicksProtocol {
 	}
 	
 	// MARK: Notifications
+    
 	func moveThumbToTick(tick: Int) {
 		let intValue = Int(self.minimumValue)+(tick * Int(self.incrementValue))
 		if intValue != _intValue {
