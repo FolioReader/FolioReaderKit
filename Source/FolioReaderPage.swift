@@ -452,7 +452,9 @@ extension UIWebView {
     }
     
     func js(script: String) -> String? {
-        return self.stringByEvaluatingJavaScriptFromString(script)
+        let callback = self.stringByEvaluatingJavaScriptFromString(script)
+        if callback!.isEmpty { return nil }
+        return callback
     }
 }
 
