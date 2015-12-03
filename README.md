@@ -34,7 +34,7 @@ pod 'FolioReaderKit'
 
 ### Basic Usage
 
-To get started, let's introduce MaterialView, a lightweight UIView Object that has flexibility in mind. Common controls have been added to make things easier. For example, let's make a circle view that has a shadow, border, and image.
+To get started, this is a simple usage sample.
 
 ```swift
 import FolioReaderKit
