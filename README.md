@@ -48,4 +48,4 @@ func open(sender: AnyObject) {
 
 ### License
 
-FolioReaderKit is available under the MIT license. See the LICENSE file for more info.
+FolioReaderKit is available under the GNU General Public license. See the LICENSE file for more info.
