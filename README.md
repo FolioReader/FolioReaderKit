@@ -1,5 +1,5 @@
 
-![FolioReader](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/folioreader.png)
+![FolioReader logo](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/folioreader.png)
 FolioReaderKit is an ePub reader and parser framework for iOS written in Swift.
 
 ### Features
@@ -18,10 +18,15 @@ FolioReaderKit is an ePub reader and parser framework for iOS written in Swift.
 - [ ] Write Some Tests
 - [ ] Better Documentation
 
-### Requirements
-
-- iOS 8.0+
-- Xcode 7.1+
+### Demo
+###### Custom Fonts
+![Custom fonts](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/custom-fonts.gif)
+###### Day night mode
+![Day night mode](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/day-night.gif)
+###### Text Highlighting
+![Highlight](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/highlight.gif)
+###### Reading Time Left
+![Time left](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/time-left.mov.gif)
 
 ### Installation
 
@@ -32,6 +37,11 @@ it, simply add the following lines to your Podfile:
 use_frameworks!
 pod 'FolioReaderKit'
 ```
+
+### Requirements
+
+- iOS 8.0+
+- Xcode 7.1+
 
 ### Basic Usage
 
