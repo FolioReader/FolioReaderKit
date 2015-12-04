@@ -19,13 +19,13 @@ FolioReaderKit is an ePub reader and parser framework for iOS written in Swift.
 - [ ] Better Documentation
 
 ### Demo
-##### Custom Fonts
+##### Custom Fonts :smirk:
 ![Custom fonts](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/custom-fonts.gif)
-##### Day and Night Mode
+##### Day and Night Mode :sunglasses:
 ![Day night mode](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/day-night.gif)
-##### Text Highlighting
+##### Text Highlighting :heart_eyes:
 ![Highlight](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/highlight.gif)
-##### Reading Time Left
+##### Reading Time Left :open_mouth:
 ![Time left](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/time-left.mov.gif)
 
 ### Installation
