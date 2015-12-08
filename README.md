@@ -2,32 +2,6 @@
 ![FolioReader logo](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/folioreader.png)
 FolioReaderKit is an ePub reader and parser framework for iOS written in Swift.
 
-### Features
-
-- [x] Custom Fonts
-- [x] Custom Text Size
-- [x] Text Highlighting
-- [x] List / Edit / Delete Highlights
-- [x] Themes / Day mode / Night mode
-- [x] Handle Internal and External Links
-- [x] Portrait / Landscape
-- [x] Reading Time Left / Pages left
-- [x] Unzip and parse ePub files
-- [ ] Book Search
-- [ ] Add Notes to a Highlight
-- [ ] Write Some Tests
-- [ ] Better Documentation
-
-### Demo
-##### Custom Fonts :smirk:
-![Custom fonts](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/custom-fonts.gif)
-##### Day and Night Mode :sunglasses:
-![Day night mode](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/day-night.gif)
-##### Text Highlighting :heart_eyes:
-![Highlight](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/highlight.gif)
-##### Reading Time Left :open_mouth:
-![Time left](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/time-left.mov.gif)
-
 ### Installation
 
 **FolioReaderKit** is available through [CocoaPods](http://cocoapods.org). To install
@@ -56,6 +30,32 @@ func open(sender: AnyObject) {
     FolioReader.presentReader(parentViewController: self, withEpubPath: bookPath!, andConfig: config)
 }
 ```
+
+### Features
+
+- [x] Custom Fonts
+- [x] Custom Text Size
+- [x] Text Highlighting
+- [x] List / Edit / Delete Highlights
+- [x] Themes / Day mode / Night mode
+- [x] Handle Internal and External Links
+- [x] Portrait / Landscape
+- [x] Reading Time Left / Pages left
+- [x] Unzip and parse ePub files
+- [ ] Book Search
+- [ ] Add Notes to a Highlight
+- [ ] Write Some Tests
+- [ ] Better Documentation
+
+### Demo
+##### Custom Fonts :smirk:
+![Custom fonts](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/custom-fonts.gif)
+##### Day and Night Mode :sunglasses:
+![Day night mode](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/day-night.gif)
+##### Text Highlighting :heart_eyes:
+![Highlight](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/highlight.gif)
+##### Reading Time Left :open_mouth:
+![Time left](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/time-left.mov.gif)
 
 ### Documentation
 For now the documentation is the sample project, I will write a better documentation in the next weeks.
