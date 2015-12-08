@@ -40,6 +40,7 @@ public class FolioReader {
     var readerSidePanel: FolioReaderSidePanel!
     var readerContainer: FolioReaderContainer!
     var isReaderOpen = false
+    var isReaderReady = false
     
     var nightMode: Bool {
         get { return FolioReader.defaults.valueForKey(kNightMode) as! Bool }

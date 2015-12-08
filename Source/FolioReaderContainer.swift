@@ -128,6 +128,8 @@ class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
                     if FolioReader.defaults.valueForKey(kBookId) == nil {
                         self.toggleLeftPanel()
                     }
+                    
+                    FolioReader.sharedInstance.isReaderReady = true
                 })
             })
         } else {

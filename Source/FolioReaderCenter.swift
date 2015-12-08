@@ -284,6 +284,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     // MARK: - Device rotation
     
     override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
+        if !FolioReader.sharedInstance.isReaderReady { return }
+        
         setPageSize(toInterfaceOrientation)
         updateCurrentPage()
         
@@ -303,16 +305,18 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             self.collectionView.setContentOffset(self.frameForPage(currentPageNumber).origin, animated: false)
             self.collectionView.collectionViewLayout.invalidateLayout()
         })
-        
-        
     }
     
     override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
+        if !FolioReader.sharedInstance.isReaderReady { return }
+        
         // Update pages
         pagesForCurrentPage(currentPage)
     }
     
     override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
+        if !FolioReader.sharedInstance.isReaderReady { return }
+        
         if currentPageNumber+1 >= totalPages {
             UIView.animateWithDuration(duration, animations: {
                 self.collectionView.setContentOffset(self.frameForPage(currentPageNumber).origin, animated: false)
