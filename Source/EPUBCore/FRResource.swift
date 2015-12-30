@@ -14,5 +14,6 @@ class FRResource: NSObject {
     var href: String!
     var fullHref: String!
     var mediaType: MediaType!
+    var mediaOverlay: String!
     var inputEncoding: String!
 }

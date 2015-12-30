@@ -16,4 +16,12 @@ class FRBook: NSObject {
     var opfResource: FRResource!
     var ncxResource: FRResource!
     var coverImage: FRResource!
+
+    func duration() -> String? {
+        return metadata.findMetaByProperty("media:duration");
+    }
+
+    func durationFor(ID: String) -> String? {
+        return metadata.findMetaByProperty("media:duration", refinedBy: ID)
+    }
 }

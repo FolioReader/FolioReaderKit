@@ -83,7 +83,10 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
                 resource.href = item.attributes["href"]
                 resource.fullHref = (resourcesBasePath as NSString).stringByAppendingPathComponent(item.attributes["href"]!).stringByRemovingPercentEncoding
                 resource.mediaType = FRMediaType.mediaTypesByName[item.attributes["media-type"]!]
+                resource.mediaOverlay = item.attributes["media-overlay"]
                 book.resources.add(resource)
+
+
             }
             
             // Get the first resource with the NCX mediatype
@@ -209,8 +212,14 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
                 if tag.attributes["property"] != nil && tag.attributes["id"] != nil {
                     metadata.metaAttributes.append(Meta(id: tag.attributes["id"]!, property: tag.attributes["property"]!, value: tag.value ?? ""))
                 }
+
+                if tag.attributes["property"] != nil {
+                    metadata.metaAttributes.append(Meta(property: tag.attributes["property"]!, value: tag.value != nil ? tag.value! : "", refines: tag.attributes["refines"] != nil ? tag.attributes["refines"] : nil))
+                }
+
             }
         }
+
         return metadata
     }
     
