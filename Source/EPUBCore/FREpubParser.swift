@@ -77,6 +77,8 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         
         do {
             let xmlDoc = try AEXMLDocument(xmlData: opfData!)
+
+            // parse and save each "manifest item"
             for item in xmlDoc.root["manifest"]["item"].all! {
                 let resource = FRResource()
                 resource.id = item.attributes["id"]
@@ -84,11 +86,15 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
                 resource.fullHref = (resourcesBasePath as NSString).stringByAppendingPathComponent(item.attributes["href"]!).stringByRemovingPercentEncoding
                 resource.mediaType = FRMediaType.mediaTypesByName[item.attributes["media-type"]!]
                 resource.mediaOverlay = item.attributes["media-overlay"]
+
+                // if a .smil file is listed in resources, go parse that file now and save it on book model
+                if( resource.mediaType == FRMediaType.SMIL ){
+                    readSmilFile(resource);
+                }
+
                 book.resources.add(resource)
-
-
             }
-            
+
             // Get the first resource with the NCX mediatype
             book.ncxResource = book.resources.findFirstResource(byMediaType: FRMediaType.NCX)
             
@@ -115,6 +121,36 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         }
     }
     
+    /**
+    Reads and parses a .smil file
+    */
+    private func readSmilFile(resource: FRResource){
+        let smilData = try? NSData(contentsOfFile: resource.fullHref, options: .DataReadingMappedAlways)
+
+        var smilFile = FRSmilFile(resource: resource);
+
+        do {
+            let xmlDoc = try AEXMLDocument(xmlData: smilData!)
+
+            // @TODO - <par> is not the only tag that can exist
+            for item in xmlDoc.root["body"]["par"].all! {
+
+                let smil = FRSmil(name: item.name, id: item.attributes["id"])
+
+                for tag in item.children {
+                    smil.children.append( FRSmilElement(name: tag.name, attributes: tag.attributes) );
+                }
+
+                smilFile.data.append(smil);
+            }
+
+        } catch {
+            print("Cannot read .smil file: "+resource.href)
+        }
+
+        book.smils.add(smilFile);
+    }
+
     /**
     Read and parse the Table of Contents.
     */
