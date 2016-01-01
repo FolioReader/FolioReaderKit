@@ -206,20 +206,20 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         if FolioReader.sharedInstance.readerCenter.navigationController!.navigationBarHidden {
             let menuIsVisibleRef = menuIsVisible
             
-            if let selected = webView.js("getSelectedText()") {
-                if selected.characters.count == 0 {
-                    let seconds = 0.4
-                    let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
-                    let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+            let selected = webView.js("getSelectedText()")
+
+            if selected == nil || selected!.characters.count == 0 {
+                let seconds = 0.4
+                let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
+                let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+
+                dispatch_after(dispatchTime, dispatch_get_main_queue(), {
                     
-                    dispatch_after(dispatchTime, dispatch_get_main_queue(), {
-                        
-                        if self.shouldShowBar && !menuIsVisibleRef {
-                            FolioReader.sharedInstance.readerCenter.toggleBars()
-                        }
-                        self.shouldShowBar = true
-                    })
-                }
+                    if self.shouldShowBar && !menuIsVisibleRef {
+                        FolioReader.sharedInstance.readerCenter.toggleBars()
+                    }
+                    self.shouldShowBar = true
+                })
             }
         } else if readerConfig.shouldHideNavigationOnTap == true {
             FolioReader.sharedInstance.readerCenter.hideBars()
