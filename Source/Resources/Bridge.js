@@ -131,6 +131,12 @@ function removeThisHighlight() {
     return thisHighlight.id;
 }
 
+function removeHighlightById(elmId) {
+    var elm = document.getElementById(elmId);
+    elm.outerHTML = elm.innerHTML;
+    return elm.id;
+}
+
 function getHighlightContent() {
     return thisHighlight.textContent
 }

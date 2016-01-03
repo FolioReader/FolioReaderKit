@@ -134,4 +134,15 @@ class FRHighlight: NSObject {
         }
         return mapped.first
     }
+    
+    static func removeById(highlightId: String) -> String? {
+        let currentPage = FolioReader.sharedInstance.readerCenter.currentPage
+        
+        if let removedId = currentPage.webView.js("removeHighlightById('\(highlightId)')") {
+            return removedId
+        } else {
+            print("Error removing Higlight")
+            return nil
+        }
+    }
 }
