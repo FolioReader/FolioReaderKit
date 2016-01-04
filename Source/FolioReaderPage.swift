@@ -130,6 +130,14 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
             menuIsVisible = true
             
             return false
+        } else if url?.scheme == "play-audio" {
+
+            let decoded = url?.absoluteString.stringByRemovingPercentEncoding as String!
+            let playID = decoded.substringFromIndex(decoded.startIndex.advancedBy(13))
+
+            FolioReader.sharedInstance.readerCenter.playAudio(playID)
+
+            return false;
         } else if url?.scheme == "file" {
             
             let anchorFromURL = url?.fragment
@@ -275,6 +283,11 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         
         return super.canPerformAction(action, withSender: sender)
     }
+
+
+    func audioMarkID(ID: String){
+        self.webView.js("audioMarkID('\(book.playbackActiveClass())','\(ID)')");
+    }
 }
 
 // MARK: - WebView Highlight and share implementation
@@ -299,18 +312,25 @@ extension UIWebView {
     }
     
     public override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
+
+        // menu on existing highlight
         if isShare {
             if action == "colors:" || action == "share:" || action == "remove:" {
                 return true
             }
             return false
+
+        // menu for selecting highlight color
         } else if isColors {
             if action == "setYellow:" || action == "setGreen:" || action == "setBlue:" || action == "setPink:" || action == "setUnderline:" {
                 return true
             }
             return false
+
+        // default menu
         } else {
-            if action == "highlight:" || action == "share:" || action == "copy:" {
+            // @TODO: the playAudio: action should only be visible when the book has audio to play
+            if action == "highlight:" || action == "playAudio:" || action == "share:" || action == "copy:" {
                 return true
             }
             return false
@@ -362,7 +382,7 @@ extension UIWebView {
             // Force remove text selection
             userInteractionEnabled = false
             userInteractionEnabled = true
-            
+
             createMenu(options: true)
             setMenuVisible(true, andRect: rect)
             
@@ -376,6 +396,17 @@ extension UIWebView {
         }
     }
     
+
+    func playAudio(sender: UIMenuController?) {
+
+        js("playAudioFromSelected()")
+
+        // Force remove text selection
+        userInteractionEnabled = false
+        userInteractionEnabled = true
+    }
+
+
     // MARK: - Set highlight styles
     
     func setYellow(sender: UIMenuController?) {
@@ -418,6 +449,7 @@ extension UIWebView {
     func createMenu(options options: Bool) {
         isShare = options
         
+        let play = UIImage(readerImageNamed: "play-btn")
         let colors = UIImage(readerImageNamed: "colors-marker")
         let share = UIImage(readerImageNamed: "share-marker")
         let remove = UIImage(readerImageNamed: "no-marker")
@@ -427,7 +459,9 @@ extension UIWebView {
         let pink = UIImage(readerImageNamed: "pink-marker")
         let underline = UIImage(readerImageNamed: "underline-marker")
         
-        let highlightItem = UIMenuItem(title: readerConfig.localizedHighlightMenu, action: "highlight:")
+        //let highlightItem = UIMenuItem(title: readerConfig.localizedHighlightMenu, action: "highlight:")
+        let playAudioItem = UIMenuItem(title: "A", image: play!, action: "playAudio:")
+        let highlightItem = UIMenuItem(title: "C", image: colors!, action: "highlight:")
         let colorsItem = UIMenuItem(title: "C", image: colors!, action: "colors:")
         let shareItem = UIMenuItem(title: "S", image: share!, action: "share:")
         let removeItem = UIMenuItem(title: "R", image: remove!, action: "remove:")
@@ -437,7 +471,7 @@ extension UIWebView {
         let pinkItem = UIMenuItem(title: "P", image: pink!, action: "setPink:")
         let underlineItem = UIMenuItem(title: "U", image: underline!, action: "setUnderline:")
         
-        var menuItems = [highlightItem, colorsItem, removeItem, yellowItem, greenItem, blueItem, pinkItem, underlineItem]
+        var menuItems = [playAudioItem, highlightItem, colorsItem, removeItem, yellowItem, greenItem, blueItem, pinkItem, underlineItem]
         if !isColors { menuItems.append(shareItem) }
         UIMenuController.sharedMenuController().menuItems = menuItems
     }

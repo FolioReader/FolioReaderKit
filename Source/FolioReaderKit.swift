@@ -39,6 +39,7 @@ public class FolioReader {
     var readerCenter: FolioReaderCenter!
     var readerSidePanel: FolioReaderSidePanel!
     var readerContainer: FolioReaderContainer!
+    var readerAudioPlayer: FolioReaderAudioPlayer!
     var isReaderOpen = false
     var isReaderReady = false
     

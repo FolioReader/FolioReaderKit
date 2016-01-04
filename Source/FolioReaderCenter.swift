@@ -90,9 +90,11 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         configureNavBar()
         
         // Navbar buttons
-        let shareIcon = UIImage(readerImageNamed: "btn-navbar-share")!.imageTintColor(readerConfig.toolBarBackgroundColor).imageWithRenderingMode(.AlwaysOriginal)
+        //let shareIcon = UIImage(readerImageNamed: "btn-navbar-share")!.imageTintColor(readerConfig.toolBarBackgroundColor).imageWithRenderingMode(.AlwaysOriginal)
+        let playIcon = UIImage(readerImageNamed: "play-btn")!.imageTintColor(readerConfig.toolBarBackgroundColor).imageWithRenderingMode(.AlwaysOriginal)
         let menuIcon = UIImage(readerImageNamed: "btn-navbar-menu")!.imageTintColor(readerConfig.toolBarBackgroundColor).imageWithRenderingMode(.AlwaysOriginal)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: shareIcon, style: UIBarButtonItemStyle.Plain, target: self, action:"shareChapter:")
+        //navigationItem.rightBarButtonItem = UIBarButtonItem(image: shareIcon, style: UIBarButtonItemStyle.Plain, target: self, action:"shareChapter:")
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: playIcon, style: UIBarButtonItemStyle.Plain, target: self, action:"togglePlay:")
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: menuIcon, style: UIBarButtonItemStyle.Plain, target: self, action:"toggleMenu:")
         
         // Page indicator view
@@ -180,6 +182,10 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         navigationController?.setNavigationBarHidden(shouldHide, animated: true)
     }
     
+    func togglePlay(sender: UIBarButtonItem) {
+        FolioReader.sharedInstance.readerAudioPlayer.pause(); // @TODO change to toggle
+    }
+
     // MARK: Toggle menu
     
     func toggleMenu(sender: UIBarButtonItem) {
@@ -449,6 +455,11 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
+    func changePageWith(href href: String, andAudioMarkID markID: String) {
+        changePageWith(href: href);
+        currentPage.audioMarkID(markID);
+    }
+
     func changePageWith(indexPath indexPath: NSIndexPath) {
         collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Top, animated: false)
     }
@@ -482,8 +493,23 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     /**
-    Find and return the current chapter name.
+    Find and return the current chapter resource.
     */
+    func getCurrentChapter() -> FRResource? {
+        if let currentPageNumber = currentPageNumber {
+            for item in FolioReader.sharedInstance.readerSidePanel.tocItems {
+                let resource = book.spine.spineReferences[currentPageNumber-1].resource
+                if item.resource.href == resource.href {
+                    return item.resource
+                }
+            }
+        }
+        return nil
+    }
+
+    /**
+     Find and return the current chapter name.
+     */
     func getCurrentChapterName() -> String? {
         if let currentPageNumber = currentPageNumber {
             for item in FolioReader.sharedInstance.readerSidePanel.tocItems {
@@ -499,6 +525,18 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         return nil
     }
     
+    // MARK: - Audio Playing
+
+    func playAudio(fragmentID: String){
+
+        let chapter = getCurrentChapter()
+        FolioReader.sharedInstance.readerAudioPlayer.playAudio(chapter!.href, fragmentID: fragmentID)
+    }
+
+    func audioMark(href href: String, fragmentID: String) {
+        changePageWith(href: href, andAudioMarkID: fragmentID)
+    }
+
     // MARK: - Sharing
     
     /**

@@ -20,4 +20,21 @@ struct Spine {
 
 class FRSpine: NSObject {
     var spineReferences = [Spine]()
+
+
+    func nextChapter(href:String) -> FRResource? {
+        var found = false;
+
+        for item in spineReferences {
+
+            if( found ){
+                return item.resource
+            }
+
+            if( item.resource.href == href ){
+                found = true
+            }
+        }
+        return nil
+    }
 }

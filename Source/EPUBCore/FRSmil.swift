@@ -55,4 +55,37 @@ class FRSmil: NSObject {
         }
         return nil;
     }
+
+    // MARK: - Audio clip info
+
+    func clipBegin() -> Double {
+        return clockValueToSeconds(audioElement().attributes["clipBegin"])
+    }
+
+    func clipEnd() -> Double {
+        return clockValueToSeconds(audioElement().attributes["clipEnd"])
+    }
+
+    // @TODO: need to test for what clock value is being used
+    // http://www.idpf.org/epub/301/spec/epub-mediaoverlays.html#app-clock-examples
+    func clockValueToSeconds(val: String!) -> Double {
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = "HH:mm:ss.SSS"
+        let time = formatter.dateFromString(val!)
+
+        if( time == nil ){
+            return 0.0
+        }
+
+        formatter.dateFormat = "ss.SSS"
+        let seconds = (formatter.stringFromDate(time!) as NSString).doubleValue
+
+        formatter.dateFormat = "mm"
+        let minutes = (formatter.stringFromDate(time!) as NSString).doubleValue
+
+        formatter.dateFormat = "HH"
+        let hours = (formatter.stringFromDate(time!) as NSString).doubleValue
+
+        return seconds + (minutes*60) + (hours*60*60)
+    }
 }

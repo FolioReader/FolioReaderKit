@@ -45,6 +45,7 @@ class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
     var centerNavigationController: UINavigationController!
     var centerViewController: FolioReaderCenter!
     var leftViewController: FolioReaderSidePanel!
+    var audioPlayer: FolioReaderAudioPlayer!
     var centerPanelExpandedOffset: CGFloat = 70
     var currentState = SlideOutState()
     var shouldHideStatusBar = true
@@ -123,6 +124,7 @@ class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
                 dispatch_async(dispatch_get_main_queue(), {
                     self.centerViewController.reloadData()
                     self.addLeftPanelViewController()
+                    self.addAudioPlayer()
                     
                     // Open panel if does not have a saved point
                     if FolioReader.defaults.valueForKey(kBookId) == nil {
@@ -230,6 +232,13 @@ class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
         }
     }
     
+    func addAudioPlayer(){
+        // @NOTE: should the audio player only be initialized if the epub has audio smil?
+        audioPlayer = FolioReaderAudioPlayer()
+
+        FolioReader.sharedInstance.readerAudioPlayer = audioPlayer;
+    }
+
     // MARK: Gesture recognizer
     
     func handleTapGesture(recognizer: UITapGestureRecognizer) {

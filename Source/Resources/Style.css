@@ -265,3 +265,27 @@ p, span, div {
         hyphens: none !important;
     }
 }
+
+
+
+span.epub-media-overlay-playing {
+    background: #81D4FA;
+    border-radius: 3px;
+    padding-right: 4px;
+    margin-right: -4px
+}
+
+
+p.epub-media-overlay-playing {
+    position: relative;
+}
+
+p.epub-media-overlay-playing:before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 120%;
+    height: 120%;
+    background: rgba(0, 0, 0, .05);
+}

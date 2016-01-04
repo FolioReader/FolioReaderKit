@@ -180,3 +180,63 @@ function getReadingTime() {
 
     return readingTimeMinutes;
 }
+
+
+function findElementWithID(node){
+    if( !node || node.tagName == "BODY")
+        return null
+    else if( node.id )
+        return node
+    else
+        return findElementWithID(node)
+}
+
+
+// called by native UIMenuController when a user selects a bit of text and presses "play"
+function playAudioFromSelected(){
+
+    var sel = getSelection();
+    var node = sel.anchorNode ? findElementWithID(sel.anchorNode.parentNode) : null;
+    var fragmentID = node ? node.id : null;
+
+    // tell page controller to begin playing audio from the following ID
+    var URLBase = "play-audio://";
+    window.location = URLBase + encodeURIComponent(fragmentID);
+}
+
+
+function goToEl(el){
+
+    var top = document.body.scrollTop;
+    var elTop = el.offsetTop - 20;
+
+    var bottom = window.innerHeight + document.body.scrollTop;
+    var elBottom = el.offsetHeight + el.offsetTop + 60
+
+    if( elBottom > bottom || elTop < top )
+        document.body.scrollTop = el.offsetTop - 20
+
+    return el;
+}
+
+function removeAudioMark(className){
+    var els = document.body.getElementsByClassName(className)
+    if( els.length > 0 )
+    for( i = 0; i <= els.length; i++){
+        els[i].classList.remove(className);
+    }
+}
+
+function audioMarkID(className, id, useParagrpah){
+
+    removeAudioMark(className);
+
+    var el = document.getElementById(id);
+
+    if( useParagrpah == true)
+        el = el.parentNode;
+
+    goToEl(el);
+
+    el.classList.add(className)
+}

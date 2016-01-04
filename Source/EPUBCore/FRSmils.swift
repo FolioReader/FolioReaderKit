@@ -12,48 +12,46 @@ import UIKit
 struct FRSmilFile {
     var resource: FRResource
     var data = [FRSmil]()
-
+    
     init(resource: FRResource){
         self.resource = resource;
     }
-
-    // MARK: - shortcuts
-
+    
+    // MARK: - shortcuts 
+    
     func ID() -> String {
         return self.resource.id;
     }
-
+    
     func href() -> String {
         return self.resource.href;
     }
-
+    
     // MARK: - data methods
-
+    
     /**
-    Returns an <audio> tag which contains info about parallel audio to be played
+    Returns an smil <par> tag which contains info about parallel audio and text to be played
     */
-    func parallelAudioForFragment(fragment: String) -> FRSmilElement! {
+    func parallelAudioForFragment(fragment: String!) -> FRSmil! {
         for smil in data {
-
             // if its a <par> (parallel) element and has a <text> node with the matching fragment
-            if( smil.name == "par" && smil.textElement().name == href()+"#"+fragment ){
-                return smil.audioElement()
+            if( smil.name == "par" && (fragment == nil || smil.textElement().attributes["src"] == fragment ) ){
+                return smil
             }
         }
         return nil;
     }
-
-    /**
-     Returns text fragment for the current audio time given
-    */
-    func parallelFragmentForAudio(currentTime: String) -> String! {
+    
+    func nextParallelAudioForFragment(fragment: String) -> FRSmil! {
+        var found = false
         for smil in data {
-
-            // if its a <par> (parallel) element
-            if( smil.name == "par" && smil.audioElement() != nil ){
-
-                let audioEl = smil.audioElement()
-
+            if( found ){
+                return smil
+            }
+            
+            // if its a <par> (parallel) element and has a <text> node with the matching fragment
+            if( smil.name == "par" && smil.textElement().attributes["src"] == fragment ){
+                found = true
             }
         }
         return nil;
@@ -62,15 +60,16 @@ struct FRSmilFile {
 
 
 class FRSmils: NSObject {
+    var basePath: String!
     var smils = [String: FRSmilFile]()
-
+    
     /**
      Adds a smil to the smils.
      */
     func add(smil: FRSmilFile) {
         self.smils[smil.resource.href] = smil
     }
-
+    
     /**
      Gets the resource with the given href.
      */
@@ -82,7 +81,7 @@ class FRSmils: NSObject {
         }
         return nil
     }
-
+    
     /**
      Gets the resource with the given id.
      */

@@ -77,7 +77,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         
         do {
             let xmlDoc = try AEXMLDocument(xmlData: opfData!)
-
+            
             // parse and save each "manifest item"
             for item in xmlDoc.root["manifest"]["item"].all! {
                 let resource = FRResource()
@@ -86,14 +86,16 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
                 resource.fullHref = (resourcesBasePath as NSString).stringByAppendingPathComponent(item.attributes["href"]!).stringByRemovingPercentEncoding
                 resource.mediaType = FRMediaType.mediaTypesByName[item.attributes["media-type"]!]
                 resource.mediaOverlay = item.attributes["media-overlay"]
-
+                
                 // if a .smil file is listed in resources, go parse that file now and save it on book model
                 if( resource.mediaType == FRMediaType.SMIL ){
                     readSmilFile(resource);
                 }
-
+                
                 book.resources.add(resource)
             }
+            
+            book.smils.basePath = resourcesBasePath
 
             // Get the first resource with the NCX mediatype
             book.ncxResource = book.resources.findFirstResource(byMediaType: FRMediaType.NCX)
@@ -126,31 +128,31 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     */
     private func readSmilFile(resource: FRResource){
         let smilData = try? NSData(contentsOfFile: resource.fullHref, options: .DataReadingMappedAlways)
-
+        
         var smilFile = FRSmilFile(resource: resource);
-
+        
         do {
             let xmlDoc = try AEXMLDocument(xmlData: smilData!)
-
+            
             // @TODO - <par> is not the only tag that can exist
             for item in xmlDoc.root["body"]["par"].all! {
-
+                
                 let smil = FRSmil(name: item.name, id: item.attributes["id"])
-
+                
                 for tag in item.children {
                     smil.children.append( FRSmilElement(name: tag.name, attributes: tag.attributes) );
                 }
-
+                
                 smilFile.data.append(smil);
             }
-
+            
         } catch {
             print("Cannot read .smil file: "+resource.href)
         }
-
+        
         book.smils.add(smilFile);
     }
-
+    
     /**
     Read and parse the Table of Contents.
     */
@@ -201,61 +203,61 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         
         for tag in tags {
             if tag.name == "dc:title" {
-                metadata.titles.append(tag.value ?? "")
+                metadata.titles.append(tag.value!)
             }
             
             if tag.name == "dc:identifier" {
-                metadata.identifiers.append(Identifier(scheme: tag.attributes["opf:scheme"] ?? "", value: tag.value ?? ""))
+                metadata.identifiers.append(Identifier(scheme: tag.attributes["opf:scheme"] != nil ? tag.attributes["opf:scheme"]! : "", value: tag.value!))
             }
             
             if tag.name == "dc:language" {
-                metadata.language = tag.value ?? ""
+                metadata.language = tag.value != nil ? tag.value! : ""
             }
             
             if tag.name == "dc:creator" {
-                metadata.creators.append(Author(name: tag.value ?? "", role: tag.attributes["opf:role"] ?? "", fileAs: tag.attributes["opf:file-as"] ?? ""))
+                metadata.creators.append(Author(name: tag.value!, role: tag.attributes["opf:role"] != nil ? tag.attributes["opf:role"]! : "", fileAs: tag.attributes["opf:file-as"] != nil ? tag.attributes["opf:file-as"]! : ""))
             }
             
             if tag.name == "dc:contributor" {
-                metadata.creators.append(Author(name: tag.value ?? "", role: tag.attributes["opf:role"] ?? "", fileAs: tag.attributes["opf:file-as"] ?? ""))
+                metadata.creators.append(Author(name: tag.value!, role: tag.attributes["opf:role"] != nil ? tag.attributes["opf:role"]! : "", fileAs: tag.attributes["opf:file-as"] != nil ? tag.attributes["opf:file-as"]! : ""))
             }
             
             if tag.name == "dc:publisher" {
-                metadata.publishers.append(tag.value ?? "")
+                metadata.publishers.append(tag.value != nil ? tag.value! : "")
             }
             
             if tag.name == "dc:description" {
-                metadata.descriptions.append(tag.value ?? "")
+                metadata.descriptions.append(tag.value != nil ? tag.value! : "")
             }
             
             if tag.name == "dc:subject" {
-                metadata.subjects.append(tag.value ?? "")
+                metadata.subjects.append(tag.value != nil ? tag.value! : "")
             }
             
             if tag.name == "dc:rights" {
-                metadata.rights.append(tag.value ?? "")
+                metadata.rights.append(tag.value != nil ? tag.value! : "")
             }
             
             if tag.name == "dc:date" {
-                metadata.dates.append(Date(date: tag.value ?? "", event: tag.attributes["opf:event"] ?? ""))
+                metadata.dates.append(Date(date: tag.value!, event: tag.attributes["opf:event"] != nil ? tag.attributes["opf:event"]! : ""))
             }
             
             if tag.name == "meta" {
                 if tag.attributes["name"] != nil {
-                    metadata.metaAttributes.append(Meta(name: tag.attributes["name"]!, content: (tag.attributes["content"] ?? "")))
+                    metadata.metaAttributes.append(Meta(name: tag.attributes["name"]!, content: (tag.attributes["content"] != nil ? tag.attributes["content"]! : "")))
                 }
                 
                 if tag.attributes["property"] != nil && tag.attributes["id"] != nil {
-                    metadata.metaAttributes.append(Meta(id: tag.attributes["id"]!, property: tag.attributes["property"]!, value: tag.value ?? ""))
+                    metadata.metaAttributes.append(Meta(id: tag.attributes["id"]!, property: tag.attributes["property"]!, value: tag.value != nil ? tag.value! : ""))
                 }
-
+                
                 if tag.attributes["property"] != nil {
                     metadata.metaAttributes.append(Meta(property: tag.attributes["property"]!, value: tag.value != nil ? tag.value! : "", refines: tag.attributes["refines"] != nil ? tag.attributes["refines"] : nil))
                 }
 
             }
         }
-
+        
         return metadata
     }
     

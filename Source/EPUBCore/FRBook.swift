@@ -18,33 +18,37 @@ class FRBook: NSObject {
     var opfResource: FRResource!
     var ncxResource: FRResource!
     var coverImage: FRResource!
+    
+    func hasAudio() -> Bool {
+        return duration() != nil ? true : false;
+    }
 
     // MARK: - Media Overlay Metadata
     // http://www.idpf.org/epub/301/spec/epub-mediaoverlays.html#sec-package-metadata
-
+    
     func duration() -> String? {
         return metadata.findMetaByProperty("media:duration");
     }
-
+    
     // @NOTE: should "#" be automatically prefixed with the ID?
     func durationFor(ID: String) -> String? {
         return metadata.findMetaByProperty("media:duration", refinedBy: ID)
     }
-
-
-    func activeClass() -> String? {
+    
+    
+    func activeClass() -> String! {
         let className = metadata.findMetaByProperty("media:active-class");
         return className != nil ? className : "epub-media-overlay-active";
     }
-
-    func playbackActiveClass() -> String? {
+    
+    func playbackActiveClass() -> String! {
         let className = metadata.findMetaByProperty("media:playback-active-class");
         return className != nil ? className : "epub-media-overlay-playing";
     }
-
-
+    
+    
     // MARK: - Media Overlay (SMIL) retrieval
-
+    
     /**
      Get Smil File from a resource (if it has a media-overlay)
     */
@@ -52,20 +56,20 @@ class FRBook: NSObject {
         if( resource == nil || resource.mediaOverlay == nil ){
             return nil
         }
-
+        
         // lookup the smile resource to get info about the file
         let smilResource = resources.getById(resource.mediaOverlay)
-
+        
         // use the resource to get the file
         return smils.getByHref( smilResource!.href )
     }
-
+    
     func smilFileForHref(href: String) -> FRSmilFile! {
         return smilFileForResource(resources.getByHref(href))
     }
-
+    
     func smilFileForId(ID: String) -> FRSmilFile! {
         return smilFileForResource(resources.getById(ID))
     }
-
+    
 }
