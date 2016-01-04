@@ -117,10 +117,6 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
 
         if( player != nil ){
 
-            print("----")
-            print(player.currentTime)
-            print(currentBeginTime)
-
             if( player.currentTime < currentBeginTime || ( currentEndTime > 0 && player.currentTime > currentEndTime) ){
                 player.currentTime = currentBeginTime;
             }
