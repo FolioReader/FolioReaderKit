@@ -279,14 +279,14 @@ private var sAssociationKey: UInt8 = 0
 extension UIWebView {
     
     var isColors: Bool {
-        get { return objc_getAssociatedObject(self, &cAssociationKey) as! Bool }
+        get { return objc_getAssociatedObject(self, &cAssociationKey) as? Bool ?? false }
         set(newValue) {
             objc_setAssociatedObject(self, &cAssociationKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
         }
     }
     
     var isShare: Bool {
-        get {return objc_getAssociatedObject(self, &sAssociationKey) as! Bool}
+        get { return objc_getAssociatedObject(self, &sAssociationKey) as? Bool ?? false }
         set(newValue) {
             objc_setAssociatedObject(self, &sAssociationKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
         }
