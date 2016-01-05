@@ -449,7 +449,6 @@ extension UIWebView {
     func createMenu(options options: Bool) {
         isShare = options
         
-        let play = UIImage(readerImageNamed: "play-btn")
         let colors = UIImage(readerImageNamed: "colors-marker")
         let share = UIImage(readerImageNamed: "share-marker")
         let remove = UIImage(readerImageNamed: "no-marker")
@@ -459,9 +458,8 @@ extension UIWebView {
         let pink = UIImage(readerImageNamed: "pink-marker")
         let underline = UIImage(readerImageNamed: "underline-marker")
         
-        //let highlightItem = UIMenuItem(title: readerConfig.localizedHighlightMenu, action: "highlight:")
-        let playAudioItem = UIMenuItem(title: "A", image: play!, action: "playAudio:")
-        let highlightItem = UIMenuItem(title: "C", image: colors!, action: "highlight:")
+        let highlightItem = UIMenuItem(title: readerConfig.localizedHighlightMenu, action: "highlight:")
+        let playAudioItem = UIMenuItem(title: readerConfig.localizedPlayMenu, action: "playAudio:")
         let colorsItem = UIMenuItem(title: "C", image: colors!, action: "colors:")
         let shareItem = UIMenuItem(title: "S", image: share!, action: "share:")
         let removeItem = UIMenuItem(title: "R", image: remove!, action: "remove:")

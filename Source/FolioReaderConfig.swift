@@ -26,6 +26,7 @@ public class FolioReaderConfig: NSObject {
     public var localizedHighlightsTitle: String
     public var localizedHighlightsDateFormat: String
     public var localizedHighlightMenu: String
+    public var localizedPlayMenu: String
     public var localizedFontMenuNight: String
     public var localizedFontMenuDay: String
     public var localizedReaderOnePageLeft: String
@@ -56,6 +57,7 @@ public class FolioReaderConfig: NSObject {
         self.localizedHighlightsTitle = NSLocalizedString("Highlights", comment: "")
         self.localizedHighlightsDateFormat = "MMM dd, YYYY | HH:mm"
         self.localizedHighlightMenu = NSLocalizedString("Highlight", comment: "")
+        self.localizedPlayMenu = NSLocalizedString("Play", comment: "")
         self.localizedFontMenuNight = NSLocalizedString("Night", comment: "")
         self.localizedFontMenuDay = NSLocalizedString("Day", comment: "")
         self.localizedReaderOnePageLeft = NSLocalizedString("1 page left", comment: "")
