@@ -134,16 +134,10 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         do {
             let xmlDoc = try AEXMLDocument(xmlData: smilData!)
             
-            // @TODO - <par> is not the only tag that can exist
-            for item in xmlDoc.root["body"]["par"].all! {
-                
-                let smil = FRSmil(name: item.name, id: item.attributes["id"])
-                
-                for tag in item.children {
-                    smil.children.append( FRSmilElement(name: tag.name, attributes: tag.attributes) );
-                }
-                
-                smilFile.data.append(smil);
+            let children = xmlDoc.root["body"].children
+
+            if( children.count > 0 ){
+                smilFile.data.appendContentsOf( readSmilFileElements(children) )
             }
             
         } catch {
@@ -153,6 +147,26 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         book.smils.add(smilFile);
     }
     
+    private func readSmilFileElements(children:[AEXMLElement]) -> [FRSmilElement] {
+
+        var data = [FRSmilElement]()
+
+        // convert each smil element to a FRSmil object
+        for item in children {
+
+            let smil = FRSmilElement(name: item.name, attributes: item.attributes)
+
+            // if this element has children, convert them to objects too
+            if( item.children.count > 0 ){
+                smil.children.appendContentsOf( readSmilFileElements(item.children) )
+            }
+
+            data.append(smil)
+        }
+
+        return data
+    }
+
     /**
     Read and parse the Table of Contents.
     */

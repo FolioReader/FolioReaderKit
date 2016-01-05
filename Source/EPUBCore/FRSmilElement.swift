@@ -12,27 +12,17 @@ import UIKit
 // http://www.idpf.org/accessibility/guidelines/content/overlays/overview.php#mo005-samp
 
 
-class FRSmilElement {
-    var name: String // the name of the tag: <audio>
-    var attributes: [String: String]
-
-    init(name: String, attributes: [String:String]) {
-        self.name = name
-        self.attributes = attributes;
-    }
-};
-
-
-class FRSmil: NSObject {
-    var name: String // the name of the tag: <par>
-    var id: String!
+class FRSmilElement: NSObject {
+    var name: String // the name of the tag: <seq>, <par>, <text>, <audio>
+    var attributes: [String: String]!
     var children: [FRSmilElement]
 
-    init(name: String, id: String!) {
+    init(name: String, attributes: [String:String]!) {
         self.name = name
-        self.id = id
+        self.attributes = attributes
         self.children = [FRSmilElement]()
     }
+
 
     // if <par> tag, a <text> is required (http://www.idpf.org/epub/301/spec/epub-mediaoverlays.html#sec-smil-par-elem)
     func textElement() -> FRSmilElement! {

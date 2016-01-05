@@ -71,7 +71,7 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
         playFragment(nextAudioFragment())
     }
 
-    func playFragment(smil: FRSmil!){
+    func playFragment(smil: FRSmilElement!){
 
         if( smil == nil ){
             print("no more parallel audio to play")
@@ -126,7 +126,7 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
     }
 
 
-    func nextAudioFragment() -> FRSmil! {
+    func nextAudioFragment() -> FRSmilElement! {
 
         let smilFile = book.smilFileForHref(currentHref)
         let smil = currentFragment == nil ? smilFile.parallelAudioForFragment(nil) : smilFile.nextParallelAudioForFragment(currentFragment)

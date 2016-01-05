@@ -11,7 +11,7 @@ import UIKit
 
 struct FRSmilFile {
     var resource: FRResource
-    var data = [FRSmil]()
+    var data = [FRSmilElement]()
     
     init(resource: FRResource){
         self.resource = resource;
@@ -32,7 +32,7 @@ struct FRSmilFile {
     /**
     Returns an smil <par> tag which contains info about parallel audio and text to be played
     */
-    func parallelAudioForFragment(fragment: String!) -> FRSmil! {
+    func parallelAudioForFragment(fragment: String!) -> FRSmilElement! {
         for smil in data {
             // if its a <par> (parallel) element and has a <text> node with the matching fragment
             if( smil.name == "par" && (fragment == nil || smil.textElement().attributes["src"] == fragment ) ){
@@ -42,7 +42,7 @@ struct FRSmilFile {
         return nil;
     }
     
-    func nextParallelAudioForFragment(fragment: String) -> FRSmil! {
+    func nextParallelAudioForFragment(fragment: String) -> FRSmilElement! {
         var found = false
         for smil in data {
             if( found ){
