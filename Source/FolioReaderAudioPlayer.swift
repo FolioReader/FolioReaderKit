@@ -20,18 +20,10 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
     var currentEndTime: Double!
     var playingTimer: NSTimer!
 
-    var tempTimer: NSTimer!
-
     func stop() {
 
         if( player != nil && player.playing ){
             player.stop()
-        }
-
-        // temp code, but `stop` will likely be a method
-        if( tempTimer != nil ){
-            tempTimer.invalidate()
-            tempTimer = nil
         }
     }
 
