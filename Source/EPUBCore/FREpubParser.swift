@@ -88,7 +88,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
                 resource.mediaOverlay = item.attributes["media-overlay"]
                 
                 // if a .smil file is listed in resources, go parse that file now and save it on book model
-                if( resource.mediaType == FRMediaType.SMIL ){
+                if( resource.mediaType != nil && resource.mediaType == FRMediaType.SMIL ){
                     readSmilFile(resource);
                 }
                 
