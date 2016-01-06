@@ -11,6 +11,9 @@ import ZFDragableModalTransition
 
 let reuseIdentifier = "Cell"
 var isScrolling = false
+var recentlyScrolled = false
+var recentlyScrolledDelay = 2.0 // 2 second delay until we clear recentlyScrolled
+var recentlyScrolledTimer: NSTimer!
 var scrollDirection = ScrollDirection()
 var pageWidth: CGFloat!
 var pageHeight: CGFloat!
@@ -454,10 +457,15 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             changePageWith(page: page)
         }
     }
-    
+
     func changePageWith(href href: String, andAudioMarkID markID: String) {
+
+        // if user recently scrolled, do not change pages or scroll the webview
+        if( recentlyScrolled ){ return }
+
         changePageWith(href: href);
         currentPage.audioMarkID(markID);
+
     }
 
     func changePageWith(indexPath indexPath: NSIndexPath) {
@@ -687,6 +695,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         isScrolling = true
+        clearRecentlyScrolled()
+        recentlyScrolled = true
         pointNow = scrollView.contentOffset
         
         if let currentPage = currentPage {
@@ -725,6 +735,18 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
+    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        recentlyScrolledTimer = NSTimer.scheduledTimerWithTimeInterval(recentlyScrolledDelay, target: self, selector: "clearRecentlyScrolled", userInfo: nil, repeats: false)
+    }
+
+    func clearRecentlyScrolled(){
+        if( recentlyScrolledTimer != nil ){
+            recentlyScrolledTimer.invalidate()
+            recentlyScrolledTimer = nil
+        }
+        recentlyScrolled = false
+    }
+
     func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
         updateCurrentPage()
     }
