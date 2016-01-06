@@ -92,14 +92,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         extendedLayoutIncludesOpaqueBars = true
         configureNavBar()
         
-        // Navbar buttons
-        //let shareIcon = UIImage(readerImageNamed: "btn-navbar-share")!.imageTintColor(readerConfig.toolBarBackgroundColor).imageWithRenderingMode(.AlwaysOriginal)
-        let playIcon = UIImage(readerImageNamed: "play-btn")!.imageTintColor(readerConfig.toolBarBackgroundColor).imageWithRenderingMode(.AlwaysOriginal)
-        let menuIcon = UIImage(readerImageNamed: "btn-navbar-menu")!.imageTintColor(readerConfig.toolBarBackgroundColor).imageWithRenderingMode(.AlwaysOriginal)
-        //navigationItem.rightBarButtonItem = UIBarButtonItem(image: shareIcon, style: UIBarButtonItemStyle.Plain, target: self, action:"shareChapter:")
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: playIcon, style: UIBarButtonItemStyle.Plain, target: self, action:"togglePlay:")
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: menuIcon, style: UIBarButtonItemStyle.Plain, target: self, action:"toggleMenu:")
-        
         // Page indicator view
         pageIndicatorView = FolioReaderPageIndicator(frame: CGRect(x: 0, y: view.frame.height-pageIndicatorHeight, width: view.frame.width, height: pageIndicatorHeight))
         view.addSubview(pageIndicatorView)
@@ -115,7 +107,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         pagesForCurrentPage(currentPage)
         pageIndicatorView.reloadView(updateShadow: true)
     }
-    
+
     func configureNavBar() {
         let navBackground = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeMenuBackground : UIColor.whiteColor()
         let tintColor = readerConfig.toolBarBackgroundColor
@@ -124,10 +116,34 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         setTranslucentNavigation(color: navBackground, tintColor: tintColor, titleColor: navText, andFont: font)
     }
     
+    func configureNavBarButtons() {
+
+        // Navbar buttons
+        let shareIcon = UIImage(readerImageNamed: "btn-navbar-share")!.imageTintColor(readerConfig.toolBarBackgroundColor).imageWithRenderingMode(.AlwaysOriginal)
+        let audioIcon = UIImage(readerImageNamed: "icon-volume-high")!.imageTintColor(readerConfig.toolBarBackgroundColor).imageWithRenderingMode(.AlwaysOriginal)
+        let menuIcon = UIImage(readerImageNamed: "btn-navbar-menu")!.imageTintColor(readerConfig.toolBarBackgroundColor).imageWithRenderingMode(.AlwaysOriginal)
+
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: menuIcon, style: UIBarButtonItemStyle.Plain, target: self, action:"toggleMenu:")
+
+        var rightBarIcons = [UIBarButtonItem]()
+
+        if readerConfig.allowSharing == true {
+            rightBarIcons.append(UIBarButtonItem(image: shareIcon, style: UIBarButtonItemStyle.Plain, target: self, action:"shareChapter:"))
+        }
+
+        if book.hasAudio() {
+            rightBarIcons.append(UIBarButtonItem(image: audioIcon, style: UIBarButtonItemStyle.Plain, target: self, action:"togglePlay:"))
+        }
+
+        navigationItem.rightBarButtonItems = rightBarIcons
+    }
+
     func reloadData() {
         bookShareLink = readerConfig.localizedShareWebLink
         totalPages = book.spine.spineReferences.count
+
         collectionView.reloadData()
+        configureNavBarButtons()
         
         if let position = FolioReader.defaults.valueForKey(kBookId) as? NSDictionary {
             let pageNumber = position["pageNumber"]! as! Int
@@ -187,9 +203,9 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         })
         navigationController?.setNavigationBarHidden(shouldHide, animated: true)
     }
-    
+
     func togglePlay(sender: UIBarButtonItem) {
-        FolioReader.sharedInstance.readerAudioPlayer.pause(); // @TODO change to toggle
+        presentPlayerMenu()
     }
 
     // MARK: Toggle menu
@@ -805,6 +821,27 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     func presentHighlightsList() {
         let menu = UINavigationController(rootViewController: FolioReaderHighlightList())
+        presentViewController(menu, animated: true, completion: nil)
+    }
+
+
+    // MARK: - Audio Player Menu
+
+    func presentPlayerMenu() {
+        hideBars()
+
+        let menu = FolioReaderPlayerMenu()
+        menu.modalPresentationStyle = .Custom
+
+        animator = ZFModalTransitionAnimator(modalViewController: menu)
+        animator.dragable = true
+        animator.bounces = false
+        animator.behindViewAlpha = 0.4
+        animator.behindViewScale = 1
+        animator.transitionDuration = 0.6
+        animator.direction = ZFModalTransitonDirection.Bottom
+
+        menu.transitioningDelegate = animator
         presentViewController(menu, animated: true, completion: nil)
     }
 }

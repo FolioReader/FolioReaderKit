@@ -7,6 +7,7 @@
 //
 
 var thisHighlight;
+var audioMarkClass;
 var wordsPerMinute = 200;
 
 document.addEventListener("DOMContentLoaded", function(event) {
@@ -191,20 +192,62 @@ function findElementWithID(node){
         return findElementWithID(node)
 }
 
+function findElementWithIDInView(){
 
-// called by native UIMenuController when a user selects a bit of text and presses "play"
-function playAudioFromSelected(){
+    if( audioMarkClass ){
+        // attempt to find an existing "audio mark"
+        var el = document.querySelector("."+audioMarkClass)
+
+        // if that existing audio mark exists and is in view, use it
+        if( el && el.offsetTop > document.body.scrollTop && el.offsetTop < (window.innerHeight + document.body.scrollTop))
+            return el
+    }
+
+    // @NOTE: is `span` too limiting?
+    var els = document.querySelectorAll("span[id]")
+
+    for( indx in els ){
+        if( els[indx].offsetTop > document.body.scrollTop )
+            return els[indx]
+    }
+
+    return null
+}
+
+
+/**
+ Play Audio - called by native UIMenuController when a user selects a bit of text and presses "play"
+ */
+function playAudio(){
 
     var sel = getSelection();
-    var node = sel.anchorNode ? findElementWithID(sel.anchorNode.parentNode) : null;
-    var fragmentID = node ? node.id : null;
+    var node = null;
 
-    // tell page controller to begin playing audio from the following ID
+    // user selected text? start playing from the selected node
+    if( sel.toString() != "" ){
+        node = sel.anchorNode ? findElementWithID(sel.anchorNode.parentNode) : null;
+
+    // find the first ID'd element that is within view (it will
+    }else{
+        node = findElementWithIDInView()
+    }
+
+    playAudioFragmentID(node ? node.id : null)
+}
+
+
+/**
+ Play Audio Fragment ID - tells page controller to begin playing audio from the following ID
+ */
+function playAudioFragmentID(fragmentID){
     var URLBase = "play-audio://";
     window.location = URLBase + encodeURIComponent(fragmentID);
 }
 
 
+/**
+ Go To Element - scrolls the webview to the requested element
+ */
 function goToEl(el){
 
     var top = document.body.scrollTop;
@@ -219,7 +262,10 @@ function goToEl(el){
     return el;
 }
 
-function removeAudioMark(className){
+/**
+ Remove All Classes - removes the given class from all elements in the DOM
+ */
+function removeAllClasses(className){
     var els = document.body.getElementsByClassName(className)
     if( els.length > 0 )
     for( i = 0; i <= els.length; i++){
@@ -227,14 +273,17 @@ function removeAudioMark(className){
     }
 }
 
-function audioMarkID(className, id, useParagrpah){
+/**
+ Audio Mark ID - marks an element with an ID with the given class and scrolls to it
+ */
+function audioMarkID(className, id){
 
-    removeAudioMark(className);
+    if( audioMarkClass )
+        removeAllClasses(audioMarkClass);
+
+    audioMarkClass = className
 
     var el = document.getElementById(id);
-
-    if( useParagrpah == true)
-        el = el.parentNode;
 
     goToEl(el);
 

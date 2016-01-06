@@ -36,6 +36,27 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
         return player != nil && player.playing
     }
 
+    func setRate(rate: Int) {
+        if( player != nil ){
+            switch rate {
+            case 0:
+                player.rate = 0.5
+                break
+            case 1:
+                player.rate = 1.0
+                break
+            case 2:
+                player.rate = 1.25
+                break
+            case 3:
+                player.rate = 1.5
+                break
+            default:
+                break
+            }
+        }
+    }
+
     func stop() {
 
         if( player != nil && player.playing ){
@@ -47,6 +68,11 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
         if( player != nil && player.playing ){
             player.pause()
         }
+    }
+
+    func playAudio(){
+        let currentPage = FolioReader.sharedInstance.readerCenter.currentPage
+        currentPage.playAudio()
     }
 
     func playAudio(href: String, fragmentID: String) {
@@ -117,6 +143,8 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
 
             if( audioData != nil ){
                 player = try! AVAudioPlayer(data: audioData!)
+                player.enableRate = true
+                setRate(FolioReader.sharedInstance.currentAudioRate)
                 player.prepareToPlay()
                 player.delegate = self
 

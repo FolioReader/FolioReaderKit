@@ -21,12 +21,14 @@ public class FolioReaderConfig: NSObject {
     
     // Custom actions
     public var shouldHideNavigationOnTap: Bool!
+    public var allowSharing: Bool!
     
     // Reader Strings
     public var localizedHighlightsTitle: String
     public var localizedHighlightsDateFormat: String
     public var localizedHighlightMenu: String
     public var localizedPlayMenu: String
+    public var localizedPauseMenu: String
     public var localizedFontMenuNight: String
     public var localizedFontMenuDay: String
     public var localizedReaderOnePageLeft: String
@@ -53,11 +55,13 @@ public class FolioReaderConfig: NSObject {
         self.nightModeSeparatorColor = UIColor(white: 0.5, alpha: 0.2)
         
         self.shouldHideNavigationOnTap = true
+        self.allowSharing = true
         
         self.localizedHighlightsTitle = NSLocalizedString("Highlights", comment: "")
         self.localizedHighlightsDateFormat = "MMM dd, YYYY | HH:mm"
         self.localizedHighlightMenu = NSLocalizedString("Highlight", comment: "")
         self.localizedPlayMenu = NSLocalizedString("Play", comment: "")
+        self.localizedPauseMenu = NSLocalizedString("Pause", comment: "")
         self.localizedFontMenuNight = NSLocalizedString("Night", comment: "")
         self.localizedFontMenuDay = NSLocalizedString("Day", comment: "")
         self.localizedReaderOnePageLeft = NSLocalizedString("1 page left", comment: "")

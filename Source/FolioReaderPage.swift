@@ -276,6 +276,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     }
     
     override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
+
         if UIMenuController.sharedMenuController().menuItems?.count == 0 {
             webView.isColors = false
             webView.createMenu(options: false)
@@ -284,6 +285,9 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         return super.canPerformAction(action, withSender: sender)
     }
 
+    func playAudio(){
+        webView.play(nil)
+    }
 
     func audioMarkID(ID: String){
         self.webView.js("audioMarkID('\(book.playbackActiveClass())','\(ID)')");
@@ -315,7 +319,7 @@ extension UIWebView {
 
         // menu on existing highlight
         if isShare {
-            if action == "colors:" || action == "share:" || action == "remove:" {
+            if action == "colors:" || (action == "share:" && readerConfig.allowSharing == true) || action == "remove:" {
                 return true
             }
             return false
@@ -329,8 +333,10 @@ extension UIWebView {
 
         // default menu
         } else {
-            // @TODO: the playAudio: action should only be visible when the book has audio to play
-            if action == "highlight:" || action == "playAudio:" || action == "share:" || action == "copy:" {
+            if action == "highlight:"
+            || (action == "play:" && book.hasAudio() )
+            || (action == "share:" && readerConfig.allowSharing == true)
+            || (action == "copy:" && readerConfig.allowSharing == true) {
                 return true
             }
             return false
@@ -395,13 +401,14 @@ extension UIWebView {
             print("Could not receive JSON")
         }
     }
-    
 
-    func playAudio(sender: UIMenuController?) {
 
-        js("playAudioFromSelected()")
+    func play(sender: UIMenuController?) {
+
+        js("playAudio()")
 
         // Force remove text selection
+        // @NOTE: this doesn't seem to always work
         userInteractionEnabled = false
         userInteractionEnabled = true
     }
@@ -459,7 +466,7 @@ extension UIWebView {
         let underline = UIImage(readerImageNamed: "underline-marker")
         
         let highlightItem = UIMenuItem(title: readerConfig.localizedHighlightMenu, action: "highlight:")
-        let playAudioItem = UIMenuItem(title: readerConfig.localizedPlayMenu, action: "playAudio:")
+        let playAudioItem = UIMenuItem(title: readerConfig.localizedPlayMenu, action: "play:")
         let colorsItem = UIMenuItem(title: "C", image: colors!, action: "colors:")
         let shareItem = UIMenuItem(title: "S", image: share!, action: "share:")
         let removeItem = UIMenuItem(title: "R", image: remove!, action: "remove:")
@@ -469,8 +476,8 @@ extension UIWebView {
         let pinkItem = UIMenuItem(title: "P", image: pink!, action: "setPink:")
         let underlineItem = UIMenuItem(title: "U", image: underline!, action: "setUnderline:")
         
-        var menuItems = [playAudioItem, highlightItem, colorsItem, removeItem, yellowItem, greenItem, blueItem, pinkItem, underlineItem]
-        if !isColors { menuItems.append(shareItem) }
+        let menuItems = [playAudioItem, highlightItem, colorsItem, removeItem, yellowItem, greenItem, blueItem, pinkItem, underlineItem, shareItem]
+
         UIMenuController.sharedMenuController().menuItems = menuItems
     }
     

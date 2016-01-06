@@ -72,7 +72,8 @@ class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
         FolioReader.defaults.registerDefaults([
             kCurrentFontFamily: 0,
             kNightMode: false,
-            kCurrentFontSize: 2
+            kCurrentFontSize: 2,
+            kCurrentAudioRate: 1
             ])
     }
     

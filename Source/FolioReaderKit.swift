@@ -24,6 +24,7 @@ internal let isLargePhone = isPhone6P
 internal let kApplicationDocumentsDirectory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] 
 internal let kCurrentFontFamily = "kCurrentFontFamily"
 internal let kCurrentFontSize = "kCurrentFontSize"
+internal let kCurrentAudioRate = "kCurrentAudioRate"
 internal let kNightMode = "kNightMode"
 internal let kHighlightRange = 30
 internal var kBookId: String!
@@ -66,6 +67,14 @@ public class FolioReader {
         }
     }
     
+    var currentAudioRate: Int {
+        get { return FolioReader.defaults.valueForKey(kCurrentAudioRate) as! Int }
+        set (value) {
+            FolioReader.defaults.setValue(value, forKey: kCurrentAudioRate)
+            FolioReader.defaults.synchronize()
+        }
+    }
+
     // MARK: - Present Folio Reader
     
     /**
