@@ -139,6 +139,9 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     // MARK: Status bar and Navigation bar
     
     func hideBars() {
+
+        if readerConfig.shouldHideNavigationOnTap == false { return }
+
         let shouldHide = true
         FolioReader.sharedInstance.readerContainer.shouldHideStatusBar = shouldHide
         
