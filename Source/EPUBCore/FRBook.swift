@@ -23,9 +23,13 @@ class FRBook: NSObject {
         return duration() != nil ? true : false;
     }
 
+    func title() -> String! {
+        return metadata.titles[0]
+    }
+
     // MARK: - Media Overlay Metadata
     // http://www.idpf.org/epub/301/spec/epub-mediaoverlays.html#sec-package-metadata
-    
+
     func duration() -> String? {
         return metadata.findMetaByProperty("media:duration");
     }
