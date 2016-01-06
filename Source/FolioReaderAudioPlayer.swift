@@ -4,6 +4,9 @@
 //
 //  Created by Kevin Jantzer on 1/4/16.
 //
+//  TODO
+//  - Import MediaPlayer and set "now playing" info for the lock screen
+//  - Allow lock screen to control playing audio (I think that will have to be done in a view)
 //
 
 import UIKit
@@ -19,6 +22,19 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
     var currentBeginTime: Double!
     var currentEndTime: Double!
     var playingTimer: NSTimer!
+
+    override init() {
+
+        // this is needed to the audio can play even when the "silent/vibrate" toggle is on
+        let session:AVAudioSession = AVAudioSession.sharedInstance()
+        try! session.setCategory(AVAudioSessionCategoryPlayback)
+        try! session.setActive(true)
+    }
+
+
+    func isPlaying() -> Bool {
+        return player != nil && player.playing
+    }
 
     func stop() {
 
@@ -51,7 +67,9 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
     }
 
     func startPlayerTimer() {
-        playingTimer = NSTimer.scheduledTimerWithTimeInterval(0.01, target: self, selector: "playerTimerObserver", userInfo: nil, repeats: true)
+        // we must add the timer in this mode in order for it to continue working even when the user is scrolling a webview
+        playingTimer = NSTimer(timeInterval: 0.01, target: self, selector: "playerTimerObserver", userInfo: nil, repeats: true)
+        NSRunLoop.currentRunLoop().addTimer(playingTimer, forMode: NSRunLoopCommonModes)
     }
 
     func stopPlayerTimer() {
