@@ -76,7 +76,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate {
         menuView.addSubview(line)
 
         // audio playback rate adjust
-        let fontName = SMSegmentView(frame: CGRect(x: 15, y: line.frame.height+line.frame.origin.y, width: view.frame.width-30, height: 55),
+        let playbackRate = SMSegmentView(frame: CGRect(x: 15, y: line.frame.height+line.frame.origin.y, width: view.frame.width-30, height: 55),
             separatorColour: UIColor.clearColor(),
             separatorWidth: 0,
             segmentProperties:  [
@@ -86,15 +86,15 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate {
                 keySegmentOffSelectionTextColour: normalColor,
                 keyContentVerticalMargin: 17
             ])
-        fontName.delegate = self
-        fontName.tag = 2
-        fontName.addSegmentWithTitle("0.5x", onSelectionImage: nil, offSelectionImage: nil)
-        fontName.addSegmentWithTitle("1.0x", onSelectionImage: nil, offSelectionImage: nil)
-        fontName.addSegmentWithTitle("1.25x", onSelectionImage: nil, offSelectionImage: nil)
-        fontName.addSegmentWithTitle("1.5x", onSelectionImage: nil, offSelectionImage: nil)
-        fontName.segmentTitleFont = UIFont(name: "Avenir-Light", size: 17)!
-        fontName.selectSegmentAtIndex(Int(FolioReader.sharedInstance.currentAudioRate))
-        menuView.addSubview(fontName)
+        playbackRate.delegate = self
+        playbackRate.tag = 2
+        playbackRate.addSegmentWithTitle("0.5x", onSelectionImage: nil, offSelectionImage: nil)
+        playbackRate.addSegmentWithTitle("1.0x", onSelectionImage: nil, offSelectionImage: nil)
+        playbackRate.addSegmentWithTitle("1.25x", onSelectionImage: nil, offSelectionImage: nil)
+        playbackRate.addSegmentWithTitle("1.5x", onSelectionImage: nil, offSelectionImage: nil)
+        playbackRate.segmentTitleFont = UIFont(name: "Avenir-Light", size: 17)!
+        playbackRate.selectSegmentAtIndex(Int(FolioReader.sharedInstance.currentAudioRate))
+        menuView.addSubview(playbackRate)
 
     }
 
