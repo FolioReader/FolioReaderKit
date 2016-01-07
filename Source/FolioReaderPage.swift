@@ -138,7 +138,13 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
             if (url!.path! as NSString).pathExtension != "" {
                 let base = (book.opfResource.href as NSString).stringByDeletingLastPathComponent
                 let path = url?.path
-                let splitedPath = path!.componentsSeparatedByString(base)
+                let splitedPath = path!.componentsSeparatedByString(base.isEmpty ? kBookId : base)
+                
+                // Return to avoid crash
+                if splitedPath.count <= 1 || splitedPath[1].isEmpty {
+                    return true
+                }
+                
                 let href = splitedPath[1].stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString: "/"))
                 let hrefPage = FolioReader.sharedInstance.readerCenter.findPageByHref(href)+1
                 
