@@ -241,7 +241,7 @@ function playAudio(){
  */
 function playAudioFragmentID(fragmentID){
     var URLBase = "play-audio://";
-    window.location = URLBase + encodeURIComponent(fragmentID);
+    window.location = URLBase + (fragmentID?encodeURIComponent(fragmentID):"")
 }
 
 
@@ -288,4 +288,26 @@ function audioMarkID(className, id){
     goToEl(el);
 
     el.classList.add(className)
+}
+
+
+
+function setMediaOverlayStyle(style){
+
+    var stylesheet = document.styleSheets[document.styleSheets.length-1];
+    var index = null;
+
+    [].forEach.call(stylesheet.rules, function(rule, i){
+
+        if( rule.selectorText && rule.selectorText == "span.epub-media-overlay-playing"){
+            index = i
+            return
+        }
+
+    })
+
+    if( index )
+        stylesheet.removeRule(index)
+
+    stylesheet.insertRule("span.epub-media-overlay-playing { "+style+" }")
 }

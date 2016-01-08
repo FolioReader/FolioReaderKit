@@ -241,11 +241,18 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         let resource = book.spine.spineReferences[indexPath.row].resource
         var html = try? String(contentsOfFile: resource.fullHref, encoding: NSUTF8StringEncoding)
         
+        if readerConfig.mediaOverlayColor == nil {
+           readerConfig.mediaOverlayColor = readerConfig.toolBarBackgroundColor.highlightColor()
+        }
+
+        let mediaOverlayStyle = "background: \(readerConfig.mediaOverlayColor.hexString(false)); border-radius: 3px; padding-right: 4px; margin-right: -4px;"
+
         // Inject CSS
         let jsFilePath = NSBundle.frameworkBundle().pathForResource("Bridge", ofType: "js")
         let cssFilePath = NSBundle.frameworkBundle().pathForResource("Style", ofType: "css")
         let cssTag = "<link rel=\"stylesheet\" type=\"text/css\" href=\"\(cssFilePath!)\">"
         let jsTag = "<script type=\"text/javascript\" src=\"\(jsFilePath!)\"></script>"
+                    + "<script type=\"text/javascript\">setMediaOverlayStyle(\"\(mediaOverlayStyle)\")</script>"
         
         let toInject = "\n\(cssTag)\n\(jsTag)\n</head>"
         html = html?.stringByReplacingOccurrencesOfString("</head>", withString: toInject)

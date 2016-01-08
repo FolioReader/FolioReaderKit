@@ -185,6 +185,83 @@ extension UIColor {
         }
         self.init(red:red, green:green, blue:blue, alpha:alpha)
     }
+
+    /**
+     Hex string of a UIColor instance.
+
+     - parameter rgba: Whether the alpha should be included.
+     */
+    // from: https://github.com/yeahdongcn/UIColor-Hex-Swift
+    public func hexString(includeAlpha: Bool) -> String {
+        var r: CGFloat = 0
+        var g: CGFloat = 0
+        var b: CGFloat = 0
+        var a: CGFloat = 0
+        self.getRed(&r, green: &g, blue: &b, alpha: &a)
+
+        if (includeAlpha) {
+            return String(format: "#%02X%02X%02X%02X", Int(r * 255), Int(g * 255), Int(b * 255), Int(a * 255))
+        } else {
+            return String(format: "#%02X%02X%02X", Int(r * 255), Int(g * 255), Int(b * 255))
+        }
+    }
+
+    // MARK: - color shades
+    // https://gist.github.com/mbigatti/c6be210a6bbc0ff25972
+
+    func highlightColor() -> UIColor {
+
+        var hue : CGFloat = 0
+        var saturation : CGFloat = 0
+        var brightness : CGFloat = 0
+        var alpha : CGFloat = 0
+
+        if getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha) {
+            return UIColor(hue: hue, saturation: 0.30, brightness: 1, alpha: alpha)
+        } else {
+            return self;
+        }
+
+    }
+
+    /**
+     Returns a lighter color by the provided percentage
+
+     :param: lighting percent percentage
+     :returns: lighter UIColor
+     */
+    func lighterColor(percent : Double) -> UIColor {
+        return colorWithBrightnessFactor(CGFloat(1 + percent));
+    }
+
+    /**
+     Returns a darker color by the provided percentage
+
+     :param: darking percent percentage
+     :returns: darker UIColor
+     */
+    func darkerColor(percent : Double) -> UIColor {
+        return colorWithBrightnessFactor(CGFloat(1 - percent));
+    }
+
+    /**
+     Return a modified color using the brightness factor provided
+
+     :param: factor brightness factor
+     :returns: modified color
+     */
+    func colorWithBrightnessFactor(factor: CGFloat) -> UIColor {
+        var hue : CGFloat = 0
+        var saturation : CGFloat = 0
+        var brightness : CGFloat = 0
+        var alpha : CGFloat = 0
+
+        if getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha) {
+            return UIColor(hue: hue, saturation: saturation, brightness: brightness * factor, alpha: alpha)
+        } else {
+            return self;
+        }
+    }
 }
 
 extension String {
