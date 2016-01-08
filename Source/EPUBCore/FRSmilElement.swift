@@ -23,6 +23,45 @@ class FRSmilElement: NSObject {
         self.children = [FRSmilElement]()
     }
 
+    // MARK: - Element attributes
+
+    func getId() -> String! {
+        return getAttribute("id")
+    }
+
+    func getSrc() -> String! {
+        return getAttribute("src")
+    }
+
+    /**
+     Returns array of Strings if `epub:type` attribute is set. An array is returned as there can be multiple types specified, seperated by a whitespace
+    */
+    func getType() -> [String]! {
+        let type = getAttribute("epub:type", defaultVal: "")
+        return type.componentsSeparatedByString(" ")
+    }
+
+    /**
+     Use to determine if this element matches a given type
+
+     **Example**
+
+         epub:type="bodymatter chapter"
+         isType("bodymatter") -> true
+    */
+    func isType(aType:String) -> Bool {
+        return getType().contains(aType)
+    }
+
+    func getAttribute(name: String, defaultVal: String!) -> String! {
+        return attributes[name] != nil ? attributes[name] : defaultVal;
+    }
+
+    func getAttribute(name: String ) -> String! {
+        return getAttribute(name, defaultVal: nil)
+    }
+
+    // MARK: - Retrieving children elements
 
     // if <par> tag, a <text> is required (http://www.idpf.org/epub/301/spec/epub-mediaoverlays.html#sec-smil-par-elem)
     func textElement() -> FRSmilElement! {
@@ -46,36 +85,29 @@ class FRSmilElement: NSObject {
         return nil;
     }
 
+    func childrenWithNames(name:[String]) -> [FRSmilElement]! {
+        var matched = [FRSmilElement]()
+        for el in children {
+            if( name.contains(el.name) ){
+                matched.append(el)
+            }
+        }
+        return matched;
+    }
+
+    func childrenWithName(name:String) -> [FRSmilElement]! {
+        return childrenWithNames([name])
+    }
+
     // MARK: - Audio clip info
 
     func clipBegin() -> Double {
-        return clockValueToSeconds(audioElement().attributes["clipBegin"])
+        let val = audioElement().getAttribute("clipBegin", defaultVal: "")
+        return val.clockTimeToSeconds()
     }
 
     func clipEnd() -> Double {
-        return clockValueToSeconds(audioElement().attributes["clipEnd"])
-    }
-
-    // @TODO: need to test for what clock value is being used
-    // http://www.idpf.org/epub/301/spec/epub-mediaoverlays.html#app-clock-examples
-    func clockValueToSeconds(val: String!) -> Double {
-        let formatter = NSDateFormatter()
-        formatter.dateFormat = "HH:mm:ss.SSS"
-        let time = formatter.dateFromString(val!)
-
-        if( time == nil ){
-            return 0.0
-        }
-
-        formatter.dateFormat = "ss.SSS"
-        let seconds = (formatter.stringFromDate(time!) as NSString).doubleValue
-
-        formatter.dateFormat = "mm"
-        let minutes = (formatter.stringFromDate(time!) as NSString).doubleValue
-
-        formatter.dateFormat = "HH"
-        let hours = (formatter.stringFromDate(time!) as NSString).doubleValue
-
-        return seconds + (minutes*60) + (hours*60*60)
+        let val = audioElement().getAttribute("clipEnd", defaultVal: "")
+        return val.clockTimeToSeconds()
     }
 }

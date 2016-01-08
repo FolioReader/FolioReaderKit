@@ -30,35 +30,82 @@ struct FRSmilFile {
     // MARK: - data methods
     
     /**
-    Returns an smil <par> tag which contains info about parallel audio and text to be played
+    Returns a smil <par> tag which contains info about parallel audio and text to be played
     */
     func parallelAudioForFragment(fragment: String!) -> FRSmilElement! {
-        for smil in data {
+        return findParElement(forTextSrc: fragment, inData: data)
+    }
+
+    private func findParElement(forTextSrc src:String!, inData _data:[FRSmilElement]) -> FRSmilElement! {
+        for el in _data {
+
             // if its a <par> (parallel) element and has a <text> node with the matching fragment
-            if( smil.name == "par" && (fragment == nil || smil.textElement().attributes["src"] == fragment ) ){
-                return smil
+            if( el.name == "par" && (src == nil || el.textElement().attributes["src"]?.containsString(src) != false ) ){
+                return el
+
+            // if its a <seq> (sequence) element, it should have children (<par>)
+            }else if el.name == "seq" && el.children.count > 0 {
+                let parEl = findParElement(forTextSrc: src, inData: el.children)
+                if parEl != nil { return parEl }
+            }
+        }
+        return nil
+    }
+    
+    /**
+     Returns a smil <par> element after the given fragment
+    */
+    func nextParallelAudioForFragment(fragment: String) -> FRSmilElement! {
+        return findNextParElement(forTextSrc: fragment, inData: data)
+    }
+
+    private func findNextParElement(forTextSrc src:String!, inData _data:[FRSmilElement]) -> FRSmilElement! {
+        var foundPrev = false
+        for el in _data {
+
+            if foundPrev { return el }
+            
+            // if its a <par> (parallel) element and has a <text> node with the matching fragment
+            if( el.name == "par" && (src == nil || el.textElement().attributes["src"]?.containsString(src) != false) ){
+                foundPrev = true
+
+                // if its a <seq> (sequence) element, it should have children (<par>)
+            }else if el.name == "seq" && el.children.count > 0 {
+                let parEl = findNextParElement(forTextSrc: src, inData: el.children)
+                if parEl != nil { return parEl }
+            }
+        }
+        return nil
+    }
+
+
+    func childWithName(name:String) -> FRSmilElement! {
+        for el in data {
+            if( el.name == name ){
+                return el
             }
         }
         return nil;
     }
-    
-    func nextParallelAudioForFragment(fragment: String) -> FRSmilElement! {
-        var found = false
-        for smil in data {
-            if( found ){
-                return smil
-            }
-            
-            // if its a <par> (parallel) element and has a <text> node with the matching fragment
-            if( smil.name == "par" && smil.textElement().attributes["src"] == fragment ){
-                found = true
+
+    func childrenWithNames(name:[String]) -> [FRSmilElement]! {
+        var matched = [FRSmilElement]()
+        for el in data {
+            if( name.contains(el.name) ){
+                matched.append(el)
             }
         }
-        return nil;
+        return matched;
+    }
+
+    func childrenWithName(name:String) -> [FRSmilElement]! {
+        return childrenWithNames([name])
     }
 }
 
-
+/**
+ Holds array of `FRSmilFile`
+*/
 class FRSmils: NSObject {
     var basePath: String!
     var smils = [String: FRSmilFile]()
