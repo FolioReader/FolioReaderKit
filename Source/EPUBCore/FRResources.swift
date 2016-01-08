@@ -26,7 +26,7 @@ class FRResources: NSObject {
     */
     func findFirstResource(byMediaType mediaType: MediaType) -> FRResource? {
         for resource in resources.values {
-            if resource.mediaType == mediaType {
+            if resource.mediaType != nil && resource.mediaType == mediaType {
                 return resource
             }
         }
