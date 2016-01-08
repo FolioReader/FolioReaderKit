@@ -301,11 +301,11 @@ extension String {
         if( val.isEmpty ){ return 0 }
 
         let formats = [
-            "HH:mm:ss.SSS"  : "^\\d{2}:\\d{2}:\\d{2}\\.\\d{1,3}$",
-            "HH:mm:ss"      : "^\\d{2}:\\d{2}:\\d{2}$",
-            "mm:ss.SSS"     : "^\\d{2}:\\d{2}\\.\\d{1,3}$",
-            "mm:ss"         : "^\\d{2}:\\d{2}$",
-            "ss.SSS"         : "^\\d{2}\\.\\d{1,3}$",
+            "HH:mm:ss.SSS"  : "^\\d{1,2}:\\d{2}:\\d{2}\\.\\d{1,3}$",
+            "HH:mm:ss"      : "^\\d{1,2}:\\d{2}:\\d{2}$",
+            "mm:ss.SSS"     : "^\\d{1,2}:\\d{2}\\.\\d{1,3}$",
+            "mm:ss"         : "^\\d{1,2}:\\d{2}$",
+            "ss.SSS"         : "^\\d{1,2}\\.\\d{1,3}$",
         ]
 
         // search for normal duration formats such as `00:05:01.2`
