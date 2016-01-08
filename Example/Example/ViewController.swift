@@ -32,9 +32,7 @@ class ViewController: UIViewController {
         // http://www.readbeyond.it/ebooks.html
         let epubSampleFiles = [
             "The Silver Chair", // standard eBook
-            "A Christmas Carol", // audio-eBook
             "The Adventures Of Sherlock Holmes - Adventure I", // audio-eBook
-            "Tales from Shakespeare", // audio-eBook
         ]
 
         let epubName = epubSampleFiles[sampleNum-1];

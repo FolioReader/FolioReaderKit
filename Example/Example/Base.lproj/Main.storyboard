@@ -26,17 +26,8 @@
                                     <action selector="didOpen:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Ibf-j6-YlH"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" tag="2" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U7w-Zr-unv">
-                                <rect key="frame" x="213" y="146" width="177" height="30"/>
-                                <state key="normal" title="A Christmas Carol (Audio)">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="didOpen:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="T9p-aa-52S"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" tag="3" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vdn-HF-kCC">
-                                <rect key="frame" x="150" y="219" width="302" height="30"/>
+                            <button opaque="NO" tag="2" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vdn-HF-kCC">
+                                <rect key="frame" x="150" y="143" width="302" height="30"/>
                                 <state key="normal" title="The Adventures Of Sherlock Holmes (Audio)">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -44,22 +35,11 @@
                                     <action selector="didOpen:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="M8S-eM-283"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" tag="4" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l4k-IQ-5zl">
-                                <rect key="frame" x="192" y="285" width="218" height="30"/>
-                                <state key="normal" title="Tales from Shakespeare (Audio)">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="didOpen:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="tbF-yQ-Lkd"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="4VN-zC-gTV" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="8gi-wn-vte"/>
                             <constraint firstItem="vdn-HF-kCC" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="XaE-aP-bux"/>
-                            <constraint firstItem="l4k-IQ-5zl" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="hn3-s5-SuE"/>
-                            <constraint firstItem="U7w-Zr-unv" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="qHs-TE-FW9"/>
                         </constraints>
                     </view>
                 </viewController>
