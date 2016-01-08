@@ -18,6 +18,7 @@ public class FolioReaderConfig: NSObject {
     public var nightModeBackground: UIColor!
     public var nightModeMenuBackground: UIColor!
     public var nightModeSeparatorColor: UIColor!
+    public var mediaOverlayColor: UIColor!
     
     // Custom actions
     public var shouldHideNavigationOnTap: Bool!
@@ -54,6 +55,9 @@ public class FolioReaderConfig: NSObject {
         self.nightModeMenuBackground = UIColor(rgba: "#1E1E1E")
         self.nightModeSeparatorColor = UIColor(white: 0.5, alpha: 0.2)
         
+        // if not set by config, this will be set in FolioReaderCenter
+        //self.mediaOverlayColor
+
         self.shouldHideNavigationOnTap = true
         self.allowSharing = true
         
