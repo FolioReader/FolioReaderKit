@@ -11,8 +11,18 @@
 		1A42C28F1C0E3882000F2137 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A42C28E1C0E3882000F2137 /* ViewController.swift */; };
 		1A42C2921C0E3883000F2137 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A42C2901C0E3883000F2137 /* Main.storyboard */; };
 		1A42C2941C0E3883000F2137 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A42C2931C0E3883000F2137 /* Assets.xcassets */; };
-		1A42C29F1C0E39B3000F2137 /* book.epub in Resources */ = {isa = PBXBuildFile; fileRef = 1A42C29E1C0E39B3000F2137 /* book.epub */; };
 		1A42C2A21C0E3A8D000F2137 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A42C2A01C0E3A8D000F2137 /* LaunchScreen.storyboard */; };
+                6E01549B1C403D2900F9F14C /* Coraline.epub in Resources */ = {isa = PBXBuildFile; fileRef = 6E5C9B061C4037DA008F6FD9 /* Coraline.epub */; };
+                6E3C4A391C3C5181009CBC8C /* 0005-v3.epub in Resources */ = {isa = PBXBuildFile; fileRef = 6E3C4A341C3C5181009CBC8C /* 0005-v3.epub */; };
+                6E3C4A3A1C3C5181009CBC8C /* 0006-v3.epub in Resources */ = {isa = PBXBuildFile; fileRef = 6E3C4A351C3C5181009CBC8C /* 0006-v3.epub */; };
+                6E3C4A3B1C3C5181009CBC8C /* 0007-v3.epub in Resources */ = {isa = PBXBuildFile; fileRef = 6E3C4A361C3C5181009CBC8C /* 0007-v3.epub */; };
+                6E3C4A3C1C3C5181009CBC8C /* 0008-v3.epub in Resources */ = {isa = PBXBuildFile; fileRef = 6E3C4A371C3C5181009CBC8C /* 0008-v3.epub */; };
+                6E3C4A3D1C3C5181009CBC8C /* 0024-v3.epub in Resources */ = {isa = PBXBuildFile; fileRef = 6E3C4A381C3C5181009CBC8C /* 0024-v3.epub */; };
+                6E3C4A3F1C3C6708009CBC8C /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E3C4A3E1C3C6708009CBC8C /* MediaPlayer.framework */; };
+                6E5C9B041C4037B7008F6FD9 /* A Christmas Carol.epub in Resources */ = {isa = PBXBuildFile; fileRef = 6E5C9B021C4037B7008F6FD9 /* A Christmas Carol.epub */; };
+                6E5C9B051C4037B7008F6FD9 /* The Silver Chair.epub in Resources */ = {isa = PBXBuildFile; fileRef = 6E5C9B031C4037B7008F6FD9 /* The Silver Chair.epub */; };
+                6E5C9B091C403968008F6FD9 /* The Adventures Of Sherlock Holmes - Adventure I.epub in Resources */ = {isa = PBXBuildFile; fileRef = 6E5C9B081C403942008F6FD9 /* The Adventures Of Sherlock Holmes - Adventure I.epub */; };
+                6E5C9B0A1C40396A008F6FD9 /* Tales from Shakespeare.epub in Resources */ = {isa = PBXBuildFile; fileRef = 6E5C9B071C403942008F6FD9 /* Tales from Shakespeare.epub */; };
 		F2DF7E310FE62B1F477F22A1 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37A980705BFFE71CCA6F9C31 /* Pods.framework */; };
 /* End PBXBuildFile section */
 
@@ -24,9 +34,19 @@
 		1A42C2911C0E3883000F2137 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1A42C2931C0E3883000F2137 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1A42C2981C0E3883000F2137 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1A42C29E1C0E39B3000F2137 /* book.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = book.epub; sourceTree = "<group>"; };
 		1A42C2A11C0E3A8D000F2137 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		37A980705BFFE71CCA6F9C31 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+                6E3C4A341C3C5181009CBC8C /* 0005-v3.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "0005-v3.epub"; sourceTree = "<group>"; };
+                6E3C4A351C3C5181009CBC8C /* 0006-v3.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "0006-v3.epub"; sourceTree = "<group>"; };
+                6E3C4A361C3C5181009CBC8C /* 0007-v3.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "0007-v3.epub"; sourceTree = "<group>"; };
+                6E3C4A371C3C5181009CBC8C /* 0008-v3.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "0008-v3.epub"; sourceTree = "<group>"; };
+                6E3C4A381C3C5181009CBC8C /* 0024-v3.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "0024-v3.epub"; sourceTree = "<group>"; };
+                6E3C4A3E1C3C6708009CBC8C /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+                6E5C9B021C4037B7008F6FD9 /* A Christmas Carol.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "A Christmas Carol.epub"; sourceTree = "<group>"; };
+                6E5C9B031C4037B7008F6FD9 /* The Silver Chair.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "The Silver Chair.epub"; sourceTree = "<group>"; };
+                6E5C9B061C4037DA008F6FD9 /* Coraline.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = Coraline.epub; sourceTree = "<group>"; };
+                6E5C9B071C403942008F6FD9 /* Tales from Shakespeare.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Tales from Shakespeare.epub"; sourceTree = "<group>"; };
+                6E5C9B081C403942008F6FD9 /* The Adventures Of Sherlock Holmes - Adventure I.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "The Adventures Of Sherlock Holmes - Adventure I.epub"; sourceTree = "<group>"; };
 		8BCB174DF233A59B81E828D3 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -35,6 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+                                6E3C4A3F1C3C6708009CBC8C /* MediaPlayer.framework in Frameworks */,
 				F2DF7E310FE62B1F477F22A1 /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -69,14 +90,40 @@
 				1A42C2931C0E3883000F2137 /* Assets.xcassets */,
 				1A42C2981C0E3883000F2137 /* Info.plist */,
 				1A42C2A01C0E3A8D000F2137 /* LaunchScreen.storyboard */,
-				1A42C29E1C0E39B3000F2137 /* book.epub */,
+                                6E5C9B011C4037B7008F6FD9 /* Sample eBooks */,
+                                6E3C4A331C3C5181009CBC8C /* bsa-epubs */,
 			);
 			path = Example;
 			sourceTree = "<group>";
 		};
+                6E3C4A331C3C5181009CBC8C /* bsa-epubs */ = {
+                        isa = PBXGroup;
+                        children = (
+                                6E5C9B061C4037DA008F6FD9 /* Coraline.epub */,
+                                6E3C4A341C3C5181009CBC8C /* 0005-v3.epub */,
+                                6E3C4A351C3C5181009CBC8C /* 0006-v3.epub */,
+                                6E3C4A361C3C5181009CBC8C /* 0007-v3.epub */,
+                                6E3C4A371C3C5181009CBC8C /* 0008-v3.epub */,
+                                6E3C4A381C3C5181009CBC8C /* 0024-v3.epub */,
+                        );
+                        path = "bsa-epubs";
+                        sourceTree = "<group>";
+                };
+                6E5C9B011C4037B7008F6FD9 /* Sample eBooks */ = {
+                        isa = PBXGroup;
+                        children = (
+                                6E5C9B071C403942008F6FD9 /* Tales from Shakespeare.epub */,
+                                6E5C9B081C403942008F6FD9 /* The Adventures Of Sherlock Holmes - Adventure I.epub */,
+                                6E5C9B021C4037B7008F6FD9 /* A Christmas Carol.epub */,
+                                6E5C9B031C4037B7008F6FD9 /* The Silver Chair.epub */,
+                        );
+                        path = "Sample eBooks";
+                        sourceTree = "<group>";
+                };
 		D394FAB8B11D7C692E7BE00D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+                                6E3C4A3E1C3C6708009CBC8C /* MediaPlayer.framework */,
 				37A980705BFFE71CCA6F9C31 /* Pods.framework */,
 			);
 			name = Frameworks;
@@ -152,9 +199,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+                                6E3C4A3A1C3C5181009CBC8C /* 0006-v3.epub in Resources */,
+                                6E3C4A3D1C3C5181009CBC8C /* 0024-v3.epub in Resources */,
 				1A42C2941C0E3883000F2137 /* Assets.xcassets in Resources */,
+                                6E3C4A3B1C3C5181009CBC8C /* 0007-v3.epub in Resources */,
 				1A42C2A21C0E3A8D000F2137 /* LaunchScreen.storyboard in Resources */,
-				1A42C29F1C0E39B3000F2137 /* book.epub in Resources */,
+                                6E5C9B0A1C40396A008F6FD9 /* Tales from Shakespeare.epub in Resources */,
+                                6E01549B1C403D2900F9F14C /* Coraline.epub in Resources */,
+                                6E5C9B091C403968008F6FD9 /* The Adventures Of Sherlock Holmes - Adventure I.epub in Resources */,
+                                6E5C9B051C4037B7008F6FD9 /* The Silver Chair.epub in Resources */,
+                                6E5C9B041C4037B7008F6FD9 /* A Christmas Carol.epub in Resources */,
+                                6E3C4A3C1C3C5181009CBC8C /* 0008-v3.epub in Resources */,
+                                6E3C4A391C3C5181009CBC8C /* 0005-v3.epub in Resources */,
 				1A42C2921C0E3883000F2137 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -319,6 +375,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+                                SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
