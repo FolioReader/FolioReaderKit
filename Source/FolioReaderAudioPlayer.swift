@@ -15,9 +15,11 @@ import AVFoundation
 
 class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
 
+    var playing = false
     var player: AVAudioPlayer!
     var currentHref: String!
     var currentFragment: String!
+    var currentSmilFile: FRSmilFile!
     var currentAudioFile: String!
     var currentBeginTime: Double!
     var currentEndTime: Double!
@@ -33,7 +35,7 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
 
 
     func isPlaying() -> Bool {
-        return player != nil && player.playing
+        return playing
     }
 
     func setRate(rate: Int) {
@@ -58,16 +60,21 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
     }
 
     func stop() {
-
+        playing = false
         if( player != nil && player.playing ){
             player.stop()
         }
     }
 
     func pause() {
+        playing = false
         if( player != nil && player.playing ){
             player.pause()
         }
+    }
+
+    func togglePlay() {
+        isPlaying() ? pause() : playAudio()
     }
 
     func playAudio(){
@@ -75,52 +82,64 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
         currentPage.playAudio()
     }
 
+    /**
+     Play Audio (href/fragmentID)
+
+     Begins to play audio for the given chapter (href) and text fragment.
+     If this chapter does not have audio, it will delay for a second, then attempt to play the next chapter
+    */
     func playAudio(href: String, fragmentID: String) {
 
         stop();
 
-        currentHref = href
-        currentFragment = currentHref+"#"+fragmentID
-
         let smilFile = book.smilFileForHref(href)
-        let smil =  smilFile.parallelAudioForFragment(currentFragment)
 
-        if( smil != nil ){
-            playFragment(smil)
-            startPlayerTimer()
+        // if no smil file for this href and the same href is being requested, we've hit the end. stop playing
+        if smilFile == nil && currentHref != nil && href == currentHref {
+            return
         }
 
-    }
+        playing = true
+        currentHref = href
+        currentFragment = "#"+fragmentID
+        currentSmilFile = smilFile
 
-    func startPlayerTimer() {
-        // we must add the timer in this mode in order for it to continue working even when the user is scrolling a webview
-        playingTimer = NSTimer(timeInterval: 0.01, target: self, selector: "playerTimerObserver", userInfo: nil, repeats: true)
-        NSRunLoop.currentRunLoop().addTimer(playingTimer, forMode: NSRunLoopCommonModes)
-    }
-
-    func stopPlayerTimer() {
-        if( playingTimer != nil ){
-            playingTimer.invalidate()
-            playingTimer = nil
+        // if no smil file, delay for a second, then move on to the next chapter
+        if smilFile == nil {
+            NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "_playNextChapter", userInfo: nil, repeats: false)
+            return
         }
-    }
 
-    func playerTimerObserver(){
-        if( currentEndTime != nil && currentEndTime > 0 && player.currentTime > currentEndTime ){
-            playFragment(nextAudioFragment())
+        let fragment =  smilFile.parallelAudioForFragment(currentFragment)
+
+        if( fragment != nil ){
+            if _playFragment(fragment) {
+                startPlayerTimer()
+            }
         }
     }
 
-    func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
-        playFragment(nextAudioFragment())
+    func _playNextChapter(){
+        // if user has stopped playing, dont play the next chapter
+        if isPlaying() == false { return }
+        FolioReader.sharedInstance.readerCenter.changePageToNext()
+        // wait for "currentPage" to update, then request to play audio
+        NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "playAudio", userInfo: nil, repeats: false)
     }
 
-    func playFragment(smil: FRSmilElement!){
+
+    /**
+     Play Fragment of audio
+
+     Once an audio fragment begins playing, the audio clip will continue playing until the player timer detects
+     the audio is out of the fragment timeframe.
+    */
+    private func _playFragment(smil: FRSmilElement!) -> Bool{
 
         if( smil == nil ){
             print("no more parallel audio to play")
             stop()
-            return
+            return false
         }
 
         let textFragment = smil.textElement().attributes["src"]
@@ -129,18 +148,13 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
         currentBeginTime = smil.clipBegin()
         currentEndTime = smil.clipEnd()
 
-//        print(currentBeginTime)
-//        print(currentEndTime)
-
         // new audio file to play, create the audio player
         if( player == nil || (audioFile != nil && audioFile != currentAudioFile) ){
 
-//            print("play file: "+audioFile!)
             currentAudioFile = audioFile
 
-            let fileURL = book.smils.basePath.stringByAppendingString("/"+audioFile!)
+            let fileURL = currentSmilFile.resource.basePath().stringByAppendingString("/"+audioFile!)
             let audioData = NSData(contentsOfFile: fileURL)
-
             if( audioData != nil ){
                 player = try! AVAudioPlayer(data: audioData!)
                 player.enableRate = true
@@ -149,32 +163,42 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
                 player.delegate = self
 
             }else{
-                print("could not read audio file")
+                print("could not read audio file:", audioFile)
+                return false
             }
         }
 
+        // if player is initialized properly, begin playing
         if( player != nil ){
 
+            // the audio may be playing already, so only set the player time if it is NOT already within the fragment timeframe
+            // this is done to mitigate milisecond skips in the audio when changing fragments
             if( player.currentTime < currentBeginTime || ( currentEndTime > 0 && player.currentTime > currentEndTime) ){
                 player.currentTime = currentBeginTime;
             }
 
             player.play();
 
-            //print("mark fragment: "+textFragment!)
-
+            // get the fragment ID so we can "mark" it in the webview
             let textParts = textFragment!.componentsSeparatedByString("#")
             let fragmentID = textParts[1];
-
             FolioReader.sharedInstance.readerCenter.audioMark(href: currentHref, fragmentID: fragmentID)
         }
 
+        return true
     }
 
+    /**
+     Next Audio Fragment
 
-    func nextAudioFragment() -> FRSmilElement! {
+     Gets the next audio fragment in the current smil file, or moves on to the next smil file
+    */
+    private func nextAudioFragment() -> FRSmilElement! {
 
         let smilFile = book.smilFileForHref(currentHref)
+
+        if smilFile == nil { return nil }
+
         let smil = currentFragment == nil ? smilFile.parallelAudioForFragment(nil) : smilFile.nextParallelAudioForFragment(currentFragment)
 
         if( smil != nil ){
@@ -184,6 +208,7 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
 
         currentHref = book.spine.nextChapter(currentHref)!.href
         currentFragment = nil
+        currentSmilFile = smilFile
 
         if( currentHref == nil ){
             return nil
@@ -192,5 +217,29 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
         return nextAudioFragment()
     }
 
+    // MARK: - audio timing events
+
+    private func startPlayerTimer() {
+        // we must add the timer in this mode in order for it to continue working even when the user is scrolling a webview
+        playingTimer = NSTimer(timeInterval: 0.01, target: self, selector: "playerTimerObserver", userInfo: nil, repeats: true)
+        NSRunLoop.currentRunLoop().addTimer(playingTimer, forMode: NSRunLoopCommonModes)
+    }
+
+    private func stopPlayerTimer() {
+        if( playingTimer != nil ){
+            playingTimer.invalidate()
+            playingTimer = nil
+        }
+    }
+
+    func playerTimerObserver(){
+        if( currentEndTime != nil && currentEndTime > 0 && player.currentTime > currentEndTime ){
+            _playFragment(nextAudioFragment())
+        }
+    }
+
+    func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
+        _playFragment(nextAudioFragment())
+    }
 
 }

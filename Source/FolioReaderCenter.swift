@@ -381,7 +381,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
-    func updateCurrentPage(page: FolioReaderPage? = nil) {
+    func updateCurrentPage() { updateCurrentPage(nil) }
+    func updateCurrentPage(page: FolioReaderPage!) {
         if let page = page {
             currentPage = page
             previousPageNumber = page.pageNumber-1
@@ -467,7 +468,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     func changePageWith(page page: Int) {
-        if page > 0 {
+        if page > 0 && page-1 < totalPages {
             let indexPath = NSIndexPath(forRow: page-1, inSection: 0)
             collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Top, animated: false)
         }
@@ -489,15 +490,26 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         // if user recently scrolled, do not change pages or scroll the webview
         if( recentlyScrolled ){ return }
 
-        changePageWith(href: href);
-        currentPage.audioMarkID(markID);
+        let item = findPageByHref(href)
+        let pageUpdateNeeded = item+1 != currentPage.pageNumber
+        let indexPath = NSIndexPath(forRow: item, inSection: 0)
+        collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Top, animated: false)
 
+        if pageUpdateNeeded { updateCurrentPage() }
+
+        currentPage.audioMarkID(markID);
     }
 
     func changePageWith(indexPath indexPath: NSIndexPath) {
         collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Top, animated: false)
     }
-    
+
+    func changePageToNext(){
+        changePageWith(page: currentPageNumber+1)
+        // @FIXME - this is kinda hacky
+        NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "updateCurrentPage", userInfo: nil, repeats: false)
+    }
+
     /**
     Find a page by FRTocReference.
     */
@@ -564,7 +576,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     func playAudio(fragmentID: String){
 
         let chapter = getCurrentChapter()
-        FolioReader.sharedInstance.readerAudioPlayer.playAudio(chapter!.href, fragmentID: fragmentID)
+        let href = chapter != nil ? chapter!.href : "";
+        FolioReader.sharedInstance.readerAudioPlayer.playAudio(href, fragmentID: fragmentID)
     }
 
     func audioMark(href href: String, fragmentID: String) {
