@@ -28,14 +28,8 @@
 		1A42C2981C0E3883000F2137 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1A42C2A11C0E3A8D000F2137 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		37A980705BFFE71CCA6F9C31 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6E3C4A341C3C5181009CBC8C /* 0005-v3.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "0005-v3.epub"; sourceTree = "<group>"; };
-		6E3C4A351C3C5181009CBC8C /* 0006-v3.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "0006-v3.epub"; sourceTree = "<group>"; };
-		6E3C4A361C3C5181009CBC8C /* 0007-v3.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "0007-v3.epub"; sourceTree = "<group>"; };
-		6E3C4A371C3C5181009CBC8C /* 0008-v3.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "0008-v3.epub"; sourceTree = "<group>"; };
-		6E3C4A381C3C5181009CBC8C /* 0024-v3.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "0024-v3.epub"; sourceTree = "<group>"; };
 		6E3C4A3E1C3C6708009CBC8C /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		6E5C9B031C4037B7008F6FD9 /* The Silver Chair.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "The Silver Chair.epub"; sourceTree = "<group>"; };
-		6E5C9B061C4037DA008F6FD9 /* Coraline.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = Coraline.epub; sourceTree = "<group>"; };
 		6E5C9B081C403942008F6FD9 /* The Adventures Of Sherlock Holmes - Adventure I.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "The Adventures Of Sherlock Holmes - Adventure I.epub"; sourceTree = "<group>"; };
 		8BCB174DF233A59B81E828D3 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -81,22 +75,8 @@
 				1A42C2981C0E3883000F2137 /* Info.plist */,
 				1A42C2A01C0E3A8D000F2137 /* LaunchScreen.storyboard */,
 				6E5C9B011C4037B7008F6FD9 /* Sample eBooks */,
-				6E3C4A331C3C5181009CBC8C /* bsa-epubs */,
 			);
 			path = Example;
-			sourceTree = "<group>";
-		};
-		6E3C4A331C3C5181009CBC8C /* bsa-epubs */ = {
-			isa = PBXGroup;
-			children = (
-				6E5C9B061C4037DA008F6FD9 /* Coraline.epub */,
-				6E3C4A341C3C5181009CBC8C /* 0005-v3.epub */,
-				6E3C4A351C3C5181009CBC8C /* 0006-v3.epub */,
-				6E3C4A361C3C5181009CBC8C /* 0007-v3.epub */,
-				6E3C4A371C3C5181009CBC8C /* 0008-v3.epub */,
-				6E3C4A381C3C5181009CBC8C /* 0024-v3.epub */,
-			);
-			path = "bsa-epubs";
 			sourceTree = "<group>";
 		};
 		6E5C9B011C4037B7008F6FD9 /* Sample eBooks */ = {
