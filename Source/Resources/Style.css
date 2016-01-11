@@ -265,3 +265,11 @@ p, span, div {
         hyphens: none !important;
     }
 }
+
+/* default media overlay style */
+span.epub-media-overlay-playing {
+    background: #ccc;
+    border-radius: 3px;
+    padding-right: 4px;
+    margin-right: -4px
+}

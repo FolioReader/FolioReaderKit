@@ -121,7 +121,14 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
         cell.indexLabel.text = tocReference.title.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
         cell.indexLabel.font = UIFont(name: "Avenir-Light", size: 17)
         cell.indexLabel.textColor = readerConfig.menuTextColor
-        
+
+        if( tocReference.resource.mediaOverlay != nil ){
+            let duration = book.durationFor("#"+tocReference.resource.mediaOverlay);
+            let durationFormatted = (duration != nil ? duration : "")?.clockTimeToMinutesString()
+
+            cell.indexLabel.text = cell.indexLabel.text! + (duration != nil ? " - "+durationFormatted! : "");
+        }
+
         // Mark current reading chapter
         if let currentPageNumber = currentPageNumber {
             if let resource = book.spine.spineReferences[currentPageNumber-1].resource {

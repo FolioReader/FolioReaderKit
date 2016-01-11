@@ -157,7 +157,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate {
     // MARK: - Status Bar
     
     override func prefersStatusBarHidden() -> Bool {
-        return true
+        return readerConfig.shouldHideNavigationOnTap == true
     }
     
     // MARK: - SMSegmentView delegate
@@ -166,12 +166,16 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate {
         let currentPage = FolioReader.sharedInstance.readerCenter.currentPage
         
         if segmentView.tag == 1 {
+
+            FolioReader.sharedInstance.nightMode = Bool(index)
+
             switch index {
             case 0:
                 currentPage.webView.js("nightMode(false)")
                 UIView.animateWithDuration(0.6, animations: {
                     self.menuView.backgroundColor = UIColor.whiteColor()
                     FolioReader.sharedInstance.readerCenter.collectionView.backgroundColor = UIColor.whiteColor()
+                    FolioReader.sharedInstance.readerCenter.configureNavBar()
                 })
                 FolioReader.sharedInstance.readerSidePanel.tableView.backgroundColor = readerConfig.menuBackgroundColor
                 FolioReader.sharedInstance.readerSidePanel.tableView.separatorColor = readerConfig.menuSeparatorColor
@@ -181,6 +185,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate {
                 UIView.animateWithDuration(0.6, animations: {
                     self.menuView.backgroundColor = readerConfig.nightModeMenuBackground
                     FolioReader.sharedInstance.readerCenter.collectionView.backgroundColor = readerConfig.nightModeBackground
+                    FolioReader.sharedInstance.readerCenter.configureNavBar()
                 })
                 FolioReader.sharedInstance.readerSidePanel.tableView.backgroundColor = readerConfig.nightModeMenuBackground
                 FolioReader.sharedInstance.readerSidePanel.tableView.separatorColor = readerConfig.nightModeSeparatorColor
@@ -189,7 +194,6 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate {
                 break
             }
             
-            FolioReader.sharedInstance.nightMode = Bool(index)
         }
         
         if segmentView.tag == 2 {

@@ -7,6 +7,7 @@
 //
 
 var thisHighlight;
+var audioMarkClass;
 var wordsPerMinute = 200;
 
 document.addEventListener("DOMContentLoaded", function(event) {
@@ -179,4 +180,134 @@ function getReadingTime() {
     var readingTimeMinutes = Math.round(totalReadingTimeSeconds / 60);
 
     return readingTimeMinutes;
+}
+
+
+function findElementWithID(node){
+    if( !node || node.tagName == "BODY")
+        return null
+    else if( node.id )
+        return node
+    else
+        return findElementWithID(node)
+}
+
+function findElementWithIDInView(){
+
+    if( audioMarkClass ){
+        // attempt to find an existing "audio mark"
+        var el = document.querySelector("."+audioMarkClass)
+
+        // if that existing audio mark exists and is in view, use it
+        if( el && el.offsetTop > document.body.scrollTop && el.offsetTop < (window.innerHeight + document.body.scrollTop))
+            return el
+    }
+
+    // @NOTE: is `span` too limiting?
+    var els = document.querySelectorAll("span[id]")
+
+    for( indx in els ){
+        if( els[indx].offsetTop > document.body.scrollTop )
+            return els[indx]
+    }
+
+    return null
+}
+
+
+/**
+ Play Audio - called by native UIMenuController when a user selects a bit of text and presses "play"
+ */
+function playAudio(){
+
+    var sel = getSelection();
+    var node = null;
+
+    // user selected text? start playing from the selected node
+    if( sel.toString() != "" ){
+        node = sel.anchorNode ? findElementWithID(sel.anchorNode.parentNode) : null;
+
+    // find the first ID'd element that is within view (it will
+    }else{
+        node = findElementWithIDInView()
+    }
+
+    playAudioFragmentID(node ? node.id : null)
+}
+
+
+/**
+ Play Audio Fragment ID - tells page controller to begin playing audio from the following ID
+ */
+function playAudioFragmentID(fragmentID){
+    var URLBase = "play-audio://";
+    window.location = URLBase + (fragmentID?encodeURIComponent(fragmentID):"")
+}
+
+
+/**
+ Go To Element - scrolls the webview to the requested element
+ */
+function goToEl(el){
+
+    var top = document.body.scrollTop;
+    var elTop = el.offsetTop - 20;
+
+    var bottom = window.innerHeight + document.body.scrollTop;
+    var elBottom = el.offsetHeight + el.offsetTop + 60
+
+    if( elBottom > bottom || elTop < top )
+        document.body.scrollTop = el.offsetTop - 20
+
+    return el;
+}
+
+/**
+ Remove All Classes - removes the given class from all elements in the DOM
+ */
+function removeAllClasses(className){
+    var els = document.body.getElementsByClassName(className)
+    if( els.length > 0 )
+    for( i = 0; i <= els.length; i++){
+        els[i].classList.remove(className);
+    }
+}
+
+/**
+ Audio Mark ID - marks an element with an ID with the given class and scrolls to it
+ */
+function audioMarkID(className, id){
+
+    if( audioMarkClass )
+        removeAllClasses(audioMarkClass);
+
+    audioMarkClass = className
+
+    var el = document.getElementById(id);
+
+    goToEl(el);
+
+    el.classList.add(className)
+}
+
+
+
+function setMediaOverlayStyle(style){
+
+    var stylesheet = document.styleSheets[document.styleSheets.length-1];
+    var index = null;
+
+    [].forEach.call(stylesheet.rules, function(rule, i){
+
+        if( rule.selectorText && rule.selectorText == "span.epub-media-overlay-playing"){
+            index = i
+            return
+        }
+
+    })
+
+    if( index )
+        stylesheet.removeRule(index)
+
+    stylesheet.insertRule("span.epub-media-overlay-playing { "+style+" }")
 }

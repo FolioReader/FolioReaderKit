@@ -17,14 +17,28 @@ class ViewController: UIViewController {
     }
 
     @IBAction func didOpen(sender: AnyObject) {
+        openEpub(sender.tag);
+    }
+
+    func openEpub(sampleNum:Int) {
         let config = FolioReaderConfig()
-//        config.shouldHideNavigationOnTap = false
+        config.shouldHideNavigationOnTap = false
+//        config.allowSharing = false
 //        config.toolBarTintColor = UIColor.redColor()
 //        config.toolBarBackgroundColor = UIColor.purpleColor()
 //        config.menuTextColor = UIColor.brownColor()
 //        config.menuBackgroundColor = UIColor.lightGrayColor()
         
-        let bookPath = NSBundle.mainBundle().pathForResource("book", ofType: "epub")
+        // http://www.readbeyond.it/ebooks.html
+        let epubSampleFiles = [
+            "The Silver Chair", // standard eBook
+            "The Adventures Of Sherlock Holmes - Adventure I", // audio-eBook
+        ]
+
+        let epubName = epubSampleFiles[sampleNum-1];
+        let bookPath = NSBundle.mainBundle().pathForResource(epubName, ofType: "epub")
+
         FolioReader.presentReader(parentViewController: self, withEpubPath: bookPath!, andConfig: config)
     }
+
 }

@@ -58,6 +58,7 @@ struct Meta {
     var id: String?
     var property: String?
     var value: String?
+    var refines: String?
     
     init(name: String, content: String) {
         self.name = name
@@ -68,6 +69,12 @@ struct Meta {
         self.id = id
         self.property = property
         self.value = value
+    }
+
+    init(property: String, value: String, refines: String!) {
+        self.property = property
+        self.value = value
+        self.refines = refines
     }
 }
 
@@ -102,4 +109,27 @@ class FRMetadata: NSObject {
         }
         return nil
     }
+
+    func findMetaByProperty(property: String, refinedBy: String?) -> String? {
+        if property.isEmpty {
+            return nil
+        }
+
+        for meta in metaAttributes {
+            if meta.property != nil {
+                if( meta.property == property && refinedBy == nil && meta.refines == nil){
+                    return meta.value
+                }
+                if( meta.property == property && meta.refines == refinedBy){
+                    return meta.value
+                }
+            }
+        }
+        return nil
+    }
+
+    func findMetaByProperty(property: String) -> String? {
+        return findMetaByProperty(property, refinedBy: nil);
+    }
+
 }

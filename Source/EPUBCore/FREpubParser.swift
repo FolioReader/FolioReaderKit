@@ -77,15 +77,26 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         
         do {
             let xmlDoc = try AEXMLDocument(xmlData: opfData!)
+            
+            // parse and save each "manifest item"
             for item in xmlDoc.root["manifest"]["item"].all! {
                 let resource = FRResource()
                 resource.id = item.attributes["id"]
                 resource.href = item.attributes["href"]
                 resource.fullHref = (resourcesBasePath as NSString).stringByAppendingPathComponent(item.attributes["href"]!).stringByRemovingPercentEncoding
                 resource.mediaType = FRMediaType.mediaTypesByName[item.attributes["media-type"]!]
+                resource.mediaOverlay = item.attributes["media-overlay"]
+                
+                // if a .smil file is listed in resources, go parse that file now and save it on book model
+                if( resource.mediaType != nil && resource.mediaType == FRMediaType.SMIL ){
+                    readSmilFile(resource);
+                }
+                
                 book.resources.add(resource)
             }
             
+            book.smils.basePath = resourcesBasePath
+
             // Get the first resource with the NCX mediatype
             book.ncxResource = book.resources.findFirstResource(byMediaType: FRMediaType.NCX)
             
@@ -112,6 +123,50 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         }
     }
     
+    /**
+    Reads and parses a .smil file
+    */
+    private func readSmilFile(resource: FRResource){
+        let smilData = try? NSData(contentsOfFile: resource.fullHref, options: .DataReadingMappedAlways)
+        
+        var smilFile = FRSmilFile(resource: resource);
+        
+        do {
+            let xmlDoc = try AEXMLDocument(xmlData: smilData!)
+            
+            let children = xmlDoc.root["body"].children
+
+            if( children.count > 0 ){
+                smilFile.data.appendContentsOf( readSmilFileElements(children) )
+            }
+            
+        } catch {
+            print("Cannot read .smil file: "+resource.href)
+        }
+        
+        book.smils.add(smilFile);
+    }
+    
+    private func readSmilFileElements(children:[AEXMLElement]) -> [FRSmilElement] {
+
+        var data = [FRSmilElement]()
+
+        // convert each smil element to a FRSmil object
+        for item in children {
+
+            let smil = FRSmilElement(name: item.name, attributes: item.attributes)
+
+            // if this element has children, convert them to objects too
+            if( item.children.count > 0 ){
+                smil.children.appendContentsOf( readSmilFileElements(item.children) )
+            }
+
+            data.append(smil)
+        }
+
+        return data
+    }
+
     /**
     Read and parse the Table of Contents.
     */
@@ -209,8 +264,14 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
                 if tag.attributes["property"] != nil && tag.attributes["id"] != nil {
                     metadata.metaAttributes.append(Meta(id: tag.attributes["id"]!, property: tag.attributes["property"]!, value: tag.value ?? ""))
                 }
+                
+                if tag.attributes["property"] != nil {
+                    metadata.metaAttributes.append(Meta(property: tag.attributes["property"]!, value: tag.value != nil ? tag.value! : "", refines: tag.attributes["refines"] != nil ? tag.attributes["refines"] : nil))
+                }
+
             }
         }
+        
         return metadata
     }
     
