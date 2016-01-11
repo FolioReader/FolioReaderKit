@@ -64,5 +64,4 @@ You have a problem that cannot be solved by having a look at the example project
 [![Join the chat at https://gitter.im/FolioReader/FolioReaderKit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/FolioReader/FolioReaderKit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ### License
-
-FolioReaderKit is available under the GNU General Public license. See the LICENSE file for more info.
+FolioReaderKit is released under the MIT license. See LICENSE for details.
