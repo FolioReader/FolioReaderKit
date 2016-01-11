@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
                    DESC
   s.homepage         = "https://github.com/FolioReader/FolioReaderKit"
   # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
-  s.license          = 'GNU'
+  s.license          = 'BSD'
   s.author           = { "Heberti Almeida" => "hebertialmeida@gmail.com" }
   s.source           = { :git => "https://github.com/FolioReader/FolioReaderKit.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/hebertialmeida'
