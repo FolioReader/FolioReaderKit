@@ -56,9 +56,10 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
         super.init()
         
         let color = readerConfig.toolBarBackgroundColor
-        
-        slider = UISlider(frame: frame)
+        slider = UISlider()
+        slider.layer.anchorPoint = CGPoint(x: 0, y: 0)
         slider.transform = CGAffineTransformMakeRotation(CGFloat(M_PI_2))
+        slider.frame = frame
         slider.minimumTrackTintColor = color
         slider.maximumTrackTintColor = UIColor.lightGrayColor()
         slider.alpha = 0
@@ -283,7 +284,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         pageIndicatorView = FolioReaderPageIndicator(frame: CGRect(x: 0, y: view.frame.height-pageIndicatorHeight, width: view.frame.width, height: pageIndicatorHeight))
         view.addSubview(pageIndicatorView)
         
-        scrollScrubber = ScrollScrubber(frame: CGRect(x: 80, y: (collectionView.frame.height/2)+10, width: collectionView.frame.height - 100, height: 40))
+        scrollScrubber = ScrollScrubber(frame: CGRect(x: pageWidth + 6, y: 74, width: 40, height: pageHeight - 100))
         scrollScrubber.delegate = self
         view.addSubview(scrollScrubber.slider)
     }
@@ -521,11 +522,18 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         pageIndicatorFrame.origin.x = 0
         pageIndicatorFrame.size.width = pageWidth
         
+        var scrollScrubberFrame = scrollScrubber.slider.frame;
+        scrollScrubberFrame.origin.x = pageWidth + 6
+        scrollScrubberFrame.size.height = pageHeight - 100
+        
         UIView.animateWithDuration(duration, animations: {
             
             // Adjust page indicator view
             self.pageIndicatorView.frame = pageIndicatorFrame
             self.pageIndicatorView.reloadView(updateShadow: true)
+            
+            // adjust scroll scrubber slider
+            self.scrollScrubber.slider.frame = scrollScrubberFrame
             
             // Adjust collectionView
             self.collectionView.contentSize = CGSizeMake(pageWidth, pageHeight * CGFloat(self.totalPages))
@@ -539,6 +547,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         
         // Update pages
         pagesForCurrentPage(currentPage)
+        
+        scrollScrubber.setSliderVal()
     }
     
     override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
@@ -599,6 +609,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         // Set pages
         if let page = currentPage {
             page.webView.becomeFirstResponder()
+            
+            scrollScrubber.setSliderVal()
             
             if let readingTime = page.webView.js("getReadingTime()") {
                 pageIndicatorView.totalMinutes = Int(readingTime)!
