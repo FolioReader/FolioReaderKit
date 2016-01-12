@@ -775,7 +775,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        recentlyScrolledTimer = NSTimer.scheduledTimerWithTimeInterval(recentlyScrolledDelay, target: self, selector: "clearRecentlyScrolled", userInfo: nil, repeats: false)
+        recentlyScrolledTimer = NSTimer(timeInterval:recentlyScrolledDelay, target: self, selector: "clearRecentlyScrolled", userInfo: nil, repeats: false)
+        NSRunLoop.currentRunLoop().addTimer(recentlyScrolledTimer, forMode: NSRunLoopCommonModes)
     }
 
     func clearRecentlyScrolled(){
