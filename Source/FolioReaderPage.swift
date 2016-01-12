@@ -33,6 +33,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
             webView = UIWebView(frame: webViewFrame())
             webView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
             webView.dataDetectorTypes = [.None, .Link]
+            webView.scrollView.showsVerticalScrollIndicator = false
             webView.backgroundColor = UIColor.clearColor()
             self.contentView.addSubview(webView)
         }
