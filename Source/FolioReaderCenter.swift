@@ -438,7 +438,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
            readerConfig.mediaOverlayColor = readerConfig.toolBarBackgroundColor.highlightColor()
         }
 
-        let mediaOverlayStyle = "background: \(readerConfig.mediaOverlayColor.hexString(false)); border-radius: 3px; padding-right: 4px; margin-right: -4px;"
+        let mediaOverlayStyle = "background: \(readerConfig.mediaOverlayColor.hexString(false)) !important; border-radius: 3px; padding-right: 4px; margin-right: -4px;"
 
         // Inject CSS
         let jsFilePath = NSBundle.frameworkBundle().pathForResource("Bridge", ofType: "js")
