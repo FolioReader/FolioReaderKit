@@ -11,6 +11,7 @@ import UIKit
 class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate {
 
     var menuView: UIView!
+    var playPauseBtn: UIButton!
     var viewDidAppear = false
 
     override func viewDidLoad() {
@@ -37,33 +38,66 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate {
         menuView.layer.rasterizationScale = UIScreen.mainScreen().scale
         menuView.layer.shouldRasterize = true
         view.addSubview(menuView)
+        
+        
+        
 
         let normalColor = UIColor(white: 0.5, alpha: 0.7)
         let selectedColor = readerConfig.toolBarBackgroundColor
-        let play = UIImage(readerImageNamed: "play-btn")
-        let pause = UIImage(readerImageNamed: "pause-btn")
-
+        let size = 55
+        let padX = 32
+        // @NOTE: could this be improved/simplified with autolayout?
+        let gutterX = (Int(view.frame.width) - (size * 3 ) - (padX * 4) ) / 2
+        
+        //let btnX = (Int(view.frame.width) - (size * 3)) / 4
+        
+        // get icon images
+        let play = UIImage(readerImageNamed: "play-icon")
+        let pause = UIImage(readerImageNamed: "pause-icon")
+        let prev = UIImage(readerImageNamed: "prev-icon")
+        let next = UIImage(readerImageNamed: "next-icon")
         let playSelected = play!.imageTintColor(selectedColor).imageWithRenderingMode(.AlwaysOriginal)
         let pauseSelected = pause!.imageTintColor(selectedColor).imageWithRenderingMode(.AlwaysOriginal)
-
+        let prevSelected = prev!.imageTintColor(selectedColor).imageWithRenderingMode(.AlwaysOriginal)
+        let nextSelected = next!.imageTintColor(selectedColor).imageWithRenderingMode(.AlwaysOriginal)
+        
+        // prev button
+        let prevBtn = UIButton(frame: CGRect(x: gutterX + padX, y: 0, width: size, height: size))
+        prevBtn.setImage(prev, forState: .Normal)
+        prevBtn.setImage(prevSelected, forState: .Selected)
+        prevBtn.addTarget(self, action: "prevChapter:", forControlEvents: .TouchUpInside)
+        menuView.addSubview(prevBtn)
+        
+        
         // play / pause button
-        let playPause = UIButton(frame: CGRect(x: 0, y: 2, width: view.frame.width, height: 55))
-        playPause.setTitle("  "+readerConfig.localizedPlayMenu, forState: .Normal)
-        playPause.setTitle("  "+readerConfig.localizedPauseMenu, forState: .Selected)
-        playPause.setTitleColor(selectedColor, forState: .Normal)
-        playPause.setTitleColor(selectedColor, forState: .Selected)
-        playPause.setImage(playSelected, forState: .Normal)
-        playPause.setImage(pauseSelected, forState: .Selected)
-        playPause.titleLabel!.font = UIFont(name: "Avenir", size: 22)!
-        playPause.addTarget(self, action: "togglePlay:", forControlEvents: .TouchUpInside)
-        menuView.addSubview(playPause)
-
+        let playPauseBtn = UIButton(frame: CGRect(x: Int(prevBtn.frame.origin.x) + padX + size, y: 0, width: size, height: size))
+        playPauseBtn.setTitleColor(selectedColor, forState: .Normal)
+        playPauseBtn.setTitleColor(selectedColor, forState: .Selected)
+        playPauseBtn.setImage(playSelected, forState: .Normal)
+        playPauseBtn.setImage(pauseSelected, forState: .Selected)
+        playPauseBtn.titleLabel!.font = UIFont(name: "Avenir", size: 22)!
+        playPauseBtn.addTarget(self, action: "togglePlay:", forControlEvents: .TouchUpInside)
+        menuView.addSubview(playPauseBtn)
+        
         if FolioReader.sharedInstance.readerAudioPlayer.isPlaying() {
-            playPause.selected = true
+            playPauseBtn.selected = true
         }
+        
+        // next button
+        let nextBtn = UIButton(frame: CGRect(x: Int(playPauseBtn.frame.origin.x) + padX + size, y: 0, width: size, height: size))
+        nextBtn.setImage(next, forState: .Normal)
+        nextBtn.setImage(nextSelected, forState: .Selected)
+        nextBtn.addTarget(self, action: "nextChapter:", forControlEvents: .TouchUpInside)
+        menuView.addSubview(nextBtn)
+        
+        // temp
+//        playPause.backgroundColor =  UIColor.grayColor()
+//        prevBtn.backgroundColor =  UIColor.grayColor()
+//        nextBtn.backgroundColor = UIColor.grayColor()
+        
 
         // Separator
-        let line = UIView(frame: CGRectMake(0, playPause.frame.height+playPause.frame.origin.y, view.frame.width, 1))
+        let line = UIView(frame: CGRectMake(0, playPauseBtn.frame.height+playPauseBtn.frame.origin.y, view.frame.width, 1))
         line.backgroundColor = readerConfig.nightModeSeparatorColor
         menuView.addSubview(line)
 
@@ -80,15 +114,16 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate {
             ])
         playbackRate.delegate = self
         playbackRate.tag = 2
-        playbackRate.addSegmentWithTitle("0.5x", onSelectionImage: nil, offSelectionImage: nil)
-        playbackRate.addSegmentWithTitle("1.0x", onSelectionImage: nil, offSelectionImage: nil)
-        playbackRate.addSegmentWithTitle("1.25x", onSelectionImage: nil, offSelectionImage: nil)
-        playbackRate.addSegmentWithTitle("1.5x", onSelectionImage: nil, offSelectionImage: nil)
+        playbackRate.addSegmentWithTitle("½x", onSelectionImage: nil, offSelectionImage: nil)
+        playbackRate.addSegmentWithTitle("1x", onSelectionImage: nil, offSelectionImage: nil)
+        playbackRate.addSegmentWithTitle("1½x", onSelectionImage: nil, offSelectionImage: nil)
+        playbackRate.addSegmentWithTitle("2x", onSelectionImage: nil, offSelectionImage: nil)
         playbackRate.segmentTitleFont = UIFont(name: "Avenir-Light", size: 17)!
         playbackRate.selectSegmentAtIndex(Int(FolioReader.sharedInstance.currentAudioRate))
         menuView.addSubview(playbackRate)
 
     }
+    
 
     override func viewDidAppear(animated: Bool) {
         viewDidAppear = true
@@ -125,6 +160,14 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate {
         }
     }
 
+    func prevChapter(sender: UIButton!) {
+        FolioReader.sharedInstance.readerAudioPlayer.playPrevChapter()
+    }
+    
+    func nextChapter(sender: UIButton!) {
+        FolioReader.sharedInstance.readerAudioPlayer.playNextChapter()
+    }
+    
     func togglePlay(sender: UIButton!) {
         sender.selected = sender.selected != true
         FolioReader.sharedInstance.readerAudioPlayer.togglePlay()

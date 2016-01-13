@@ -50,10 +50,10 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
                 player.rate = 1.0
                 break
             case 2:
-                player.rate = 1.25
+                player.rate = 1.5
                 break
             case 3:
-                player.rate = 1.5
+                player.rate = 2
                 break
             default:
                 break
@@ -108,7 +108,7 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
 
         // if no smil file, delay for a second, then move on to the next chapter
         if smilFile == nil {
-            NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "_playNextChapter", userInfo: nil, repeats: false)
+            NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "_autoPlayNextChapter", userInfo: nil, repeats: false)
             return
         }
 
@@ -120,14 +120,32 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
             }
         }
     }
-
-    func _playNextChapter(){
+    
+    func _autoPlayNextChapter() {
         // if user has stopped playing, dont play the next chapter
         if isPlaying() == false { return }
-        
+        playNextChapter()
+    }
+
+    func playPrevChapter(){
+        stopPlayerTimer()
+        // Wait for "currentPage" to update, then request to play audio
+        FolioReader.sharedInstance.readerCenter.changePageToPrevious() { () -> Void in
+            if self.isPlaying() {
+                self.playAudio()
+            } else {
+                self.pause()
+            }
+        }
+    }
+    
+    func playNextChapter(){
+        stopPlayerTimer()
         // Wait for "currentPage" to update, then request to play audio
         FolioReader.sharedInstance.readerCenter.changePageToNext { () -> Void in
-            self.playAudio()
+            if self.isPlaying() {
+                self.playAudio()
+            }
         }
     }
 
