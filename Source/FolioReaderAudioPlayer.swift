@@ -50,10 +50,10 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
                 player.rate = 1.0
                 break
             case 2:
-                player.rate = 1.25
+                player.rate = 1.5
                 break
             case 3:
-                player.rate = 1.5
+                player.rate = 2
                 break
             default:
                 break
