@@ -583,8 +583,13 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
-    func updateCurrentPage() { updateCurrentPage(nil) }
-    func updateCurrentPage(page: FolioReaderPage!) {
+    func updateCurrentPage(completion: (() -> Void)? = nil) {
+        updateCurrentPage(nil) { () -> Void in
+            if (completion != nil) { completion!() }
+        }
+    }
+    
+    func updateCurrentPage(page: FolioReaderPage!, completion: (() -> Void)? = nil) {
         if let page = page {
             currentPage = page
             previousPageNumber = page.pageNumber-1
@@ -617,6 +622,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
                 pagesForCurrentPage(page)
             }
         }
+        
+        if (completion != nil) { completion!() }
     }
     
     func pagesForCurrentPage(page: FolioReaderPage?) {
@@ -668,14 +675,11 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     func changePageWith(page page: Int, animated: Bool = false, completion: (() -> Void)? = nil) {
         if page > 0 && page-1 < totalPages {
             let indexPath = NSIndexPath(forRow: page-1, inSection: 0)
-            changePageWith(indexPath: indexPath, animated: animated)
-            
-            // Delay to wait animation complete
-            let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(0.2 * Double(NSEC_PER_SEC)))
-            dispatch_after(delayTime, dispatch_get_main_queue()) {
-                self.updateCurrentPage()
-                if (completion != nil) { completion!() }
-            }
+            changePageWith(indexPath: indexPath, animated: animated, completion: { () -> Void in
+                self.updateCurrentPage({ () -> Void in
+                    if (completion != nil) { completion!() }
+                })
+            })
         }
     }
     
@@ -683,17 +687,17 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         if currentPageNumber == page {
             if fragment != "" && currentPage != nil {
                 currentPage.handleAnchor(fragment, avoidBeginningAnchors: true, animating: animated)
+                if (completion != nil) { completion!() }
             }
         } else {
             tempFragment = fragment
             changePageWith(page: page)
-        }
-        
-        // Delay to wait animation complete
-        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(0.2 * Double(NSEC_PER_SEC)))
-        dispatch_after(delayTime, dispatch_get_main_queue()) {
-            self.updateCurrentPage()
-            if (completion != nil) { completion!() }
+            
+            changePageWith(page: page, animated: false, completion: { () -> Void in
+                self.updateCurrentPage({ () -> Void in
+                    if (completion != nil) { completion!() }
+                })
+            })
         }
     }
     
@@ -709,18 +713,23 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         let item = findPageByHref(href)
         let pageUpdateNeeded = item+1 != currentPage.pageNumber
         let indexPath = NSIndexPath(forRow: item, inSection: 0)
-        changePageWith(indexPath: indexPath, animated: true)
-
-        // Delay to wait animation complete
-        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(0.2 * Double(NSEC_PER_SEC)))
-        dispatch_after(delayTime, dispatch_get_main_queue()) {
-            if pageUpdateNeeded { self.updateCurrentPage() }
-            self.currentPage.audioMarkID(markID);
+        changePageWith(indexPath: indexPath, animated: true) { () -> Void in
+            if pageUpdateNeeded {
+                self.updateCurrentPage({ () -> Void in
+                    self.currentPage.audioMarkID(markID);
+                })
+            } else {
+                self.currentPage.audioMarkID(markID);
+            }
         }
     }
 
-    func changePageWith(indexPath indexPath: NSIndexPath, animated: Bool = false) {
-        collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Top, animated: animated)
+    func changePageWith(indexPath indexPath: NSIndexPath, animated: Bool = false, completion: (() -> Void)? = nil) {
+        UIView.animateWithDuration(animated ? 0.3 : 0, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+            self.collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Top, animated: false)
+            }) { (finished: Bool) -> Void in
+                if (completion != nil) { completion!() }
+        }
     }
 
     func changePageToNext(completion: (() -> Void)? = nil) {
