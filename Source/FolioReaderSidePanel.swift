@@ -192,6 +192,7 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
         self.dismissViewControllerAnimated(true, completion: {
             FolioReader.sharedInstance.isReaderOpen = false
             FolioReader.sharedInstance.isReaderReady = false
+            FolioReader.sharedInstance.readerAudioPlayer.stop()
         })
     }
     
