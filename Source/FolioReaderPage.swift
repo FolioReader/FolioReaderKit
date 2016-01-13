@@ -334,7 +334,9 @@ extension UIWebView {
 
         // default menu
         } else {
+            
             if action == "highlight:"
+            || (action == "define:" && (js("getSelectedText()"))!.componentsSeparatedByString(" ").count == 1)
             || (action == "play:" && book.hasAudio() )
             || (action == "share:" && readerConfig.allowSharing == true)
             || (action == "copy:" && readerConfig.allowSharing == true) {
@@ -403,6 +405,17 @@ extension UIWebView {
         }
     }
 
+    func define(sender: UIMenuController?) {
+        let selectedText = js("getSelectedText()")
+        
+        setMenuVisible(false)
+        userInteractionEnabled = false
+        userInteractionEnabled = true
+        
+        let vc = UIReferenceLibraryViewController(term: selectedText! )
+        vc.view.tintColor = readerConfig.toolBarBackgroundColor
+        FolioReader.sharedInstance.readerContainer.showViewController(vc, sender: nil)
+    }
 
     func play(sender: UIMenuController?) {
 
@@ -468,6 +481,7 @@ extension UIWebView {
         
         let highlightItem = UIMenuItem(title: readerConfig.localizedHighlightMenu, action: "highlight:")
         let playAudioItem = UIMenuItem(title: readerConfig.localizedPlayMenu, action: "play:")
+        let defineItem = UIMenuItem(title: readerConfig.localizedDefineMenu, action: "define:")
         let colorsItem = UIMenuItem(title: "C", image: colors!, action: "colors:")
         let shareItem = UIMenuItem(title: "S", image: share!, action: "share:")
         let removeItem = UIMenuItem(title: "R", image: remove!, action: "remove:")
@@ -477,7 +491,7 @@ extension UIWebView {
         let pinkItem = UIMenuItem(title: "P", image: pink!, action: "setPink:")
         let underlineItem = UIMenuItem(title: "U", image: underline!, action: "setUnderline:")
         
-        let menuItems = [playAudioItem, highlightItem, colorsItem, removeItem, yellowItem, greenItem, blueItem, pinkItem, underlineItem, shareItem]
+        let menuItems = [playAudioItem, highlightItem, defineItem, colorsItem, removeItem, yellowItem, greenItem, blueItem, pinkItem, underlineItem, shareItem]
 
         UIMenuController.sharedMenuController().menuItems = menuItems
     }
