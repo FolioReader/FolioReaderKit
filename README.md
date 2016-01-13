@@ -42,9 +42,9 @@ func open(sender: AnyObject) {
 - [x] Portrait / Landscape
 - [x] Reading Time Left / Pages left
 - [x] Unzip and parse ePub files
+- [x] Media Overlays (Sync text rendering with audio playback)
 - [ ] Book Search
 - [ ] Add Notes to a Highlight
-- [ ] Write Some Tests
 - [ ] Better Documentation
 
 ### Demo
