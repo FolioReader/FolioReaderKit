@@ -55,7 +55,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
         
         super.init()
         
-        let color = readerConfig.toolBarBackgroundColor
+        let color = readerConfig.tintColor
         slider = UISlider()
         slider.layer.anchorPoint = CGPoint(x: 0, y: 0)
         slider.transform = CGAffineTransformMakeRotation(CGFloat(M_PI_2))
@@ -303,7 +303,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
 
     func configureNavBar() {
         let navBackground = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeMenuBackground : UIColor.whiteColor()
-        let tintColor = readerConfig.toolBarBackgroundColor
+        let tintColor = readerConfig.tintColor
         let navText = FolioReader.sharedInstance.nightMode ? UIColor.whiteColor() : UIColor.blackColor()
         let font = UIFont(name: "Avenir-Light", size: 17)!
         setTranslucentNavigation(color: navBackground, tintColor: tintColor, titleColor: navText, andFont: font)
@@ -312,9 +312,9 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     func configureNavBarButtons() {
 
         // Navbar buttons
-        let shareIcon = UIImage(readerImageNamed: "btn-navbar-share")!.imageTintColor(readerConfig.toolBarBackgroundColor).imageWithRenderingMode(.AlwaysOriginal)
-        let audioIcon = UIImage(readerImageNamed: "man-speech-icon")!.imageTintColor(readerConfig.toolBarBackgroundColor).imageWithRenderingMode(.AlwaysOriginal)
-        let menuIcon = UIImage(readerImageNamed: "btn-navbar-menu")!.imageTintColor(readerConfig.toolBarBackgroundColor).imageWithRenderingMode(.AlwaysOriginal)
+        let shareIcon = UIImage(readerImageNamed: "btn-navbar-share")!.imageTintColor(readerConfig.tintColor).imageWithRenderingMode(.AlwaysOriginal)
+        let audioIcon = UIImage(readerImageNamed: "man-speech-icon")!.imageTintColor(readerConfig.tintColor).imageWithRenderingMode(.AlwaysOriginal)
+        let menuIcon = UIImage(readerImageNamed: "btn-navbar-menu")!.imageTintColor(readerConfig.tintColor).imageWithRenderingMode(.AlwaysOriginal)
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: menuIcon, style: UIBarButtonItemStyle.Plain, target: self, action:"toggleMenu:")
 
@@ -435,7 +435,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         var html = try? String(contentsOfFile: resource.fullHref, encoding: NSUTF8StringEncoding)
         
         if readerConfig.mediaOverlayColor == nil {
-           readerConfig.mediaOverlayColor = readerConfig.toolBarBackgroundColor.highlightColor()
+           readerConfig.mediaOverlayColor = readerConfig.tintColor.highlightColor()
         }
 
         let mediaOverlayStyle = "background: \(readerConfig.mediaOverlayColor.hexString(false)) !important; border-radius: 3px; padding-right: 4px; margin-right: -4px;"

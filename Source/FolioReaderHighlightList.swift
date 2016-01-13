@@ -29,7 +29,7 @@ class FolioReaderHighlightList: UITableViewController {
     
     func configureNavBar() {
         let navBackground = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeMenuBackground : UIColor.whiteColor()
-        let tintColor = readerConfig.toolBarBackgroundColor
+        let tintColor = readerConfig.tintColor
         let navText = FolioReader.sharedInstance.nightMode ? UIColor.whiteColor() : UIColor.blackColor()
         let font = UIFont(name: "Avenir-Light", size: 17)!
         setTranslucentNavigation(color: navBackground, tintColor: tintColor, titleColor: navText, andFont: font)
