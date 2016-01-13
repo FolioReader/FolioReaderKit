@@ -665,16 +665,10 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         return CGRectMake(0, pageHeight * CGFloat(page-1), pageWidth, pageHeight)
     }
     
-    func changePageWith(href href: String) {
-        let item = findPageByHref(href)
-        let indexPath = NSIndexPath(forRow: item, inSection: 0)
-        collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
-    }
-    
     func changePageWith(page page: Int, animated: Bool = false, completion: (() -> Void)? = nil) {
         if page > 0 && page-1 < totalPages {
             let indexPath = NSIndexPath(forRow: page-1, inSection: 0)
-            collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Top, animated: animated)
+            changePageWith(indexPath: indexPath, animated: animated)
             
             // Delay to wait animation complete
             let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(0.2 * Double(NSEC_PER_SEC)))
@@ -702,24 +696,31 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             if (completion != nil) { completion!() }
         }
     }
+    
+    func changePageWith(href href: String) {
+        let item = findPageByHref(href)
+        let indexPath = NSIndexPath(forRow: item, inSection: 0)
+        changePageWith(indexPath: indexPath, animated: true)
+    }
 
     func changePageWith(href href: String, andAudioMarkID markID: String) {
-
-        // if user recently scrolled, do not change pages or scroll the webview
-        if( recentlyScrolled ){ return }
+        if recentlyScrolled { return } // if user recently scrolled, do not change pages or scroll the webview
 
         let item = findPageByHref(href)
         let pageUpdateNeeded = item+1 != currentPage.pageNumber
         let indexPath = NSIndexPath(forRow: item, inSection: 0)
-        collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Top, animated: false)
+        changePageWith(indexPath: indexPath, animated: true)
 
-        if pageUpdateNeeded { updateCurrentPage() }
-
-        currentPage.audioMarkID(markID);
+        // Delay to wait animation complete
+        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(0.2 * Double(NSEC_PER_SEC)))
+        dispatch_after(delayTime, dispatch_get_main_queue()) {
+            if pageUpdateNeeded { self.updateCurrentPage() }
+            self.currentPage.audioMarkID(markID);
+        }
     }
 
-    func changePageWith(indexPath indexPath: NSIndexPath) {
-        collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Top, animated: false)
+    func changePageWith(indexPath indexPath: NSIndexPath, animated: Bool = false) {
+        collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Top, animated: animated)
     }
 
     func changePageToNext(completion: (() -> Void)? = nil) {
@@ -1017,7 +1018,11 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     }
 
     func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
-        updateCurrentPage()
+        
+        if scrollView is UICollectionView {
+            if totalPages > 0 { updateCurrentPage() }
+        }
+        
         scrollScrubber.scrollViewDidEndScrollingAnimation(scrollView)
     }
     
