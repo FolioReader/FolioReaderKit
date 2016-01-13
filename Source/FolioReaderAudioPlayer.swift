@@ -1,9 +1,11 @@
 //
 //  FolioReaderAudioPlayer.swift
-//  Pods
+//  FolioReaderKit
 //
 //  Created by Kevin Jantzer on 1/4/16.
+//  Copyright (c) 2015 Folio Reader. All rights reserved.
 //
+
 //  TODO
 //  - Import MediaPlayer and set "now playing" info for the lock screen
 //  - Allow lock screen to control playing audio (I think that will have to be done in a view)
@@ -122,9 +124,11 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
     func _playNextChapter(){
         // if user has stopped playing, dont play the next chapter
         if isPlaying() == false { return }
-        FolioReader.sharedInstance.readerCenter.changePageToNext()
-        // wait for "currentPage" to update, then request to play audio
-        NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "playAudio", userInfo: nil, repeats: false)
+        
+        // Wait for "currentPage" to update, then request to play audio
+        FolioReader.sharedInstance.readerCenter.changePageToNext { () -> Void in
+            self.playAudio()
+        }
     }
 
 
