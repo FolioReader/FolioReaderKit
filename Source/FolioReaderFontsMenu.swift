@@ -38,7 +38,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate {
         view.addSubview(menuView)
         
         let normalColor = UIColor(white: 0.5, alpha: 0.7)
-        let selectedColor = readerConfig.toolBarBackgroundColor
+        let selectedColor = readerConfig.tintColor
         let sun = UIImage(readerImageNamed: "icon-sun")
         let moon = UIImage(readerImageNamed: "icon-moon")
         let fontSmall = UIImage(readerImageNamed: "icon-font-small")

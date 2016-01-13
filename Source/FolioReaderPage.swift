@@ -184,12 +184,12 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
             
             if #available(iOS 9.0, *) {
                 let safariVC = SFSafariViewController(URL: request.URL!)
-                safariVC.view.tintColor = readerConfig.toolBarBackgroundColor
+                safariVC.view.tintColor = readerConfig.tintColor
                 FolioReader.sharedInstance.readerCenter.presentViewController(safariVC, animated: true, completion: nil)
             } else {
                 let webViewController = WebViewController(url: request.URL!)
                 let nav = UINavigationController(rootViewController: webViewController)
-                nav.view.tintColor = readerConfig.toolBarBackgroundColor
+                nav.view.tintColor = readerConfig.tintColor
                 FolioReader.sharedInstance.readerCenter.presentViewController(nav, animated: true, completion: nil)
             }
             
@@ -413,7 +413,7 @@ extension UIWebView {
         userInteractionEnabled = true
         
         let vc = UIReferenceLibraryViewController(term: selectedText! )
-        vc.view.tintColor = readerConfig.toolBarBackgroundColor
+        vc.view.tintColor = readerConfig.tintColor
         FolioReader.sharedInstance.readerContainer.showViewController(vc, sender: nil)
     }
 

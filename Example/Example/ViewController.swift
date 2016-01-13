@@ -24,6 +24,7 @@ class ViewController: UIViewController {
         let config = FolioReaderConfig()
         config.shouldHideNavigationOnTap = sampleNum == 1 ? true : false
 //        config.allowSharing = false
+//        config.tintColor = UIColor.blueColor()
 //        config.toolBarTintColor = UIColor.redColor()
 //        config.toolBarBackgroundColor = UIColor.purpleColor()
 //        config.menuTextColor = UIColor.brownColor()

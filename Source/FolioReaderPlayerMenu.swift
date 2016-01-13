@@ -43,7 +43,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate {
         
 
         let normalColor = UIColor(white: 0.5, alpha: 0.7)
-        let selectedColor = readerConfig.toolBarBackgroundColor
+        let selectedColor = readerConfig.tintColor
         let size = 55
         let padX = 32
         // @NOTE: could this be improved/simplified with autolayout?
