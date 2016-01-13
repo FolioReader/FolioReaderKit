@@ -133,7 +133,7 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
             }
         }
     }
-    
+
     func _autoPlayNextChapter() {
         // if user has stopped playing, dont play the next chapter
         if isPlaying() == false { return }
@@ -151,7 +151,7 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
             }
         }
     }
-    
+
     func playNextChapter(){
         stopPlayerTimer()
         // Wait for "currentPage" to update, then request to play audio
