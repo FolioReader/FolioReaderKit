@@ -68,6 +68,8 @@ public class FolioReaderConfig: NSObject {
         self.localizedPauseMenu = NSLocalizedString("Stop Reading", comment: "")
         self.localizedHighlightMenu = NSLocalizedString("Highlight", comment: "")
         self.localizedDefineMenu = NSLocalizedString("Define", comment: "")
+        self.localizedPlayMenu = NSLocalizedString("Play", comment: "")
+        self.localizedPauseMenu = NSLocalizedString("Pause", comment: "")
         self.localizedFontMenuNight = NSLocalizedString("Night", comment: "")
         self.localizedFontMenuDay = NSLocalizedString("Day", comment: "")
         self.localizedReaderOnePageLeft = NSLocalizedString("1 page left", comment: "")
