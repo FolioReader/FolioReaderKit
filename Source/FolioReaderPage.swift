@@ -164,7 +164,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
                         return false
                     }
                 } else {
-                    FolioReader.sharedInstance.readerCenter.changePageWith(href: href)
+                    FolioReader.sharedInstance.readerCenter.changePageWith(href: href, animated: true)
                 }
                 
                 return false

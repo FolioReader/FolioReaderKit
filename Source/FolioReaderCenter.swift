@@ -691,9 +691,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             }
         } else {
             tempFragment = fragment
-            changePageWith(page: page)
-            
-            changePageWith(page: page, animated: false, completion: { () -> Void in
+            changePageWith(page: page, animated: animated, completion: { () -> Void in
                 self.updateCurrentPage({ () -> Void in
                     if (completion != nil) { completion!() }
                 })
@@ -701,10 +699,14 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
-    func changePageWith(href href: String) {
+    func changePageWith(href href: String, animated: Bool = false, completion: (() -> Void)? = nil) {
         let item = findPageByHref(href)
         let indexPath = NSIndexPath(forRow: item, inSection: 0)
-        changePageWith(indexPath: indexPath, animated: true)
+        changePageWith(indexPath: indexPath, animated: animated, completion: { () -> Void in
+            self.updateCurrentPage({ () -> Void in
+                if (completion != nil) { completion!() }
+            })
+        })
     }
 
     func changePageWith(href href: String, andAudioMarkID markID: String) {
@@ -1027,11 +1029,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     }
 
     func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
-        
-        if scrollView is UICollectionView {
-            if totalPages > 0 { updateCurrentPage() }
-        }
-        
         scrollScrubber.scrollViewDidEndScrollingAnimation(scrollView)
     }
     
@@ -1058,7 +1055,9 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     func container(sidePanel: FolioReaderSidePanel, didSelectRowAtIndexPath indexPath: NSIndexPath, withTocReference reference: FRTocReference) {
         let item = findPageByResource(reference)
         let indexPath = NSIndexPath(forRow: item, inSection: 0)
-        changePageWith(indexPath: indexPath)
+        changePageWith(indexPath: indexPath, animated: false, completion: { () -> Void in
+            self.updateCurrentPage()
+        })
         tempReference = reference
     }
     
