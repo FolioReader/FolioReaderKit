@@ -65,6 +65,8 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
         playing = false
         if( player != nil && player.playing ){
             player.stop()
+            
+            UIApplication.sharedApplication().idleTimerDisabled = false
         }
     }
 
@@ -72,6 +74,8 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
         playing = false
         if( player != nil && player.playing ){
             player.pause()
+            
+            UIApplication.sharedApplication().idleTimerDisabled = false
         }
     }
 
@@ -82,6 +86,8 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
     func playAudio(){
         let currentPage = FolioReader.sharedInstance.readerCenter.currentPage
         currentPage.playAudio()
+        
+        UIApplication.sharedApplication().idleTimerDisabled = true
     }
 
     /**
