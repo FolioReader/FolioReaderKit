@@ -58,16 +58,18 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate {
         let next = UIImage(readerImageNamed: "next-icon")
         let playSelected = play!.imageTintColor(selectedColor).imageWithRenderingMode(.AlwaysOriginal)
         let pauseSelected = pause!.imageTintColor(selectedColor).imageWithRenderingMode(.AlwaysOriginal)
+        
+        let prevNormal = prev!.imageTintColor(normalColor).imageWithRenderingMode(.AlwaysOriginal)
+        let nextNormal = next!.imageTintColor(normalColor).imageWithRenderingMode(.AlwaysOriginal)
         let prevSelected = prev!.imageTintColor(selectedColor).imageWithRenderingMode(.AlwaysOriginal)
         let nextSelected = next!.imageTintColor(selectedColor).imageWithRenderingMode(.AlwaysOriginal)
         
         // prev button
         let prevBtn = UIButton(frame: CGRect(x: gutterX + padX, y: 0, width: size, height: size))
-        prevBtn.setImage(prev, forState: .Normal)
+        prevBtn.setImage(prevNormal, forState: .Normal)
         prevBtn.setImage(prevSelected, forState: .Selected)
         prevBtn.addTarget(self, action: "prevChapter:", forControlEvents: .TouchUpInside)
         menuView.addSubview(prevBtn)
-        
         
         // play / pause button
         let playPauseBtn = UIButton(frame: CGRect(x: Int(prevBtn.frame.origin.x) + padX + size, y: 0, width: size, height: size))
@@ -85,15 +87,10 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate {
         
         // next button
         let nextBtn = UIButton(frame: CGRect(x: Int(playPauseBtn.frame.origin.x) + padX + size, y: 0, width: size, height: size))
-        nextBtn.setImage(next, forState: .Normal)
+        nextBtn.setImage(nextNormal, forState: .Normal)
         nextBtn.setImage(nextSelected, forState: .Selected)
         nextBtn.addTarget(self, action: "nextChapter:", forControlEvents: .TouchUpInside)
         menuView.addSubview(nextBtn)
-        
-        // temp
-//        playPause.backgroundColor =  UIColor.grayColor()
-//        prevBtn.backgroundColor =  UIColor.grayColor()
-//        nextBtn.backgroundColor = UIColor.grayColor()
         
 
         // Separator
