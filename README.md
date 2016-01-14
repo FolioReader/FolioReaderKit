@@ -41,7 +41,7 @@ func open(sender: AnyObject) {
 - [x] Handle Internal and External Links
 - [x] Portrait / Landscape
 - [x] Reading Time Left / Pages left
-- [x] Unzip and parse ePub files
+- [x] In-App Dictionary
 - [x] Media Overlays (Sync text rendering with audio playback)
 - [ ] Book Search
 - [ ] Add Notes to a Highlight
