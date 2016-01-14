@@ -42,12 +42,12 @@ class FRBook: NSObject {
     
     func activeClass() -> String! {
         let className = metadata.findMetaByProperty("media:active-class");
-        return className != nil ? className : "epub-media-overlay-active";
+        return className ?? "epub-media-overlay-active";
     }
     
     func playbackActiveClass() -> String! {
         let className = metadata.findMetaByProperty("media:playback-active-class");
-        return className != nil ? className : "epub-media-overlay-playing";
+        return className ?? "epub-media-overlay-playing";
     }
     
     

@@ -168,6 +168,15 @@ html .highlight-underline {
     border-bottom: 2px solid #F02814;
 }
 
+html .highlight-yellow, html .highlight-green, html .highlight-blue, html .highlight-pink, span.epub-media-overlay-playing {
+    border-radius: 3px;
+    padding: 0 2px;
+    margin: 0 -2px;
+}
+
+/* default media overlay style */
+span.epub-media-overlay-playing {background: #ccc !important}
+
 
 /*
  *
@@ -202,7 +211,6 @@ html.nightMode .highlight-green {background:rgba(192, 237, 114, 0.9)}
 html.nightMode .highlight-blue {background:rgba(173, 216, 255, 0.9)}
 html.nightMode .highlight-pink {background:rgba(255, 176, 202, 0.9)}
 html.nightMode .highlight-underline {border-bottom: 2px solid rgba(240, 40, 20, 0.6)}
-
 
 
 /*
@@ -264,12 +272,4 @@ p, span, div {
         -webkit-hyphens: none !important;
         hyphens: none !important;
     }
-}
-
-/* default media overlay style */
-span.epub-media-overlay-playing {
-    background: #ccc !important;
-    border-radius: 3px;
-    padding-right: 4px;
-    margin-right: -4px
 }

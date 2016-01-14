@@ -138,7 +138,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
 
             FolioReader.sharedInstance.readerCenter.playAudio(playID)
 
-            return false;
+            return false
         } else if url?.scheme == "file" {
             
             let anchorFromURL = url?.fragment
@@ -259,21 +259,21 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     
     func handleAnchor(anchor: String,  avoidBeginningAnchors: Bool, animating: Bool) {
         if !anchor.isEmpty {
-            let offset = getAnchorOffset(anchor)
-            let isBeginning = CGFloat((offset as NSString).floatValue) > self.frame.height/2
-            
-            if !avoidBeginningAnchors {
-                scrollPageToOffset(offset, animating: animating)
-            } else if avoidBeginningAnchors && isBeginning {
-                scrollPageToOffset(offset, animating: animating)
+            if let offset = getAnchorOffset(anchor) {
+                let isBeginning = CGFloat((offset as NSString).floatValue) > self.frame.height/2
+                
+                if !avoidBeginningAnchors {
+                    scrollPageToOffset(offset, animating: animating)
+                } else if avoidBeginningAnchors && isBeginning {
+                    scrollPageToOffset(offset, animating: animating)
+                }
             }
         }
     }
     
-    func getAnchorOffset(anchor: String) -> String {
+    func getAnchorOffset(anchor: String) -> String? {
         let jsAnchorHandler = "(function() {var target = '\(anchor)';var elem = document.getElementById(target); if (!elem) elem=document.getElementsByName(target)[0];return elem.offsetTop;})();"
-        
-        return webView.js(jsAnchorHandler)!
+        return webView.js(jsAnchorHandler)
     }
     
     override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {

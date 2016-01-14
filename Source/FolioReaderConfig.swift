@@ -49,7 +49,7 @@ public class FolioReaderConfig: NSObject {
     
     public override init() {
         self.tintColor = UIColor(rgba: "#6ACC50")
-        self.toolBarBackgroundColor = self.tintColor
+        self.toolBarBackgroundColor = nil // If not set by config, this will use tintColor later
         self.toolBarTintColor = UIColor.whiteColor()
         self.menuBackgroundColor = UIColor(rgba: "#F5F5F5")
         self.menuSeparatorColor = UIColor(rgba: "#D7D7D7")
@@ -57,9 +57,7 @@ public class FolioReaderConfig: NSObject {
         self.nightModeBackground = UIColor(rgba: "#131313")
         self.nightModeMenuBackground = UIColor(rgba: "#1E1E1E")
         self.nightModeSeparatorColor = UIColor(white: 0.5, alpha: 0.2)
-        
-        // if not set by config, this will be set in FolioReaderCenter
-        //self.mediaOverlayColor
+        self.mediaOverlayColor = nil // If not set by config, this will use tintColor later
 
         self.shouldHideNavigationOnTap = true
         self.allowSharing = true

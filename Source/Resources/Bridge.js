@@ -183,7 +183,7 @@ function getReadingTime() {
 }
 
 
-function findElementWithID(node){
+function findElementWithID(node) {
     if( !node || node.tagName == "BODY")
         return null
     else if( node.id )
@@ -192,9 +192,9 @@ function findElementWithID(node){
         return findElementWithID(node)
 }
 
-function findElementWithIDInView(){
+function findElementWithIDInView() {
 
-    if( audioMarkClass ){
+    if(audioMarkClass) {
         // attempt to find an existing "audio mark"
         var el = document.querySelector("."+audioMarkClass)
 
@@ -206,7 +206,7 @@ function findElementWithIDInView(){
     // @NOTE: is `span` too limiting?
     var els = document.querySelectorAll("span[id]")
 
-    for( indx in els ){
+    for(indx in els){
         if( els[indx].offsetTop > document.body.scrollTop )
             return els[indx]
     }
@@ -218,17 +218,16 @@ function findElementWithIDInView(){
 /**
  Play Audio - called by native UIMenuController when a user selects a bit of text and presses "play"
  */
-function playAudio(){
-
+function playAudio() {
     var sel = getSelection();
     var node = null;
 
     // user selected text? start playing from the selected node
-    if( sel.toString() != "" ){
+    if (sel.toString() != "") {
         node = sel.anchorNode ? findElementWithID(sel.anchorNode.parentNode) : null;
 
     // find the first ID'd element that is within view (it will
-    }else{
+    } else {
         node = findElementWithIDInView()
     }
 
@@ -239,25 +238,23 @@ function playAudio(){
 /**
  Play Audio Fragment ID - tells page controller to begin playing audio from the following ID
  */
-function playAudioFragmentID(fragmentID){
+function playAudioFragmentID(fragmentID) {
     var URLBase = "play-audio://";
     window.location = URLBase + (fragmentID?encodeURIComponent(fragmentID):"")
 }
 
-
 /**
  Go To Element - scrolls the webview to the requested element
  */
-function goToEl(el){
-
+function goToEl(el) {
     var top = document.body.scrollTop;
     var elTop = el.offsetTop - 20;
-
     var bottom = window.innerHeight + document.body.scrollTop;
     var elBottom = el.offsetHeight + el.offsetTop + 60
 
-    if( elBottom > bottom || elTop < top )
+    if(elBottom > bottom || elTop < top) {
         document.body.scrollTop = el.offsetTop - 20
+    }
 
     return el;
 }
@@ -265,10 +262,10 @@ function goToEl(el){
 /**
  Remove All Classes - removes the given class from all elements in the DOM
  */
-function removeAllClasses(className){
+function removeAllClasses(className) {
     var els = document.body.getElementsByClassName(className)
     if( els.length > 0 )
-    for( i = 0; i <= els.length; i++){
+    for( i = 0; i <= els.length; i++) {
         els[i].classList.remove(className);
     }
 }
@@ -276,38 +273,28 @@ function removeAllClasses(className){
 /**
  Audio Mark ID - marks an element with an ID with the given class and scrolls to it
  */
-function audioMarkID(className, id){
-
-    if( audioMarkClass )
+function audioMarkID(className, id) {
+    if (audioMarkClass)
         removeAllClasses(audioMarkClass);
 
     audioMarkClass = className
-
     var el = document.getElementById(id);
 
     goToEl(el);
-
     el.classList.add(className)
 }
 
-
-
-function setMediaOverlayStyle(style){
-
+function setMediaOverlayStyle(style) {
     var stylesheet = document.styleSheets[document.styleSheets.length-1];
     var index = null;
 
-    [].forEach.call(stylesheet.rules, function(rule, i){
-
-        if( rule.selectorText && rule.selectorText == "span.epub-media-overlay-playing"){
+    [].forEach.call(stylesheet.rules, function(rule, i) {
+        if (rule.selectorText && rule.selectorText == "span.epub-media-overlay-playing") {
             index = i
             return
         }
-
     })
 
-    if( index )
-        stylesheet.removeRule(index)
-
+    if (index) stylesheet.removeRule(index)
     stylesheet.insertRule("span.epub-media-overlay-playing { "+style+" }")
 }
