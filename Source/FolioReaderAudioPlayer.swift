@@ -6,11 +6,6 @@
 //  Copyright (c) 2015 Folio Reader. All rights reserved.
 //
 
-//  TODO
-//  - Import MediaPlayer and set "now playing" info for the lock screen
-//  - Allow lock screen to control playing audio (I think that will have to be done in a view)
-//
-
 import UIKit
 import AVFoundation
 import MediaPlayer

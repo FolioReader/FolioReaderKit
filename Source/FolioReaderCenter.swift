@@ -839,7 +839,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             var authorName = ""
             
             // Get book title
-            if let title = book.metadata.titles.first {
+            if let title = book.title() {
                 bookTitle = title
                 subject += " “\(title)”"
             }
@@ -893,7 +893,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         var authorName = ""
         
         // Get book title
-        if let title = book.metadata.titles.first {
+        if let title = book.title() {
             bookTitle = title
             subject += " “\(title)”"
         }
