@@ -13,7 +13,7 @@
 
 import UIKit
 import AVFoundation
-
+import MediaPlayer
 
 class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
 
@@ -26,15 +26,20 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
     var currentBeginTime: Double!
     var currentEndTime: Double!
     var playingTimer: NSTimer!
+    var registeredCommands = false
 
     override init() {
-
+        UIApplication.sharedApplication().beginReceivingRemoteControlEvents()
+        
         // this is needed to the audio can play even when the "silent/vibrate" toggle is on
         let session:AVAudioSession = AVAudioSession.sharedInstance()
         try! session.setCategory(AVAudioSessionCategoryPlayback)
         try! session.setActive(true)
     }
-
+    
+    deinit {
+        UIApplication.sharedApplication().endReceivingRemoteControlEvents()
+    }
 
     func isPlaying() -> Bool {
         return playing
@@ -58,6 +63,8 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
             default:
                 break
             }
+            
+            updateNowPlayingInfo()
         }
     }
 
@@ -83,7 +90,7 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
         isPlaying() ? pause() : playAudio()
     }
 
-    func playAudio(){
+    func playAudio() {
         let currentPage = FolioReader.sharedInstance.readerCenter.currentPage
         currentPage.playAudio()
         
@@ -136,7 +143,7 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
     func playPrevChapter(){
         stopPlayerTimer()
         // Wait for "currentPage" to update, then request to play audio
-        FolioReader.sharedInstance.readerCenter.changePageToPrevious() { () -> Void in
+        FolioReader.sharedInstance.readerCenter.changePageToPrevious { () -> Void in
             if self.isPlaying() {
                 self.playAudio()
             } else {
@@ -189,8 +196,10 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
                 setRate(FolioReader.sharedInstance.currentAudioRate)
                 player.prepareToPlay()
                 player.delegate = self
-
-            }else{
+                
+                updateNowPlayingInfo()
+            
+            } else {
                 print("could not read audio file:", audioFile)
                 return false
             }
@@ -245,7 +254,7 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
         return nextAudioFragment()
     }
 
-    // MARK: - audio timing events
+    // MARK: - Audio timing events
 
     private func startPlayerTimer() {
         // we must add the timer in this mode in order for it to continue working even when the user is scrolling a webview
@@ -268,6 +277,70 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
 
     func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
         _playFragment(nextAudioFragment())
+    }
+    
+    // MARK: - Now Playing Info and Controls
+    
+    /**
+     Update Now Playing info
+     
+     Gets the book and audio information and updates on Now Playing Center
+     */
+    func updateNowPlayingInfo() {
+        var songInfo = [String: AnyObject]()
+        
+        // Get book Artwork
+        if let artwork = UIImage(contentsOfFile: book.coverImage.fullHref) {
+            let albumArt = MPMediaItemArtwork(image: artwork)
+            songInfo[MPMediaItemPropertyArtwork] = albumArt
+        }
+        
+        // Get book title
+        if let title = book.metadata.titles.first {
+            songInfo[MPMediaItemPropertyAlbumTitle] = title
+        }
+        
+        // Get chapter name
+        if let chapter = FolioReader.sharedInstance.readerCenter.getCurrentChapterName() {
+            songInfo[MPMediaItemPropertyTitle] = chapter
+        }
+        
+        // Get author name
+        if let author = book.metadata.creators.first {
+            songInfo[MPMediaItemPropertyArtist] = author.name
+        }
+        
+        //
+        songInfo[MPMediaItemPropertyPlaybackDuration] = player.duration
+        songInfo[MPNowPlayingInfoPropertyPlaybackRate] = player.rate
+//        songInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = player.currentTime
+        
+        // Set Audio Player info
+        MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
+        
+        registerCommandsIfNeeded()
+    }
+    
+    /**
+     Register commands if needed, check if it's registered to avoid register twice.
+     */
+    func registerCommandsIfNeeded() {
+        
+        if registeredCommands {return}
+        
+        let command = MPRemoteCommandCenter.sharedCommandCenter()
+        command.previousTrackCommand.enabled = true
+        command.previousTrackCommand.addTarget(self, action: "playPrevChapter")
+        command.nextTrackCommand.enabled = true
+        command.nextTrackCommand.addTarget(self, action: "playNextChapter")
+        command.pauseCommand.enabled = true
+        command.pauseCommand.addTarget(self, action: "pause")
+        command.playCommand.enabled = true
+        command.playCommand.addTarget(self, action: "playAudio")
+        command.togglePlayPauseCommand.enabled = true
+        command.togglePlayPauseCommand.addTarget(self, action: "togglePlay")
+        
+        registeredCommands = true
     }
 
 }
