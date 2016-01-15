@@ -25,6 +25,7 @@ internal let kApplicationDocumentsDirectory = NSSearchPathForDirectoriesInDomain
 internal let kCurrentFontFamily = "kCurrentFontFamily"
 internal let kCurrentFontSize = "kCurrentFontSize"
 internal let kCurrentAudioRate = "kCurrentAudioRate"
+internal let kCurrentHighlightStyle = "kCurrentHighlightStyle"
 internal let kNightMode = "kNightMode"
 internal let kHighlightRange = 30
 internal var kBookId: String!
@@ -71,6 +72,14 @@ public class FolioReader {
         get { return FolioReader.defaults.valueForKey(kCurrentAudioRate) as! Int }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentAudioRate)
+            FolioReader.defaults.synchronize()
+        }
+    }
+
+    var currentHighlightStyle: Int {
+        get { return FolioReader.defaults.valueForKey(kCurrentHighlightStyle) as! Int }
+        set (value) {
+            FolioReader.defaults.setValue(value, forKey: kCurrentHighlightStyle)
             FolioReader.defaults.synchronize()
         }
     }

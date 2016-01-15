@@ -73,7 +73,8 @@ class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
             kCurrentFontFamily: 0,
             kNightMode: false,
             kCurrentFontSize: 2,
-            kCurrentAudioRate: 1
+            kCurrentAudioRate: 1,
+            kCurrentHighlightStyle: 0
             ])
     }
     

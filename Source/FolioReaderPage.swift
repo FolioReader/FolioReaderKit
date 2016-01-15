@@ -85,6 +85,9 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
                     let newRange = NSRange(location: range.location + item.contentPre.characters.count, length: item.content.characters.count)
                     html = html.stringByReplacingCharactersInRange(newRange, withString: tag)
                 }
+                else {
+                    print("highlight range not found")
+                }
             }
         }
         
@@ -380,7 +383,7 @@ extension UIWebView {
     }
     
     func highlight(sender: UIMenuController?) {
-        let highlightAndReturn = js("highlightString()")
+        let highlightAndReturn = js("highlightString('\(HighlightStyle.classForStyle(FolioReader.sharedInstance.currentHighlightStyle))')")
         let jsonData = highlightAndReturn?.dataUsingEncoding(NSUTF8StringEncoding)
         
         do {
@@ -431,36 +434,30 @@ extension UIWebView {
     // MARK: - Set highlight styles
     
     func setYellow(sender: UIMenuController?) {
-        if let updateId = js("setYellow()") {
-            Highlight.updateById(updateId, type: .Yellow)
-        }
-        colors(sender)
+        changeHighlightStyle(sender, style: .Yellow)
     }
     
     func setGreen(sender: UIMenuController?) {
-        if let updateId = js("setGreen()") {
-            Highlight.updateById(updateId, type: .Green)
-        }
-        colors(sender)
+        changeHighlightStyle(sender, style: .Green)
     }
     
     func setBlue(sender: UIMenuController?) {
-        if let updateId = js("setBlue()") {
-            Highlight.updateById(updateId, type: .Blue)
-        }
-        colors(sender)
+        changeHighlightStyle(sender, style: .Blue)
     }
     
     func setPink(sender: UIMenuController?) {
-        if let updateId = js("setPink()") {
-            Highlight.updateById(updateId, type: .Pink)
-        }
-        colors(sender)
+        changeHighlightStyle(sender, style: .Pink)
     }
     
     func setUnderline(sender: UIMenuController?) {
-        if let updateId = js("setUnderline()") {
-            Highlight.updateById(updateId, type: .Underline)
+        changeHighlightStyle(sender, style: .Underline)
+    }
+
+    func changeHighlightStyle(sender: UIMenuController?, style: HighlightStyle) {
+        FolioReader.sharedInstance.currentHighlightStyle = style.rawValue
+
+        if let updateId = js("setHighlightStyle('\(HighlightStyle.classForStyle(style.rawValue))')") {
+            Highlight.updateById(updateId, type: style)
         }
         colors(sender)
     }
