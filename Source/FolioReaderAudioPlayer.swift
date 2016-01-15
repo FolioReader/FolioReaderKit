@@ -133,7 +133,7 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
             }
         }
     }
-    
+
     func _autoPlayNextChapter() {
         // if user has stopped playing, dont play the next chapter
         if isPlaying() == false { return }
@@ -151,7 +151,7 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
             }
         }
     }
-    
+
     func playNextChapter(){
         stopPlayerTimer()
         // Wait for "currentPage" to update, then request to play audio
@@ -212,6 +212,7 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
             // this is done to mitigate milisecond skips in the audio when changing fragments
             if( player.currentTime < currentBeginTime || ( currentEndTime > 0 && player.currentTime > currentEndTime) ){
                 player.currentTime = currentBeginTime;
+                updateNowPlayingInfo()
             }
 
             player.play();
@@ -296,12 +297,12 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
         }
         
         // Get book title
-        if let title = book.metadata.titles.first {
+        if let title = book.title() {
             songInfo[MPMediaItemPropertyAlbumTitle] = title
         }
         
         // Get chapter name
-        if let chapter = FolioReader.sharedInstance.readerCenter.getCurrentChapterName() {
+        if let chapter = getCurrentChapterName() {
             songInfo[MPMediaItemPropertyTitle] = chapter
         }
         
@@ -310,15 +311,30 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
             songInfo[MPMediaItemPropertyArtist] = author.name
         }
         
-        //
+        // Set player times
         songInfo[MPMediaItemPropertyPlaybackDuration] = player.duration
         songInfo[MPNowPlayingInfoPropertyPlaybackRate] = player.rate
-//        songInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = player.currentTime
+        songInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime ] = player.currentTime
         
         // Set Audio Player info
         MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
         
         registerCommandsIfNeeded()
+    }
+    
+    /**
+     Get Current Chapter Name
+     
+     This is done here and not in ReaderCenter because even though `currentHref` is accurate,
+     the `currentPage` in ReaderCenter may not have updated just yet
+     */
+    func getCurrentChapterName() -> String? {
+        for item in FolioReader.sharedInstance.readerSidePanel.tocItems {
+            if item.resource.href == currentHref {
+                return item.title
+            }
+        }
+        return nil
     }
     
     /**
