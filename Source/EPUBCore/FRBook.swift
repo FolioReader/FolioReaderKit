@@ -23,8 +23,8 @@ class FRBook: NSObject {
         return smils.smils.count > 0 ? true : false;
     }
 
-    func title() -> String! {
-        return metadata.titles[0]
+    func title() -> String? {
+        return metadata.titles.first
     }
 
     // MARK: - Media Overlay Metadata
