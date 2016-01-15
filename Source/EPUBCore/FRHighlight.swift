@@ -141,7 +141,7 @@ class FRHighlight: NSObject {
         if let removedId = currentPage.webView.js("removeHighlightById('\(highlightId)')") {
             return removedId
         } else {
-            print("Error removing Higlight")
+            print("Error removing Higlight from page")
             return nil
         }
     }

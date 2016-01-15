@@ -81,7 +81,7 @@ function setFontSize(cls) {
 /*
  *	Native bridge Highlight text
  */
-function highlightString() {
+function highlightString(style) {
     var range = window.getSelection().getRangeAt(0);
     var selectionContents = range.extractContents();
     var elm = document.createElement("highlight");
@@ -90,7 +90,7 @@ function highlightString() {
     elm.appendChild(selectionContents);
     elm.setAttribute("id", id);
     elm.setAttribute("onclick","callHighlightURL(this);");
-    elm.setAttribute("class", "highlight-yellow");
+    elm.setAttribute("class", style);
     
     range.insertNode(elm);
     thisHighlight = elm;
@@ -102,28 +102,8 @@ function highlightString() {
 }
 
 // Menu colors
-function setYellow() {
-    thisHighlight.className = "highlight-yellow";
-    return thisHighlight.id;
-}
-
-function setGreen() {
-    thisHighlight.className = "highlight-green";
-    return thisHighlight.id;
-}
-
-function setBlue() {
-    thisHighlight.className = "highlight-blue";
-    return thisHighlight.id;
-}
-
-function setPink() {
-    thisHighlight.className = "highlight-pink";
-    return thisHighlight.id;
-}
-
-function setUnderline() {
-    thisHighlight.className = "highlight-underline";
+function setHighlightStyle(style) {
+    thisHighlight.className = style;
     return thisHighlight.id;
 }
 
