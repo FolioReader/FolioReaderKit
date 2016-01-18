@@ -21,7 +21,6 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     Returns a FRBook.
     */
     func readEpub(epubPath withEpubPath: String) -> FRBook {
-        
         epubPathToRemove = withEpubPath
         
         // Unzip   
