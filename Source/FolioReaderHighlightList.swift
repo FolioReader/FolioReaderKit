@@ -16,6 +16,7 @@ class FolioReaderHighlightList: UITableViewController {
         super.viewDidLoad()
 
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.backgroundColor = FolioReader.sharedInstance.nightMode ? UIColor.blackColor() : UIColor.whiteColor()
         highlights = Highlight.allByBookId((kBookId as NSString).stringByDeletingPathExtension)
         title = readerConfig.localizedHighlightsTitle
         
@@ -53,6 +54,7 @@ class FolioReaderHighlightList: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) 
+        cell.backgroundColor = FolioReader.sharedInstance.nightMode ? UIColor.blackColor() : UIColor.whiteColor()
 
         let highlight = highlights[indexPath.row]
         
