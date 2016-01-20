@@ -31,7 +31,7 @@ func open(sender: AnyObject) {
 }
 ```
 
-In your AppDelegate call `applicationWillResignActive` and `applicationWillTerminate`.
+In your AppDelegate call `applicationWillResignActive` and `applicationWillTerminate`. This will save the reader state even if you kill the app.
 
 ```swift
 import FolioReaderKit
