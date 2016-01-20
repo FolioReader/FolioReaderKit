@@ -60,20 +60,20 @@ enum HighlightStyle: Int {
     /**
     Return CSS class for HighlightStyle.
     */
-    static func colorForStyle(style: Int) -> UIColor {
+    static func colorForStyle(style: Int, nightMode: Bool = false) -> UIColor {
         switch style {
         case HighlightStyle.Yellow.rawValue:
-            return UIColor(red: 255/255, green: 235/255, blue: 107/255, alpha: 1)
+            return UIColor(red: 255/255, green: 235/255, blue: 107/255, alpha: nightMode ? 0.9 : 1)
         case HighlightStyle.Green.rawValue:
-            return UIColor(red: 192/255, green: 237/255, blue: 114/255, alpha: 1)
+            return UIColor(red: 192/255, green: 237/255, blue: 114/255, alpha: nightMode ? 0.9 : 1)
         case HighlightStyle.Blue.rawValue:
-            return UIColor(red: 173/255, green: 216/255, blue: 255/255, alpha: 1)
+            return UIColor(red: 173/255, green: 216/255, blue: 255/255, alpha: nightMode ? 0.9 : 1)
         case HighlightStyle.Pink.rawValue:
-            return UIColor(red: 255/255, green: 176/255, blue: 202/255, alpha: 1)
+            return UIColor(red: 255/255, green: 176/255, blue: 202/255, alpha: nightMode ? 0.9 : 1)
         case HighlightStyle.Underline.rawValue:
-            return UIColor(red: 240/255, green: 40/255, blue: 20/255, alpha: 1)
+            return UIColor(red: 240/255, green: 40/255, blue: 20/255, alpha: nightMode ? 0.6 : 1)
         default:
-            return UIColor(red: 255/255, green: 235/255, blue: 107/255, alpha: 1)
+            return UIColor(red: 255/255, green: 235/255, blue: 107/255, alpha: nightMode ? 0.9 : 1)
         }
     }
 }

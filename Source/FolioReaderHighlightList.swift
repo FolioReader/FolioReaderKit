@@ -16,7 +16,9 @@ class FolioReaderHighlightList: UITableViewController {
         super.viewDidLoad()
 
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
-        tableView.backgroundColor = FolioReader.sharedInstance.nightMode ? UIColor.blackColor() : UIColor.whiteColor()
+        tableView.backgroundColor = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeBackground : UIColor.whiteColor()
+        tableView.separatorColor = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeSeparatorColor : readerConfig.menuSeparatorColor
+        
         highlights = Highlight.allByBookId((kBookId as NSString).stringByDeletingPathExtension)
         title = readerConfig.localizedHighlightsTitle
         
@@ -51,10 +53,9 @@ class FolioReaderHighlightList: UITableViewController {
         return highlights.count
     }
 
-    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) 
-        cell.backgroundColor = FolioReader.sharedInstance.nightMode ? UIColor.blackColor() : UIColor.whiteColor()
+        cell.backgroundColor = UIColor.clearColor()
 
         let highlight = highlights[indexPath.row]
         
@@ -70,14 +71,13 @@ class FolioReaderHighlightList: UITableViewController {
             dateLabel.tag = 456
             dateLabel.autoresizingMask = UIViewAutoresizing.FlexibleWidth
             dateLabel.font = UIFont(name: "Avenir-Medium", size: 12)
-            dateLabel.textColor = UIColor.blackColor()
             cell.contentView.addSubview(dateLabel)
         } else {
             dateLabel = cell.contentView.viewWithTag(456) as! UILabel
         }
         
         dateLabel.text = dateString.uppercaseString
-        dateLabel.textColor = UIColor.lightGrayColor()
+        dateLabel.textColor = FolioReader.sharedInstance.nightMode ? UIColor(white: 5, alpha: 0.3) : UIColor.lightGrayColor()
         dateLabel.frame = CGRect(x: 20, y: 20, width: view.frame.width-40, height: dateLabel.frame.height)
         
         // Text
@@ -86,16 +86,18 @@ class FolioReaderHighlightList: UITableViewController {
         let range = NSRange(location: 0, length: text.length)
         let paragraph = NSMutableParagraphStyle()
         paragraph.lineSpacing = 3
+        let textColor = FolioReader.sharedInstance.nightMode ? readerConfig.menuTextColor : UIColor.blackColor()
         
         text.addAttribute(NSParagraphStyleAttributeName, value: paragraph, range: range)
         text.addAttribute(NSFontAttributeName, value: UIFont(name: "Avenir-Light", size: 16)!, range: range)
+        text.addAttribute(NSForegroundColorAttributeName, value: textColor, range: range)
         
         if highlight.type.integerValue == HighlightStyle.Underline.rawValue {
             text.addAttribute(NSBackgroundColorAttributeName, value: UIColor.clearColor(), range: range)
-            text.addAttribute(NSUnderlineColorAttributeName, value: HighlightStyle.colorForStyle(highlight.type.integerValue), range: range)
+            text.addAttribute(NSUnderlineColorAttributeName, value: HighlightStyle.colorForStyle(highlight.type.integerValue, nightMode: FolioReader.sharedInstance.nightMode), range: range)
             text.addAttribute(NSUnderlineStyleAttributeName, value: NSNumber(integer: NSUnderlineStyle.StyleSingle.rawValue), range: range)
         } else {
-            text.addAttribute(NSBackgroundColorAttributeName, value: HighlightStyle.colorForStyle(highlight.type.integerValue), range: range)
+            text.addAttribute(NSBackgroundColorAttributeName, value: HighlightStyle.colorForStyle(highlight.type.integerValue, nightMode: FolioReader.sharedInstance.nightMode), range: range)
         }
         
         // Text

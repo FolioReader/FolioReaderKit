@@ -53,7 +53,7 @@ public class FolioReaderConfig: NSObject {
         self.toolBarTintColor = UIColor.whiteColor()
         self.menuBackgroundColor = UIColor(rgba: "#F5F5F5")
         self.menuSeparatorColor = UIColor(rgba: "#D7D7D7")
-        self.menuTextColor = UIColor(rgba: "#575757")
+        self.menuTextColor = UIColor(rgba: "#767676")
         self.nightModeBackground = UIColor(rgba: "#131313")
         self.nightModeMenuBackground = UIColor(rgba: "#1E1E1E")
         self.nightModeSeparatorColor = UIColor(white: 0.5, alpha: 0.2)

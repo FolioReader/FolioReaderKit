@@ -61,7 +61,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
         slider.transform = CGAffineTransformMakeRotation(CGFloat(M_PI_2))
         slider.frame = frame
         slider.minimumTrackTintColor = color
-        slider.maximumTrackTintColor = UIColor.lightGrayColor()
+        slider.maximumTrackTintColor = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeSeparatorColor : readerConfig.menuSeparatorColor
         slider.alpha = 0
         
         // less obtrusive knob and fixes jump: http://stackoverflow.com/a/22301039/484780
