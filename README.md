@@ -31,6 +31,20 @@ func open(sender: AnyObject) {
 }
 ```
 
+In your AppDelegate call `applicationWillResignActive` and `applicationWillTerminate`.
+
+```swift
+import FolioReaderKit
+
+func applicationWillResignActive(application: UIApplication) {
+    FolioReader.applicationWillResignActive()
+}
+
+func applicationWillTerminate(application: UIApplication) {
+    FolioReader.applicationWillTerminate()
+}
+```
+
 ### Features
 
 - [x] Custom Fonts
