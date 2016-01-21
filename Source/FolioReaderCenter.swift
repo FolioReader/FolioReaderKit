@@ -224,6 +224,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
 class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, FolioPageDelegate, FolioReaderContainerDelegate {
     
     var collectionView: UICollectionView!
+    var loadingView: UIActivityIndicatorView!
     var pages: [String]!
     var totalPages: Int!
     var tempFragment: String?
@@ -287,6 +288,14 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         scrollScrubber = ScrollScrubber(frame: CGRect(x: pageWidth + 6, y: 74, width: 40, height: pageHeight - 100))
         scrollScrubber.delegate = self
         view.addSubview(scrollScrubber.slider)
+        
+        // Loading indicator
+        let style: UIActivityIndicatorViewStyle = FolioReader.sharedInstance.nightMode ? .White : .Gray
+        loadingView = UIActivityIndicatorView(activityIndicatorStyle: style)
+        loadingView.center = view.center
+        loadingView.hidesWhenStopped = true
+        loadingView.startAnimating()
+        view.addSubview(loadingView)
     }
     
     
@@ -332,6 +341,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     }
 
     func reloadData() {
+        loadingView.stopAnimating()
         bookShareLink = readerConfig.localizedShareWebLink
         totalPages = book.spine.spineReferences.count
 
