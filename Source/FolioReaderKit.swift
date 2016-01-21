@@ -477,5 +477,15 @@ extension UINavigationBar {
         }
         return nil
     }
+}
+
+extension Array {
     
+    /**
+     Return index if is safe, if not return nil
+     http://stackoverflow.com/a/30593673/517707
+     */
+    subscript(safe index: Int) -> Element? {
+        return indices ~= index ? self[index] : nil
+    }
 }

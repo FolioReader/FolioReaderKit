@@ -780,9 +780,11 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     func getCurrentChapter() -> FRResource? {
         if let currentPageNumber = currentPageNumber {
             for item in FolioReader.sharedInstance.readerSidePanel.tocItems {
-                let resource = book.spine.spineReferences[currentPageNumber-1].resource
-                if item.resource.href == resource.href {
-                    return item.resource
+                if let reference = book.spine.spineReferences[safe: currentPageNumber-1] {
+                    let resource = reference.resource
+                    if item.resource.href == resource.href {
+                        return item.resource
+                    }
                 }
             }
         }
@@ -795,12 +797,14 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     func getCurrentChapterName() -> String? {
         if let currentPageNumber = currentPageNumber {
             for item in FolioReader.sharedInstance.readerSidePanel.tocItems {
-                let resource = book.spine.spineReferences[currentPageNumber-1].resource
-                if item.resource.href == resource.href {
-                    if let title = item.title {
-                        return title
+                if let reference = book.spine.spineReferences[safe: currentPageNumber-1] {
+                    let resource = reference.resource
+                    if item.resource.href == resource.href {
+                        if let title = item.title {
+                            return title
+                        }
+                        return nil
                     }
-                    return nil
                 }
             }
         }
