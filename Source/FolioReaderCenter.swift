@@ -39,9 +39,9 @@ enum ScrollDirection: Int {
 class ScrollScrubber: NSObject, UIScrollViewDelegate {
     
     var delegate: FolioReaderCenter!
-    var showSpeed = 1.0
-    var hideSpeed = 1.5
-    var hideDelay = 2.0
+    var showSpeed = 0.6
+    var hideSpeed = 0.6
+    var hideDelay = 1.0
     
     var visible = false
     var usingSlider = false
@@ -174,7 +174,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
         } else if delegate.currentPage != nil && scrollStart != nil {
             scrollDelta = scrollView.contentOffset.y - scrollStart
             
-            if scrollDeltaTimer == nil && scrollDelta > (pageHeight * 1.15 ) || (scrollDelta * -1) > (pageHeight * 1.15) {
+            if scrollDeltaTimer == nil && scrollDelta > (pageHeight * 0.2 ) || (scrollDelta * -1) > (pageHeight * 0.2) {
                 show()
                 resetScrollDelta()
             }
@@ -288,7 +288,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         pageIndicatorView = FolioReaderPageIndicator(frame: CGRect(x: 0, y: view.frame.height-pageIndicatorHeight, width: view.frame.width, height: pageIndicatorHeight))
         view.addSubview(pageIndicatorView)
         
-        scrollScrubber = ScrollScrubber(frame: CGRect(x: pageWidth + 6, y: 74, width: 40, height: pageHeight - 100))
+        let scrubberY: CGFloat = readerConfig.shouldHideNavigationOnTap == true ? 50 : 74
+        scrollScrubber = ScrollScrubber(frame: CGRect(x: pageWidth + 10, y: scrubberY, width: 40, height: pageHeight - 100))
         scrollScrubber.delegate = self
         view.addSubview(scrollScrubber.slider)
         
@@ -536,7 +537,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         pageIndicatorFrame.size.width = pageWidth
         
         var scrollScrubberFrame = scrollScrubber.slider.frame;
-        scrollScrubberFrame.origin.x = pageWidth + 6
+        scrollScrubberFrame.origin.x = pageWidth + 10
         scrollScrubberFrame.size.height = pageHeight - 100
         
         UIView.animateWithDuration(duration, animations: {
