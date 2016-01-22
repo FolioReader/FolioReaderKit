@@ -16,8 +16,8 @@ class FolioReaderHighlightList: UITableViewController {
         super.viewDidLoad()
 
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
-        tableView.backgroundColor = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeBackground : UIColor.whiteColor()
-        tableView.separatorColor = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeSeparatorColor : readerConfig.menuSeparatorColor
+        tableView.backgroundColor = isNight(readerConfig.nightModeBackground, UIColor.whiteColor())
+        tableView.separatorColor = isNight(readerConfig.nightModeSeparatorColor, readerConfig.menuSeparatorColor)
         
         highlights = Highlight.allByBookId((kBookId as NSString).stringByDeletingPathExtension)
         title = readerConfig.localizedHighlightsTitle
@@ -31,9 +31,9 @@ class FolioReaderHighlightList: UITableViewController {
     }
     
     func configureNavBar() {
-        let navBackground = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeMenuBackground : UIColor.whiteColor()
+        let navBackground = isNight(readerConfig.nightModeMenuBackground, UIColor.whiteColor())
         let tintColor = readerConfig.tintColor
-        let navText = FolioReader.sharedInstance.nightMode ? UIColor.whiteColor() : UIColor.blackColor()
+        let navText = isNight(UIColor.whiteColor(), UIColor.blackColor())
         let font = UIFont(name: "Avenir-Light", size: 17)!
         setTranslucentNavigation(color: navBackground, tintColor: tintColor, titleColor: navText, andFont: font)
     }
@@ -77,7 +77,7 @@ class FolioReaderHighlightList: UITableViewController {
         }
         
         dateLabel.text = dateString.uppercaseString
-        dateLabel.textColor = FolioReader.sharedInstance.nightMode ? UIColor(white: 5, alpha: 0.3) : UIColor.lightGrayColor()
+        dateLabel.textColor = isNight(UIColor(white: 5, alpha: 0.3), UIColor.lightGrayColor())
         dateLabel.frame = CGRect(x: 20, y: 20, width: view.frame.width-40, height: dateLabel.frame.height)
         
         // Text
@@ -86,7 +86,7 @@ class FolioReaderHighlightList: UITableViewController {
         let range = NSRange(location: 0, length: text.length)
         let paragraph = NSMutableParagraphStyle()
         paragraph.lineSpacing = 3
-        let textColor = FolioReader.sharedInstance.nightMode ? readerConfig.menuTextColor : UIColor.blackColor()
+        let textColor = isNight(readerConfig.menuTextColor, UIColor.blackColor())
         
         text.addAttribute(NSParagraphStyleAttributeName, value: paragraph, range: range)
         text.addAttribute(NSFontAttributeName, value: UIFont(name: "Avenir-Light", size: 16)!, range: range)

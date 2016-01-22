@@ -20,7 +20,7 @@ class FolioReaderPageIndicator: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let color = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeBackground : UIColor.whiteColor()
+        let color = isNight(readerConfig.nightModeBackground, UIColor.whiteColor())
         backgroundColor = color
         layer.shadowColor = color.CGColor
         layer.shadowOffset = CGSize(width: 0, height: -6)
@@ -58,12 +58,12 @@ class FolioReaderPageIndicator: UIView {
             layer.shadowPath = UIBezierPath(rect: bounds).CGPath
             
             // Update colors
-            let color = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeBackground : UIColor.whiteColor()
+            let color = isNight(readerConfig.nightModeBackground, UIColor.whiteColor())
             backgroundColor = color
             layer.shadowColor = color.CGColor
             
-            minutesLabel.textColor = FolioReader.sharedInstance.nightMode ? UIColor(white: 5, alpha: 0.3) : UIColor(white: 0, alpha: 0.6)
-            pagesLabel.textColor = FolioReader.sharedInstance.nightMode ? UIColor(white: 5, alpha: 0.6) : UIColor(white: 0, alpha: 0.9)
+            minutesLabel.textColor = isNight(UIColor(white: 5, alpha: 0.3), UIColor(white: 0, alpha: 0.6))
+            pagesLabel.textColor = isNight(UIColor(white: 5, alpha: 0.6), UIColor(white: 0, alpha: 0.9))
         }
     }
     

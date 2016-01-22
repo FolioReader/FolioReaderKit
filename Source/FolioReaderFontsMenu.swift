@@ -26,7 +26,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate {
         
         // Menu view
         menuView = UIView(frame: CGRectMake(0, view.frame.height-170, view.frame.width, view.frame.height))
-        menuView.backgroundColor = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeMenuBackground : UIColor.whiteColor()
+        menuView.backgroundColor = isNight(readerConfig.nightModeMenuBackground, UIColor.whiteColor())
         menuView.autoresizingMask = .FlexibleWidth
         menuView.layer.shadowColor = UIColor.blackColor().CGColor
         menuView.layer.shadowOffset = CGSize(width: 0, height: 0)

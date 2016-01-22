@@ -285,7 +285,7 @@ class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return FolioReader.sharedInstance.nightMode ? .LightContent : .Default
+        return isNight(.LightContent, .Default)
     }
     
     

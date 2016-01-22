@@ -33,8 +33,8 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
         tableView = UITableView(frame: tableViewFrame)
         tableView.delaysContentTouches = true
         tableView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
-        tableView.backgroundColor = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeMenuBackground : readerConfig.menuBackgroundColor
-        tableView.separatorColor = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeSeparatorColor : readerConfig.menuSeparatorColor
+        tableView.backgroundColor = isNight(readerConfig.nightModeMenuBackground, readerConfig.menuBackgroundColor)
+        tableView.separatorColor = isNight(readerConfig.nightModeSeparatorColor, readerConfig.menuSeparatorColor)
         tableView.delegate = self
         tableView.dataSource = self
         view.addSubview(tableView)

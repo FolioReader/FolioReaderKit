@@ -77,7 +77,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     
     func updateColors() {
         slider.minimumTrackTintColor = readerConfig.tintColor
-        slider.maximumTrackTintColor = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeSeparatorColor : readerConfig.menuSeparatorColor
+        slider.maximumTrackTintColor = isNight(readerConfig.nightModeSeparatorColor, readerConfig.menuSeparatorColor)
     }
     
     // MARK: - slider events
@@ -258,7 +258,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         layout.minimumInteritemSpacing = 0
         layout.scrollDirection = UICollectionViewScrollDirection.Vertical
         
-        let background = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeBackground : UIColor.whiteColor()
+        let background = isNight(readerConfig.nightModeBackground, UIColor.whiteColor())
         view.backgroundColor = background
         
         // CollectionView
@@ -294,7 +294,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         view.addSubview(scrollScrubber.slider)
         
         // Loading indicator
-        let style: UIActivityIndicatorViewStyle = FolioReader.sharedInstance.nightMode ? .White : .Gray
+        let style: UIActivityIndicatorViewStyle = isNight(.White, .Gray)
         loadingView = UIActivityIndicatorView(activityIndicatorStyle: style)
         loadingView.center = view.center
         loadingView.hidesWhenStopped = true
@@ -315,9 +315,9 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     }
 
     func configureNavBar() {
-        let navBackground = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeMenuBackground : UIColor.whiteColor()
+        let navBackground = isNight(readerConfig.nightModeMenuBackground, UIColor.whiteColor())
         let tintColor = readerConfig.tintColor
-        let navText = FolioReader.sharedInstance.nightMode ? UIColor.whiteColor() : UIColor.blackColor()
+        let navText = isNight(UIColor.whiteColor(), UIColor.blackColor())
         let font = UIFont(name: "Avenir-Light", size: 17)!
         setTranslucentNavigation(color: navBackground, tintColor: tintColor, titleColor: navText, andFont: font)
     }

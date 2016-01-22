@@ -138,6 +138,12 @@ public class FolioReader {
     }
 }
 
+// MARK: - Global Functions
+
+func isNight<T> (f: T, _ l: T) -> T {
+    return FolioReader.sharedInstance.nightMode ? f : l
+}
+
 // MARK: - Extensions
 
 extension NSBundle {
@@ -448,7 +454,7 @@ extension UIViewController: UIGestureRecognizerDelegate {
 
 extension UINavigationController {
     override public func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return FolioReader.sharedInstance.nightMode ? .LightContent : .Default
+        return isNight(.LightContent, .Default)
     }
 }
 
