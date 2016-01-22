@@ -52,21 +52,19 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     var scrollDeltaTimer: NSTimer!
     
     init(frame:CGRect) {
-        
         super.init()
         
-        let color = readerConfig.tintColor
         slider = UISlider()
         slider.layer.anchorPoint = CGPoint(x: 0, y: 0)
         slider.transform = CGAffineTransformMakeRotation(CGFloat(M_PI_2))
         slider.frame = frame
-        slider.minimumTrackTintColor = color
-        slider.maximumTrackTintColor = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeSeparatorColor : readerConfig.menuSeparatorColor
         slider.alpha = 0
+        
+        updateColors()
         
         // less obtrusive knob and fixes jump: http://stackoverflow.com/a/22301039/484780
         let thumbImg = UIImage(readerImageNamed: "knob")
-        let thumbImgColor = thumbImg!.imageTintColor(color).imageWithRenderingMode(.AlwaysOriginal)
+        let thumbImgColor = thumbImg!.imageTintColor(readerConfig.tintColor).imageWithRenderingMode(.AlwaysOriginal)
         slider.setThumbImage(thumbImgColor, forState: .Normal)
         slider.setThumbImage(thumbImgColor, forState: .Selected)
         slider.setThumbImage(thumbImgColor, forState: .Highlighted)
@@ -75,6 +73,11 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
         slider.addTarget(self, action: "sliderTouchDown:", forControlEvents: .TouchDown)
         slider.addTarget(self, action: "sliderTouchUp:", forControlEvents: .TouchUpInside)
         slider.addTarget(self, action: "sliderTouchUp:", forControlEvents: .TouchUpOutside)
+    }
+    
+    func updateColors() {
+        slider.minimumTrackTintColor = readerConfig.tintColor
+        slider.maximumTrackTintColor = FolioReader.sharedInstance.nightMode ? readerConfig.nightModeSeparatorColor : readerConfig.menuSeparatorColor
     }
     
     // MARK: - slider events

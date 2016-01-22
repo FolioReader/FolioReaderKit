@@ -168,27 +168,32 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate {
         if segmentView.tag == 1 {
 
             FolioReader.sharedInstance.nightMode = Bool(index)
-
+            
+            let readerCenter = FolioReader.sharedInstance.readerCenter
+            let readerSidePanel = FolioReader.sharedInstance.readerSidePanel
+            
             switch index {
             case 0:
                 currentPage.webView.js("nightMode(false)")
                 UIView.animateWithDuration(0.6, animations: {
                     self.menuView.backgroundColor = UIColor.whiteColor()
-                    FolioReader.sharedInstance.readerCenter.collectionView.backgroundColor = UIColor.whiteColor()
-                    FolioReader.sharedInstance.readerCenter.configureNavBar()
+                    readerCenter.collectionView.backgroundColor = UIColor.whiteColor()
+                    readerCenter.configureNavBar()
+                    readerCenter.scrollScrubber.updateColors()
                 })
-                FolioReader.sharedInstance.readerSidePanel.tableView.backgroundColor = readerConfig.menuBackgroundColor
-                FolioReader.sharedInstance.readerSidePanel.tableView.separatorColor = readerConfig.menuSeparatorColor
+                readerSidePanel.tableView.backgroundColor = readerConfig.menuBackgroundColor
+                readerSidePanel.tableView.separatorColor = readerConfig.menuSeparatorColor
                 break
             case 1:
                 currentPage.webView.js("nightMode(true)")
                 UIView.animateWithDuration(0.6, animations: {
                     self.menuView.backgroundColor = readerConfig.nightModeMenuBackground
-                    FolioReader.sharedInstance.readerCenter.collectionView.backgroundColor = readerConfig.nightModeBackground
-                    FolioReader.sharedInstance.readerCenter.configureNavBar()
+                    readerCenter.collectionView.backgroundColor = readerConfig.nightModeBackground
+                    readerCenter.configureNavBar()
+                    readerCenter.scrollScrubber.updateColors()
                 })
-                FolioReader.sharedInstance.readerSidePanel.tableView.backgroundColor = readerConfig.nightModeMenuBackground
-                FolioReader.sharedInstance.readerSidePanel.tableView.separatorColor = readerConfig.nightModeSeparatorColor
+                readerSidePanel.tableView.backgroundColor = readerConfig.nightModeMenuBackground
+                readerSidePanel.tableView.separatorColor = readerConfig.nightModeSeparatorColor
                 break
             default:
                 break
