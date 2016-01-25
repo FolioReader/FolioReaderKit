@@ -39,10 +39,6 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.dataSource = self
         view.addSubview(tableView)
         
-        if readerConfig.toolBarBackgroundColor == nil {
-            readerConfig.toolBarBackgroundColor = readerConfig.tintColor
-        }
-        
         toolBar = UIToolbar(frame: CGRectMake(0, screenBounds().height-toolBarHeight, view.frame.width, toolBarHeight))
         toolBar.autoresizingMask = .FlexibleWidth
         toolBar.barTintColor = readerConfig.toolBarBackgroundColor

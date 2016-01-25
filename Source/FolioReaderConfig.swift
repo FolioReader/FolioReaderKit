@@ -11,7 +11,7 @@ import UIKit
 public class FolioReaderConfig: NSObject {
     // Reader Colors
     public var tintColor: UIColor!
-    public var toolBarBackgroundColor: UIColor!
+    public lazy var toolBarBackgroundColor: UIColor! = self.tintColor
     public var toolBarTintColor: UIColor!
     public var menuBackgroundColor: UIColor!
     public var menuSeparatorColor: UIColor!
@@ -19,7 +19,7 @@ public class FolioReaderConfig: NSObject {
     public var nightModeBackground: UIColor!
     public var nightModeMenuBackground: UIColor!
     public var nightModeSeparatorColor: UIColor!
-    public var mediaOverlayColor: UIColor!
+    public lazy var mediaOverlayColor: UIColor! = self.tintColor.highlightColor()
     
     // Custom actions
     public var shouldHideNavigationOnTap: Bool!
@@ -49,7 +49,6 @@ public class FolioReaderConfig: NSObject {
     
     public override init() {
         self.tintColor = UIColor(rgba: "#6ACC50")
-        self.toolBarBackgroundColor = nil // If not set by config, this will use tintColor later
         self.toolBarTintColor = UIColor.whiteColor()
         self.menuBackgroundColor = UIColor(rgba: "#F5F5F5")
         self.menuSeparatorColor = UIColor(rgba: "#D7D7D7")
@@ -57,7 +56,6 @@ public class FolioReaderConfig: NSObject {
         self.nightModeBackground = UIColor(rgba: "#131313")
         self.nightModeMenuBackground = UIColor(rgba: "#1E1E1E")
         self.nightModeSeparatorColor = UIColor(white: 0.5, alpha: 0.2)
-        self.mediaOverlayColor = nil // If not set by config, this will use tintColor later
 
         self.shouldHideNavigationOnTap = true
         self.allowSharing = true

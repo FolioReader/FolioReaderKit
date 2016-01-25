@@ -447,11 +447,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         // Configure the cell
         let resource = book.spine.spineReferences[indexPath.row].resource
         var html = try? String(contentsOfFile: resource.fullHref, encoding: NSUTF8StringEncoding)
-        
-        if readerConfig.mediaOverlayColor == nil {
-           readerConfig.mediaOverlayColor = readerConfig.tintColor.highlightColor()
-        }
-
         let mediaOverlayStyle = "background: \(readerConfig.mediaOverlayColor.hexString(false)) !important;"
 
         // Inject CSS
