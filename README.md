@@ -70,6 +70,8 @@ func applicationWillTerminate(application: UIApplication) {
 ![Highlight](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/highlight.gif)
 ##### Reading Time Left :open_mouth:
 ![Time left](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/time-left.mov.gif)
+##### Media Overlays 😭
+![Time left](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/media-overlays.gif)
 
 ### Documentation
 For now the documentation is the sample project, I will write a better documentation in the next weeks.
