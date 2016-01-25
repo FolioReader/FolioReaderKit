@@ -81,17 +81,27 @@ class FRMediaType: NSObject {
     
     /**
     Gets the MediaType based on the file mimetype.
+     
+     - Parameters:
+        - name: The mediaType name
+        - filename: The file name to extract the extension
+     
+     - Returns: A know mediatype or create a new one.
     */
-    static var mediaTypesByName: [String: MediaType] = {
-        var mediaTypesByNameTemp = [String: MediaType]()
+    static func mediaTypeByName(name: String, fileName: String) -> MediaType {
         for mediatype in mediatypes {
-            mediaTypesByNameTemp[mediatype.name] = mediatype
+            if mediatype.name == name {
+                return mediatype
+            }
         }
-        return mediaTypesByNameTemp
-    }()
+        let ext = "."+NSURL(string: fileName ?? "")!.pathExtension!
+        return MediaType(name: name, defaultExtension: ext)
+    }
     
     /**
     Compare if the resource is a image.
+     
+     - Returns: `true` if is a image and `false` if not
     */
     static func isBitmapImage(mediaType: MediaType) -> Bool {
         return mediaType == JPG || mediaType == PNG || mediaType == GIF
@@ -101,9 +111,9 @@ class FRMediaType: NSObject {
     /**
     Gets the MediaType based on the file extension.
     */
-    static func determineMediaType(filename: String) -> MediaType? {
+    static func determineMediaType(fileName: String) -> MediaType? {
         for mediatype in mediatypes {
-            let ext = "."+(filename as NSString).pathExtension
+            let ext = "."+(fileName as NSString).pathExtension
             if mediatype.extensions.contains(ext) {
                 return mediatype
             }

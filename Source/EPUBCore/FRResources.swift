@@ -34,6 +34,20 @@ class FRResources: NSObject {
     }
     
     /**
+     Gets the first resource (random order) with the give extension.
+     
+     Useful for looking up the table of contents as it's supposed to be the only resource with NCX extension.
+     */
+    func findFirstResource(byExtension ext: String) -> FRResource? {
+        for resource in resources.values {
+            if resource.mediaType != nil && resource.mediaType.defaultExtension == ext {
+                return resource
+            }
+        }
+        return nil
+    }
+    
+    /**
     Whether there exists a resource with the given href.
     */
     func containsByHref(href: String) -> Bool {

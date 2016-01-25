@@ -84,7 +84,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
                 resource.id = item.attributes["id"]
                 resource.href = item.attributes["href"]
                 resource.fullHref = (resourcesBasePath as NSString).stringByAppendingPathComponent(item.attributes["href"]!).stringByRemovingPercentEncoding
-                resource.mediaType = FRMediaType.mediaTypesByName[item.attributes["media-type"]!]
+                resource.mediaType = FRMediaType.mediaTypeByName(item.attributes["media-type"]!, fileName: resource.href)
                 resource.mediaOverlay = item.attributes["media-overlay"]
                 
                 // if a .smil file is listed in resources, go parse that file now and save it on book model
@@ -98,11 +98,16 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             book.smils.basePath = resourcesBasePath
 
             // Get the first resource with the NCX mediatype
-            book.ncxResource = book.resources.findFirstResource(byMediaType: FRMediaType.NCX)
-            
-            if book.ncxResource == nil {
-                print("ERROR: Could not find table of contents resource. The book don't have a NCX resource.")
+            if let ncxResource = book.resources.findFirstResource(byMediaType: FRMediaType.NCX) {
+                book.ncxResource = ncxResource
             }
+            
+            // Non-standard books may use wrong mediatype, fallback with extension
+            if let ncxResource = book.resources.findFirstResource(byExtension: FRMediaType.NCX.defaultExtension) {
+                book.ncxResource = ncxResource
+            }
+            
+            assert(book.ncxResource != nil, "ERROR: Could not find table of contents resource. The book don't have a NCX resource.")
             
             // The book TOC
             book.tableOfContents = findTableOfContents()
