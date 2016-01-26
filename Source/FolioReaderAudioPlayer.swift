@@ -286,10 +286,11 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
         var songInfo = [String: AnyObject]()
         
         // Get book Artwork
-        if let artwork = UIImage(contentsOfFile: book.coverImage.fullHref) {
+        if book.coverImage != nil {
+        if let artwork = UIImage(contentsOfFile: book.coverImage!.fullHref) {
             let albumArt = MPMediaItemArtwork(image: artwork)
             songInfo[MPMediaItemPropertyArtwork] = albumArt
-        }
+        }}
         
         // Get book title
         if let title = book.title() {
