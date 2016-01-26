@@ -264,17 +264,14 @@ function audioMarkID(className, id) {
     el.classList.add(className)
 }
 
-function setMediaOverlayStyle(style) {
+function setMediaOverlayStyle(style){
+    document.documentElement.classList.remove("mediaOverlayStyle0", "mediaOverlayStyle1", "mediaOverlayStyle2")
+    document.documentElement.classList.add(style)
+}
+
+function setMediaOverlayStyleColors(color, colorHighlight) {
     var stylesheet = document.styleSheets[document.styleSheets.length-1];
-    var index = null;
-
-    [].forEach.call(stylesheet.rules, function(rule, i) {
-        if (rule.selectorText && rule.selectorText == "span.epub-media-overlay-playing") {
-            index = i
-            return
-        }
-    })
-
-    if (index) stylesheet.removeRule(index)
-    stylesheet.insertRule("span.epub-media-overlay-playing { "+style+" }")
+    stylesheet.insertRule(".mediaOverlayStyle0 span.epub-media-overlay-playing { background: "+colorHighlight+" !important }")
+    stylesheet.insertRule(".mediaOverlayStyle1 span.epub-media-overlay-playing { border-color: "+color+" !important }")
+    stylesheet.insertRule(".mediaOverlayStyle2 span.epub-media-overlay-playing { color: "+color+" !important }")
 }

@@ -26,9 +26,29 @@ internal let kCurrentFontFamily = "kCurrentFontFamily"
 internal let kCurrentFontSize = "kCurrentFontSize"
 internal let kCurrentAudioRate = "kCurrentAudioRate"
 internal let kCurrentHighlightStyle = "kCurrentHighlightStyle"
+internal var kCurrentMediaOverlayStyle = "kMediaOverlayStyle"
 internal let kNightMode = "kNightMode"
 internal let kHighlightRange = 30
 internal var kBookId: String!
+
+/**
+ `0` Default  
+ `1` Underline  
+ `2` Text Color
+*/
+enum MediaOverlayStyle: Int {
+    case Default
+    case Underline
+    case TextColor
+    
+    init () {
+        self = .Default
+    }
+    
+    func className() -> String {
+        return "mediaOverlayStyle\(self.rawValue)"
+    }
+}
 
 /**
 *  Main Library class with some useful constants and methods
@@ -80,6 +100,14 @@ public class FolioReader {
         get { return FolioReader.defaults.valueForKey(kCurrentHighlightStyle) as! Int }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentHighlightStyle)
+            FolioReader.defaults.synchronize()
+        }
+    }
+    
+    var currentMediaOverlayStyle: MediaOverlayStyle {
+        get { return MediaOverlayStyle(rawValue: FolioReader.defaults.valueForKey(kCurrentMediaOverlayStyle) as! Int)! }
+        set (value) {
+            FolioReader.defaults.setValue(value.rawValue, forKey: kCurrentMediaOverlayStyle)
             FolioReader.defaults.synchronize()
         }
     }

@@ -19,7 +19,7 @@ public class FolioReaderConfig: NSObject {
     public var nightModeBackground: UIColor!
     public var nightModeMenuBackground: UIColor!
     public var nightModeSeparatorColor: UIColor!
-    public lazy var mediaOverlayColor: UIColor! = self.tintColor.highlightColor()
+    public lazy var mediaOverlayColor: UIColor! = self.tintColor
     
     // Custom actions
     public var shouldHideNavigationOnTap: Bool!
@@ -33,6 +33,7 @@ public class FolioReaderConfig: NSObject {
     public var localizedPlayMenu: String
     public var localizedPauseMenu: String
     public var localizedFontMenuNight: String
+    public var localizedPlayerMenuStyle: String
     public var localizedFontMenuDay: String
     public var localizedReaderOnePageLeft: String
     public var localizedReaderManyPagesLeft: String
@@ -68,6 +69,7 @@ public class FolioReaderConfig: NSObject {
         self.localizedDefineMenu = NSLocalizedString("Define", comment: "")
         self.localizedFontMenuNight = NSLocalizedString("Night", comment: "")
         self.localizedFontMenuDay = NSLocalizedString("Day", comment: "")
+        self.localizedPlayerMenuStyle = NSLocalizedString("Style", comment: "")
         self.localizedReaderOnePageLeft = NSLocalizedString("1 page left", comment: "")
         self.localizedReaderManyPagesLeft = NSLocalizedString("pages left", comment: "")
         self.localizedReaderManyMinutes = NSLocalizedString("minutes", comment: "")

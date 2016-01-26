@@ -175,7 +175,15 @@ html .highlight-yellow, html .highlight-green, html .highlight-blue, html .highl
 }
 
 /* default media overlay style */
-span.epub-media-overlay-playing {background: #ccc !important}
+.mediaOverlayStyle0 span.epub-media-overlay-playing {
+    background: #ccc
+}
+
+.mediaOverlayStyle1 .epub-media-overlay-playing {
+    border-bottom: dotted 2px transparent;
+    border-radius: 0;
+}
+
 
 
 /*
