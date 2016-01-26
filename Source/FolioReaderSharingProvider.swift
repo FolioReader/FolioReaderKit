@@ -9,34 +9,28 @@
 import UIKit
 
 class FolioReaderSharingProvider: UIActivityItemProvider {
-    
-    var subject: String!
-    var text: String!
+
+    var subject: String
+    var text: String
     var html: String?
-    
+
     init(subject: String, text: String, html: String?) {
         self.subject = subject
         self.text = text
-        if let ht = html {
-            self.html = ht
-        }
+        self.html = html
+
         super.init(placeholderItem: "")
     }
-    
+
     override func activityViewController(activityViewController: UIActivityViewController, subjectForActivityType activityType: String?) -> String {
         return subject
     }
-    
+
     override func activityViewController(activityViewController: UIActivityViewController, itemForActivityType activityType: String) -> AnyObject? {
-        
-        if activityType == UIActivityTypeMail {
-            if let html = html {
-                return html
-            } else {
-                return text
-            }
+        if let html = html where activityType == UIActivityTypeMail {
+            return html
         }
-        
+
         return text
     }
 }
