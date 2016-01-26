@@ -12,6 +12,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate {
 
     var menuView: UIView!
     var playPauseBtn: UIButton!
+    var styleOptionBtns = [UIButton]()
     var viewDidAppear = false
 
     override func viewDidLoad() {
@@ -27,7 +28,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate {
         view.addGestureRecognizer(tapGesture)
 
         // Menu view
-        menuView = UIView(frame: CGRectMake(0, view.frame.height-110, view.frame.width, view.frame.height))
+        menuView = UIView(frame: CGRectMake(0, view.frame.height-165, view.frame.width, view.frame.height))
         menuView.backgroundColor = isNight(readerConfig.nightModeMenuBackground, UIColor.whiteColor())
         menuView.autoresizingMask = .FlexibleWidth
         menuView.layer.shadowColor = UIColor.blackColor().CGColor
@@ -118,7 +119,82 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate {
         playbackRate.segmentTitleFont = UIFont(name: "Avenir-Light", size: 17)!
         playbackRate.selectSegmentAtIndex(Int(FolioReader.sharedInstance.currentAudioRate))
         menuView.addSubview(playbackRate)
-
+        
+        
+        // Separator
+        let line2 = UIView(frame: CGRectMake(0, playbackRate.frame.height+playbackRate.frame.origin.y, view.frame.width, 1))
+        line2.backgroundColor = readerConfig.nightModeSeparatorColor
+        menuView.addSubview(line2)
+        
+        
+        // Media overlay highlight styles
+        let style0 = UIButton(frame: CGRectMake(0, line2.frame.height+line2.frame.origin.y, view.frame.width/3, 55))
+        style0.titleLabel!.textAlignment = .Center
+        style0.titleLabel!.font = UIFont(name: "Avenir-Light", size: 17)
+        style0.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        style0.setTitle("Style", forState: .Normal)
+        style0.titleLabel!.textColor = UIColor.whiteColor()
+        menuView.addSubview(style0);
+        style0.titleLabel?.sizeToFit()
+        let style0Bgd = UIView(frame: style0.titleLabel!.frame)
+        style0Bgd.center = CGPointMake(style0.frame.size.width  / 2, style0.frame.size.height / 2);
+        style0Bgd.frame.size.width += 8
+        style0Bgd.frame.origin.x -= 4
+        style0Bgd.backgroundColor = normalColor;
+        style0Bgd.layer.cornerRadius = 3.0;
+        style0Bgd.userInteractionEnabled = false
+        style0.insertSubview(style0Bgd, belowSubview: style0.titleLabel!)
+        
+        let style1 = UIButton(frame: CGRectMake(view.frame.width/3, line2.frame.height+line2.frame.origin.y, view.frame.width/3, 55))
+        style1.titleLabel!.textAlignment = .Center
+        style1.titleLabel!.font = UIFont(name: "Avenir-Light", size: 17)
+        style1.titleLabel!.textColor = normalColor
+        style1.titleLabel!.layer.addBorder(.Left, color: readerConfig.nightModeSeparatorColor, thickness: 1)
+        style1.setAttributedTitle(NSAttributedString(string: "Style", attributes: [
+            NSUnderlineStyleAttributeName: NSUnderlineStyle.PatternDot.rawValue|NSUnderlineStyle.StyleSingle.rawValue,
+            NSUnderlineColorAttributeName: normalColor
+        ]), forState: .Normal)
+        style1.setAttributedTitle(NSAttributedString(string: "Style", attributes: [
+            NSUnderlineStyleAttributeName: NSUnderlineStyle.PatternDot.rawValue|NSUnderlineStyle.StyleSingle.rawValue,
+            NSUnderlineColorAttributeName: selectedColor
+            ]), forState: .Selected)
+        menuView.addSubview(style1);
+        
+        let style2 = UIButton(frame: CGRectMake(view.frame.width/1.5, line2.frame.height+line2.frame.origin.y, view.frame.width/3, 55))
+        style2.titleLabel!.textAlignment = .Center
+        style2.titleLabel!.font = UIFont(name: "Avenir-Light", size: 17)
+        style2.titleLabel!.textColor = normalColor
+        style2.titleLabel!.layer.addBorder(.Left, color: readerConfig.nightModeSeparatorColor, thickness: 1)
+        style2.setTitleColor(normalColor, forState: .Normal)
+        style2.setTitleColor(selectedColor, forState: .Selected)
+        style2.setTitle("Style", forState: .Normal)
+        menuView.addSubview(style2);
+        
+        let style1line = UIView(frame: CGRectMake(style1.frame.origin.x, style1.frame.origin.y, 1, style1.frame.height))
+        style1line.backgroundColor = readerConfig.nightModeSeparatorColor
+        menuView.addSubview(style1line)
+        
+        let style2line = UIView(frame: CGRectMake(style2.frame.origin.x, style2.frame.origin.y, 1, style2.frame.height))
+        style2line.backgroundColor = readerConfig.nightModeSeparatorColor
+        menuView.addSubview(style2line)
+        
+        style0.selected = (FolioReader.sharedInstance.currentMediaOverlayStyle == .Default)
+        style1.selected = (FolioReader.sharedInstance.currentMediaOverlayStyle == .Underline)
+        style2.selected = (FolioReader.sharedInstance.currentMediaOverlayStyle == .TextColor)
+        
+        if style0.selected { style0Bgd.backgroundColor = selectedColor }
+        
+        style0.tag = MediaOverlayStyle.Default.rawValue
+        style1.tag = MediaOverlayStyle.Underline.rawValue
+        style2.tag = MediaOverlayStyle.TextColor.rawValue
+        
+        style0.addTarget(self, action: "changeStyle:", forControlEvents: .TouchUpInside)
+        style1.addTarget(self, action: "changeStyle:", forControlEvents: .TouchUpInside)
+        style2.addTarget(self, action: "changeStyle:", forControlEvents: .TouchUpInside)
+        
+        styleOptionBtns.append(style0)
+        styleOptionBtns.append(style1)
+        styleOptionBtns.append(style2)
     }
     
 
@@ -169,6 +245,19 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate {
         sender.selected = sender.selected != true
         FolioReader.sharedInstance.readerAudioPlayer.togglePlay()
         closeView()
+    }
+    
+    func changeStyle(sender: UIButton!) {
+        FolioReader.sharedInstance.currentMediaOverlayStyle = MediaOverlayStyle(rawValue: sender.tag)!
+        
+        // select the proper style button
+        for btn in styleOptionBtns {
+            btn.selected = btn == sender
+            
+            if btn.tag == MediaOverlayStyle.Default.rawValue {
+                btn.subviews.first?.backgroundColor = btn.selected ? readerConfig.tintColor : UIColor(white: 0.5, alpha: 0.7)
+            }
+        }
     }
 
     func closeView() {
