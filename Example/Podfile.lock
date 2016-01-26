@@ -9,22 +9,28 @@ PODS:
     - ZFDragableModalTransition
   - FontBlaster (2.0.2)
   - JSQWebViewController (2.0.1)
+  - Nimble (3.1.0)
+  - Quick (0.8.0)
   - SSZipArchive (1.0.1)
   - UIMenuItem-CXAImageSupport (0.0.1)
   - ZFDragableModalTransition (0.6)
 
 DEPENDENCIES:
   - FolioReaderKit (from `../`)
+  - Nimble
+  - Quick
 
 EXTERNAL SOURCES:
   FolioReaderKit:
-    :path: "../"
+    :path: ../
 
 SPEC CHECKSUMS:
   AEXML: d6bb5b994521fcf3667ee8ccc1ed533f31b19218
   FolioReaderKit: 8f67f16fe474a588c3ddc9f45557e6bd9a4dbf34
   FontBlaster: 8165fef7f0556ba766836a2f5654a16cd0251e27
   JSQWebViewController: 2e416ae6604676510812bbda050d63a1488003a4
+  Nimble: 79d40f4d69d47314229bbabacaa02b8838c779b9
+  Quick: 563d0f6ec5f72e394645adb377708639b7dd38ab
   SSZipArchive: 5f30a0af2cb3d48c0ff83b1e18029f7041ac3c38
   UIMenuItem-CXAImageSupport: 2945e2af4487414caad801ed8ff6ac8db274e986
   ZFDragableModalTransition: 0d294eaaba6edfcb9839595de765f9ca06a4b524
