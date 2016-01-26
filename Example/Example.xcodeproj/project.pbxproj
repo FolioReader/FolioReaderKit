@@ -20,6 +20,7 @@
 		CA10C1341C572A4B0049165D /* FolioReaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA10C1331C572A4B0049165D /* FolioReaderTests.swift */; };
 		CA61603F1C572C4C00ACD034 /* The Adventures Of Sherlock Holmes - Adventure I.epub in Resources */ = {isa = PBXBuildFile; fileRef = 6E5C9B081C403942008F6FD9 /* The Adventures Of Sherlock Holmes - Adventure I.epub */; };
 		CA6160401C572C4C00ACD034 /* The Silver Chair.epub in Resources */ = {isa = PBXBuildFile; fileRef = 6E5C9B031C4037B7008F6FD9 /* The Silver Chair.epub */; };
+		CAF233291C57E1F400CB930C /* SharingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF233281C57E1F400CB930C /* SharingProviderTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,7 @@
 		CA10C1311C572A4B0049165D /* FolioReaderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FolioReaderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA10C1331C572A4B0049165D /* FolioReaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolioReaderTests.swift; sourceTree = "<group>"; };
 		CA10C1351C572A4B0049165D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CAF233281C57E1F400CB930C /* SharingProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharingProviderTests.swift; sourceTree = "<group>"; };
 		CF0BE619497BB80F68421DFD /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
 		D92D71D4A92CE71CA9A6CF5A /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
 		DC3BF5678D61F199F4ECC2BD /* Pods-FolioReaderTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FolioReaderTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FolioReaderTests/Pods-FolioReaderTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				CA10C1331C572A4B0049165D /* FolioReaderTests.swift */,
+				CAF233281C57E1F400CB930C /* SharingProviderTests.swift */,
 				CA10C1351C572A4B0049165D /* Info.plist */,
 			);
 			path = FolioReaderTests;
@@ -367,6 +370,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CA10C1341C572A4B0049165D /* FolioReaderTests.swift in Sources */,
+				CAF233291C57E1F400CB930C /* SharingProviderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
