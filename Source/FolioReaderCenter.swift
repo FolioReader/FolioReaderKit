@@ -447,14 +447,14 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         // Configure the cell
         let resource = book.spine.spineReferences[indexPath.row].resource
         var html = try? String(contentsOfFile: resource.fullHref, encoding: NSUTF8StringEncoding)
-        let mediaOverlayStyle = "background: \(readerConfig.mediaOverlayColor.hexString(false)) !important;"
+        let mediaOverlayStyleColors = "\"\(readerConfig.mediaOverlayColor.hexString(false))\", \"\(readerConfig.mediaOverlayColor.highlightColor().hexString(false))\""
 
         // Inject CSS
         let jsFilePath = NSBundle.frameworkBundle().pathForResource("Bridge", ofType: "js")
         let cssFilePath = NSBundle.frameworkBundle().pathForResource("Style", ofType: "css")
         let cssTag = "<link rel=\"stylesheet\" type=\"text/css\" href=\"\(cssFilePath!)\">"
         let jsTag = "<script type=\"text/javascript\" src=\"\(jsFilePath!)\"></script>" +
-                    "<script type=\"text/javascript\">setMediaOverlayStyle(\"\(mediaOverlayStyle)\")</script>"
+                    "<script type=\"text/javascript\">setMediaOverlayStyleColors(\(mediaOverlayStyleColors))</script>"
         
         let toInject = "\n\(cssTag)\n\(jsTag)\n</head>"
         html = html?.stringByReplacingOccurrencesOfString("</head>", withString: toInject)
@@ -479,6 +479,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             break
         }
         
+        classes += " "+FolioReader.sharedInstance.currentMediaOverlayStyle.className()
         
         // Night mode
         if FolioReader.sharedInstance.nightMode {

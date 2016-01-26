@@ -44,6 +44,10 @@ enum MediaOverlayStyle: Int {
     init () {
         self = .Default
     }
+    
+    func className() -> String {
+        return "mediaOverlayStyle\(self.rawValue)"
+    }
 }
 
 /**

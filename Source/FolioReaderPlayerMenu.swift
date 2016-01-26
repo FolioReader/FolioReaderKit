@@ -131,9 +131,9 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate {
         let style0 = UIButton(frame: CGRectMake(0, line2.frame.height+line2.frame.origin.y, view.frame.width/3, 55))
         style0.titleLabel!.textAlignment = .Center
         style0.titleLabel!.font = UIFont(name: "Avenir-Light", size: 17)
-        style0.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        style0.setTitle("Style", forState: .Normal)
-        style0.titleLabel!.textColor = UIColor.whiteColor()
+        style0.setTitleColor(isNight(readerConfig.nightModeMenuBackground, UIColor.whiteColor()), forState: .Normal)
+        style0.setTitleColor(isNight(readerConfig.nightModeMenuBackground, UIColor.whiteColor()), forState: .Selected)
+        style0.setTitle(readerConfig.localizedPlayerMenuStyle, forState: .Normal)
         menuView.addSubview(style0);
         style0.titleLabel?.sizeToFit()
         let style0Bgd = UIView(frame: style0.titleLabel!.frame)
@@ -148,13 +148,14 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate {
         let style1 = UIButton(frame: CGRectMake(view.frame.width/3, line2.frame.height+line2.frame.origin.y, view.frame.width/3, 55))
         style1.titleLabel!.textAlignment = .Center
         style1.titleLabel!.font = UIFont(name: "Avenir-Light", size: 17)
-        style1.titleLabel!.textColor = normalColor
-        style1.titleLabel!.layer.addBorder(.Left, color: readerConfig.nightModeSeparatorColor, thickness: 1)
+        style1.setTitleColor(normalColor, forState: .Normal)
         style1.setAttributedTitle(NSAttributedString(string: "Style", attributes: [
+            NSForegroundColorAttributeName: normalColor,
             NSUnderlineStyleAttributeName: NSUnderlineStyle.PatternDot.rawValue|NSUnderlineStyle.StyleSingle.rawValue,
             NSUnderlineColorAttributeName: normalColor
         ]), forState: .Normal)
-        style1.setAttributedTitle(NSAttributedString(string: "Style", attributes: [
+        style1.setAttributedTitle(NSAttributedString(string: readerConfig.localizedPlayerMenuStyle, attributes: [
+            NSForegroundColorAttributeName: isNight(UIColor.whiteColor(), UIColor.blackColor()),
             NSUnderlineStyleAttributeName: NSUnderlineStyle.PatternDot.rawValue|NSUnderlineStyle.StyleSingle.rawValue,
             NSUnderlineColorAttributeName: selectedColor
             ]), forState: .Selected)
@@ -163,35 +164,34 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate {
         let style2 = UIButton(frame: CGRectMake(view.frame.width/1.5, line2.frame.height+line2.frame.origin.y, view.frame.width/3, 55))
         style2.titleLabel!.textAlignment = .Center
         style2.titleLabel!.font = UIFont(name: "Avenir-Light", size: 17)
-        style2.titleLabel!.textColor = normalColor
-        style2.titleLabel!.layer.addBorder(.Left, color: readerConfig.nightModeSeparatorColor, thickness: 1)
         style2.setTitleColor(normalColor, forState: .Normal)
         style2.setTitleColor(selectedColor, forState: .Selected)
-        style2.setTitle("Style", forState: .Normal)
+        style2.setTitle(readerConfig.localizedPlayerMenuStyle, forState: .Normal)
         menuView.addSubview(style2);
         
+        // add line dividers between style buttons
         let style1line = UIView(frame: CGRectMake(style1.frame.origin.x, style1.frame.origin.y, 1, style1.frame.height))
         style1line.backgroundColor = readerConfig.nightModeSeparatorColor
         menuView.addSubview(style1line)
-        
         let style2line = UIView(frame: CGRectMake(style2.frame.origin.x, style2.frame.origin.y, 1, style2.frame.height))
         style2line.backgroundColor = readerConfig.nightModeSeparatorColor
         menuView.addSubview(style2line)
         
+        // select the current style
         style0.selected = (FolioReader.sharedInstance.currentMediaOverlayStyle == .Default)
         style1.selected = (FolioReader.sharedInstance.currentMediaOverlayStyle == .Underline)
         style2.selected = (FolioReader.sharedInstance.currentMediaOverlayStyle == .TextColor)
-        
         if style0.selected { style0Bgd.backgroundColor = selectedColor }
         
+        // hook up button actions
         style0.tag = MediaOverlayStyle.Default.rawValue
         style1.tag = MediaOverlayStyle.Underline.rawValue
         style2.tag = MediaOverlayStyle.TextColor.rawValue
-        
         style0.addTarget(self, action: "changeStyle:", forControlEvents: .TouchUpInside)
         style1.addTarget(self, action: "changeStyle:", forControlEvents: .TouchUpInside)
         style2.addTarget(self, action: "changeStyle:", forControlEvents: .TouchUpInside)
         
+        // store ref to buttons
         styleOptionBtns.append(style0)
         styleOptionBtns.append(style1)
         styleOptionBtns.append(style2)
@@ -257,6 +257,11 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate {
             if btn.tag == MediaOverlayStyle.Default.rawValue {
                 btn.subviews.first?.backgroundColor = btn.selected ? readerConfig.tintColor : UIColor(white: 0.5, alpha: 0.7)
             }
+        }
+        
+        // update the current page style
+        if let currentPage = FolioReader.sharedInstance.readerCenter.currentPage {
+            currentPage.webView.js("setMediaOverlayStyle(\"\(FolioReader.sharedInstance.currentMediaOverlayStyle.className())\")")
         }
     }
 
