@@ -352,16 +352,14 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         collectionView.reloadData()
         configureNavBarButtons()
         
-        if let position = FolioReader.defaults.valueForKey(kBookId) as? NSDictionary {
-            let pageNumber = position["pageNumber"]! as! Int
-            
-            if pageNumber > 0 {
-                changePageWith(page: pageNumber)
-                currentPageNumber = pageNumber
-            }
-        } else {
-            currentPageNumber = 1
+        if let position = FolioReader.defaults.valueForKey(kBookId) as? NSDictionary,
+            let pageNumber = position["pageNumber"] as? Int where pageNumber > 0 {
+            changePageWith(page: pageNumber)
+            currentPageNumber = pageNumber
+            return
         }
+        
+        currentPageNumber = 1
     }
     
     // MARK: Status bar and Navigation bar
@@ -790,11 +788,9 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     func getCurrentChapter() -> FRResource? {
         if let currentPageNumber = currentPageNumber {
             for item in FolioReader.sharedInstance.readerSidePanel.tocItems {
-                if let reference = book.spine.spineReferences[safe: currentPageNumber-1] {
-                    let resource = reference.resource
-                    if item.resource.href == resource.href {
-                        return item.resource
-                    }
+                if let reference = book.spine.spineReferences[safe: currentPageNumber-1]
+                    where item.resource.href == reference.resource.href {
+                    return item.resource
                 }
             }
         }
@@ -807,14 +803,12 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     func getCurrentChapterName() -> String? {
         if let currentPageNumber = currentPageNumber {
             for item in FolioReader.sharedInstance.readerSidePanel.tocItems {
-                if let reference = book.spine.spineReferences[safe: currentPageNumber-1] {
-                    let resource = reference.resource
-                    if item.resource.href == resource.href {
-                        if let title = item.title {
-                            return title
-                        }
-                        return nil
+                if let reference = book.spine.spineReferences[safe: currentPageNumber-1]
+                    where item.resource.href == reference.resource.href {
+                    if let title = item.title {
+                        return title
                     }
+                    return nil
                 }
             }
         }
@@ -972,10 +966,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         }
         
         // Go to fragment if needed
-        if let fragment = tempFragment {
-            if fragment != "" && currentPage != nil {
-                currentPage.handleAnchor(fragment, avoidBeginningAnchors: true, animating: true)
-            }
+        if let fragment = tempFragment where fragment != "" && currentPage != nil {
+            currentPage.handleAnchor(fragment, avoidBeginningAnchors: true, animating: true)
             tempFragment = nil
         }
     }
@@ -1006,12 +998,10 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         
         // Update current reading page
         if scrollView is UICollectionView {} else {
-            if let page = currentPage {
-                if page.webView.scrollView.contentOffset.y+pageHeight <= page.webView.scrollView.contentSize.height {
-                    let webViewPage = pageForOffset(page.webView.scrollView.contentOffset.y, pageHeight: pageHeight)
-                    if pageIndicatorView.currentPage != webViewPage {
-                        pageIndicatorView.currentPage = webViewPage
-                    }
+            if let page = currentPage where page.webView.scrollView.contentOffset.y+pageHeight <= page.webView.scrollView.contentSize.height {
+                let webViewPage = pageForOffset(page.webView.scrollView.contentOffset.y, pageHeight: pageHeight)
+                if pageIndicatorView.currentPage != webViewPage {
+                    pageIndicatorView.currentPage = webViewPage
                 }
             }
         }

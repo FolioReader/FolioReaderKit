@@ -130,11 +130,9 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
         }
 
         // Mark current reading chapter
-        if let currentPageNumber = currentPageNumber {
-            if let reference = book.spine.spineReferences[safe: currentPageNumber-1] {
-                let resource = reference.resource
-                cell.indexLabel.textColor = tocReference.resource.href == resource.href ? readerConfig.tintColor : readerConfig.menuTextColor
-            }
+        if let currentPageNumber = currentPageNumber, reference = book.spine.spineReferences[safe: currentPageNumber-1] {
+            let resource = reference.resource
+            cell.indexLabel.textColor = tocReference.resource.href == resource.href ? readerConfig.tintColor : readerConfig.menuTextColor
         }
         
         cell.layoutMargins = UIEdgeInsetsZero
