@@ -1,0 +1,8 @@
+module_name: FolioReaderKit
+author_name: Heberti Almeida
+author_url: https://folioreader.com
+github_url: https://github.com/FolioReader/FolioReaderKit
+clean: true
+output: Documentation
+
+podspec: FolioReaderKit.podspec
