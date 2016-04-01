@@ -20,17 +20,16 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
      Parse the Cover Image from an epub file.
      Returns an UIImage.
      */
-    func parseCoverImage(epubPath: String)-> UIImage {
+    func parseCoverImage(epubPath: String)-> UIImage? {
 
         let book = readEpub(epubPath: epubPath)
         
         // Read the cover image
-        let coverImageID = book.metadata.findMetaByName("cover")
-        if (coverImageID != nil && book.resources.containsById(coverImageID!)) {
-            book.coverImage = book.resources.getById(coverImageID!)
+        if let artwork = UIImage(contentsOfFile: book.coverImage!.fullHref) where book.coverImage != nil {
+            return artwork
         }
-
-        return UIImage(contentsOfFile: book.coverImage.fullHref)!
+        
+        return nil
     }
     
     /**

@@ -11,10 +11,8 @@ import FolioReaderKit
 
 class ViewController: UIViewController {
 
-    @IBOutlet
-    var coverImageView : UIImageView!
-    
-    // http://www.readbeyond.it/ebooks.html
+    @IBOutlet var bookOne: UIButton!
+    @IBOutlet var bookTwo: UIButton!
     let epubSampleFiles = [
         "The Silver Chair", // standard eBook
         "The Adventures Of Sherlock Holmes - Adventure I", // audio-eBook
@@ -23,18 +21,12 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view, typically from a nib.
-        coverImageView.layer.borderWidth = 4
-        coverImageView.layer.masksToBounds = true
-        coverImageView.layer.borderColor = UIColor(red: 255.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1.0).CGColor
+        setCover(bookOne, index: 0)
+        setCover(bookTwo, index: 1)
     }
 
     @IBAction func didOpen(sender: AnyObject) {
         openEpub(sender.tag);
-    }
-    
-    @IBAction func getEpubCoverImage(sender: AnyObject) {
-        showEpubCover(sender.tag);
     }
     
     func openEpub(sampleNum:Int) {
@@ -46,16 +38,19 @@ class ViewController: UIViewController {
         //config.toolBarBackgroundColor = UIColor.purpleColor()
         //config.menuTextColor = UIColor.brownColor()
         //config.menuBackgroundColor = UIColor.lightGrayColor()
+        // See more at FolioReaderConfig.swift
         
         let epubName = epubSampleFiles[sampleNum-1];
         let bookPath = NSBundle.mainBundle().pathForResource(epubName, ofType: "epub")
         FolioReader.presentReader(parentViewController: self, withEpubPath: bookPath!, andConfig: config)
     }
-    
-    func showEpubCover(sampleNum:Int) {
-        let epubName = epubSampleFiles[sampleNum-1];
-        let bookPath = NSBundle.mainBundle().pathForResource(epubName, ofType: "epub")
-        coverImageView.image =  FolioReader.getCoverImage(bookPath!)
-    }
 
+    func setCover(button: UIButton, index: Int) {
+        let epubName = epubSampleFiles[index];
+        let bookPath = NSBundle.mainBundle().pathForResource(epubName, ofType: "epub")
+        
+        if let image = FolioReader.getCoverImage(bookPath!) {
+            button.setBackgroundImage(image, forState: .Normal)
+        }
+    }
 }

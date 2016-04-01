@@ -3,7 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -18,81 +18,47 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4VN-zC-gTV">
-                                <rect key="frame" x="168" y="63" width="263" height="30"/>
-                                <color key="backgroundColor" red="0.33374384270000002" green="0.6810386853" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <button opaque="NO" tag="1" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4VN-zC-gTV">
+                                <rect key="frame" x="218" y="64" width="164" height="235"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="263" id="4Sm-77-oas"/>
+                                    <constraint firstAttribute="height" constant="235" id="4Do-x7-Zyi"/>
+                                    <constraint firstAttribute="width" secondItem="4VN-zC-gTV" secondAttribute="height" multiplier="28:40" id="yIh-Rk-XlF"/>
                                 </constraints>
                                 <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="The Silver Road [1]">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
                                 <connections>
                                     <action selector="didOpen:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Ibf-j6-YlH"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vdn-HF-kCC">
-                                <rect key="frame" x="20" y="101" width="560" height="30"/>
-                                <color key="backgroundColor" red="0.33374384270000002" green="0.6810386853" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="The Adventures Of Sherlock Holmes (Audio) [2]">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
+                            <button opaque="NO" tag="2" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vdn-HF-kCC">
+                                <rect key="frame" x="218" y="323" width="164" height="234"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="vdn-HF-kCC" secondAttribute="height" multiplier="28:40" id="9fo-qU-rt1"/>
+                                </constraints>
                                 <connections>
                                     <action selector="didOpen:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="M8S-eM-283"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gRA-G9-aca">
-                                <rect key="frame" x="145" y="172" width="308" height="30"/>
-                                <color key="backgroundColor" red="1" green="0.21176470589999999" blue="0.21176470589999999" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="308" id="Kpe-CU-KXe"/>
-                                </constraints>
-                                <state key="normal" title="Get ePub Cover [1]">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="getEpubCoverImage:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="FKu-XO-3Er"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uiq-uI-Agt">
-                                <rect key="frame" x="145" y="210" width="308" height="30"/>
-                                <color key="backgroundColor" red="1" green="0.21176470589999999" blue="0.21176470589999999" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="Get ePub Cover [2]">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="getEpubCoverImage:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="c1A-UL-GDX"/>
-                                </connections>
-                            </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="E32-Fj-3fj">
-                                <rect key="frame" x="180" y="269" width="240" height="300"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="240" id="cqn-cY-wo5"/>
-                                </constraints>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="4VN-zC-gTV" firstAttribute="centerX" secondItem="vdn-HF-kCC" secondAttribute="centerX" id="3KR-er-XC4"/>
-                            <constraint firstItem="E32-Fj-3fj" firstAttribute="top" secondItem="Uiq-uI-Agt" secondAttribute="bottom" constant="29" id="643-DE-Qrl"/>
-                            <constraint firstItem="4VN-zC-gTV" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="43" id="Lrl-wR-V1N"/>
-                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="E32-Fj-3fj" secondAttribute="bottom" constant="31" id="Ndo-k1-Kd6"/>
-                            <constraint firstItem="gRA-G9-aca" firstAttribute="top" secondItem="vdn-HF-kCC" secondAttribute="bottom" constant="41" id="PEM-fU-AJm"/>
-                            <constraint firstItem="gRA-G9-aca" firstAttribute="trailing" secondItem="Uiq-uI-Agt" secondAttribute="trailing" id="VzP-ye-M9Q"/>
-                            <constraint firstItem="vdn-HF-kCC" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="WIr-i7-g1h"/>
-                            <constraint firstItem="gRA-G9-aca" firstAttribute="leading" secondItem="Uiq-uI-Agt" secondAttribute="leading" id="ZVh-lh-rZB"/>
-                            <constraint firstItem="vdn-HF-kCC" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="aAO-Dd-WEk"/>
-                            <constraint firstItem="Uiq-uI-Agt" firstAttribute="top" secondItem="gRA-G9-aca" secondAttribute="bottom" constant="8" symbolic="YES" id="fsb-n2-wSl"/>
-                            <constraint firstItem="vdn-HF-kCC" firstAttribute="top" secondItem="4VN-zC-gTV" secondAttribute="bottom" constant="8" symbolic="YES" id="rRp-y2-5OG"/>
-                            <constraint firstItem="Uiq-uI-Agt" firstAttribute="centerX" secondItem="E32-Fj-3fj" secondAttribute="centerX" constant="-1" id="xyS-9I-h2U"/>
-                            <constraint firstItem="4VN-zC-gTV" firstAttribute="centerX" secondItem="gRA-G9-aca" secondAttribute="centerX" id="ygf-YS-YaA"/>
+                            <constraint firstItem="4VN-zC-gTV" firstAttribute="leading" secondItem="vdn-HF-kCC" secondAttribute="leading" id="O6h-O5-Mm3"/>
+                            <constraint firstItem="4VN-zC-gTV" firstAttribute="trailing" secondItem="vdn-HF-kCC" secondAttribute="trailing" id="WFt-MO-d3s"/>
+                            <constraint firstItem="vdn-HF-kCC" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="Yo1-zt-m3U"/>
+                            <constraint firstItem="4VN-zC-gTV" firstAttribute="leading" secondItem="vdn-HF-kCC" secondAttribute="trailing" constant="-185" id="ZQK-9H-WO5"/>
+                            <constraint firstItem="vdn-HF-kCC" firstAttribute="top" secondItem="4VN-zC-gTV" secondAttribute="bottom" constant="24" id="cmd-b3-LGv"/>
+                            <constraint firstItem="4VN-zC-gTV" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="44" id="iMP-kv-hwb"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="ZQK-9H-WO5"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
-                        <outlet property="coverImageView" destination="E32-Fj-3fj" id="Hij-TJ-JoS"/>
+                        <outlet property="bookOne" destination="4VN-zC-gTV" id="Yau-yI-OXs"/>
+                        <outlet property="bookTwo" destination="vdn-HF-kCC" id="XU5-jB-OaP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>

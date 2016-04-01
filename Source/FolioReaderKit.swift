@@ -53,8 +53,8 @@ enum MediaOverlayStyle: Int {
 /**
 *  Main Library class with some useful constants and methods
 */
-public class FolioReader {
-    private init() {}
+public class FolioReader : NSObject {
+    private override init() {}
     
     static let sharedInstance = FolioReader()
     static let defaults = NSUserDefaults.standardUserDefaults()
@@ -119,7 +119,7 @@ public class FolioReader {
      Read Cover Image and Return an IUImage
      */
     
-    public class func getCoverImage(epubPath: String) -> UIImage {
+    public class func getCoverImage(epubPath: String) -> UIImage? {
         return FREpubParser().parseCoverImage(epubPath)
     }
 
@@ -130,15 +130,6 @@ public class FolioReader {
     */
     public class func presentReader(parentViewController parentViewController: UIViewController, withEpubPath epubPath: String, andConfig config: FolioReaderConfig, animated: Bool = true) {
         let reader = FolioReaderContainer(config: config, epubPath: epubPath)
-        FolioReader.sharedInstance.readerContainer = reader
-        parentViewController.presentViewController(reader, animated: animated, completion: nil)
-    }
-    
-    /**
-    Present a Folio Reader for a Parent View Controller.
-    */
-    public class func presentReader(parentViewController parentViewController: UIViewController, andConfig config: FolioReaderConfig, animated: Bool = true) {
-        let reader = FolioReaderContainer(config: config)
         FolioReader.sharedInstance.readerContainer = reader
         parentViewController.presentViewController(reader, animated: animated, completion: nil)
     }
