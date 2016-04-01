@@ -1,5 +1,5 @@
 language: objective-c
 osx_image: xcode7.3
 
-xcode_project: Example/Example.xcworkspace
+xcode_workspace: Example/Example.xcworkspace
 xcode_scheme: Example
