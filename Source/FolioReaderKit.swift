@@ -65,6 +65,7 @@ public class FolioReader {
     var isReaderOpen = false
     var isReaderReady = false
     
+    
     var nightMode: Bool {
         get { return FolioReader.defaults.valueForKey(kNightMode) as! Bool }
         set (value) {
@@ -110,6 +111,16 @@ public class FolioReader {
             FolioReader.defaults.setValue(value.rawValue, forKey: kCurrentMediaOverlayStyle)
             FolioReader.defaults.synchronize()
         }
+    }
+    
+    // MARK: - Get Cover Image
+    
+    /**
+     Read Cover Image and Return an IUImage
+     */
+    
+    public class func getCoverImage(epubPath: String) -> UIImage {
+        return FREpubParser().parseCoverImage(epubPath)
     }
 
     // MARK: - Present Folio Reader
