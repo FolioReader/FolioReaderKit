@@ -337,9 +337,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             rightBarIcons.append(UIBarButtonItem(image: shareIcon, style: UIBarButtonItemStyle.Plain, target: self, action:"shareChapter:"))
         }
 
-        if book.hasAudio() {
-            rightBarIcons.append(UIBarButtonItem(image: audioIcon, style: UIBarButtonItemStyle.Plain, target: self, action:"togglePlay:"))
-        }
+        rightBarIcons.append(UIBarButtonItem(image: audioIcon, style: UIBarButtonItemStyle.Plain, target: self, action:"togglePlay:"))
 
         navigationItem.rightBarButtonItems = rightBarIcons
     }
@@ -740,6 +738,10 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             }) { (finished: Bool) -> Void in
                 if (completion != nil) { completion!() }
         }
+    }
+    
+    func isLastPage() -> Bool{
+        return currentPageNumber == nextPageNumber
     }
 
     func changePageToNext(completion: (() -> Void)? = nil) {

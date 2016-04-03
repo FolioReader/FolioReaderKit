@@ -15,7 +15,7 @@ import JSQWebViewController
     optional func pageDidLoad(page: FolioReaderPage)
 }
 
-class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate {
+class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate, FolioReaderAudioPlayerDelegate {
     
     var pageNumber: Int!
     var webView: UIWebView!
@@ -95,10 +95,22 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         webView.loadHTMLString(html as String, baseURL: baseURL)
     }
     
+    // MARK: - FolioReaderAudioPlayerDelegate
+    func didReadSentence() {
+        self.readCurrentSentence();
+    }
+    
     // MARK: - UIWebView Delegate
     
     func webViewDidFinishLoad(webView: UIWebView) {
-        
+        if (!book.hasAudio()) {
+            FolioReader.sharedInstance.readerAudioPlayer.delegate = self;
+            self.webView.js("wrappingSentencesWithinPTags()");
+            if (FolioReader.sharedInstance.readerAudioPlayer.isPlaying()) {
+                readCurrentSentence()
+            }
+        }
+
         webView.scrollView.contentSize = CGSizeMake(pageWidth, webView.scrollView.contentSize.height)
         
         if scrollDirection == .Down && isScrolling {
@@ -114,8 +126,10 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
             webView.isColors = false
             self.webView.createMenu(options: false)
         }
-        
+
         delegate.pageDidLoad!(self)
+        
+        
     }
     
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
@@ -290,8 +304,44 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     }
 
     func playAudio(){
-        webView.play(nil)
+		if (book.hasAudio()) {
+            webView.js("playAudio()")
+		} else {
+			readCurrentSentence()
+		}
     }
+    
+    func speakSentence(){
+        let sentence = self.webView.js("getSentenceWithIndex('\(book.playbackActiveClass())')")
+        if ((sentence) != nil) {
+            FolioReader.sharedInstance.readerAudioPlayer.playText(sentence!)
+        }else{
+            if(FolioReader.sharedInstance.readerCenter.isLastPage()){
+                FolioReader.sharedInstance.readerAudioPlayer.stop()
+            }else{
+                FolioReader.sharedInstance.readerCenter.changePageToNext()
+            }
+        }
+    }
+    
+	func readCurrentSentence() {
+		if (FolioReader.sharedInstance.readerAudioPlayer.synthesizer == nil ) {
+            speakSentence()
+		} else {
+            if(FolioReader.sharedInstance.readerAudioPlayer.synthesizer.paused){
+                FolioReader.sharedInstance.readerAudioPlayer.synthesizer.continueSpeaking()
+            }else{
+                if(FolioReader.sharedInstance.readerAudioPlayer.synthesizer.speaking){
+                    FolioReader.sharedInstance.readerAudioPlayer.stopSynthesizer({ () -> Void in
+                        self.webView.js("resetCurrentSentenceIndex()")
+                        self.speakSentence()
+                    })
+                }else{
+                    speakSentence()
+                }
+            }
+		}
+	}
 
     func audioMarkID(ID: String){
         self.webView.js("audioMarkID('\(book.playbackActiveClass())','\(ID)')");
@@ -340,7 +390,7 @@ extension UIWebView {
             
             if action == "highlight:"
             || (action == "define:" && (js("getSelectedText()"))!.componentsSeparatedByString(" ").count == 1)
-            || (action == "play:" && book.hasAudio() )
+            || (action == "play:")
             || (action == "share:" && readerConfig.allowSharing == true)
             || (action == "copy:" && readerConfig.allowSharing == true) {
                 return true
@@ -421,8 +471,7 @@ extension UIWebView {
     }
 
     func play(sender: UIMenuController?) {
-
-        js("playAudio()")
+        FolioReader.sharedInstance.readerCenter.currentPage.playAudio()
 
         // Force remove text selection
         // @NOTE: this doesn't seem to always work
