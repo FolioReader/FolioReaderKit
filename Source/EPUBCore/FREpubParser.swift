@@ -41,11 +41,17 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         
         // Unzip   
         let bookName = (withEpubPath as NSString).lastPathComponent
-        bookBasePath = (kApplicationDocumentsDirectory as NSString).stringByAppendingPathComponent(bookName)
-        SSZipArchive.unzipFileAtPath(withEpubPath, toDestination: bookBasePath, delegate: self)
+        bookBasePath = (kApplicationDocumentsDirectory as NSString).stringByAppendingPathComponent(bookName+".dir")
         
-        // Skip from backup this folder
-        addSkipBackupAttributeToItemAtURL(NSURL(fileURLWithPath: bookBasePath, isDirectory: true))
+        // unzip the epub if we have not already done so
+        var isDir : ObjCBool = true
+        if NSFileManager.defaultManager().fileExistsAtPath(bookBasePath, isDirectory: &isDir) == false {
+            
+            SSZipArchive.unzipFileAtPath(withEpubPath, toDestination: bookBasePath, delegate: self)
+            
+            // Skip from backup this folder
+            addSkipBackupAttributeToItemAtURL(NSURL(fileURLWithPath: bookBasePath, isDirectory: true))
+        }
         
         kBookId = bookName
         readContainer()
@@ -336,10 +342,12 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     // MARK: - SSZipArchive delegate
     
     func zipArchiveWillUnzipArchiveAtPath(path: String!, zipInfo: unz_global_info) {
-        do {
-            try NSFileManager.defaultManager().removeItemAtPath(epubPathToRemove!)
-        } catch let error as NSError {
-            print(error)
+        if readerConfig.keepOriginalEpub == false {
+            do {
+                try NSFileManager.defaultManager().removeItemAtPath(epubPathToRemove!)
+            } catch let error as NSError {
+                print(error)
+            }
         }
     }
 }
