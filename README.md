@@ -57,6 +57,7 @@ func applicationWillTerminate(application: UIApplication) {
 - [x] Reading Time Left / Pages left
 - [x] In-App Dictionary
 - [x] Media Overlays (Sync text rendering with audio playback)
+- [x] TTS - Text to Speech Support
 - [x] Parse epub cover image
 - [ ] PDF support
 - [ ] Book Search
