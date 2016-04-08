@@ -32,6 +32,7 @@ class ViewController: UIViewController {
     func openEpub(sampleNum:Int) {
         let config = FolioReaderConfig()
         config.shouldHideNavigationOnTap = sampleNum == 1 ? true : false
+//        config.enableTTS = false
         //config.allowSharing = false
         //config.tintColor = UIColor.blueColor()
         //config.toolBarTintColor = UIColor.redColor()

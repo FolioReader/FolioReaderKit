@@ -392,7 +392,6 @@ extension UIWebView {
             if action == #selector(UIWebView.highlight(_:))
             || (action == #selector(UIWebView.define(_:)) && (js("getSelectedText()"))!.componentsSeparatedByString(" ").count == 1)
             || (action == #selector(UIWebView.play(_:)) && (book.hasAudio() || readerConfig.enableTTS))
-                || (action == #selector(UIWebView.play(_:)))
             || (action == #selector(UIWebView.share(_:)) && readerConfig.allowSharing == true)
             || (action == #selector(NSObject.copy(_:)) && readerConfig.allowSharing == true) {
                 return true
