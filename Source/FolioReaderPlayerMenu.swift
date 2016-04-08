@@ -22,7 +22,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate {
         self.view.backgroundColor = UIColor.clearColor()
 
         // Tap gesture
-        let tapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(FolioReaderPlayerMenu.tapGesture))
         tapGesture.numberOfTapsRequired = 1
         tapGesture.delegate = self
         view.addGestureRecognizer(tapGesture)
@@ -69,7 +69,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate {
         let prevBtn = UIButton(frame: CGRect(x: gutterX + padX, y: 0, width: size, height: size))
         prevBtn.setImage(prevNormal, forState: .Normal)
         prevBtn.setImage(prevSelected, forState: .Selected)
-        prevBtn.addTarget(self, action: "prevChapter:", forControlEvents: .TouchUpInside)
+        prevBtn.addTarget(self, action: #selector(FolioReaderPlayerMenu.prevChapter(_:)), forControlEvents: .TouchUpInside)
         menuView.addSubview(prevBtn)
         
         // play / pause button
@@ -79,7 +79,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate {
         playPauseBtn.setImage(playSelected, forState: .Normal)
         playPauseBtn.setImage(pauseSelected, forState: .Selected)
         playPauseBtn.titleLabel!.font = UIFont(name: "Avenir", size: 22)!
-        playPauseBtn.addTarget(self, action: "togglePlay:", forControlEvents: .TouchUpInside)
+        playPauseBtn.addTarget(self, action: #selector(FolioReaderPlayerMenu.togglePlay(_:)), forControlEvents: .TouchUpInside)
         menuView.addSubview(playPauseBtn)
         
         if FolioReader.sharedInstance.readerAudioPlayer.isPlaying() {
@@ -90,7 +90,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate {
         let nextBtn = UIButton(frame: CGRect(x: Int(playPauseBtn.frame.origin.x) + padX + size, y: 0, width: size, height: size))
         nextBtn.setImage(nextNormal, forState: .Normal)
         nextBtn.setImage(nextSelected, forState: .Selected)
-        nextBtn.addTarget(self, action: "nextChapter:", forControlEvents: .TouchUpInside)
+        nextBtn.addTarget(self, action: #selector(FolioReaderPlayerMenu.nextChapter(_:)), forControlEvents: .TouchUpInside)
         menuView.addSubview(nextBtn)
         
 
@@ -187,9 +187,9 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate {
         style0.tag = MediaOverlayStyle.Default.rawValue
         style1.tag = MediaOverlayStyle.Underline.rawValue
         style2.tag = MediaOverlayStyle.TextColor.rawValue
-        style0.addTarget(self, action: "changeStyle:", forControlEvents: .TouchUpInside)
-        style1.addTarget(self, action: "changeStyle:", forControlEvents: .TouchUpInside)
-        style2.addTarget(self, action: "changeStyle:", forControlEvents: .TouchUpInside)
+        style0.addTarget(self, action: #selector(FolioReaderPlayerMenu.changeStyle(_:)), forControlEvents: .TouchUpInside)
+        style1.addTarget(self, action: #selector(FolioReaderPlayerMenu.changeStyle(_:)), forControlEvents: .TouchUpInside)
+        style2.addTarget(self, action: #selector(FolioReaderPlayerMenu.changeStyle(_:)), forControlEvents: .TouchUpInside)
         
         // store ref to buttons
         styleOptionBtns.append(style0)

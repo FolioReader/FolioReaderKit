@@ -69,10 +69,10 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
         slider.setThumbImage(thumbImgColor, forState: .Selected)
         slider.setThumbImage(thumbImgColor, forState: .Highlighted)
         
-        slider.addTarget(self, action: "sliderChange:", forControlEvents: .ValueChanged)
-        slider.addTarget(self, action: "sliderTouchDown:", forControlEvents: .TouchDown)
-        slider.addTarget(self, action: "sliderTouchUp:", forControlEvents: .TouchUpInside)
-        slider.addTarget(self, action: "sliderTouchUp:", forControlEvents: .TouchUpOutside)
+        slider.addTarget(self, action: #selector(ScrollScrubber.sliderChange(_:)), forControlEvents: .ValueChanged)
+        slider.addTarget(self, action: #selector(ScrollScrubber.sliderTouchDown(_:)), forControlEvents: .TouchDown)
+        slider.addTarget(self, action: #selector(ScrollScrubber.sliderTouchUp(_:)), forControlEvents: .TouchUpInside)
+        slider.addTarget(self, action: #selector(ScrollScrubber.sliderTouchUp(_:)), forControlEvents: .TouchUpOutside)
     }
     
     func updateColors() {
@@ -132,7 +132,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     
     func hideAfterDelay() {
         cancelHide()
-        hideTimer = NSTimer.scheduledTimerWithTimeInterval(hideDelay, target: self, selector: "hide", userInfo: nil, repeats: false)
+        hideTimer = NSTimer.scheduledTimerWithTimeInterval(hideDelay, target: self, selector: #selector(ScrollScrubber.hide), userInfo: nil, repeats: false)
     }
     
     func cancelHide() {
@@ -186,7 +186,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     }
     
     func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
-        scrollDeltaTimer = NSTimer(timeInterval:0.5, target: self, selector: "resetScrollDelta", userInfo: nil, repeats: false)
+        scrollDeltaTimer = NSTimer(timeInterval:0.5, target: self, selector: #selector(ScrollScrubber.resetScrollDelta), userInfo: nil, repeats: false)
         NSRunLoop.currentRunLoop().addTimer(scrollDeltaTimer, forMode: NSRunLoopCommonModes)
     }
     
@@ -329,16 +329,16 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         let audioIcon = UIImage(readerImageNamed: "man-speech-icon")!.imageTintColor(readerConfig.tintColor).imageWithRenderingMode(.AlwaysOriginal)
         let menuIcon = UIImage(readerImageNamed: "btn-navbar-menu")!.imageTintColor(readerConfig.tintColor).imageWithRenderingMode(.AlwaysOriginal)
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: menuIcon, style: UIBarButtonItemStyle.Plain, target: self, action:"toggleMenu:")
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: menuIcon, style: UIBarButtonItemStyle.Plain, target: self, action:#selector(FolioReaderCenter.toggleMenu(_:)))
 
         var rightBarIcons = [UIBarButtonItem]()
 
         if readerConfig.allowSharing == true {
-            rightBarIcons.append(UIBarButtonItem(image: shareIcon, style: UIBarButtonItemStyle.Plain, target: self, action:"shareChapter:"))
+            rightBarIcons.append(UIBarButtonItem(image: shareIcon, style: UIBarButtonItemStyle.Plain, target: self, action:#selector(FolioReaderCenter.shareChapter(_:))))
         }
 
         if book.hasAudio() {
-            rightBarIcons.append(UIBarButtonItem(image: audioIcon, style: UIBarButtonItemStyle.Plain, target: self, action:"togglePlay:"))
+            rightBarIcons.append(UIBarButtonItem(image: audioIcon, style: UIBarButtonItemStyle.Plain, target: self, action:#selector(FolioReaderCenter.togglePlay(_:))))
         }
 
         navigationItem.rightBarButtonItems = rightBarIcons
@@ -763,7 +763,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             if item.resource.href == reference.resource.href {
                 return count
             }
-            count++
+            count += 1
         }
         return count
     }
@@ -777,7 +777,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             if item.resource.href == href {
                 return count
             }
-            count++
+            count += 1
         }
         return count
     }
@@ -1020,7 +1020,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        recentlyScrolledTimer = NSTimer(timeInterval:recentlyScrolledDelay, target: self, selector: "clearRecentlyScrolled", userInfo: nil, repeats: false)
+        recentlyScrolledTimer = NSTimer(timeInterval:recentlyScrolledDelay, target: self, selector: #selector(FolioReaderCenter.clearRecentlyScrolled), userInfo: nil, repeats: false)
         NSRunLoop.currentRunLoop().addTimer(recentlyScrolledTimer, forMode: NSRunLoopCommonModes)
     }
 

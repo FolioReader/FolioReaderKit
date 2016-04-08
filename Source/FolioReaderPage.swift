@@ -39,7 +39,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         }
         webView.delegate = self
         
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "handleTapGesture:")
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(FolioReaderPage.handleTapGesture(_:)))
         tapGestureRecognizer.numberOfTapsRequired = 1
         tapGestureRecognizer.delegate = self
         webView.addGestureRecognizer(tapGestureRecognizer)
@@ -323,14 +323,14 @@ extension UIWebView {
 
         // menu on existing highlight
         if isShare {
-            if action == "colors:" || (action == "share:" && readerConfig.allowSharing == true) || action == "remove:" {
+            if action == #selector(UIWebView.colors(_:)) || (action == #selector(UIWebView.share(_:)) && readerConfig.allowSharing == true) || action == #selector(UIWebView.remove(_:)) {
                 return true
             }
             return false
 
         // menu for selecting highlight color
         } else if isColors {
-            if action == "setYellow:" || action == "setGreen:" || action == "setBlue:" || action == "setPink:" || action == "setUnderline:" {
+            if action == #selector(UIWebView.setYellow(_:)) || action == #selector(UIWebView.setGreen(_:)) || action == #selector(UIWebView.setBlue(_:)) || action == #selector(UIWebView.setPink(_:)) || action == #selector(UIWebView.setUnderline(_:)) {
                 return true
             }
             return false
@@ -338,11 +338,11 @@ extension UIWebView {
         // default menu
         } else {
             
-            if action == "highlight:"
-            || (action == "define:" && (js("getSelectedText()"))!.componentsSeparatedByString(" ").count == 1)
-            || (action == "play:" && book.hasAudio() )
-            || (action == "share:" && readerConfig.allowSharing == true)
-            || (action == "copy:" && readerConfig.allowSharing == true) {
+            if action == #selector(UIWebView.highlight(_:))
+            || (action == #selector(UIWebView.define(_:)) && (js("getSelectedText()"))!.componentsSeparatedByString(" ").count == 1)
+            || (action == #selector(UIWebView.play(_:)) && book.hasAudio() )
+            || (action == #selector(UIWebView.share(_:)) && readerConfig.allowSharing == true)
+            || (action == #selector(NSObject.copy(_:)) && readerConfig.allowSharing == true) {
                 return true
             }
             return false
@@ -476,17 +476,17 @@ extension UIWebView {
         let pink = UIImage(readerImageNamed: "pink-marker")
         let underline = UIImage(readerImageNamed: "underline-marker")
         
-        let highlightItem = UIMenuItem(title: readerConfig.localizedHighlightMenu, action: "highlight:")
-        let playAudioItem = UIMenuItem(title: readerConfig.localizedPlayMenu, action: "play:")
-        let defineItem = UIMenuItem(title: readerConfig.localizedDefineMenu, action: "define:")
-        let colorsItem = UIMenuItem(title: "C", image: colors!, action: "colors:")
-        let shareItem = UIMenuItem(title: "S", image: share!, action: "share:")
-        let removeItem = UIMenuItem(title: "R", image: remove!, action: "remove:")
-        let yellowItem = UIMenuItem(title: "Y", image: yellow!, action: "setYellow:")
-        let greenItem = UIMenuItem(title: "G", image: green!, action: "setGreen:")
-        let blueItem = UIMenuItem(title: "B", image: blue!, action: "setBlue:")
-        let pinkItem = UIMenuItem(title: "P", image: pink!, action: "setPink:")
-        let underlineItem = UIMenuItem(title: "U", image: underline!, action: "setUnderline:")
+        let highlightItem = UIMenuItem(title: readerConfig.localizedHighlightMenu, action: #selector(UIWebView.highlight(_:)))
+        let playAudioItem = UIMenuItem(title: readerConfig.localizedPlayMenu, action: #selector(UIWebView.play(_:)))
+        let defineItem = UIMenuItem(title: readerConfig.localizedDefineMenu, action: #selector(UIWebView.define(_:)))
+        let colorsItem = UIMenuItem(title: "C", image: colors!, action: #selector(UIWebView.colors(_:)))
+        let shareItem = UIMenuItem(title: "S", image: share!, action: #selector(UIWebView.share(_:)))
+        let removeItem = UIMenuItem(title: "R", image: remove!, action: #selector(UIWebView.remove(_:)))
+        let yellowItem = UIMenuItem(title: "Y", image: yellow!, action: #selector(UIWebView.setYellow(_:)))
+        let greenItem = UIMenuItem(title: "G", image: green!, action: #selector(UIWebView.setGreen(_:)))
+        let blueItem = UIMenuItem(title: "B", image: blue!, action: #selector(UIWebView.setBlue(_:)))
+        let pinkItem = UIMenuItem(title: "P", image: pink!, action: #selector(UIWebView.setPink(_:)))
+        let underlineItem = UIMenuItem(title: "U", image: underline!, action: #selector(UIWebView.setUnderline(_:)))
         
         let menuItems = [playAudioItem, highlightItem, defineItem, colorsItem, removeItem, yellowItem, greenItem, blueItem, pinkItem, underlineItem, shareItem]
 

@@ -116,7 +116,7 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
 
         // if no smil file, delay for a second, then move on to the next chapter
         if smilFile == nil {
-            NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "_autoPlayNextChapter", userInfo: nil, repeats: false)
+            NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(FolioReaderAudioPlayer._autoPlayNextChapter), userInfo: nil, repeats: false)
             return
         }
 
@@ -254,7 +254,7 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
 
     private func startPlayerTimer() {
         // we must add the timer in this mode in order for it to continue working even when the user is scrolling a webview
-        playingTimer = NSTimer(timeInterval: 0.01, target: self, selector: "playerTimerObserver", userInfo: nil, repeats: true)
+        playingTimer = NSTimer(timeInterval: 0.01, target: self, selector: #selector(FolioReaderAudioPlayer.playerTimerObserver), userInfo: nil, repeats: true)
         NSRunLoop.currentRunLoop().addTimer(playingTimer, forMode: NSRunLoopCommonModes)
     }
 
@@ -341,15 +341,15 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
         
         let command = MPRemoteCommandCenter.sharedCommandCenter()
         command.previousTrackCommand.enabled = true
-        command.previousTrackCommand.addTarget(self, action: "playPrevChapter")
+        command.previousTrackCommand.addTarget(self, action: #selector(FolioReaderAudioPlayer.playPrevChapter))
         command.nextTrackCommand.enabled = true
-        command.nextTrackCommand.addTarget(self, action: "playNextChapter")
+        command.nextTrackCommand.addTarget(self, action: #selector(FolioReaderAudioPlayer.playNextChapter))
         command.pauseCommand.enabled = true
-        command.pauseCommand.addTarget(self, action: "pause")
+        command.pauseCommand.addTarget(self, action: #selector(FolioReaderAudioPlayer.pause))
         command.playCommand.enabled = true
-        command.playCommand.addTarget(self, action: "playAudio")
+        command.playCommand.addTarget(self, action: #selector(FolioReaderPage.playAudio))
         command.togglePlayPauseCommand.enabled = true
-        command.togglePlayPauseCommand.addTarget(self, action: "togglePlay")
+        command.togglePlayPauseCommand.addTarget(self, action: #selector(FolioReaderAudioPlayer.togglePlay))
         
         registeredCommands = true
     }

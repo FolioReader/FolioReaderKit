@@ -19,7 +19,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate {
         self.view.backgroundColor = UIColor.clearColor()
         
         // Tap gesture
-        let tapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(FolioReaderFontsMenu.tapGesture))
         tapGesture.numberOfTapsRequired = 1
         tapGesture.delegate = self
         view.addGestureRecognizer(tapGesture)
@@ -122,7 +122,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate {
         slider.tintColor = readerConfig.nightModeSeparatorColor
         slider.minimumValue = 0
         slider.value = CGFloat(FolioReader.sharedInstance.currentFontSize)
-        slider.addTarget(self, action: "sliderValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        slider.addTarget(self, action: #selector(FolioReaderFontsMenu.sliderValueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         // Force remove fill color
         for layer in slider.layer.sublayers! {

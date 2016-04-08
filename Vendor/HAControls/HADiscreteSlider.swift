@@ -338,12 +338,12 @@ class HADiscreteSlider : UIControl {
 		
         self.ticksAbscisses.removeAll()
 		
-        for var iterate = 0; iterate <= segments; iterate++ {
-			let ratio = Double(iterate) / Double(segments)
-			let originX = self.trackRectangle.origin.x+(trackSize.width * CGFloat(ratio))
+        for i in 0...segments {
+            let ratio = Double(i) / Double(segments)
+            let originX = self.trackRectangle.origin.x+(trackSize.width * CGFloat(ratio))
             let point = CGPoint(x:originX, y:trackY)
             self.ticksAbscisses.append(point)
-		}
+        }
         
 		self.layoutThumb()
 	}

@@ -56,16 +56,16 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
         let closeButton = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
         closeButton.setImage(imageClose, forState: UIControlState.Normal)
         closeButton.setBackgroundImage(blackImage, forState: UIControlState.Normal)
-        closeButton.addTarget(self, action: "didSelectClose:", forControlEvents: UIControlEvents.TouchUpInside)
+        closeButton.addTarget(self, action: #selector(FolioReaderSidePanel.didSelectClose(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         let noSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FixedSpace, target: nil, action: nil)
         noSpace.width = isPad || isLargePhone ? -20 : -16
         let iconClose = UIBarButtonItem(customView: closeButton)
         
-        let iconHighlight = UIBarButtonItem(image: imageHighlight, style: .Plain, target: self, action: "didSelectHighlight:")
+        let iconHighlight = UIBarButtonItem(image: imageHighlight, style: .Plain, target: self, action: #selector(FolioReaderSidePanel.didSelectHighlight(_:)))
         iconHighlight.width = space
         
-        let iconFont = UIBarButtonItem(image: imageFont, style: .Plain, target: self, action: "didSelectFont:")
+        let iconFont = UIBarButtonItem(image: imageFont, style: .Plain, target: self, action: #selector(FolioReaderSidePanel.didSelectFont(_:)))
         iconFont.width = space
         
         toolBar.setItems([noSpace, iconClose, iconFont, iconHighlight], animated: false)

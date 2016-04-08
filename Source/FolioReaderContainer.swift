@@ -95,9 +95,9 @@ class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
         centerNavigationController.didMoveToParentViewController(self)
         
         // Add gestures
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "handleTapGesture:")
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(FolioReaderContainer.handleTapGesture(_:)))
         tapGestureRecognizer.numberOfTapsRequired = 1
-        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handlePanGesture:")
+        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(FolioReaderContainer.handlePanGesture(_:)))
         centerNavigationController.view.addGestureRecognizer(tapGestureRecognizer)
         centerNavigationController.view.addGestureRecognizer(panGestureRecognizer)
 
