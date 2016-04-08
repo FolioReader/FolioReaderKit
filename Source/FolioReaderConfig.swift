@@ -22,8 +22,9 @@ public class FolioReaderConfig: NSObject {
     public lazy var mediaOverlayColor: UIColor! = self.tintColor
     
     // Custom actions
-    public var shouldHideNavigationOnTap: Bool!
-    public var allowSharing: Bool!
+    public var shouldHideNavigationOnTap = true
+    public var allowSharing = true
+    public var enableTTS = true
     
     // Reader Strings
     public var localizedHighlightsTitle: String
@@ -57,9 +58,6 @@ public class FolioReaderConfig: NSObject {
         self.nightModeBackground = UIColor(rgba: "#131313")
         self.nightModeMenuBackground = UIColor(rgba: "#1E1E1E")
         self.nightModeSeparatorColor = UIColor(white: 0.5, alpha: 0.2)
-
-        self.shouldHideNavigationOnTap = true
-        self.allowSharing = true
         
         self.localizedHighlightsTitle = NSLocalizedString("Highlights", comment: "")
         self.localizedHighlightsDateFormat = "MMM dd, YYYY | HH:mm"

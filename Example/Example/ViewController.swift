@@ -32,17 +32,20 @@ class ViewController: UIViewController {
     func openEpub(sampleNum:Int) {
         let config = FolioReaderConfig()
         config.shouldHideNavigationOnTap = sampleNum == 1 ? true : false
-        //config.allowSharing = false
-        //config.tintColor = UIColor.blueColor()
-        //config.toolBarTintColor = UIColor.redColor()
-        //config.toolBarBackgroundColor = UIColor.purpleColor()
-        //config.menuTextColor = UIColor.brownColor()
-        //config.menuBackgroundColor = UIColor.lightGrayColor()
+        
         // See more at FolioReaderConfig.swift
+//        config.enableTTS = false
+//        config.allowSharing = false
+//        config.tintColor = UIColor.blueColor()
+//        config.toolBarTintColor = UIColor.redColor()
+//        config.toolBarBackgroundColor = UIColor.purpleColor()
+//        config.menuTextColor = UIColor.brownColor()
+//        config.menuBackgroundColor = UIColor.lightGrayColor()
+        
         
         let epubName = epubSampleFiles[sampleNum-1];
         let bookPath = NSBundle.mainBundle().pathForResource(epubName, ofType: "epub")
-        FolioReader.presentReader(parentViewController: self, withEpubPath: bookPath!, andConfig: config)
+        FolioReader.presentReader(parentViewController: self, withEpubPath: bookPath!, andConfig: config, shouldRemoveEpub: false)
     }
 
     func setCover(button: UIButton, index: Int) {

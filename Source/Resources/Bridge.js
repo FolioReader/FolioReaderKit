@@ -275,3 +275,238 @@ function setMediaOverlayStyleColors(color, colorHighlight) {
     stylesheet.insertRule(".mediaOverlayStyle1 span.epub-media-overlay-playing { border-color: "+color+" !important }")
     stylesheet.insertRule(".mediaOverlayStyle2 span.epub-media-overlay-playing { color: "+color+" !important }")
 }
+
+var currentIndex = -1;
+
+
+function findSentenceWithIDInView(els) {
+    // @NOTE: is `span` too limiting?
+
+    for(indx in els)
+    {
+        if( els[indx].offsetTop > document.body.scrollTop )
+        {
+            currentIndex = indx;
+            return els[indx]
+        }
+    }
+    
+    return null
+}
+
+function findNextSentenceInArray(els) {
+    if( currentIndex >= 0)
+    {
+        currentIndex ++;
+        return els[currentIndex];
+    }
+    
+    return null
+}
+
+function resetCurrentSentenceIndex() {
+    currentIndex = -1;
+}
+
+function getSentenceWithIndex(className){
+    var sentence;
+    if(currentIndex < 0){
+        sentence = findSentenceWithIDInView(document.querySelectorAll("span.sentence"));
+    }else{
+        sentence = findNextSentenceInArray(document.querySelectorAll("span.sentence"));
+    }
+    
+    var text = sentence.innerText || sentence.textContent;
+    
+    goToEl(sentence);
+    
+    if (audioMarkClass){
+        removeAllClasses(audioMarkClass);
+    }
+    
+    audioMarkClass = className;
+    sentence.classList.add(className)
+    return text;
+}
+
+function wrappingSentencesWithinPTags(){
+    currentIndex = -1;
+    "use strict";
+    
+    var rxOpen = new RegExp("<[^\\/].+?>"),
+    rxClose = new RegExp("<\\/.+?>"),
+    rxSupStart = new RegExp("^<sup\\b[^>]*>"),
+    rxSupEnd = new RegExp("<\/sup>"),
+    sentenceEnd = [],
+    rxIndex;
+    
+    sentenceEnd.push(new RegExp("[^\\d][\\.!\\?]+"));
+    sentenceEnd.push(new RegExp("(?=([^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*?$)"));
+    sentenceEnd.push(new RegExp("(?![^\\(]*?\\))"));
+    sentenceEnd.push(new RegExp("(?![^\\[]*?\\])"));
+    sentenceEnd.push(new RegExp("(?![^\\{]*?\\})"));
+    sentenceEnd.push(new RegExp("(?![^\\|]*?\\|)"));
+    sentenceEnd.push(new RegExp("(?![^\\\\]*?\\\\)"));
+    //sentenceEnd.push(new RegExp("(?![^\\/.]*\\/)")); // all could be a problem, but this one is problematic
+    
+    rxIndex = new RegExp(sentenceEnd.reduce(function (previousValue, currentValue) {
+                                            return previousValue + currentValue.source;
+                                            }, ""));
+    
+    function indexSentenceEnd(html) {
+        var index = html.search(rxIndex);
+        
+        if (index !== -1) {
+            index += html.match(rxIndex)[0].length - 1;
+        }
+        
+        return index;
+    }
+
+    function pushSpan(array, className, string, classNameOpt) {
+        if (!string.match('[a-zA-Z0-9]+')) {
+            array.push(string);
+        } else {
+            array.push('<span class="' + className + '">' + string + '</span>');
+        }
+    }
+    
+    function addSupToPrevious(html, array) {
+        var sup = html.search(rxSupStart),
+        end = 0,
+        last;
+        
+        if (sup !== -1) {
+            end = html.search(rxSupEnd);
+            if (end !== -1) {
+                last = array.pop();
+                end = end + 6;
+                array.push(last.slice(0, -7) + html.slice(0, end) + last.slice(-7));
+            }
+        }
+        
+        return html.slice(end);
+    }
+    
+    function paragraphIsSentence(html, array) {
+        var index = indexSentenceEnd(html);
+        
+        if (index === -1 || index === html.length) {
+            pushSpan(array, "sentence", html, "paragraphIsSentence");
+            html = "";
+        }
+        
+        return html;
+    }
+    
+    function paragraphNoMarkup(html, array) {
+        var open = html.search(rxOpen),
+        index = 0;
+        
+        if (open === -1) {
+            index = indexSentenceEnd(html);
+            if (index === -1) {
+                index = html.length;
+            }
+            
+            pushSpan(array, "sentence", html.slice(0, index += 1), "paragraphNoMarkup");
+        }
+        
+        return html.slice(index);
+    }
+    
+    function sentenceUncontained(html, array) {
+        var open = html.search(rxOpen),
+        index = 0,
+        close;
+        
+        if (open !== -1) {
+            index = indexSentenceEnd(html);
+            if (index === -1) {
+                index = html.length;
+            }
+            
+            close = html.search(rxClose);
+            if (index < open || index > close) {
+                pushSpan(array, "sentence", html.slice(0, index += 1), "sentenceUncontained");
+            } else {
+                index = 0;
+            }
+        }
+        
+        return html.slice(index);
+    }
+    
+    function sentenceContained(html, array) {
+        var open = html.search(rxOpen),
+        index = 0,
+        close,
+        count;
+        
+        if (open !== -1) {
+            index = indexSentenceEnd(html);
+            if (index === -1) {
+                index = html.length;
+            }
+            
+            close = html.search(rxClose);
+            if (index > open && index < close) {
+                count = html.match(rxClose)[0].length;
+                pushSpan(array, "sentence", html.slice(0, close + count), "sentenceContained");
+                index = close + count;
+            } else {
+                index = 0;
+            }
+        }
+        
+        return html.slice(index);
+    }
+    
+    function anythingElse(html, array) {
+        pushSpan(array, "sentence", html, "anythingElse");
+        
+        return "";
+    }
+    
+    function guessSenetences() {
+        var paragraphs = document.getElementsByTagName("p");
+
+        Array.prototype.forEach.call(paragraphs, function (paragraph) {
+            var html = paragraph.innerHTML,
+                length = html.length,
+                array = [],
+                safety = 100;
+
+            while (length && safety) {
+                html = addSupToPrevious(html, array);
+                if (html.length === length) {
+                    if (html.length === length) {
+                        html = paragraphIsSentence(html, array);
+                        if (html.length === length) {
+                            html = paragraphNoMarkup(html, array);
+                            if (html.length === length) {
+                                html = sentenceUncontained(html, array);
+                                if (html.length === length) {
+                                    html = sentenceContained(html, array);
+                                    if (html.length === length) {
+                                        html = anythingElse(html, array);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                length = html.length;
+                safety -= 1;
+            }
+
+            paragraph.innerHTML = array.join("");
+        });
+    }
+    
+    guessSenetences();
+}
+                                                         
+                                                         
+

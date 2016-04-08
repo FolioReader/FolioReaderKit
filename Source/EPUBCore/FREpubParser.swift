@@ -14,6 +14,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     let book = FRBook()
     var bookBasePath: String!
     var resourcesBasePath: String!
+    var shouldRemoveEpub = true
     private var epubPathToRemove: String?
     
     /**
@@ -22,7 +23,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
      */
     func parseCoverImage(epubPath: String)-> UIImage? {
 
-        let book = readEpub(epubPath: epubPath)
+        let book = readEpub(epubPath: epubPath, removeEpub: false)
         
         // Read the cover image
         if let artwork = UIImage(contentsOfFile: book.coverImage!.fullHref) where book.coverImage != nil {
@@ -36,8 +37,9 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     Unzip, delete and read an epub file.
     Returns a FRBook.
     */
-    func readEpub(epubPath withEpubPath: String) -> FRBook {
+    func readEpub(epubPath withEpubPath: String, removeEpub: Bool = true) -> FRBook {
         epubPathToRemove = withEpubPath
+        shouldRemoveEpub = removeEpub
         
         // Unzip   
         let bookName = (withEpubPath as NSString).lastPathComponent
@@ -336,10 +338,12 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     // MARK: - SSZipArchive delegate
     
     func zipArchiveWillUnzipArchiveAtPath(path: String!, zipInfo: unz_global_info) {
-        do {
-            try NSFileManager.defaultManager().removeItemAtPath(epubPathToRemove!)
-        } catch let error as NSError {
-            print(error)
+        if shouldRemoveEpub {
+            do {
+                try NSFileManager.defaultManager().removeItemAtPath(epubPathToRemove!)
+            } catch let error as NSError {
+                print(error)
+            }
         }
     }
 }

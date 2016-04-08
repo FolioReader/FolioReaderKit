@@ -10,8 +10,17 @@ import UIKit
 import AVFoundation
 import MediaPlayer
 
-class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
+protocol FolioReaderAudioPlayerDelegate {
+    /**
+     Notifies that Player read all sentence
+     */
+    func didReadSentence()
+}
 
+class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate, AVSpeechSynthesizerDelegate {
+    var delegate: FolioReaderAudioPlayerDelegate!
+    var isTextToSpeech = false
+    var synthesizer: AVSpeechSynthesizer!
     var playing = false
     var player: AVAudioPlayer!
     var currentHref: String!
@@ -22,15 +31,20 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
     var currentEndTime: Double!
     var playingTimer: NSTimer!
     var registeredCommands = false
-
+    var completionHandler: () -> Void = {}
+    var utteranceRate: float_t = 0
     override init() {
+        super.init()
         UIApplication.sharedApplication().beginReceivingRemoteControlEvents()
         
         // this is needed to the audio can play even when the "silent/vibrate" toggle is on
         let session:AVAudioSession = AVAudioSession.sharedInstance()
         try! session.setCategory(AVAudioSessionCategoryPlayback)
         try! session.setActive(true)
+        
+        
     }
+    
     
     deinit {
         UIApplication.sharedApplication().endReceivingRemoteControlEvents()
@@ -61,23 +75,83 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
             
             updateNowPlayingInfo()
         }
+        if( synthesizer != nil){
+            // Need to change between version IOS
+            // http://stackoverflow.com/questions/32761786/ios9-avspeechutterance-rate-for-avspeechsynthesizer-issue
+            if #available(iOS 9, *) {
+                switch rate {
+                case 0:
+                    utteranceRate = 0.42
+                    break
+                case 1:
+                    utteranceRate = 0.5
+                    break
+                case 2:
+                    utteranceRate = 0.53
+                    break
+                case 3:
+                    utteranceRate = 0.56
+                    break
+                default:
+                    break
+                }
+            } else {
+                switch rate {
+                case 0:
+                    utteranceRate = 0
+                    break
+                case 1:
+                    utteranceRate = 0.06
+                    break
+                case 2:
+                    utteranceRate = 0.15
+                    break
+                case 3:
+                    utteranceRate = 0.23
+                    break
+                default:
+                    break
+                }
+            }
+            
+            updateNowPlayingInfo()
+        }
     }
 
     func stop() {
         playing = false
-        if( player != nil && player.playing ){
-            player.stop()
-            
-            UIApplication.sharedApplication().idleTimerDisabled = false
-        }
+		if (!isTextToSpeech) {
+			if (player != nil && player.playing) {
+				player.stop()
+
+				UIApplication.sharedApplication().idleTimerDisabled = false
+			}
+		} else {
+            synthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Word)
+		}
+    }
+    
+    func stopSynthesizer(stopCompletion: ()->Void){
+        playing = false
+        synthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Word)
+        completionHandler = stopCompletion
     }
 
     func pause() {
         playing = false
-        if( player != nil && player.playing ){
-            player.pause()
+        
+        if(!isTextToSpeech){
             
-            UIApplication.sharedApplication().idleTimerDisabled = false
+            if( player != nil && player.playing ){
+                player.pause()
+                
+                UIApplication.sharedApplication().idleTimerDisabled = false
+            }
+            
+        }else{
+			if (synthesizer.speaking) {
+				synthesizer.pauseSpeakingAtBoundary(AVSpeechBoundary.Word)
+			}
         }
     }
 
@@ -99,7 +173,8 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
      If this chapter does not have audio, it will delay for a second, then attempt to play the next chapter
     */
     func playAudio(href: String, fragmentID: String) {
-
+        isTextToSpeech = false;
+        
         stop();
 
         let smilFile = book.smilFileForHref(href)
@@ -249,7 +324,36 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
 
         return nextAudioFragment()
     }
-
+    
+    func speechSynthesizer(synthesizer: AVSpeechSynthesizer, didCancelSpeechUtterance utterance: AVSpeechUtterance) {
+        completionHandler()
+    }
+    
+    func speechSynthesizer(synthesizer: AVSpeechSynthesizer, didFinishSpeechUtterance utterance: AVSpeechUtterance) {
+        if isPlaying() {
+            delegate.didReadSentence()
+        }
+    }
+    
+    func playText(href: String, text: String) {
+        isTextToSpeech = true
+        playing = true
+        currentHref = href
+        
+        if((synthesizer) == nil){
+            synthesizer = AVSpeechSynthesizer()
+            synthesizer.delegate = self;
+            setRate(FolioReader.sharedInstance.currentAudioRate);
+        }
+        
+        let utterance = AVSpeechUtterance(string: text)
+        utterance.rate = utteranceRate
+        if(synthesizer.speaking){
+            synthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Word)
+        }
+        synthesizer.speakUtterance(utterance)
+    }
+    
     // MARK: - Audio timing events
 
     private func startPlayerTimer() {
@@ -307,9 +411,11 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate {
         }
         
         // Set player times
-        songInfo[MPMediaItemPropertyPlaybackDuration] = player.duration
-        songInfo[MPNowPlayingInfoPropertyPlaybackRate] = player.rate
-        songInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime ] = player.currentTime
+        if !isTextToSpeech {
+            songInfo[MPMediaItemPropertyPlaybackDuration] = player.duration
+            songInfo[MPNowPlayingInfoPropertyPlaybackRate] = player.rate
+            songInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime ] = player.currentTime
+        }
         
         // Set Audio Player info
         MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
