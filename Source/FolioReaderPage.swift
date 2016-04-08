@@ -313,12 +313,14 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     
     func speakSentence(){
         let sentence = self.webView.js("getSentenceWithIndex('\(book.playbackActiveClass())')")
-        if ((sentence) != nil) {
-            FolioReader.sharedInstance.readerAudioPlayer.playText(sentence!)
-        }else{
+        if sentence != nil {
+            let chapter = FolioReader.sharedInstance.readerCenter.getCurrentChapter()
+            let href = chapter != nil ? chapter!.href : "";
+            FolioReader.sharedInstance.readerAudioPlayer.playText(href, text: sentence!)
+        } else {
             if(FolioReader.sharedInstance.readerCenter.isLastPage()){
                 FolioReader.sharedInstance.readerAudioPlayer.stop()
-            }else{
+            } else{
                 FolioReader.sharedInstance.readerCenter.changePageToNext()
             }
         }

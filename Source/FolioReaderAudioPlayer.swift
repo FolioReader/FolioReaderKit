@@ -114,6 +114,7 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate, AVSpeechSynthesiz
                 }
             }
             
+            updateNowPlayingInfo()
         }
     }
 
@@ -159,7 +160,6 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate, AVSpeechSynthesiz
     }
 
     func playAudio() {
-        isTextToSpeech = false;
         let currentPage = FolioReader.sharedInstance.readerCenter.currentPage
         currentPage.playAudio()
         
@@ -173,7 +173,8 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate, AVSpeechSynthesiz
      If this chapter does not have audio, it will delay for a second, then attempt to play the next chapter
     */
     func playAudio(href: String, fragmentID: String) {
-
+        isTextToSpeech = false;
+        
         stop();
 
         let smilFile = book.smilFileForHref(href)
@@ -328,20 +329,21 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate, AVSpeechSynthesiz
         completionHandler()
     }
     
-    func speechSynthesizer(synthesizer: AVSpeechSynthesizer, didFinishSpeechUtterance utterance: AVSpeechUtterance)
-    {
-        if(isPlaying()){
+    func speechSynthesizer(synthesizer: AVSpeechSynthesizer, didFinishSpeechUtterance utterance: AVSpeechUtterance) {
+        if isPlaying() {
             delegate.didReadSentence()
         }
     }
     
-    func playText(text: String) {
-        isTextToSpeech = true;
-        playing = true;
+    func playText(href: String, text: String) {
+        isTextToSpeech = true
+        playing = true
+        currentHref = href
+        
         if((synthesizer) == nil){
             synthesizer = AVSpeechSynthesizer()
             synthesizer.delegate = self;
-            setRate(1);
+            setRate(FolioReader.sharedInstance.currentAudioRate);
         }
         
         let utterance = AVSpeechUtterance(string: text)
@@ -409,9 +411,11 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate, AVSpeechSynthesiz
         }
         
         // Set player times
-        songInfo[MPMediaItemPropertyPlaybackDuration] = player.duration
-        songInfo[MPNowPlayingInfoPropertyPlaybackRate] = player.rate
-        songInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime ] = player.currentTime
+        if !isTextToSpeech {
+            songInfo[MPMediaItemPropertyPlaybackDuration] = player.duration
+            songInfo[MPNowPlayingInfoPropertyPlaybackRate] = player.rate
+            songInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime ] = player.currentTime
+        }
         
         // Set Audio Player info
         MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
