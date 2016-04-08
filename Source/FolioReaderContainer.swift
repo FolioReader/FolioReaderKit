@@ -50,6 +50,7 @@ class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
     var currentState = SlideOutState()
     var shouldHideStatusBar = true
     private var errorOnLoad = false
+    private var shouldRemoveEpub = true
     
     // MARK: - Init
     
@@ -57,9 +58,10 @@ class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
         super.init(coder: aDecoder)
     }
     
-    init(config configOrNil: FolioReaderConfig!, epubPath epubPathOrNil: String? = nil) {
+    init(config configOrNil: FolioReaderConfig!, epubPath epubPathOrNil: String? = nil, removeEpub: Bool) {
         readerConfig = configOrNil
         epubPath = epubPathOrNil
+        shouldRemoveEpub = removeEpub
         super.init(nibName: nil, bundle: NSBundle.frameworkBundle())
         
         // Init with empty book
@@ -113,7 +115,7 @@ class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
                     if isDir {
                         book = FREpubParser().readEpub(filePath: epubPath!)
                     } else {
-                        book = FREpubParser().readEpub(epubPath: epubPath!)
+                        book = FREpubParser().readEpub(epubPath: epubPath!, removeEpub: self.shouldRemoveEpub)
                     }
                 }
                 else {
@@ -123,19 +125,21 @@ class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
                 
                 FolioReader.sharedInstance.isReaderOpen = true
                 
-                // Reload data
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.centerViewController.reloadData()
-                    self.addLeftPanelViewController()
-                    self.addAudioPlayer()
-                    
-                    // Open panel if does not have a saved point
-                    if FolioReader.defaults.valueForKey(kBookId) == nil {
-                        self.toggleLeftPanel()
-                    }
-                    
-                    FolioReader.sharedInstance.isReaderReady = true
-                })
+                if !self.errorOnLoad {
+                    // Reload data
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.centerViewController.reloadData()
+                        self.addLeftPanelViewController()
+                        self.addAudioPlayer()
+                        
+                        // Open panel if does not have a saved point
+                        if FolioReader.defaults.valueForKey(kBookId) == nil {
+                            self.toggleLeftPanel()
+                        }
+                        
+                        FolioReader.sharedInstance.isReaderReady = true
+                    })
+                }
             })
         } else {
             print("Epub path is nil.")
