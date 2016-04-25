@@ -223,7 +223,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         let href = hrefSplit[0]
         
         let resource = book.resources.getByHref(href)
-        let toc = FRTocReference(title: label, resource: resource!, fragmentID: fragmentID)
+        let toc = FRTocReference(title: label, resource: resource, fragmentID: fragmentID)
         
         if navpointElement["navPoint"].all != nil {
             for navPoint in navpointElement["navPoint"].all! {

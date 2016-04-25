@@ -431,7 +431,7 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate, AVSpeechSynthesiz
      */
     func getCurrentChapterName() -> String? {
         for item in FolioReader.sharedInstance.readerSidePanel.tocItems {
-            if item.resource.href == currentHref {
+            if let resource = item.resource where resource.href == currentHref {
                 return item.title
             }
         }

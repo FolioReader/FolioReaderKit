@@ -764,7 +764,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     func findPageByResource(reference: FRTocReference) -> Int {
         var count = 0
         for item in book.spine.spineReferences {
-            if item.resource.href == reference.resource.href {
+            if let resource = reference.resource where item.resource.href == resource.href {
                 return count
             }
             count += 1
@@ -792,8 +792,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     func getCurrentChapter() -> FRResource? {
         if let currentPageNumber = currentPageNumber {
             for item in FolioReader.sharedInstance.readerSidePanel.tocItems {
-                if let reference = book.spine.spineReferences[safe: currentPageNumber-1]
-                    where item.resource.href == reference.resource.href {
+                if let reference = book.spine.spineReferences[safe: currentPageNumber-1], resource = item.resource
+                    where resource.href == reference.resource.href {
                     return item.resource
                 }
             }
@@ -807,8 +807,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     func getCurrentChapterName() -> String? {
         if let currentPageNumber = currentPageNumber {
             for item in FolioReader.sharedInstance.readerSidePanel.tocItems {
-                if let reference = book.spine.spineReferences[safe: currentPageNumber-1]
-                    where item.resource.href == reference.resource.href {
+                if let reference = book.spine.spineReferences[safe: currentPageNumber-1], resource = item.resource
+                    where resource.href == reference.resource.href {
                     if let title = item.title {
                         return title
                     }
@@ -1062,11 +1062,16 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     func container(sidePanel: FolioReaderSidePanel, didSelectRowAtIndexPath indexPath: NSIndexPath, withTocReference reference: FRTocReference) {
         let item = findPageByResource(reference)
-        let indexPath = NSIndexPath(forRow: item, inSection: 0)
-        changePageWith(indexPath: indexPath, animated: false, completion: { () -> Void in
-            self.updateCurrentPage()
-        })
-        tempReference = reference
+        
+        if item < totalPages-1 {
+            let indexPath = NSIndexPath(forRow: item, inSection: 0)
+            changePageWith(indexPath: indexPath, animated: false, completion: { () -> Void in
+                self.updateCurrentPage()
+            })
+            tempReference = reference
+        } else {
+            print("Failed to load book because the requested resource is missing.")
+        }
     }
     
     // MARK: - Fonts Menu

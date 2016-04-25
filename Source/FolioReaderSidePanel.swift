@@ -122,17 +122,19 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
         cell.indexLabel.font = UIFont(name: "Avenir-Light", size: 17)
         cell.indexLabel.textColor = readerConfig.menuTextColor
 
-        if( tocReference.resource.mediaOverlay != nil ){
-            let duration = book.durationFor("#"+tocReference.resource.mediaOverlay);
-            let durationFormatted = (duration != nil ? duration : "")?.clockTimeToMinutesString()
+        if let resource = tocReference.resource {
+            if(resource.mediaOverlay != nil){
+                let duration = book.durationFor("#"+resource.mediaOverlay);
+                let durationFormatted = (duration != nil ? duration : "")?.clockTimeToMinutesString()
 
-            cell.indexLabel.text = cell.indexLabel.text! + (duration != nil ? " - "+durationFormatted! : "");
+                cell.indexLabel.text = cell.indexLabel.text! + (duration != nil ? " - "+durationFormatted! : "");
+            }
         }
 
         // Mark current reading chapter
-        if let currentPageNumber = currentPageNumber, reference = book.spine.spineReferences[safe: currentPageNumber-1] {
+        if let currentPageNumber = currentPageNumber, reference = book.spine.spineReferences[safe: currentPageNumber-1] where tocReference.resource != nil {
             let resource = reference.resource
-            cell.indexLabel.textColor = tocReference.resource.href == resource.href ? readerConfig.tintColor : readerConfig.menuTextColor
+            cell.indexLabel.textColor = tocReference.resource!.href == resource.href ? readerConfig.tintColor : readerConfig.menuTextColor
         }
         
         cell.layoutMargins = UIEdgeInsetsZero
