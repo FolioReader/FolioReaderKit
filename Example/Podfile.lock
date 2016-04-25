@@ -1,16 +1,16 @@
 PODS:
   - AEXML (2.1.0)
-  - FolioReaderKit (0.6.2):
+  - FolioReaderKit (0.6.3):
     - AEXML
     - FontBlaster
     - JSQWebViewController
     - SSZipArchive
     - UIMenuItem-CXAImageSupport
     - ZFDragableModalTransition
-  - FontBlaster (2.1.1)
+  - FontBlaster (2.1.2)
   - JSQWebViewController (3.0.0)
-  - Nimble (4.0.0)
-  - Quick (0.9.1)
+  - Nimble (4.0.1)
+  - Quick (0.9.2)
   - SSZipArchive (1.1)
   - UIMenuItem-CXAImageSupport (0.0.1)
   - ZFDragableModalTransition (0.6)
@@ -26,11 +26,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AEXML: 0e2f657fdc67e17905682a06d55583a863d80803
-  FolioReaderKit: 625aa6f1021529182490879308151cf747e46a55
-  FontBlaster: 4468b8cd1d6d644f47946d5094a4656701153262
+  FolioReaderKit: e13e604b9f584569c16c50b1dd6adeeba72ec365
+  FontBlaster: 95ebf29a025dbeda4530300099c6f533e805682c
   JSQWebViewController: eaa6bd68d9e1426ae25ade99c9bbde4c6cdd4120
-  Nimble: 72bcc3e2f02242e6bfaaf8d9412ca7bfe3d8b417
-  Quick: a5221fc21788b6aeda934805e68b061839bc3165
+  Nimble: 0f3c8b8b084cda391209c3c5efbb48bedeeb920a
+  Quick: 18d057bc66451eedd5d1c8dc99ba2a5db6e60226
   SSZipArchive: de3d215ab73f87db627f81f2ce24f1731e3886c3
   UIMenuItem-CXAImageSupport: 2945e2af4487414caad801ed8ff6ac8db274e986
   ZFDragableModalTransition: 0d294eaaba6edfcb9839595de765f9ca06a4b524
