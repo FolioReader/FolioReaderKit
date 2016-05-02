@@ -192,8 +192,11 @@ html .highlight-yellow, html .highlight-green, html .highlight-blue, html .highl
  *
  */
 
-html { 
+html, body {
     -webkit-transition: all 0.6s ease;
+}
+
+html {
     background-color: #FFFFFF !important;
 }
 
