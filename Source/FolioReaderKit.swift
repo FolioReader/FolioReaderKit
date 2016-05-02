@@ -176,13 +176,13 @@ func isNight<T> (f: T, _ l: T) -> T {
 
 // MARK: - Extensions
 
-extension NSBundle {
+internal extension NSBundle {
     class func frameworkBundle() -> NSBundle {
         return NSBundle(forClass: FolioReader.self)
     }
 }
 
-extension UIColor {
+internal extension UIColor {
     convenience init(rgba: String) {
         var red:   CGFloat = 0.0
         var green: CGFloat = 0.0
@@ -309,7 +309,7 @@ extension UIColor {
     }
 }
 
-extension String {
+internal extension String {
     /// Truncates the string to length number of characters and
     /// appends optional trailing string if longer
     func truncate(length: Int, trailing: String? = nil) -> String {
@@ -409,7 +409,7 @@ extension String {
 
 }
 
-extension UIImage {
+internal extension UIImage {
     convenience init?(readerImageNamed: String) {
         let traits = UITraitCollection(displayScale: UIScreen.mainScreen().scale)
         self.init(named: readerImageNamed, inBundle: NSBundle.frameworkBundle(), compatibleWithTraitCollection: traits)
@@ -482,13 +482,13 @@ extension UIViewController: UIGestureRecognizerDelegate {
     }
 }
 
-extension UINavigationController {
+internal extension UINavigationController {
     override public func preferredStatusBarStyle() -> UIStatusBarStyle {
         return isNight(.LightContent, .Default)
     }
 }
 
-extension UINavigationBar {
+internal extension UINavigationBar {
     
     func hideBottomHairline() {
         let navigationBarImageView = hairlineImageViewInNavigationBar(self)
@@ -515,7 +515,7 @@ extension UINavigationBar {
     }
 }
 
-extension Array {
+internal extension Array {
     
     /**
      Return index if is safe, if not return nil
