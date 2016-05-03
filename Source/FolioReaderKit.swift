@@ -67,7 +67,7 @@ public class FolioReader : NSObject {
     
     
     var nightMode: Bool {
-        get { return FolioReader.defaults.valueForKey(kNightMode) as! Bool }
+        get { return FolioReader.defaults.boolForKey(kNightMode) }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kNightMode)
             FolioReader.defaults.synchronize()
