@@ -69,7 +69,7 @@ public class FolioReader : NSObject {
     var nightMode: Bool {
         get { return FolioReader.defaults.boolForKey(kNightMode) }
         set (value) {
-            FolioReader.defaults.setValue(value, forKey: kNightMode)
+            FolioReader.defaults.setBool(value, forKey: kNightMode)
             FolioReader.defaults.synchronize()
         }
     }
@@ -237,7 +237,7 @@ internal extension UIColor {
      - parameter rgba: Whether the alpha should be included.
      */
     // from: https://github.com/yeahdongcn/UIColor-Hex-Swift
-    public func hexString(includeAlpha: Bool) -> String {
+    func hexString(includeAlpha: Bool) -> String {
         var r: CGFloat = 0
         var g: CGFloat = 0
         var b: CGFloat = 0
@@ -479,12 +479,6 @@ extension UIViewController: UIGestureRecognizerDelegate {
         navBar?.translucent = translucent
         navBar?.tintColor = tintColor
         navBar?.titleTextAttributes = [NSForegroundColorAttributeName: titleColor, NSFontAttributeName: font]
-    }
-}
-
-internal extension UINavigationController {
-    override public func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return isNight(.LightContent, .Default)
     }
 }
 
