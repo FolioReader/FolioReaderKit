@@ -9,7 +9,7 @@
 import UIKit
 
 @objc
-protocol FolioReaderSidePanelDelegate {
+protocol FolioReaderSidePanelDelegate: class {
     /**
     Notifies when the user selected some item on menu.
     */
