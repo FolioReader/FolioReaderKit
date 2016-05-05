@@ -23,7 +23,7 @@ enum SlideOutState {
     }
 }
 
-protocol FolioReaderContainerDelegate {
+protocol FolioReaderContainerDelegate: class {
     /**
     Notifies that the menu was expanded.
     */
@@ -78,7 +78,7 @@ class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
             kCurrentAudioRate: 1,
             kCurrentHighlightStyle: 0,
             kCurrentMediaOverlayStyle: MediaOverlayStyle.Default.rawValue
-            ])
+        ])
     }
     
     // MARK: - View life cicle

@@ -38,7 +38,7 @@ enum ScrollDirection: Int {
 
 class ScrollScrubber: NSObject, UIScrollViewDelegate {
     
-    var delegate: FolioReaderCenter!
+    weak var delegate: FolioReaderCenter!
     var showSpeed = 0.6
     var hideSpeed = 0.6
     var hideDelay = 1.0
@@ -232,7 +232,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     var totalPages: Int!
     var tempFragment: String?
     var currentPage: FolioReaderPage!
-    var folioReaderContainer: FolioReaderContainer!
+    weak var folioReaderContainer: FolioReaderContainer!
     var animator: ZFModalTransitionAnimator!
     var pageIndicatorView: FolioReaderPageIndicator!
     var bookShareLink: String?

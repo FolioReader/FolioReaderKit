@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 import MediaPlayer
 
-protocol FolioReaderAudioPlayerDelegate {
+protocol FolioReaderAudioPlayerDelegate: class {
     /**
      Notifies that Player read all sentence
      */
@@ -18,7 +18,7 @@ protocol FolioReaderAudioPlayerDelegate {
 }
 
 class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate, AVSpeechSynthesizerDelegate {
-    var delegate: FolioReaderAudioPlayerDelegate!
+    weak var delegate: FolioReaderAudioPlayerDelegate!
     var isTextToSpeech = false
     var synthesizer: AVSpeechSynthesizer!
     var playing = false
