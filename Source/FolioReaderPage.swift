@@ -19,7 +19,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     
     var pageNumber: Int!
     var webView: UIWebView!
-    var delegate: FolioPageDelegate!
+    weak var delegate: FolioPageDelegate!
     private var shouldShowBar = true
     private var menuIsVisible = false
     

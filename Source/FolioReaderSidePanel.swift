@@ -18,7 +18,7 @@ protocol FolioReaderSidePanelDelegate {
 
 class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
-    var delegate: FolioReaderSidePanelDelegate?
+    weak var delegate: FolioReaderSidePanelDelegate?
     var tableView: UITableView!
     var toolBar: UIToolbar!
     let toolBarHeight: CGFloat = 50
