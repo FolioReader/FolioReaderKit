@@ -11,7 +11,7 @@ import SafariServices
 import UIMenuItem_CXAImageSupport
 import JSQWebViewController
 
-@objc protocol FolioPageDelegate {
+@objc protocol FolioPageDelegate: class {
     optional func pageDidLoad(page: FolioReaderPage)
 }
 

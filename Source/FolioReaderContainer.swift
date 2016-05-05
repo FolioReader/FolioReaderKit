@@ -41,7 +41,7 @@ protocol FolioReaderContainerDelegate: class {
 }
 
 class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
-    var delegate: FolioReaderContainerDelegate!
+    weak var delegate: FolioReaderContainerDelegate!
     var centerNavigationController: UINavigationController!
     var centerViewController: FolioReaderCenter!
     var leftViewController: FolioReaderSidePanel!
