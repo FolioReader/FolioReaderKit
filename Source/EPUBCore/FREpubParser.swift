@@ -26,8 +26,8 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         let book = readEpub(epubPath: epubPath, removeEpub: false)
         
         // Read the cover image
-        if let artwork = UIImage(contentsOfFile: book.coverImage!.fullHref) where book.coverImage != nil {
-            return artwork
+        if let coverImage = book.coverImage {
+            return UIImage(contentsOfFile: coverImage.fullHref)
         }
         
         return nil
