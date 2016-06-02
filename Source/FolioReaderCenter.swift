@@ -712,7 +712,9 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         let indexPath = NSIndexPath(forRow: item, inSection: 0)
         changePageWith(indexPath: indexPath, animated: animated, completion: { () -> Void in
             self.updateCurrentPage({ () -> Void in
-                if (completion != nil) { completion!() }
+                if (completion != nil) {
+                    completion!()
+                }
             })
         })
     }
@@ -735,11 +737,33 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     }
 
     func changePageWith(indexPath indexPath: NSIndexPath, animated: Bool = false, completion: (() -> Void)? = nil) {
+        if !indexPathIsValid(indexPath) {
+            print("ERROR: Attempt to scroll to invalid index path")
+            if (completion != nil) {
+                completion!()
+            }
+            return
+        }
+        
         UIView.animateWithDuration(animated ? 0.3 : 0, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
             self.collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Top, animated: false)
             }) { (finished: Bool) -> Void in
                 if (completion != nil) { completion!() }
         }
+    }
+    
+    func indexPathIsValid(indexPath: NSIndexPath) -> Bool {
+        let section = indexPath.section
+        let row = indexPath.row
+        let lastSectionIndex = numberOfSectionsInCollectionView(collectionView) - 1
+        
+        //Make sure the specified section exists
+        if section > lastSectionIndex {
+            return false
+        }
+        
+        let rowCount = self.collectionView(collectionView, numberOfItemsInSection: indexPath.section) - 1
+        return row <= rowCount
     }
     
     func isLastPage() -> Bool{
