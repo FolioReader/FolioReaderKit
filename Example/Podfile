@@ -1,0 +1,33 @@
+platform :ios, '8.0'
+
+use_frameworks!
+inhibit_all_warnings!
+
+def shared_pods
+  pod 'FolioReaderKit', path: '../'
+end
+
+def testing_pods
+  pod 'Quick'
+  pod 'Nimble'
+end
+
+target 'Example' do
+  shared_pods
+end
+
+target 'FolioReaderTests' do
+  shared_pods
+  testing_pods
+end
+
+# ensure testability is set https://github.com/CocoaPods/CocoaPods/issues/4505
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      if config.name == 'Debug'
+        config.build_settings['ENABLE_TESTABILITY'] = 'YES'
+      end
+    end
+  end
+end

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="ufC-wZ-h7g">
+            <objects>
+                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
+                        <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" tag="1" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4VN-zC-gTV">
+                                <rect key="frame" x="218" y="64" width="164" height="235"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="235" id="4Do-x7-Zyi"/>
+                                    <constraint firstAttribute="width" secondItem="4VN-zC-gTV" secondAttribute="height" multiplier="28:40" id="yIh-Rk-XlF"/>
+                                </constraints>
+                                <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="didOpen:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Ibf-j6-YlH"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" tag="2" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vdn-HF-kCC">
+                                <rect key="frame" x="218" y="323" width="164" height="234"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="vdn-HF-kCC" secondAttribute="height" multiplier="28:40" id="9fo-qU-rt1"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="didOpen:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="M8S-eM-283"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="4VN-zC-gTV" firstAttribute="leading" secondItem="vdn-HF-kCC" secondAttribute="leading" id="O6h-O5-Mm3"/>
+                            <constraint firstItem="4VN-zC-gTV" firstAttribute="trailing" secondItem="vdn-HF-kCC" secondAttribute="trailing" id="WFt-MO-d3s"/>
+                            <constraint firstItem="vdn-HF-kCC" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="Yo1-zt-m3U"/>
+                            <constraint firstItem="4VN-zC-gTV" firstAttribute="leading" secondItem="vdn-HF-kCC" secondAttribute="trailing" constant="-185" id="ZQK-9H-WO5"/>
+                            <constraint firstItem="vdn-HF-kCC" firstAttribute="top" secondItem="4VN-zC-gTV" secondAttribute="bottom" constant="24" id="cmd-b3-LGv"/>
+                            <constraint firstItem="4VN-zC-gTV" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="44" id="iMP-kv-hwb"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="ZQK-9H-WO5"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <connections>
+                        <outlet property="bookOne" destination="4VN-zC-gTV" id="Yau-yI-OXs"/>
+                        <outlet property="bookTwo" destination="vdn-HF-kCC" id="XU5-jB-OaP"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="340" y="392"/>
+        </scene>
+    </scenes>
+</document>
