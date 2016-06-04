@@ -1,0 +1,494 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DC15A4F2193F710800D293CE /* ModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC15A4F1193F710800D293CE /* ModalViewController.m */; };
+		DCAD9954193F6E7300F0F385 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCAD9953193F6E7300F0F385 /* Foundation.framework */; };
+		DCAD9956193F6E7300F0F385 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCAD9955193F6E7300F0F385 /* CoreGraphics.framework */; };
+		DCAD9958193F6E7300F0F385 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCAD9957193F6E7300F0F385 /* UIKit.framework */; };
+		DCAD995E193F6E7300F0F385 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DCAD995C193F6E7300F0F385 /* InfoPlist.strings */; };
+		DCAD9960193F6E7300F0F385 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DCAD995F193F6E7300F0F385 /* main.m */; };
+		DCAD9964193F6E7300F0F385 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DCAD9963193F6E7300F0F385 /* AppDelegate.m */; };
+		DCAD9967193F6E7300F0F385 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DCAD9965193F6E7300F0F385 /* Main.storyboard */; };
+		DCAD996A193F6E7300F0F385 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DCAD9969193F6E7300F0F385 /* ViewController.m */; };
+		DCAD996C193F6E7300F0F385 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DCAD996B193F6E7300F0F385 /* Images.xcassets */; };
+		DCAD9973193F6E7300F0F385 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCAD9972193F6E7300F0F385 /* XCTest.framework */; };
+		DCAD9974193F6E7300F0F385 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCAD9953193F6E7300F0F385 /* Foundation.framework */; };
+		DCAD9975193F6E7300F0F385 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCAD9957193F6E7300F0F385 /* UIKit.framework */; };
+		DCAD997D193F6E7300F0F385 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DCAD997B193F6E7300F0F385 /* InfoPlist.strings */; };
+		DCAD997F193F6E7300F0F385 /* ZFModalTransitionDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DCAD997E193F6E7300F0F385 /* ZFModalTransitionDemoTests.m */; };
+		DCAD998C193F6EEF00F0F385 /* ZFModalTransitionAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = DCAD998B193F6EEF00F0F385 /* ZFModalTransitionAnimator.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DCAD9976193F6E7300F0F385 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DCAD9948193F6E7200F0F385 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DCAD994F193F6E7300F0F385;
+			remoteInfo = ZFModalTransitionDemo;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		DC15A4F0193F710800D293CE /* ModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModalViewController.h; sourceTree = "<group>"; };
+		DC15A4F1193F710800D293CE /* ModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModalViewController.m; sourceTree = "<group>"; };
+		DCAD9950193F6E7300F0F385 /* ZFModalTransitionDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZFModalTransitionDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DCAD9953193F6E7300F0F385 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		DCAD9955193F6E7300F0F385 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		DCAD9957193F6E7300F0F385 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		DCAD995B193F6E7300F0F385 /* ZFModalTransitionDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ZFModalTransitionDemo-Info.plist"; sourceTree = "<group>"; };
+		DCAD995D193F6E7300F0F385 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DCAD995F193F6E7300F0F385 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		DCAD9961193F6E7300F0F385 /* ZFModalTransitionDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ZFModalTransitionDemo-Prefix.pch"; sourceTree = "<group>"; };
+		DCAD9962193F6E7300F0F385 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		DCAD9963193F6E7300F0F385 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		DCAD9966193F6E7300F0F385 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		DCAD9968193F6E7300F0F385 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		DCAD9969193F6E7300F0F385 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		DCAD996B193F6E7300F0F385 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		DCAD9971193F6E7300F0F385 /* ZFModalTransitionDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZFModalTransitionDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DCAD9972193F6E7300F0F385 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		DCAD997A193F6E7300F0F385 /* ZFModalTransitionDemoTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ZFModalTransitionDemoTests-Info.plist"; sourceTree = "<group>"; };
+		DCAD997C193F6E7300F0F385 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DCAD997E193F6E7300F0F385 /* ZFModalTransitionDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZFModalTransitionDemoTests.m; sourceTree = "<group>"; };
+		DCAD998A193F6EEF00F0F385 /* ZFModalTransitionAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZFModalTransitionAnimator.h; sourceTree = "<group>"; };
+		DCAD998B193F6EEF00F0F385 /* ZFModalTransitionAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZFModalTransitionAnimator.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DCAD994D193F6E7300F0F385 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DCAD9956193F6E7300F0F385 /* CoreGraphics.framework in Frameworks */,
+				DCAD9958193F6E7300F0F385 /* UIKit.framework in Frameworks */,
+				DCAD9954193F6E7300F0F385 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DCAD996E193F6E7300F0F385 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DCAD9973193F6E7300F0F385 /* XCTest.framework in Frameworks */,
+				DCAD9975193F6E7300F0F385 /* UIKit.framework in Frameworks */,
+				DCAD9974193F6E7300F0F385 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DCAD9947193F6E7200F0F385 = {
+			isa = PBXGroup;
+			children = (
+				DCAD9959193F6E7300F0F385 /* ZFModalTransitionDemo */,
+				DCAD9978193F6E7300F0F385 /* ZFModalTransitionDemoTests */,
+				DCAD9952193F6E7300F0F385 /* Frameworks */,
+				DCAD9951193F6E7300F0F385 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DCAD9951193F6E7300F0F385 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DCAD9950193F6E7300F0F385 /* ZFModalTransitionDemo.app */,
+				DCAD9971193F6E7300F0F385 /* ZFModalTransitionDemoTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DCAD9952193F6E7300F0F385 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DCAD9953193F6E7300F0F385 /* Foundation.framework */,
+				DCAD9955193F6E7300F0F385 /* CoreGraphics.framework */,
+				DCAD9957193F6E7300F0F385 /* UIKit.framework */,
+				DCAD9972193F6E7300F0F385 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DCAD9959193F6E7300F0F385 /* ZFModalTransitionDemo */ = {
+			isa = PBXGroup;
+			children = (
+				DCAD9989193F6EEF00F0F385 /* Classes */,
+				DCAD9962193F6E7300F0F385 /* AppDelegate.h */,
+				DCAD9963193F6E7300F0F385 /* AppDelegate.m */,
+				DCAD9965193F6E7300F0F385 /* Main.storyboard */,
+				DCAD9968193F6E7300F0F385 /* ViewController.h */,
+				DCAD9969193F6E7300F0F385 /* ViewController.m */,
+				DC15A4F0193F710800D293CE /* ModalViewController.h */,
+				DC15A4F1193F710800D293CE /* ModalViewController.m */,
+				DCAD996B193F6E7300F0F385 /* Images.xcassets */,
+				DCAD995A193F6E7300F0F385 /* Supporting Files */,
+			);
+			path = ZFModalTransitionDemo;
+			sourceTree = "<group>";
+		};
+		DCAD995A193F6E7300F0F385 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DCAD995B193F6E7300F0F385 /* ZFModalTransitionDemo-Info.plist */,
+				DCAD995C193F6E7300F0F385 /* InfoPlist.strings */,
+				DCAD995F193F6E7300F0F385 /* main.m */,
+				DCAD9961193F6E7300F0F385 /* ZFModalTransitionDemo-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DCAD9978193F6E7300F0F385 /* ZFModalTransitionDemoTests */ = {
+			isa = PBXGroup;
+			children = (
+				DCAD997E193F6E7300F0F385 /* ZFModalTransitionDemoTests.m */,
+				DCAD9979193F6E7300F0F385 /* Supporting Files */,
+			);
+			path = ZFModalTransitionDemoTests;
+			sourceTree = "<group>";
+		};
+		DCAD9979193F6E7300F0F385 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DCAD997A193F6E7300F0F385 /* ZFModalTransitionDemoTests-Info.plist */,
+				DCAD997B193F6E7300F0F385 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DCAD9989193F6EEF00F0F385 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				DCAD998A193F6EEF00F0F385 /* ZFModalTransitionAnimator.h */,
+				DCAD998B193F6EEF00F0F385 /* ZFModalTransitionAnimator.m */,
+			);
+			name = Classes;
+			path = ../../Classes;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DCAD994F193F6E7300F0F385 /* ZFModalTransitionDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DCAD9982193F6E7300F0F385 /* Build configuration list for PBXNativeTarget "ZFModalTransitionDemo" */;
+			buildPhases = (
+				DCAD994C193F6E7300F0F385 /* Sources */,
+				DCAD994D193F6E7300F0F385 /* Frameworks */,
+				DCAD994E193F6E7300F0F385 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ZFModalTransitionDemo;
+			productName = ZFModalTransitionDemo;
+			productReference = DCAD9950193F6E7300F0F385 /* ZFModalTransitionDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DCAD9970193F6E7300F0F385 /* ZFModalTransitionDemoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DCAD9985193F6E7300F0F385 /* Build configuration list for PBXNativeTarget "ZFModalTransitionDemoTests" */;
+			buildPhases = (
+				DCAD996D193F6E7300F0F385 /* Sources */,
+				DCAD996E193F6E7300F0F385 /* Frameworks */,
+				DCAD996F193F6E7300F0F385 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DCAD9977193F6E7300F0F385 /* PBXTargetDependency */,
+			);
+			name = ZFModalTransitionDemoTests;
+			productName = ZFModalTransitionDemoTests;
+			productReference = DCAD9971193F6E7300F0F385 /* ZFModalTransitionDemoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DCAD9948193F6E7200F0F385 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = zoonref;
+				TargetAttributes = {
+					DCAD9970193F6E7300F0F385 = {
+						TestTargetID = DCAD994F193F6E7300F0F385;
+					};
+				};
+			};
+			buildConfigurationList = DCAD994B193F6E7200F0F385 /* Build configuration list for PBXProject "ZFModalTransitionDemo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = DCAD9947193F6E7200F0F385;
+			productRefGroup = DCAD9951193F6E7300F0F385 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DCAD994F193F6E7300F0F385 /* ZFModalTransitionDemo */,
+				DCAD9970193F6E7300F0F385 /* ZFModalTransitionDemoTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DCAD994E193F6E7300F0F385 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DCAD996C193F6E7300F0F385 /* Images.xcassets in Resources */,
+				DCAD995E193F6E7300F0F385 /* InfoPlist.strings in Resources */,
+				DCAD9967193F6E7300F0F385 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DCAD996F193F6E7300F0F385 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DCAD997D193F6E7300F0F385 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DCAD994C193F6E7300F0F385 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DCAD996A193F6E7300F0F385 /* ViewController.m in Sources */,
+				DCAD998C193F6EEF00F0F385 /* ZFModalTransitionAnimator.m in Sources */,
+				DC15A4F2193F710800D293CE /* ModalViewController.m in Sources */,
+				DCAD9964193F6E7300F0F385 /* AppDelegate.m in Sources */,
+				DCAD9960193F6E7300F0F385 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DCAD996D193F6E7300F0F385 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DCAD997F193F6E7300F0F385 /* ZFModalTransitionDemoTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DCAD9977193F6E7300F0F385 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DCAD994F193F6E7300F0F385 /* ZFModalTransitionDemo */;
+			targetProxy = DCAD9976193F6E7300F0F385 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		DCAD995C193F6E7300F0F385 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DCAD995D193F6E7300F0F385 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		DCAD9965193F6E7300F0F385 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DCAD9966193F6E7300F0F385 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		DCAD997B193F6E7300F0F385 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DCAD997C193F6E7300F0F385 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		DCAD9980193F6E7300F0F385 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		DCAD9981193F6E7300F0F385 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		DCAD9983193F6E7300F0F385 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ZFModalTransitionDemo/ZFModalTransitionDemo-Prefix.pch";
+				INFOPLIST_FILE = "ZFModalTransitionDemo/ZFModalTransitionDemo-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		DCAD9984193F6E7300F0F385 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ZFModalTransitionDemo/ZFModalTransitionDemo-Prefix.pch";
+				INFOPLIST_FILE = "ZFModalTransitionDemo/ZFModalTransitionDemo-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		DCAD9986193F6E7300F0F385 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ZFModalTransitionDemo.app/ZFModalTransitionDemo";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ZFModalTransitionDemo/ZFModalTransitionDemo-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "ZFModalTransitionDemoTests/ZFModalTransitionDemoTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		DCAD9987193F6E7300F0F385 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ZFModalTransitionDemo.app/ZFModalTransitionDemo";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ZFModalTransitionDemo/ZFModalTransitionDemo-Prefix.pch";
+				INFOPLIST_FILE = "ZFModalTransitionDemoTests/ZFModalTransitionDemoTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DCAD994B193F6E7200F0F385 /* Build configuration list for PBXProject "ZFModalTransitionDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DCAD9980193F6E7300F0F385 /* Debug */,
+				DCAD9981193F6E7300F0F385 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DCAD9982193F6E7300F0F385 /* Build configuration list for PBXNativeTarget "ZFModalTransitionDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DCAD9983193F6E7300F0F385 /* Debug */,
+				DCAD9984193F6E7300F0F385 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DCAD9985193F6E7300F0F385 /* Build configuration list for PBXNativeTarget "ZFModalTransitionDemoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DCAD9986193F6E7300F0F385 /* Debug */,
+				DCAD9987193F6E7300F0F385 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DCAD9948193F6E7200F0F385 /* Project object */;
+}
