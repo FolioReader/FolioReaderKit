@@ -7,7 +7,11 @@
 //
 
 import UIKit
+#if COCOAPODS
 import SSZipArchive
+#else
+import ZipArchive
+#endif
 import AEXML
 
 class FREpubParser: NSObject, SSZipArchiveDelegate {

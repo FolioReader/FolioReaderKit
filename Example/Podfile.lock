@@ -22,7 +22,7 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   FolioReaderKit:
-    :path: "../"
+    :path: ../
 
 SPEC CHECKSUMS:
   AEXML: 716fb0a8decba4a3517324a71fee3685b30233d2
@@ -35,4 +35,6 @@ SPEC CHECKSUMS:
   UIMenuItem-CXAImageSupport: 2945e2af4487414caad801ed8ff6ac8db274e986
   ZFDragableModalTransition: 0d294eaaba6edfcb9839595de765f9ca06a4b524
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 7bafcb0eb37bf78bf161a6ebcb80be176777e3a8
+
+COCOAPODS: 1.0.0
