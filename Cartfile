@@ -1,0 +1,6 @@
+github "ZipArchive/ZipArchive"
+github "cxa/UIMenuItem-CXAImageSupport"
+github "jessesquires/JSQWebViewController"
+github "alexpopov/ZFDragableModalTransition" "merge-carthage-into-zoonooz"
+github "tadija/AEXML"
+github "ArtSabintsev/FontBlaster"

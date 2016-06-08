@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "3B612560170EA1D8B903F3973583DC66B5877296",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "3B612560170EA1D8B903F3973583DC66B5877296" : 0,
+    "9BCD10649C00B1FF6599C448235C882F32E44F3C" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "2421D5CE-8B6E-412D-9068-3D56462D7CCE",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "3B612560170EA1D8B903F3973583DC66B5877296" : "FolioReaderKit\/",
+    "9BCD10649C00B1FF6599C448235C882F32E44F3C" : "UIMenuItem-CXAImageSupport\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "FolioReaderKit",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "FolioReaderKit\/FolioReaderKit.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:FolioReader\/FolioReaderKit.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "3B612560170EA1D8B903F3973583DC66B5877296"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:alexpopov\/UIMenuItem-CXAImageSupport.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9BCD10649C00B1FF6599C448235C882F32E44F3C"
+    }
+  ]
+}

@@ -4,13 +4,26 @@ FolioReaderKit is an ePub reader and parser framework for iOS written in Swift.
 
 ### Installation
 
-**FolioReaderKit** is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following lines to your Podfile:
+
+**FolioReaderKit** is available through [CocoaPods](http://cocoapods.org) and [Carthage](https://github.com/Carthage/Carthage). 
+
+#### Cocoapods
+
+To install it, simply add the following lines to your Podfile:
 
 ```ruby
 use_frameworks!
 pod 'FolioReaderKit'
 ```
+
+#### Carthage
+
+1. Add the following to your [Cartfile](https://github.com/Carthage/Carthage/blob/master/Documentation/Artifacts.md#cartfile)
+    ```
+    github "FolioReader/FolioReaderKit"
+    ```
+
+2. Run `carthage update` and follow the steps as described in Carthage's [README](https://github.com/Carthage/Carthage#adding-frameworks-to-an-application).
 
 ### Requirements
 
