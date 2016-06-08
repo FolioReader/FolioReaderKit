@@ -1,5 +1,5 @@
 github "ZipArchive/ZipArchive"
-github "alexpopov/UIMenuItem-CXAImageSupport" "carthage-support"
+github "cxa/UIMenuItem-CXAImageSupport"
 github "jessesquires/JSQWebViewController"
 github "alexpopov/ZFDragableModalTransition" "merge-carthage-into-zoonooz"
 github "tadija/AEXML"

@@ -1,6 +1,6 @@
 github "tadija/AEXML" "3.0.0"
 github "ArtSabintsev/FontBlaster" "2.1.3"
 github "jessesquires/JSQWebViewController" "3.0.0"
-github "alexpopov/UIMenuItem-CXAImageSupport" "ec44da9193fb0f724e06e7effa804179e0ce665c"
+github "cxa/UIMenuItem-CXAImageSupport" "v1.1"
 github "alexpopov/ZFDragableModalTransition" "8da951efb4202385630d1cf7104b60d1208f807e"
 github "ZipArchive/ZipArchive" "v1.2"
