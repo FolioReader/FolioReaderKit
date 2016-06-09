@@ -375,30 +375,30 @@ extension UIWebView {
 
         // menu on existing highlight
         if isShare {
-            if action == #selector(UIWebView.colors(_:)) || (action == #selector(UIWebView.share(_:)) && readerConfig.allowSharing == true) || action == #selector(UIWebView.remove(_:)) {
+            if action == #selector(UIWebView.colors(_:)) || (action == #selector(UIWebView.share(_:)) && readerConfig?.allowSharing == true) || action == #selector(UIWebView.remove(_:)) {
                 return true
             }
             return false
 
-        // menu for selecting highlight color
+            // menu for selecting highlight color
         } else if isColors {
             if action == #selector(UIWebView.setYellow(_:)) || action == #selector(UIWebView.setGreen(_:)) || action == #selector(UIWebView.setBlue(_:)) || action == #selector(UIWebView.setPink(_:)) || action == #selector(UIWebView.setUnderline(_:)) {
                 return true
             }
             return false
 
-        // default menu
+            // default menu
         } else {
             var isOneWord = false
             if let result = js("getSelectedText()") where result.componentsSeparatedByString(" ").count == 1 {
                 isOneWord = true
             }
-            
+
             if action == #selector(UIWebView.highlight(_:))
-            || (action == #selector(UIWebView.define(_:)) && isOneWord)
-            || (action == #selector(UIWebView.play(_:)) && (book.hasAudio() || readerConfig.enableTTS))
-            || (action == #selector(UIWebView.share(_:)) && readerConfig.allowSharing == true)
-            || (action == #selector(NSObject.copy(_:)) && readerConfig.allowSharing == true) {
+                || (action == #selector(UIWebView.define(_:)) && isOneWord)
+                || (action == #selector(UIWebView.play(_:)) && (book.hasAudio() || readerConfig?.enableTTS == true))
+                || (action == #selector(UIWebView.share(_:)) && readerConfig?.allowSharing == true)
+                || (action == #selector(NSObject.copy(_:)) && readerConfig?.allowSharing == true) {
                 return true
             }
             return false
