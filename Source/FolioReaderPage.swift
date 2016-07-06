@@ -15,7 +15,7 @@ import JSQWebViewController
     optional func pageDidLoad(page: FolioReaderPage)
 }
 
-class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate, FolioReaderAudioPlayerDelegate {
+class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate, FolioReaderAudioPlayerDelegate {
     
     var pageNumber: Int!
     var webView: UIWebView!
