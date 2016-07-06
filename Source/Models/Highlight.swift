@@ -9,26 +9,53 @@
 import Foundation
 import CoreData
 
-@objc(Highlight)
-class Highlight: NSManagedObject {
-
-    @NSManaged var bookId: String
-    @NSManaged var content: String
-    @NSManaged var contentPost: String
-    @NSManaged var contentPre: String
-    @NSManaged var date: NSDate
-    @NSManaged var highlightId: String
-    @NSManaged var page: NSNumber
-    @NSManaged var type: NSNumber
-
-}
-
 public typealias Completion = (error: NSError?) -> ()
 let coreDataManager = CoreDataManager()
 
-extension Highlight {
+@objc(Highlight)
+public class Highlight: NSManagedObject {
     
-    static func persistHighlight(object: FRHighlight, completion: Completion?) {
+    public func persist(completion: Completion?) {
+        var highlight: Highlight?
+        
+        do {
+            let fetchRequest = NSFetchRequest(entityName: "Highlight")
+            fetchRequest.predicate = NSPredicate(format:"highlightId = %@", highlightId)
+            highlight = try coreDataManager.managedObjectContext.executeFetchRequest(fetchRequest).last as? Highlight
+        } catch let error as NSError {
+            print(error)
+            highlight = nil
+        }
+        
+        if highlight != nil {
+            highlight!.content = content
+            highlight!.contentPre = contentPre
+            highlight!.contentPost = contentPost
+            highlight!.date = date
+            highlight!.type = type
+        } else {
+            highlight = NSEntityDescription.insertNewObjectForEntityForName("Highlight", inManagedObjectContext: coreDataManager.managedObjectContext) as? Highlight
+            
+            highlight!.bookId = bookId
+            highlight!.content = content
+            highlight!.contentPre = contentPre
+            highlight!.contentPost = contentPost
+            highlight!.date = date
+            highlight!.highlightId = highlightId
+            highlight!.page = page
+            highlight!.type = type
+        }
+        
+        // Save
+        do {
+            try coreDataManager.managedObjectContext.save()
+            completion?(error: nil)
+        } catch let error as NSError {
+            completion?(error: error)
+        }
+    }
+    
+    public static func persistHighlight(object: FRHighlight, completion: Completion?) {
         var highlight: Highlight?
         
         do {
@@ -63,17 +90,13 @@ extension Highlight {
         // Save
         do {
             try coreDataManager.managedObjectContext.save()
-            if (completion != nil) {
-                completion!(error: nil)
-            }
+            completion?(error: nil)
         } catch let error as NSError {
-            if (completion != nil) {
-                completion!(error: error)
-            }
+            completion?(error: error)
         }
     }
     
-    static func removeById(highlightId: String) {
+    public static func removeById(highlightId: String) {
         var highlight: Highlight?
         
         do {
@@ -88,7 +111,7 @@ extension Highlight {
         }
     }
     
-    static func updateById(highlightId: String, type: HighlightStyle) {
+    public static func updateById(highlightId: String, type: HighlightStyle) {
         var highlight: Highlight?
         
         do {
@@ -103,7 +126,7 @@ extension Highlight {
         }
     }
     
-    static func allByBookId(bookId: String, andPage page: NSNumber? = nil) -> [Highlight] {
+    public static func allByBookId(bookId: String, andPage page: NSNumber? = nil) -> [Highlight] {
         var highlights: [Highlight]?
         let predicate = (page != nil) ? NSPredicate(format: "bookId = %@ && page = %@", bookId, page!) : NSPredicate(format: "bookId = %@", bookId)
         

@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum HighlightStyle: Int {
+public enum HighlightStyle: Int {
     case Yellow
     case Green
     case Blue
@@ -78,7 +78,7 @@ enum HighlightStyle: Int {
     }
 }
 
-class FRHighlight: NSObject {
+public class FRHighlight: NSObject {
     var id: String!
     var content: String!
     var contentPre: String!
