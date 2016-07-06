@@ -256,7 +256,9 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         layout.sectionInset = UIEdgeInsetsZero
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
-        layout.scrollDirection = UICollectionViewScrollDirection.Vertical
+        
+        // Setting scroll direction according to FolioReaderConfig.scrollOrientation
+        layout.scrollDirection = readerConfig.scrollOrientation.collectionViewScrollDirection()
         
         let background = isNight(readerConfig.nightModeBackground, UIColor.whiteColor())
         view.backgroundColor = background

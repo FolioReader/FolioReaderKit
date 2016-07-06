@@ -33,6 +33,15 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
             webView = UIWebView(frame: webViewFrame())
             webView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
             webView.dataDetectorTypes = [.None, .Link]
+            
+            // Enabling column left-to-right pagination breaking the HTML content into columns
+            // Stated on https://developer.apple.com/library/prerelease/content/releasenotes/General/WhatsNewInSafari/Articles/Safari_7_0.html
+            if readerConfig.scrollOrientation == .horizontal {
+                webView.paginationMode = .LeftToRight
+                webView.paginationBreakingMode = .Column
+                webView.scrollView.pagingEnabled = true
+            }
+            
             webView.scrollView.showsVerticalScrollIndicator = false
             webView.backgroundColor = UIColor.clearColor()
             self.contentView.addSubview(webView)
@@ -110,8 +119,9 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
                 readCurrentSentence()
             }
         }
-
-        webView.scrollView.contentSize = CGSizeMake(pageWidth, webView.scrollView.contentSize.height)
+        
+        // Allowing the scrollview to expand horizontally by commenting the line below
+        // webView.scrollView.contentSize = CGSizeMake(pageWidth, webView.scrollView.contentSize.height)
         
         if scrollDirection == .Down && isScrolling {
             let bottomOffset = CGPointMake(0, webView.scrollView.contentSize.height - webView.scrollView.bounds.height)
