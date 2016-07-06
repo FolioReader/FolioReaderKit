@@ -70,14 +70,12 @@ public class FolioReader : NSObject {
         get { return FolioReader.defaults.boolForKey(kNightMode) }
         set (value) {
             FolioReader.defaults.setBool(value, forKey: kNightMode)
-            FolioReader.defaults.synchronize()
         }
     }
     var currentFontName: Int {
         get { return FolioReader.defaults.valueForKey(kCurrentFontFamily) as! Int }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentFontFamily)
-            FolioReader.defaults.synchronize()
         }
     }
     
@@ -85,7 +83,6 @@ public class FolioReader : NSObject {
         get { return FolioReader.defaults.valueForKey(kCurrentFontSize) as! Int }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentFontSize)
-            FolioReader.defaults.synchronize()
         }
     }
     
@@ -93,7 +90,6 @@ public class FolioReader : NSObject {
         get { return FolioReader.defaults.valueForKey(kCurrentAudioRate) as! Int }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentAudioRate)
-            FolioReader.defaults.synchronize()
         }
     }
 
@@ -101,7 +97,6 @@ public class FolioReader : NSObject {
         get { return FolioReader.defaults.valueForKey(kCurrentHighlightStyle) as! Int }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentHighlightStyle)
-            FolioReader.defaults.synchronize()
         }
     }
     
@@ -109,7 +104,6 @@ public class FolioReader : NSObject {
         get { return MediaOverlayStyle(rawValue: FolioReader.defaults.valueForKey(kCurrentMediaOverlayStyle) as! Int)! }
         set (value) {
             FolioReader.defaults.setValue(value.rawValue, forKey: kCurrentMediaOverlayStyle)
-            FolioReader.defaults.synchronize()
         }
     }
     
@@ -158,11 +152,10 @@ public class FolioReader : NSObject {
             if let currentPage = FolioReader.sharedInstance.readerCenter.currentPage {
                 let position = [
                     "pageNumber": currentPageNumber,
-                    "pageOffset": currentPage.webView.scrollView.contentOffset.y
+                    "pageOffset": currentPage.webView.scrollView.contentOffset.x
                 ]
                 
                 FolioReader.defaults.setObject(position, forKey: kBookId)
-                FolioReader.defaults.synchronize()
             }
         }
     }
