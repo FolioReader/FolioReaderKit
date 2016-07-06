@@ -120,8 +120,10 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
             }
         }
         
-        // Allowing the scrollview to expand horizontally by commenting the line below
-        // webView.scrollView.contentSize = CGSizeMake(pageWidth, webView.scrollView.contentSize.height)
+        // If on `.horizontal` mode, there's no need to limit the horizontal `contentSize` to the page's width
+        if readerConfig.scrollOrientation == FolioReaderScrollOrientation.vertical {
+            webView.scrollView.contentSize = CGSizeMake(pageWidth, webView.scrollView.contentSize.height)
+        }
         
         if scrollDirection == .Down && isScrolling {
             let bottomOffset = CGPointMake(0, webView.scrollView.contentSize.height - webView.scrollView.bounds.height)

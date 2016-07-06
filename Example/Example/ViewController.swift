@@ -33,10 +33,10 @@ class ViewController: UIViewController {
         let config = FolioReaderConfig()
         config.shouldHideNavigationOnTap = sampleNum == 1 ? true : false
         
-        config.scrollOrientation = .vertical
+//        config.scrollOrientation = .vertical
         
         // Uncomment below to enable horizontal scrolling
-//        config.scrollOrientation = .horizontal
+        config.scrollOrientation = .horizontal
         
         // See more at FolioReaderConfig.swift
 //        config.enableTTS = false
