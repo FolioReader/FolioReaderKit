@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate {
+class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRecognizerDelegate {
     
     var menuView: UIView!
     

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate {
+class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureRecognizerDelegate {
 
     var menuView: UIView!
     var playPauseBtn: UIButton!
