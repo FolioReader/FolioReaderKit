@@ -93,7 +93,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     }
     
     func sliderChange(slider:UISlider) {
-        let offset = CGPointMake(0, height()*CGFloat(slider.value))
+        let offset = CGPointMake(height()*CGFloat(slider.value), 0)
         scrollView().setContentOffset(offset, animated: false)
     }
     
@@ -157,7 +157,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
         }
         
         if scrollStart == nil {
-            scrollStart = scrollView.contentOffset.y
+            scrollStart = scrollView.contentOffset.x
         }
     }
     
@@ -172,7 +172,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
             show()
             
         } else if delegate.currentPage != nil && scrollStart != nil {
-            scrollDelta = scrollView.contentOffset.y - scrollStart
+            scrollDelta = scrollView.contentOffset.x - scrollStart
             
             if scrollDeltaTimer == nil && scrollDelta > (pageHeight * 0.2 ) || (scrollDelta * -1) > (pageHeight * 0.2) {
                 show()
@@ -197,7 +197,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
             scrollDeltaTimer = nil
         }
         
-        scrollStart = scrollView().contentOffset.y
+        scrollStart = scrollView().contentOffset.x
         scrollDelta = 0
     }
     
@@ -217,7 +217,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     }
     
     private func scrollTop() -> CGFloat {
-        return delegate.currentPage.webView.scrollView.contentOffset.y
+        return delegate.currentPage.webView.scrollView.contentOffset.x
     }
     
 }
@@ -256,7 +256,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         layout.sectionInset = UIEdgeInsetsZero
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
-        layout.scrollDirection = UICollectionViewScrollDirection.Vertical
+        layout.scrollDirection = UICollectionViewScrollDirection.Horizontal
         
         let background = isNight(readerConfig.nightModeBackground, UIColor.whiteColor())
         view.backgroundColor = background
@@ -268,6 +268,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         collectionView.dataSource = self
         collectionView.pagingEnabled = true
         collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = background
         collectionView.decelerationRate = UIScrollViewDecelerationRateFast
         view.addSubview(collectionView)
@@ -291,7 +292,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         let scrubberY: CGFloat = readerConfig.shouldHideNavigationOnTap == true ? 50 : 74
         scrollScrubber = ScrollScrubber(frame: CGRect(x: pageWidth + 10, y: scrubberY, width: 40, height: pageHeight - 100))
         scrollScrubber.delegate = self
-        view.addSubview(scrollScrubber.slider)
+//        view.addSubview(scrollScrubber.slider)
         
         // Loading indicator
         let style: UIActivityIndicatorViewStyle = isNight(.White, .Gray)
@@ -320,6 +321,11 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         let navText = isNight(UIColor.whiteColor(), UIColor.blackColor())
         let font = UIFont(name: "Avenir-Light", size: 17)!
         setTranslucentNavigation(color: navBackground, tintColor: tintColor, titleColor: navText, andFont: font)
+        if FolioReader.sharedInstance.nightMode {
+            UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: true)
+        } else {
+            UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.Default, animated: true)
+        }
     }
     
     func configureNavBarButtons() {
@@ -575,18 +581,18 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         if orientation.isPortrait {
             if screenBounds.size.width < screenBounds.size.height {
                 pageWidth = screenBounds.size.width
-                pageHeight = screenBounds.size.height
+                pageHeight = screenBounds.size.height - 20 - pageIndicatorHeight
             } else {
                 pageWidth = screenBounds.size.height
-                pageHeight = screenBounds.size.width
+                pageHeight = screenBounds.size.width - 20 - pageIndicatorHeight
             }
         } else {
             if screenBounds.size.width > screenBounds.size.height {
                 pageWidth = screenBounds.size.width
-                pageHeight = screenBounds.size.height
+                pageHeight = screenBounds.size.height - 20 - pageIndicatorHeight
             } else {
                 pageWidth = screenBounds.size.height
-                pageHeight = screenBounds.size.width
+                pageHeight = screenBounds.size.width - 20 - pageIndicatorHeight
             }
         }
     }
@@ -627,8 +633,11 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             
             if let readingTime = page.webView.js("getReadingTime()") {
                 pageIndicatorView.totalMinutes = Int(readingTime)!
-                pagesForCurrentPage(page)
+                
+            } else {
+                pageIndicatorView.totalMinutes = 0
             }
+            pagesForCurrentPage(page)
         }
         
         if (completion != nil) { completion!() }
@@ -636,8 +645,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     func pagesForCurrentPage(page: FolioReaderPage?) {
         if let page = page {
-            pageIndicatorView.totalPages = Int(ceil(page.webView.scrollView.contentSize.height/pageHeight))
-            let webViewPage = pageForOffset(currentPage.webView.scrollView.contentOffset.y, pageHeight: pageHeight)
+            pageIndicatorView.totalPages = Int(ceil(page.webView.scrollView.contentSize.width/pageWidth))
+            let webViewPage = pageForOffset(currentPage.webView.scrollView.contentOffset.x, pageHeight: pageWidth)
             pageIndicatorView.currentPage = webViewPage
         }
     }
@@ -677,7 +686,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     func frameForPage(page: Int) -> CGRect {
-        return CGRectMake(0, pageHeight * CGFloat(page-1), pageWidth, pageHeight)
+        return CGRectMake(pageWidth * CGFloat(page-1), 0, pageWidth, pageHeight)
     }
     
     func changePageWith(page page: Int, animated: Bool = false, completion: (() -> Void)? = nil) {
@@ -746,7 +755,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         }
         
         UIView.animateWithDuration(animated ? 0.3 : 0, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
-            self.collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Top, animated: false)
+            self.collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Left, animated: false)
             }) { (finished: Bool) -> Void in
                 if (completion != nil) { completion!() }
         }
@@ -1014,6 +1023,12 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         }
         
         scrollScrubber.scrollViewWillBeginDragging(scrollView)
+        
+//        let currentPageNum = Int(pointNow.x / scrollView.bounds.size.width) + 1
+//        if currentPage.webView.pageCount - 1 == currentPageNum {
+//            currentPage.refreshPageMode()
+//        }
+        currentPage.refreshPageMode()
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
@@ -1026,15 +1041,15 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         
         // Update current reading page
         if scrollView is UICollectionView {} else {
-            if let page = currentPage where page.webView.scrollView.contentOffset.y+pageHeight <= page.webView.scrollView.contentSize.height {
-                let webViewPage = pageForOffset(page.webView.scrollView.contentOffset.y, pageHeight: pageHeight)
+            if let page = currentPage where page.webView.scrollView.contentOffset.x+pageWidth <= page.webView.scrollView.contentSize.width {
+                let webViewPage = pageForOffset(page.webView.scrollView.contentOffset.x, pageHeight: pageWidth)
                 if pageIndicatorView.currentPage != webViewPage {
                     pageIndicatorView.currentPage = webViewPage
                 }
             }
         }
         
-        scrollDirection = scrollView.contentOffset.y < pointNow.y ? .Down : .Up
+        scrollDirection = scrollView.contentOffset.x < pointNow.x ? .Right : .Left
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
