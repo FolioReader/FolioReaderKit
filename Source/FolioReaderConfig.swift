@@ -8,6 +8,26 @@
 
 import UIKit
 
+public enum FolioReaderScrollDirection: Int {
+    
+    // Using Swift 3.0 specification: lower camel-case on enum cases
+
+    case vertical
+    case horizontal
+    
+    /**
+    Returns the `UICollectionViewFlowLayout` scroll direction.
+    */
+    public func collectionViewScrollDirection() -> UICollectionViewScrollDirection {
+        switch self {
+        case vertical:
+            return .Vertical
+        case horizontal:
+            return .Horizontal
+        }
+    }
+}
+
 public class FolioReaderConfig: NSObject {
     // Reader Colors
     public var tintColor: UIColor!
@@ -22,6 +42,7 @@ public class FolioReaderConfig: NSObject {
     public lazy var mediaOverlayColor: UIColor! = self.tintColor
     
     // Custom actions
+    public var scrollDirection: FolioReaderScrollDirection = .vertical
     public var shouldHideNavigationOnTap = true
     public var allowSharing = true
     public var enableTTS = true
