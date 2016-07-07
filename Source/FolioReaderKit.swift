@@ -152,7 +152,8 @@ public class FolioReader : NSObject {
             if let currentPage = FolioReader.sharedInstance.readerCenter.currentPage {
                 let position = [
                     "pageNumber": currentPageNumber,
-                    "pageOffset": currentPage.webView.scrollView.contentOffset.x
+                    "pageOffsetX": currentPage.webView.scrollView.contentOffset.x,
+                    "pageOffsetY": currentPage.webView.scrollView.contentOffset.y
                 ]
                 
                 FolioReader.defaults.setObject(position, forKey: kBookId)
@@ -166,6 +167,47 @@ public class FolioReader : NSObject {
 func isNight<T> (f: T, _ l: T) -> T {
     return FolioReader.sharedInstance.nightMode ? f : l
 }
+
+// MARK: - Scroll Direction Functions
+
+func isVerticalDirection<T> (f: T, _ l: T) -> T {
+    return readerConfig.scrollDirection == .vertical ? f : l
+}
+
+extension UICollectionViewScrollDirection {
+    static func direction() -> UICollectionViewScrollDirection {
+        return isVerticalDirection(.Vertical, .Horizontal)
+    }
+}
+
+extension UICollectionViewScrollPosition {
+    static func direction() -> UICollectionViewScrollPosition {
+        return isVerticalDirection(.Top, .Left)
+    }
+}
+
+extension CGPoint {
+    func forDirection() -> CGFloat {
+        return isVerticalDirection(self.y, self.x)
+    }
+}
+
+extension CGSize {
+    func forDirection() -> CGFloat {
+        return isVerticalDirection(self.height, self.width)
+    }
+}
+
+extension ScrollDirection {
+    static func negative() -> ScrollDirection {
+        return isVerticalDirection(.Down, .Right)
+    }
+    
+    static func positive() -> ScrollDirection {
+        return isVerticalDirection(.Up, .Left)
+    }
+}
+
 
 // MARK: - Extensions
 

@@ -38,14 +38,20 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
             webView.dataDetectorTypes = [.None, .Link]
             webView.scrollView.showsVerticalScrollIndicator = false
             webView.scrollView.showsHorizontalScrollIndicator = false
-            webView.scrollView.pagingEnabled = true
-            webView.scrollView.bounces = false
             webView.backgroundColor = UIColor.clearColor()
-            webView.paginationMode = UIWebPaginationMode.LeftToRight
-            webView.paginationBreakingMode = UIWebPaginationBreakingMode.Page
+            
             self.contentView.addSubview(webView)
         }
         webView.delegate = self
+        
+        if readerConfig.scrollDirection == .horizontal {
+            webView.scrollView.pagingEnabled = true
+            webView.paginationMode = .LeftToRight
+            webView.paginationBreakingMode = .Page
+            webView.scrollView.bounces = false
+        } else {
+            webView.scrollView.bounces = true
+        }
         
         if colorView == nil {
             colorView = UIView();
@@ -59,12 +65,12 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         webView.addGestureRecognizer(tapGestureRecognizer)
         
 //        var swipeLeftGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(FolioReaderPage.handleSwipeGesture(_:)))
-//        swipeLeftGestureRecognizer.direction = UISwipeGestureRecognizerDirection.Left
+//        swipeLeftGestureRecognizer.direction = .Left
 //        swipeLeftGestureRecognizer.delegate = self
 //        webView.addGestureRecognizer(swipeLeftGestureRecognizer)
 //        
 //        var swipeRightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(FolioReaderPage.handleSwipeGesture(_:)))
-//        swipeRightGestureRecognizer.direction = UISwipeGestureRecognizerDirection.Right
+//        swipeRightGestureRecognizer.direction = .Right
 //        swipeRightGestureRecognizer.delegate = self
 //        webView.addGestureRecognizer(swipeRightGestureRecognizer)
     }
@@ -143,9 +149,13 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
 
 //        webView.scrollView.contentSize = CGSizeMake(pageWidth, webView.scrollView.contentSize.height)
         
-        if scrollDirection == .Right && isScrolling {
-            let bottomOffset = CGPointMake(webView.scrollView.contentSize.width - webView.scrollView.bounds.width, 0)
-            if bottomOffset.x >= 0 {
+        if scrollDirection == .negative() && isScrolling {
+            let bottomOffset = isVerticalDirection(
+                CGPointMake(0, webView.scrollView.contentSize.height - webView.scrollView.bounds.height),
+                CGPointMake(webView.scrollView.contentSize.width - webView.scrollView.bounds.width, 0)
+            )
+            
+            if bottomOffset.forDirection() >= 0 {
                 dispatch_async(dispatch_get_main_queue(), {
                     webView.scrollView.setContentOffset(bottomOffset, animated: false)
                 })
@@ -334,7 +344,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     // MARK: - Scroll positioning
     
     func scrollPageToOffset(offset: String, animating: Bool) {
-        let jsCommand = "window.scrollTo(\(offset),0);"
+        let jsCommand = isVerticalDirection("window.scrollTo(0,\(offset));", "window.scrollTo(\(offset),0);")
         if animating {
             UIView.animateWithDuration(0.35, animations: {
                 self.webView.js(jsCommand)
@@ -458,7 +468,7 @@ extension UIWebView {
 
         // menu on existing highlight
         if isShare {
-            if action == #selector(UIWebView.colors(_:)) || (action == #selector(UIWebView.share(_:)) && readerConfig.allowSharing == true) || action == #selector(UIWebView.remove(_:)) {
+            if action == #selector(UIWebView.colors(_:)) || (action == #selector(UIWebView.share(_:)) && readerConfig.allowSharing) || action == #selector(UIWebView.remove(_:)) {
                 return true
             }
             return false

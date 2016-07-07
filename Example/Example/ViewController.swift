@@ -32,6 +32,7 @@ class ViewController: UIViewController {
     func openEpub(sampleNum:Int) {
         let config = FolioReaderConfig()
         config.shouldHideNavigationOnTap = sampleNum == 1 ? true : false
+        config.scrollDirection = sampleNum == 1 ? .horizontal : .vertical
         
         // See more at FolioReaderConfig.swift
 //        config.enableTTS = false
