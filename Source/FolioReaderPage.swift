@@ -90,15 +90,27 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     }
     
     func webViewFrame() -> CGRect {
-        if readerConfig.shouldHideNavigationOnTap == false {
-            let statusbarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
-            let navBarHeight = FolioReader.sharedInstance.readerCenter.navigationController?.navigationBar.frame.size.height
-            let navTotal = statusbarHeight + navBarHeight!
-            let newFrame = CGRect(x: self.bounds.origin.x, y: self.bounds.origin.y+navTotal, width: self.bounds.width, height: self.bounds.height-navTotal)
+        let paddingTop: CGFloat = 30
+        let paddingBottom: CGFloat = 20
+        
+        guard readerConfig.shouldHideNavigationOnTap == false else {
+            let newFrame = CGRect(
+                x: bounds.origin.x,
+                y: isVerticalDirection(bounds.origin.y, bounds.origin.y + paddingTop),
+                width: bounds.width,
+                height: isVerticalDirection(bounds.height, bounds.height - paddingTop - paddingBottom))
             return newFrame
-        } else {
-            return self.bounds
         }
+        
+        let statusbarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
+        let navBarHeight = FolioReader.sharedInstance.readerCenter.navigationController?.navigationBar.frame.size.height
+        let navTotal = statusbarHeight + navBarHeight!
+        let newFrame = CGRect(
+            x: bounds.origin.x,
+            y: isVerticalDirection(bounds.origin.y + navTotal, bounds.origin.y + navTotal + paddingTop),
+            width: bounds.width,
+            height: isVerticalDirection(bounds.height - navTotal, bounds.height - navTotal - paddingTop - paddingBottom))
+        return newFrame
     }
     
     func loadHTMLString(string: String!, baseURL: NSURL!) {
