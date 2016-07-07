@@ -191,6 +191,7 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
     
     func didSelectClose(sender: UIBarButtonItem) {
         self.dismissViewControllerAnimated(true, completion: {
+            FolioReader.saveReaderState()
             FolioReader.sharedInstance.isReaderOpen = false
             FolioReader.sharedInstance.isReaderReady = false
             FolioReader.sharedInstance.readerAudioPlayer.stop()
