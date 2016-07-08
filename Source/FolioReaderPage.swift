@@ -90,26 +90,26 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     }
     
     func webViewFrame() -> CGRect {
-        let paddingTop: CGFloat = 30
-        let paddingBottom: CGFloat = 20
+        let paddingTop: CGFloat = 20
+        let paddingBottom: CGFloat = 30
         
-        guard readerConfig.shouldHideNavigationOnTap == false else {
+        guard readerConfig.shouldHideNavigationOnTap else {
+            let statusbarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
+            let navBarHeight = FolioReader.sharedInstance.readerCenter.navigationController?.navigationBar.frame.size.height
+            let navTotal = statusbarHeight + navBarHeight!
             let newFrame = CGRect(
                 x: bounds.origin.x,
-                y: isVerticalDirection(bounds.origin.y, bounds.origin.y + paddingTop),
+                y: isVerticalDirection(bounds.origin.y + navTotal, bounds.origin.y + navTotal + paddingTop),
                 width: bounds.width,
-                height: isVerticalDirection(bounds.height, bounds.height - paddingTop - paddingBottom))
+                height: isVerticalDirection(bounds.height - navTotal, bounds.height - navTotal - paddingTop - paddingBottom))
             return newFrame
         }
         
-        let statusbarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
-        let navBarHeight = FolioReader.sharedInstance.readerCenter.navigationController?.navigationBar.frame.size.height
-        let navTotal = statusbarHeight + navBarHeight!
         let newFrame = CGRect(
             x: bounds.origin.x,
-            y: isVerticalDirection(bounds.origin.y + navTotal, bounds.origin.y + navTotal + paddingTop),
+            y: isVerticalDirection(bounds.origin.y, bounds.origin.y + paddingTop),
             width: bounds.width,
-            height: isVerticalDirection(bounds.height - navTotal, bounds.height - navTotal - paddingTop - paddingBottom))
+            height: isVerticalDirection(bounds.height, bounds.height - paddingTop - paddingBottom))
         return newFrame
     }
     
