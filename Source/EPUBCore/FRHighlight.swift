@@ -15,12 +15,12 @@ public enum HighlightStyle: Int {
     case Pink
     case Underline
     
-    init () { self = .Yellow }
+    public init () { self = .Yellow }
     
     /**
     Return HighlightStyle for CSS class.
     */
-    static func styleForClass(className: String) -> HighlightStyle {
+    public static func styleForClass(className: String) -> HighlightStyle {
         switch className {
         case "highlight-yellow":
             return .Yellow
@@ -40,7 +40,7 @@ public enum HighlightStyle: Int {
     /**
     Return CSS class for HighlightStyle.
     */
-    static func classForStyle(style: Int) -> String {
+    public static func classForStyle(style: Int) -> String {
         switch style {
         case HighlightStyle.Yellow.rawValue:
             return "highlight-yellow"
@@ -60,7 +60,7 @@ public enum HighlightStyle: Int {
     /**
     Return CSS class for HighlightStyle.
     */
-    static func colorForStyle(style: Int, nightMode: Bool = false) -> UIColor {
+    public static func colorForStyle(style: Int, nightMode: Bool = false) -> UIColor {
         switch style {
         case HighlightStyle.Yellow.rawValue:
             return UIColor(red: 255/255, green: 235/255, blue: 107/255, alpha: nightMode ? 0.9 : 1)
@@ -91,7 +91,7 @@ public class FRHighlight: NSObject {
     /**
     Match a highlight on string.
     */
-    static func matchHighlight(text: String!, andId id: String) -> FRHighlight? {
+    public static func matchHighlight(text: String!, andId id: String) -> FRHighlight? {
         let pattern = "<highlight id=\"\(id)\" onclick=\".*?\" class=\"(.*?)\">((.|\\s)*?)</highlight>"
         let regex = try! NSRegularExpression(pattern: pattern, options: [])
         let matches = regex.matchesInString(text, options: [], range: NSRange(location: 0, length: text.utf16.count)) 
@@ -135,7 +135,7 @@ public class FRHighlight: NSObject {
         return mapped.first
     }
     
-    static func removeById(highlightId: String) -> String? {
+    public static func removeById(highlightId: String) -> String? {
         let currentPage = FolioReader.sharedInstance.readerCenter.currentPage
         
         if let removedId = currentPage.webView.js("removeHighlightById('\(highlightId)')") {
