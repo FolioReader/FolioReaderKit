@@ -99,8 +99,9 @@ class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
         // Add gestures
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(FolioReaderContainer.handleTapGesture(_:)))
         tapGestureRecognizer.numberOfTapsRequired = 1
-        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(FolioReaderContainer.handlePanGesture(_:)))
         centerNavigationController.view.addGestureRecognizer(tapGestureRecognizer)
+        
+        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(FolioReaderContainer.handlePanGesture(_:)))
         centerNavigationController.view.addGestureRecognizer(panGestureRecognizer)
 
         // Read async book
@@ -255,6 +256,8 @@ class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
     }
     
     func handlePanGesture(recognizer: UIPanGestureRecognizer) {
+        guard readerConfig.scrollDirection == .vertical else { return }
+        
         let gestureIsDraggingFromLeftToRight = (recognizer.velocityInView(view).x > 0)
         
         switch(recognizer.state) {
