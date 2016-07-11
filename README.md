@@ -2,35 +2,59 @@
 ![FolioReader logo](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/folioreader.png)
 FolioReaderKit is an ePub reader and parser framework for iOS written in Swift.
 
-### Installation
+## Installation
 
 
 **FolioReaderKit** is available through [CocoaPods](http://cocoapods.org) and [Carthage](https://github.com/Carthage/Carthage). 
 
-#### Cocoapods
+### Cocoapods
 
-To install it, simply add the following lines to your Podfile:
+[CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects. You can install it with the following command:
 
-```ruby
-use_frameworks!
-pod 'FolioReaderKit'
+```bash
+$ gem install cocoapods
 ```
 
-#### Carthage
+To integrate FolioReaderKit into your Xcode project using CocoaPods, specify it in your `Podfile`:
 
-1. Add the following to your [Cartfile](https://github.com/Carthage/Carthage/blob/master/Documentation/Artifacts.md#cartfile)
-    ```
-    github "FolioReader/FolioReaderKit"
-    ```
+```ruby
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '8.0'
+use_frameworks!
 
-2. Run `carthage update` and follow the steps as described in Carthage's [README](https://github.com/Carthage/Carthage#adding-frameworks-to-an-application).
+target '<Your Target Name>' do
+    pod 'FolioReaderKit', '~> 0.7'
+end
+```
 
-### Requirements
+Then, run the following command:
+
+```bash
+$ pod install
+```
+
+### Carthage
+
+Add the following to your [Cartfile](https://github.com/Carthage/Carthage/blob/master/Documentation/Artifacts.md#cartfile)
+
+```ruby
+github "FolioReader/FolioReaderKit"
+```
+
+Run the following command:
+
+```bash
+$ carthage update
+```
+
+Then, follow the steps as described in Carthage's [README](https://github.com/Carthage/Carthage#adding-frameworks-to-an-application).
+
+## Requirements
 
 - iOS 8.0+
-- Xcode 7.1+
+- Xcode 7.3+
 
-### Basic Usage
+## Basic Usage
 
 To get started, this is a simple usage sample.
 
@@ -58,7 +82,7 @@ func applicationWillTerminate(application: UIApplication) {
 }
 ```
 
-### Features
+## Features
 
 - [x] Custom Fonts
 - [x] Custom Text Size
@@ -72,12 +96,13 @@ func applicationWillTerminate(application: UIApplication) {
 - [x] Media Overlays (Sync text rendering with audio playback)
 - [x] TTS - Text to Speech Support
 - [x] Parse epub cover image
+- [x] Vertical and Horizontal scrolling
 - [ ] PDF support
 - [ ] Book Search
 - [ ] Add Notes to a Highlight
 - [ ] Better Documentation
 
-### Demo
+## Demo
 ##### Custom Fonts :smirk:
 ![Custom fonts](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/custom-fonts.gif)
 ##### Day and Night Mode :sunglasses:
@@ -89,7 +114,7 @@ func applicationWillTerminate(application: UIApplication) {
 ##### Media Overlays 😭
 ![Time left](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/media-overlays.gif)
 
-### Documentation
+## Documentation
 For now the documentation is the sample project, I will write a better documentation in the next weeks.
 
 You have a problem that cannot be solved by having a look at the example project? No problem, let's talk:
@@ -101,7 +126,7 @@ You have a problem that cannot be solved by having a look at the example project
 - Follow me on **Twitter**: [**@hebertialmeida**](https://twitter.com/hebertialmeida)
 - Contact me on **LinkedIn**: [**hebertialmeida**](http://linkedin.com/in/hebertialmeida)
 
-### Donations
+## Donations
 
 **This project needs you!** If you would like to support this project's further development, the creator of this project or the continuous maintenance of this project, **feel free to donate**. Your donation is highly appreciated. Thank you!
 
@@ -115,5 +140,5 @@ You have a problem that cannot be solved by having a look at the example project
  - [**Donate 100 $**] (https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=hebertialmeida%40gmail%2ecom&lc=US&item_name=FolioReader%20Libraries&amount=100%2e00&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted): You are the man! This project saved me hours (if not days) of struggle and hard work, simply awesome!
  - Of course, you can also [**choose what you want to donate**](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=hebertialmeida%40gmail%2ecom&lc=US&item_name=FolioReader%20Libraries&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted), all donations are awesome!
 
-### License
+## License
 FolioReaderKit is available under the BSD license. See the [LICENSE file](https://github.com/FolioReader/FolioReaderKit/blob/master/LICENSE).
