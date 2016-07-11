@@ -243,7 +243,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     private var screenBounds: CGRect!
     private var pointNow = CGPointZero
-    private let pageIndicatorHeight = 20 as CGFloat
+    private let pageIndicatorHeight: CGFloat = 20
+    private var pageOffsetRate: CGFloat = 0
     
     // MARK: - View life cicle
     
@@ -549,7 +550,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             self.pageIndicatorView.frame = pageIndicatorFrame
             self.pageIndicatorView.reloadView(updateShadow: true)
             
-            // adjust scroll scrubber slider
+            // Adjust scroll scrubber slider
             self.scrollScrubber.slider.frame = scrollScrubberFrame
             
             // Adjust collectionView
@@ -573,6 +574,18 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         pagesForCurrentPage(currentPage)
         
         scrollScrubber.setSliderVal()
+        
+        // After rotation fix internal page offset
+        var pageOffset = self.currentPage.webView.scrollView.contentSize.forDirection() * pageOffsetRate
+        
+        // Fix the offset for paged scroll
+        if readerConfig.scrollDirection == .horizontal {
+            var page = round(pageOffset / pageWidth)
+            pageOffset = page * pageWidth
+        }
+        
+        let pageOffsetPoint = isVerticalDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0))
+        self.currentPage.webView.scrollView.setContentOffset(pageOffsetPoint, animated: true)
     }
     
     override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
