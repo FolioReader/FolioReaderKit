@@ -237,16 +237,16 @@ function goToEl(el) {
     }
     
     /* Set scroll left in case horz scroll is activated.
-        we can set both scroll left and scroll top because the document will only
-        be able to scroll in one direction at a time.
     
         The following works because el.offsetTop accounts for each page turned
         as if the document was scrolling vertical. We then divide by the window
         height to figure out what page the element should appear on and set scroll left
         to scroll to that page.
     */
-    var elLeft = document.body.clientWidth * Math.floor(el.offsetTop / window.innerHeight);
-    document.body.scrollLeft = elLeft;
+    if( document.body.scrollTop == 0 ){
+        var elLeft = document.body.clientWidth * Math.floor(el.offsetTop / window.innerHeight);
+        document.body.scrollLeft = elLeft;
+    }
 
     return el;
 }
