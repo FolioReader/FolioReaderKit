@@ -554,13 +554,15 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             
             // Adjust collectionView
             self.collectionView.contentSize = isVerticalDirection(
-                CGSizeMake(pageWidth, pageHeight * CGFloat(self.totalPages)),
-                CGSizeMake(pageHeight, pageWidth * CGFloat(self.totalPages))
+                CGSize(width: pageWidth, height: pageHeight * CGFloat(self.totalPages)),
+                CGSize(width: pageWidth * CGFloat(self.totalPages), height: pageHeight)
             )
-            
-            let origin = self.frameForPage(currentPageNumber).origin
-            self.collectionView.setContentOffset(origin, animated: false)
+            self.collectionView.setContentOffset(self.frameForPage(currentPageNumber).origin, animated: false)
             self.collectionView.collectionViewLayout.invalidateLayout()
+            
+            // Adjust internal page offset
+            let pageScrollView = self.currentPage.webView.scrollView
+            self.pageOffsetRate = pageScrollView.contentOffset.forDirection() / pageScrollView.contentSize.forDirection()
         })
     }
     
