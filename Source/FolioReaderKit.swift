@@ -488,7 +488,7 @@ internal extension UIImage {
     }
 }
 
-extension UIViewController: UIGestureRecognizerDelegate {
+internal extension UIViewController {
     
     func setCloseButton() {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(readerImageNamed: "icon-close"), style: UIBarButtonItemStyle.Plain, target: self, action:#selector(UIViewController.dismiss))
