@@ -158,7 +158,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1A42C29B1C0E3883000F2137 /* Build configuration list for PBXNativeTarget "Example" */;
 			buildPhases = (
-				6BB4B87019CBF22A26D57251 /* 📦 Check Pods Manifest.lock */,
+				6BB4B87019CBF22A26D57251 /* [CP] Check Pods Manifest.lock */,
 				BFF78AC0EC7FAA2ADF7765C4 /* [CP] Check Pods Manifest.lock */,
 				1A42C2851C0E3882000F2137 /* Sources */,
 				1A42C2861C0E3882000F2137 /* Frameworks */,
@@ -181,7 +181,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CA10C1381C572A4B0049165D /* Build configuration list for PBXNativeTarget "FolioReaderTests" */;
 			buildPhases = (
-				0642B6A6EF0631B5697FC382 /* 📦 Check Pods Manifest.lock */,
+				0642B6A6EF0631B5697FC382 /* [CP] Check Pods Manifest.lock */,
 				1D8126CC73301F2413345444 /* [CP] Check Pods Manifest.lock */,
 				CA10C12D1C572A4B0049165D /* Sources */,
 				CA10C12E1C572A4B0049165D /* Frameworks */,
@@ -269,14 +269,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0642B6A6EF0631B5697FC382 /* 📦 Check Pods Manifest.lock */ = {
+		0642B6A6EF0631B5697FC382 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -344,14 +344,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FolioReaderTests/Pods-FolioReaderTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6BB4B87019CBF22A26D57251 /* 📦 Check Pods Manifest.lock */ = {
+		6BB4B87019CBF22A26D57251 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
