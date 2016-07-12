@@ -85,7 +85,7 @@ class FRMetadata: NSObject {
     var creators = [Author]()
     var contributors = [Author]()
     var dates = [Date]()
-    var language = "en"
+    var language = "en-US"
     var titles = [String]()
     var identifiers = [Identifier]()
     var subjects = [String]()
