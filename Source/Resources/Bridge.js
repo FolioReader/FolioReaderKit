@@ -83,6 +83,8 @@ function setFontSize(cls) {
  */
 function highlightString(style) {
     var range = window.getSelection().getRangeAt(0);
+    var startOffset = range.startOffset;
+    var endOffset = range.endOffset;
     var selectionContents = range.extractContents();
     var elm = document.createElement("highlight");
     var id = guid();
@@ -96,7 +98,7 @@ function highlightString(style) {
     thisHighlight = elm;
     
     var params = [];
-    params.push({id: id, rect: getRectForSelectedText(elm)});
+    params.push({id: id, rect: getRectForSelectedText(elm), startOffset: startOffset.toString(), endOffset: endOffset.toString()});
     
     return JSON.stringify(params);
 }

@@ -551,6 +551,8 @@ extension UIWebView {
             let json = try NSJSONSerialization.JSONObjectWithData(jsonData!, options: []) as! NSArray
             let dic = json.firstObject as! [String: String]
             let rect = CGRectFromString(dic["rect"]!)
+            let startOffset = dic["startOffset"]!
+            let endOffset = dic["endOffset"]!
             
             // Force remove text selection
             userInteractionEnabled = false
@@ -561,7 +563,7 @@ extension UIWebView {
             
             // Persist
             let html = js("getHTML()")
-            if let highlight = FRHighlight.matchHighlight(html, andId: dic["id"]!) {
+            if let highlight = FRHighlight.matchHighlight(html, andId: dic["id"]!, startOffset: startOffset, endOffset: endOffset) {
                 Highlight.persistHighlight(highlight, completion: nil)
             }
         } catch {

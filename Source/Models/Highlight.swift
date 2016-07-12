@@ -42,6 +42,8 @@ class Highlight: Object {
             newHighlight.highlightId = object.id
             newHighlight.page = object.page
             newHighlight.type = object.type.hashValue
+            newHighlight.startOffset = object.startOffset
+            newHighlight.endOffset = object.endOffset
             
             realm.beginWrite()
             realm.add(newHighlight, update: true)

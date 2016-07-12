@@ -87,11 +87,13 @@ public class FRHighlight: NSObject {
     var page: Int!
     var bookId: String!
     var type: HighlightStyle!
+    var startOffset: Int = -1
+    var endOffset: Int! = -1
     
     /**
     Match a highlight on string.
     */
-    public static func matchHighlight(text: String!, andId id: String) -> FRHighlight? {
+    public static func matchHighlight(text: String!, andId id: String, startOffset: String, endOffset: String) -> FRHighlight? {
         let pattern = "<highlight id=\"\(id)\" onclick=\".*?\" class=\"(.*?)\">((.|\\s)*?)</highlight>"
         let regex = try! NSRegularExpression(pattern: pattern, options: [])
         let matches = regex.matchesInString(text, options: [], range: NSRange(location: 0, length: text.utf16.count)) 
@@ -129,6 +131,8 @@ public class FRHighlight: NSObject {
             highlight.contentPost = contentPost
             highlight.page = currentPageNumber
             highlight.bookId = (kBookId as NSString).stringByDeletingPathExtension
+            highlight.startOffset = Int(startOffset) ?? -1
+            highlight.endOffset = Int(endOffset) ?? -1
             
             return highlight
         }
