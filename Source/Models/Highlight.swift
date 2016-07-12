@@ -12,7 +12,7 @@ import CoreData
 
 public typealias Completion = (error: NSError?) -> ()
 
-class Highlight: Object {
+public class Highlight: Object {
     
     dynamic var bookId:String!
     dynamic var content:String!
@@ -25,11 +25,11 @@ class Highlight: Object {
     dynamic var startOffset:Int = -1
     dynamic var endOffset:Int = -1
     
-    override class func primaryKey()-> String{
+    override public class func primaryKey()-> String{
         return "highlightId"
     }
     
-    public static func persistHighlight(object: FRHighlight, completion: Completion?) {
+    public static func persistHighlight(object: FRHighlight, completion: Completion? = nil) {
         do {
             let realm = try! Realm()
             
@@ -50,6 +50,7 @@ class Highlight: Object {
             try! realm.commitWrite()
         } catch let error as NSError {
             print("Error on persist highlight: \(error)")
+            completion?(error: error)
         }
     }
     

@@ -564,7 +564,7 @@ extension UIWebView {
             // Persist
             let html = js("getHTML()")
             if let highlight = FRHighlight.matchHighlight(html, andId: dic["id"]!, startOffset: startOffset, endOffset: endOffset) {
-                Highlight.persistHighlight(highlight, completion: nil)
+                Highlight.persistHighlight(highlight)
             }
         } catch {
             print("Could not receive JSON")
