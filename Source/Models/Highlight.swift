@@ -7,105 +7,64 @@
 //
 
 import Foundation
+import RealmSwift
 import CoreData
 
 public typealias Completion = (error: NSError?) -> ()
-let coreDataManager = CoreDataManager()
 
-@objc(Highlight)
-public class Highlight: NSManagedObject {
+public class Highlight: Object {
     
-    public func persist(completion: Completion?) {
-        var highlight: Highlight?
-        
-        do {
-            let fetchRequest = NSFetchRequest(entityName: "Highlight")
-            fetchRequest.predicate = NSPredicate(format:"highlightId = %@", highlightId)
-            highlight = try coreDataManager.managedObjectContext.executeFetchRequest(fetchRequest).last as? Highlight
-        } catch let error as NSError {
-            print(error)
-            highlight = nil
-        }
-        
-        if highlight != nil {
-            highlight!.content = content
-            highlight!.contentPre = contentPre
-            highlight!.contentPost = contentPost
-            highlight!.date = date
-            highlight!.type = type
-        } else {
-            highlight = NSEntityDescription.insertNewObjectForEntityForName("Highlight", inManagedObjectContext: coreDataManager.managedObjectContext) as? Highlight
-            
-            highlight!.bookId = bookId
-            highlight!.content = content
-            highlight!.contentPre = contentPre
-            highlight!.contentPost = contentPost
-            highlight!.date = date
-            highlight!.highlightId = highlightId
-            highlight!.page = page
-            highlight!.type = type
-        }
-        
-        // Save
-        do {
-            try coreDataManager.managedObjectContext.save()
-            completion?(error: nil)
-        } catch let error as NSError {
-            completion?(error: error)
-        }
+    dynamic var bookId:String!
+    dynamic var content:String!
+    dynamic var contentPost:String!
+    dynamic var contentPre:String!
+    dynamic var date:NSDate!
+    dynamic var highlightId:String!
+    dynamic var page:Int = 0
+    dynamic var type:Int = 0
+    dynamic var startOffset:Int = -1
+    dynamic var endOffset:Int = -1
+    
+    override public class func primaryKey()-> String{
+        return "highlightId"
     }
     
-    public static func persistHighlight(object: FRHighlight, completion: Completion?) {
-        var highlight: Highlight?
-        
+    public static func persistHighlight(object: FRHighlight, completion: Completion? = nil) {
         do {
-            let fetchRequest = NSFetchRequest(entityName: "Highlight")
-            fetchRequest.predicate = NSPredicate(format:"highlightId = %@", object.id)
-            highlight = try coreDataManager.managedObjectContext.executeFetchRequest(fetchRequest).last as? Highlight
-        } catch let error as NSError {
-            print(error)
-            highlight = nil
-        }
-  
-        if highlight != nil {
-            highlight!.content = object.content
-            highlight!.contentPre = object.contentPre
-            highlight!.contentPost = object.contentPost
-            highlight!.date = object.date
-            highlight!.type = object.type.hashValue
-        } else {
-            highlight = NSEntityDescription.insertNewObjectForEntityForName("Highlight", inManagedObjectContext: coreDataManager.managedObjectContext) as? Highlight
-            coreDataManager.saveContext()
-
-            highlight!.bookId = object.bookId
-            highlight!.content = object.content
-            highlight!.contentPre = object.contentPre
-            highlight!.contentPost = object.contentPost
-            highlight!.date = NSDate()
-            highlight!.highlightId = object.id
-            highlight!.page = object.page
-            highlight!.type = object.type.hashValue
-        }
-
-        // Save
-        do {
-            try coreDataManager.managedObjectContext.save()
+            let realm = try! Realm()
+            
+            let newHighlight = Highlight()
+            newHighlight.bookId = object.bookId
+            newHighlight.content = object.content
+            newHighlight.contentPre = object.contentPre
+            newHighlight.contentPost = object.contentPost
+            newHighlight.date = NSDate()
+            newHighlight.highlightId = object.id
+            newHighlight.page = object.page
+            newHighlight.type = object.type.hashValue
+            newHighlight.startOffset = object.startOffset
+            newHighlight.endOffset = object.endOffset
+            
+            realm.beginWrite()
+            realm.add(newHighlight, update: true)
+            try! realm.commitWrite()
             completion?(error: nil)
         } catch let error as NSError {
+            print("Error on persist highlight: \(error)")
             completion?(error: error)
         }
     }
     
     public static func removeById(highlightId: String) {
         var highlight: Highlight?
+        let predicate = NSPredicate(format:"highlightId = %@", highlightId)
         
         do {
-            let fetchRequest = NSFetchRequest(entityName: "Highlight")
-            fetchRequest.predicate = NSPredicate(format:"highlightId = %@", highlightId)
-            
-            highlight = try coreDataManager.managedObjectContext.executeFetchRequest(fetchRequest).last as? Highlight
-            coreDataManager.managedObjectContext.deleteObject(highlight!)
-            coreDataManager.saveContext()
+            let realm = try! Realm()
+            highlight = realm.objects(Highlight).filter(predicate).toArray(Highlight).first
+            realm.beginWrite()
+            realm.delete(highlight!)
+            try! realm.commitWrite()
         } catch let error as NSError {
             print("Error on remove highlight: \(error)")
         }
@@ -113,33 +72,66 @@ public class Highlight: NSManagedObject {
     
     public static func updateById(highlightId: String, type: HighlightStyle) {
         var highlight: Highlight?
-        
+        let predicate = NSPredicate(format:"highlightId = %@", highlightId)
         do {
-            let fetchRequest = NSFetchRequest(entityName: "Highlight")
-            fetchRequest.predicate = NSPredicate(format:"highlightId = %@", highlightId)
+            let realm = try! Realm()
+            highlight = realm.objects(Highlight).filter(predicate).toArray(Highlight).first
+            realm.beginWrite()
             
-            highlight = try coreDataManager.managedObjectContext.executeFetchRequest(fetchRequest).last as? Highlight
             highlight?.type = type.hashValue
-            coreDataManager.saveContext()
+            
+            try! realm.commitWrite()
         } catch let error as NSError {
-            print("Error on update highlight: \(error)")
+            print("Error on updateById : \(error)")
         }
+        
     }
     
     public static func allByBookId(bookId: String, andPage page: NSNumber? = nil) -> [Highlight] {
         var highlights: [Highlight]?
         let predicate = (page != nil) ? NSPredicate(format: "bookId = %@ && page = %@", bookId, page!) : NSPredicate(format: "bookId = %@", bookId)
+        let realm = try! Realm()
+        highlights = realm.objects(Highlight).filter(predicate).toArray(Highlight) ?? [Highlight]()
+        return highlights!
+    }
+    
+    public static func migrateUserDataToRealm(){
+        var highlights: [NSManagedObject]?
+        let coreDataManager = CoreDataManager()
         
         do {
             let fetchRequest = NSFetchRequest(entityName: "Highlight")
             let sorter: NSSortDescriptor = NSSortDescriptor(key: "date" , ascending: false)
-            fetchRequest.predicate = predicate
             fetchRequest.sortDescriptors = [sorter]
             
-            highlights = try coreDataManager.managedObjectContext.executeFetchRequest(fetchRequest) as? [Highlight]
-            return highlights!
-        } catch {
-            return [Highlight]()
+            highlights = try coreDataManager.managedObjectContext.executeFetchRequest(fetchRequest) as? [NSManagedObject]
+            let realm = try! Realm()
+            
+            realm.beginWrite()
+            realm.deleteAll()
+            for oldHighlight in highlights! {
+                var newHighlight = Highlight()
+                newHighlight.bookId = oldHighlight.valueForKey("bookId") as! String
+                newHighlight.content = oldHighlight.valueForKey("content") as! String
+                newHighlight.contentPost = oldHighlight.valueForKey("contentPost") as! String
+                newHighlight.contentPre = oldHighlight.valueForKey("contentPre") as! String
+                newHighlight.date = oldHighlight.valueForKey("date") as! NSDate
+                newHighlight.highlightId = oldHighlight.valueForKey("highlightId") as! String
+                newHighlight.page = oldHighlight.valueForKey("page") as! Int
+                newHighlight.type = oldHighlight.valueForKey("type") as! Int
+                
+                realm.add(newHighlight, update: true)
+            }
+            try! realm.commitWrite()
+            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "isMigrated")
+        } catch let error as NSError {
+            print("Error on migrateuserDataToRealm : \(error)")
         }
+    }
+}
+
+extension Results {
+    func toArray<T>(ofType: T.Type) -> [T] {
+        return flatMap { $0 as? T }
     }
 }

@@ -122,7 +122,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         
         if highlights.count > 0 {
             for item in highlights {
-                let style = HighlightStyle.classForStyle(item.type.integerValue)
+                let style = HighlightStyle.classForStyle(item.type)
                 let tag = "<highlight id=\"\(item.highlightId)\" onclick=\"callHighlightURL(this);\" class=\"\(style)\">\(item.content)</highlight>"
                 let locator = item.contentPre + item.content + item.contentPost
                 let range: NSRange = html.rangeOfString(locator, options: .LiteralSearch)
@@ -551,6 +551,8 @@ extension UIWebView {
             let json = try NSJSONSerialization.JSONObjectWithData(jsonData!, options: []) as! NSArray
             let dic = json.firstObject as! [String: String]
             let rect = CGRectFromString(dic["rect"]!)
+            let startOffset = dic["startOffset"]!
+            let endOffset = dic["endOffset"]!
             
             // Force remove text selection
             userInteractionEnabled = false
@@ -561,8 +563,8 @@ extension UIWebView {
             
             // Persist
             let html = js("getHTML()")
-            if let highlight = FRHighlight.matchHighlight(html, andId: dic["id"]!) {
-                Highlight.persistHighlight(highlight, completion: nil)
+            if let highlight = FRHighlight.matchHighlight(html, andId: dic["id"]!, startOffset: startOffset, endOffset: endOffset) {
+                Highlight.persistHighlight(highlight)
             }
         } catch {
             print("Could not receive JSON")

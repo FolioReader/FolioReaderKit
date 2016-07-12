@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
   ]
   s.resources = [
     'Source/**/*.{js,css,xcdatamodeld}',
-    'Source/Resources/Images/*.png', 
+    'Source/Resources/Images/*.png',
     'Source/Resources/Fonts/**/*.{otf,ttf}'
   ]
   s.preserve_paths = 'Source/**/*.xcdatamodeld'
@@ -37,5 +37,6 @@ Pod::Spec.new do |s|
   s.dependency 'AEXML'
   s.dependency 'FontBlaster'
   s.dependency 'JSQWebViewController'
+  s.dependency 'RealmSwift'
   # s.dependency 'SMSegmentView'
 end
