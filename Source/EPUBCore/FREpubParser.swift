@@ -253,7 +253,8 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             }
             
             if tag.name == "dc:language" {
-                metadata.language = tag.value ?? ""
+                let language = tag.value ?? metadata.language
+                metadata.language = language != "en" ? language : metadata.language
             }
             
             if tag.name == "dc:creator" {

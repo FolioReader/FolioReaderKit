@@ -348,6 +348,8 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate, AVSpeechSynthesiz
         
         let utterance = AVSpeechUtterance(string: text)
         utterance.rate = utteranceRate
+        utterance.voice = AVSpeechSynthesisVoice(language: book.metadata.language)
+        
         if(synthesizer.speaking){
             synthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Word)
         }
