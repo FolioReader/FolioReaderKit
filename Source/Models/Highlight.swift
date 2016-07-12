@@ -48,6 +48,7 @@ public class Highlight: Object {
             realm.beginWrite()
             realm.add(newHighlight, update: true)
             try! realm.commitWrite()
+            completion?(error: nil)
         } catch let error as NSError {
             print("Error on persist highlight: \(error)")
             completion?(error: error)
