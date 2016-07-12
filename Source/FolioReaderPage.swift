@@ -122,7 +122,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         
         if highlights.count > 0 {
             for item in highlights {
-                let style = HighlightStyle.classForStyle(item.type.integerValue)
+                let style = HighlightStyle.classForStyle(item.type)
                 let tag = "<highlight id=\"\(item.highlightId)\" onclick=\"callHighlightURL(this);\" class=\"\(style)\">\(item.content)</highlight>"
                 let locator = item.contentPre + item.content + item.contentPost
                 let range: NSRange = html.rangeOfString(locator, options: .LiteralSearch)

@@ -84,7 +84,7 @@ public class FRHighlight: NSObject {
     var contentPre: String!
     var contentPost: String!
     var date: NSDate!
-    var page: NSNumber!
+    var page: Int!
     var bookId: String!
     var type: HighlightStyle!
     
