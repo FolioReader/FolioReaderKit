@@ -342,7 +342,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     
     // MARK: - SSZipArchive delegate
     
-    func zipArchiveWillUnzipArchiveAtPath(path: String!, zipInfo: unz_global_info) {
+    func zipArchiveWillUnzipArchiveAtPath(path: String, zipInfo: unz_global_info) {
         if shouldRemoveEpub {
             do {
                 try NSFileManager.defaultManager().removeItemAtPath(epubPathToRemove!)

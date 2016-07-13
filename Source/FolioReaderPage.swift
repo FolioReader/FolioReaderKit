@@ -316,8 +316,8 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     
     func handleSwipeGesture(recognizer: UISwipeGestureRecognizer) {
         let width = self.webView.bounds.size.width
-        var currentPageNum: Int = Int(self.webView.scrollView.contentOffset.x / width)
-        var totalPageNum: Int = Int(self.webView.scrollView.contentSize.width / width)
+        let currentPageNum = Int(self.webView.scrollView.contentOffset.x / width)
+        var totalPageNum = Int(self.webView.scrollView.contentSize.width / width)
         if self.webView.scrollView.contentSize.width % width != 0 {
             totalPageNum += 1
         }

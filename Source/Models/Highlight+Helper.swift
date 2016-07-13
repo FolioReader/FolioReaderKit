@@ -90,7 +90,7 @@ extension Highlight {
             let realm = try! Realm()
             realm.beginWrite()
             realm.add(self, update: true)
-            try! realm.commitWrite()
+            try realm.commitWrite()
             completion?(error: nil)
         } catch let error as NSError {
             print("Error on persist highlight: \(error)")
@@ -103,7 +103,7 @@ extension Highlight {
             let realm = try! Realm()
             realm.beginWrite()
             realm.delete(self)
-            try! realm.commitWrite()
+            try realm.commitWrite()
         } catch let error as NSError {
             print("Error on remove highlight: \(error)")
         }
@@ -129,7 +129,7 @@ extension Highlight {
             
             highlight?.type = type.hashValue
             
-            try! realm.commitWrite()
+            try realm.commitWrite()
         } catch let error as NSError {
             print("Error on updateById : \(error)")
         }
@@ -243,7 +243,7 @@ extension Highlight {
         }
         
         let pattern = "<span class=\"sentence\">((.|\\s)*?)</span>"
-        var cleanText = removeFrom(text, withPattern: pattern)
+        let cleanText = removeFrom(text, withPattern: pattern)
         return cleanText
     }
 }
