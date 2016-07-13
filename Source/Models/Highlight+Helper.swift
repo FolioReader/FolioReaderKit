@@ -144,6 +144,13 @@ extension Highlight {
         return highlights!
     }
     
+    public static func all() -> [Highlight] {
+        var highlights: [Highlight]?
+        let realm = try! Realm()
+        highlights = realm.objects(Highlight).toArray(Highlight) ?? [Highlight]()
+        return highlights!
+    }
+    
     // MARK: HTML Methods
     
     /**
