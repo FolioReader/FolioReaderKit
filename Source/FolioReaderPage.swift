@@ -124,7 +124,8 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
             for item in highlights {
                 let style = HighlightStyle.classForStyle(item.type)
                 let tag = "<highlight id=\"\(item.highlightId)\" onclick=\"callHighlightURL(this);\" class=\"\(style)\">\(item.content)</highlight>"
-                let locator = item.contentPre + item.content + item.contentPost
+                var locator = item.contentPre + item.content + item.contentPost
+                locator = Highlight.removeSentenceSpam(locator) /// Fix for Highlights
                 let range: NSRange = html.rangeOfString(locator, options: .LiteralSearch)
                 
                 if range.location != NSNotFound {
@@ -563,8 +564,8 @@ extension UIWebView {
             
             // Persist
             let html = js("getHTML()")
-            if let highlight = FRHighlight.matchHighlight(html, andId: dic["id"]!, startOffset: startOffset, endOffset: endOffset) {
-                Highlight.persistHighlight(highlight)
+            if let highlight = Highlight.matchHighlight(html, andId: dic["id"]!, startOffset: startOffset, endOffset: endOffset) {
+                highlight.persist()
             }
         } catch {
             print("Could not receive JSON")

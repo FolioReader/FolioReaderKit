@@ -153,10 +153,10 @@ class FolioReaderHighlightList: UITableViewController {
             let highlight = highlights[indexPath.row]
             
             if highlight.page == currentPageNumber {
-                FRHighlight.removeById(highlight.highlightId) // Remove from HTML
+                Highlight.removeFromHTMLById(highlight.highlightId) // Remove from HTML
             }
             
-            Highlight.removeById(highlight.highlightId) // Remove from Core data
+            highlight.remove() // Remove from Database
             highlights.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }
