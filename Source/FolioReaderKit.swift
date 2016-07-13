@@ -64,7 +64,7 @@ public class FolioReader : NSObject {
     var isReaderReady = false
     
     private override init() {
-        let isMigrated = NSUserDefaults.standardUserDefaults().boolForKey("isMigrated")
+        let isMigrated = FolioReader.defaults.boolForKey("isMigrated")
         if !isMigrated {
             Highlight.migrateUserDataToRealm()
         }
