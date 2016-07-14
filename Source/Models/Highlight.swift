@@ -7,139 +7,27 @@
 //
 
 import Foundation
-import CoreData
+import RealmSwift
 
-public typealias Completion = (error: NSError?) -> ()
-let coreDataManager = CoreDataManager()
+public class Highlight: Object {
+    public dynamic var bookId: String!
+    public dynamic var content: String!
+    public dynamic var contentPost: String!
+    public dynamic var contentPre: String!
+    public dynamic var date: NSDate!
+    public dynamic var highlightId: String!
+    public dynamic var page: Int = 0
+    public dynamic var type: Int = 0
+    public dynamic var startOffset: Int = -1
+    public dynamic var endOffset: Int = -1
+    
+    override public class func primaryKey()-> String {
+        return "highlightId"
+    }
+}
 
-@objc(Highlight)
-public class Highlight: NSManagedObject {
-    
-    public func persist(completion: Completion?) {
-        var highlight: Highlight?
-        
-        do {
-            let fetchRequest = NSFetchRequest(entityName: "Highlight")
-            fetchRequest.predicate = NSPredicate(format:"highlightId = %@", highlightId)
-            highlight = try coreDataManager.managedObjectContext.executeFetchRequest(fetchRequest).last as? Highlight
-        } catch let error as NSError {
-            print(error)
-            highlight = nil
-        }
-        
-        if highlight != nil {
-            highlight!.content = content
-            highlight!.contentPre = contentPre
-            highlight!.contentPost = contentPost
-            highlight!.date = date
-            highlight!.type = type
-        } else {
-            highlight = NSEntityDescription.insertNewObjectForEntityForName("Highlight", inManagedObjectContext: coreDataManager.managedObjectContext) as? Highlight
-            
-            highlight!.bookId = bookId
-            highlight!.content = content
-            highlight!.contentPre = contentPre
-            highlight!.contentPost = contentPost
-            highlight!.date = date
-            highlight!.highlightId = highlightId
-            highlight!.page = page
-            highlight!.type = type
-        }
-        
-        // Save
-        do {
-            try coreDataManager.managedObjectContext.save()
-            completion?(error: nil)
-        } catch let error as NSError {
-            completion?(error: error)
-        }
-    }
-    
-    public static func persistHighlight(object: FRHighlight, completion: Completion?) {
-        var highlight: Highlight?
-        
-        do {
-            let fetchRequest = NSFetchRequest(entityName: "Highlight")
-            fetchRequest.predicate = NSPredicate(format:"highlightId = %@", object.id)
-            highlight = try coreDataManager.managedObjectContext.executeFetchRequest(fetchRequest).last as? Highlight
-        } catch let error as NSError {
-            print(error)
-            highlight = nil
-        }
-  
-        if highlight != nil {
-            highlight!.content = object.content
-            highlight!.contentPre = object.contentPre
-            highlight!.contentPost = object.contentPost
-            highlight!.date = object.date
-            highlight!.type = object.type.hashValue
-        } else {
-            highlight = NSEntityDescription.insertNewObjectForEntityForName("Highlight", inManagedObjectContext: coreDataManager.managedObjectContext) as? Highlight
-            coreDataManager.saveContext()
-
-            highlight!.bookId = object.bookId
-            highlight!.content = object.content
-            highlight!.contentPre = object.contentPre
-            highlight!.contentPost = object.contentPost
-            highlight!.date = NSDate()
-            highlight!.highlightId = object.id
-            highlight!.page = object.page
-            highlight!.type = object.type.hashValue
-        }
-
-        // Save
-        do {
-            try coreDataManager.managedObjectContext.save()
-            completion?(error: nil)
-        } catch let error as NSError {
-            completion?(error: error)
-        }
-    }
-    
-    public static func removeById(highlightId: String) {
-        var highlight: Highlight?
-        
-        do {
-            let fetchRequest = NSFetchRequest(entityName: "Highlight")
-            fetchRequest.predicate = NSPredicate(format:"highlightId = %@", highlightId)
-            
-            highlight = try coreDataManager.managedObjectContext.executeFetchRequest(fetchRequest).last as? Highlight
-            coreDataManager.managedObjectContext.deleteObject(highlight!)
-            coreDataManager.saveContext()
-        } catch let error as NSError {
-            print("Error on remove highlight: \(error)")
-        }
-    }
-    
-    public static func updateById(highlightId: String, type: HighlightStyle) {
-        var highlight: Highlight?
-        
-        do {
-            let fetchRequest = NSFetchRequest(entityName: "Highlight")
-            fetchRequest.predicate = NSPredicate(format:"highlightId = %@", highlightId)
-            
-            highlight = try coreDataManager.managedObjectContext.executeFetchRequest(fetchRequest).last as? Highlight
-            highlight?.type = type.hashValue
-            coreDataManager.saveContext()
-        } catch let error as NSError {
-            print("Error on update highlight: \(error)")
-        }
-    }
-    
-    public static func allByBookId(bookId: String, andPage page: NSNumber? = nil) -> [Highlight] {
-        var highlights: [Highlight]?
-        let predicate = (page != nil) ? NSPredicate(format: "bookId = %@ && page = %@", bookId, page!) : NSPredicate(format: "bookId = %@", bookId)
-        
-        do {
-            let fetchRequest = NSFetchRequest(entityName: "Highlight")
-            let sorter: NSSortDescriptor = NSSortDescriptor(key: "date" , ascending: false)
-            fetchRequest.predicate = predicate
-            fetchRequest.sortDescriptors = [sorter]
-            
-            highlights = try coreDataManager.managedObjectContext.executeFetchRequest(fetchRequest) as? [Highlight]
-            return highlights!
-        } catch {
-            return [Highlight]()
-        }
+extension Results {
+    func toArray<T>(ofType: T.Type) -> [T] {
+        return flatMap { $0 as? T }
     }
 }

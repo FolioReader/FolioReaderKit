@@ -122,9 +122,10 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         
         if highlights.count > 0 {
             for item in highlights {
-                let style = HighlightStyle.classForStyle(item.type.integerValue)
+                let style = HighlightStyle.classForStyle(item.type)
                 let tag = "<highlight id=\"\(item.highlightId)\" onclick=\"callHighlightURL(this);\" class=\"\(style)\">\(item.content)</highlight>"
-                let locator = item.contentPre + item.content + item.contentPost
+                var locator = item.contentPre + item.content + item.contentPost
+                locator = Highlight.removeSentenceSpam(locator) /// Fix for Highlights
                 let range: NSRange = html.rangeOfString(locator, options: .LiteralSearch)
                 
                 if range.location != NSNotFound {
@@ -315,8 +316,8 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     
     func handleSwipeGesture(recognizer: UISwipeGestureRecognizer) {
         let width = self.webView.bounds.size.width
-        var currentPageNum: Int = Int(self.webView.scrollView.contentOffset.x / width)
-        var totalPageNum: Int = Int(self.webView.scrollView.contentSize.width / width)
+        let currentPageNum = Int(self.webView.scrollView.contentOffset.x / width)
+        var totalPageNum = Int(self.webView.scrollView.contentSize.width / width)
         if self.webView.scrollView.contentSize.width % width != 0 {
             totalPageNum += 1
         }
@@ -551,6 +552,8 @@ extension UIWebView {
             let json = try NSJSONSerialization.JSONObjectWithData(jsonData!, options: []) as! NSArray
             let dic = json.firstObject as! [String: String]
             let rect = CGRectFromString(dic["rect"]!)
+            let startOffset = dic["startOffset"]!
+            let endOffset = dic["endOffset"]!
             
             // Force remove text selection
             userInteractionEnabled = false
@@ -561,8 +564,8 @@ extension UIWebView {
             
             // Persist
             let html = js("getHTML()")
-            if let highlight = FRHighlight.matchHighlight(html, andId: dic["id"]!) {
-                Highlight.persistHighlight(highlight, completion: nil)
+            if let highlight = Highlight.matchHighlight(html, andId: dic["id"]!, startOffset: startOffset, endOffset: endOffset) {
+                highlight.persist()
             }
         } catch {
             print("Could not receive JSON")

@@ -54,8 +54,6 @@ enum MediaOverlayStyle: Int {
 *  Main Library class with some useful constants and methods
 */
 public class FolioReader : NSObject {
-    private override init() {}
-    
     static let sharedInstance = FolioReader()
     static let defaults = NSUserDefaults.standardUserDefaults()
     weak var readerCenter: FolioReaderCenter!
@@ -65,6 +63,12 @@ public class FolioReader : NSObject {
     var isReaderOpen = false
     var isReaderReady = false
     
+    private override init() {
+        let isMigrated = FolioReader.defaults.boolForKey("isMigrated")
+        if !isMigrated {
+            Highlight.migrateUserDataToRealm()
+        }
+    }
     
     var nightMode: Bool {
         get { return FolioReader.defaults.boolForKey(kNightMode) }

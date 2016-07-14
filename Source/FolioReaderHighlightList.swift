@@ -92,12 +92,12 @@ class FolioReaderHighlightList: UITableViewController {
         text.addAttribute(NSFontAttributeName, value: UIFont(name: "Avenir-Light", size: 16)!, range: range)
         text.addAttribute(NSForegroundColorAttributeName, value: textColor, range: range)
         
-        if highlight.type.integerValue == HighlightStyle.Underline.rawValue {
+        if highlight.type == HighlightStyle.Underline.rawValue {
             text.addAttribute(NSBackgroundColorAttributeName, value: UIColor.clearColor(), range: range)
-            text.addAttribute(NSUnderlineColorAttributeName, value: HighlightStyle.colorForStyle(highlight.type.integerValue, nightMode: FolioReader.sharedInstance.nightMode), range: range)
+            text.addAttribute(NSUnderlineColorAttributeName, value: HighlightStyle.colorForStyle(highlight.type, nightMode: FolioReader.sharedInstance.nightMode), range: range)
             text.addAttribute(NSUnderlineStyleAttributeName, value: NSNumber(integer: NSUnderlineStyle.StyleSingle.rawValue), range: range)
         } else {
-            text.addAttribute(NSBackgroundColorAttributeName, value: HighlightStyle.colorForStyle(highlight.type.integerValue, nightMode: FolioReader.sharedInstance.nightMode), range: range)
+            text.addAttribute(NSBackgroundColorAttributeName, value: HighlightStyle.colorForStyle(highlight.type, nightMode: FolioReader.sharedInstance.nightMode), range: range)
         }
         
         // Text
@@ -143,7 +143,7 @@ class FolioReaderHighlightList: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let highlight = highlights[indexPath.row]
 
-        FolioReader.sharedInstance.readerCenter.changePageWith(page: highlight.page.integerValue, andFragment: highlight.highlightId)
+        FolioReader.sharedInstance.readerCenter.changePageWith(page: highlight.page, andFragment: highlight.highlightId)
         
         dismissViewControllerAnimated(true, completion: nil)
     }
@@ -153,10 +153,10 @@ class FolioReaderHighlightList: UITableViewController {
             let highlight = highlights[indexPath.row]
             
             if highlight.page == currentPageNumber {
-                FRHighlight.removeById(highlight.highlightId) // Remove from HTML
+                Highlight.removeFromHTMLById(highlight.highlightId) // Remove from HTML
             }
             
-            Highlight.removeById(highlight.highlightId) // Remove from Core data
+            highlight.remove() // Remove from Database
             highlights.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }

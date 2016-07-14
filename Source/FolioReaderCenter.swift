@@ -580,7 +580,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         
         // Fix the offset for paged scroll
         if readerConfig.scrollDirection == .horizontal {
-            var page = round(pageOffset / pageWidth)
+            let page = round(pageOffset / pageWidth)
             pageOffset = page * pageWidth
         }
         
