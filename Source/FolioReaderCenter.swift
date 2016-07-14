@@ -1115,12 +1115,12 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     // MARK: - Container delegate
     
-    func container(didExpandLeftPanel sidePanel: FolioReaderSidePanel) {
+    func container(didExpandLeftPanel chapterList: FolioReaderChapterList) {
         collectionView.userInteractionEnabled = false
         FolioReader.saveReaderState()
     }
     
-    func container(didCollapseLeftPanel sidePanel: FolioReaderSidePanel) {
+    func container(didCollapseLeftPanel chapterList: FolioReaderChapterList) {
         collectionView.userInteractionEnabled = true
         updateCurrentPage()
         
@@ -1133,7 +1133,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
-    func container(sidePanel: FolioReaderSidePanel, didSelectRowAtIndexPath indexPath: NSIndexPath, withTocReference reference: FRTocReference) {
+    func container(chapterList: FolioReaderChapterList, didSelectRowAtIndexPath indexPath: NSIndexPath, withTocReference reference: FRTocReference) {
         let item = findPageByResource(reference)
         
         if item < totalPages-1 {

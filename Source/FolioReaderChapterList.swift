@@ -1,5 +1,5 @@
 //
-//  FolioReaderSidePanel.swift
+//  FolioReaderChapterList.swift
 //  FolioReaderKit
 //
 //  Created by Heberti Almeida on 15/04/15.
@@ -9,16 +9,16 @@
 import UIKit
 
 @objc
-protocol FolioReaderSidePanelDelegate: class {
+protocol FolioReaderChapterListDelegate: class {
     /**
     Notifies when the user selected some item on menu.
     */
-    func sidePanel(sidePanel: FolioReaderSidePanel, didSelectRowAtIndexPath indexPath: NSIndexPath, withTocReference reference: FRTocReference)
+    func chapterList(chapterList: FolioReaderChapterList, didSelectRowAtIndexPath indexPath: NSIndexPath, withTocReference reference: FRTocReference)
 }
 
-class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class FolioReaderChapterList: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
-    weak var delegate: FolioReaderSidePanelDelegate?
+    weak var delegate: FolioReaderChapterListDelegate?
     var tableView: UITableView!
     var toolBar: UIToolbar!
     let toolBarHeight: CGFloat = 50
@@ -56,23 +56,23 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
         let closeButton = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
         closeButton.setImage(imageClose, forState: UIControlState.Normal)
         closeButton.setBackgroundImage(blackImage, forState: UIControlState.Normal)
-        closeButton.addTarget(self, action: #selector(FolioReaderSidePanel.didSelectClose(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        closeButton.addTarget(self, action: #selector(FolioReaderChapterList.didSelectClose(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         let noSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FixedSpace, target: nil, action: nil)
         noSpace.width = isPad || isLargePhone ? -20 : -16
         let iconClose = UIBarButtonItem(customView: closeButton)
         
-        let iconHighlight = UIBarButtonItem(image: imageHighlight, style: .Plain, target: self, action: #selector(FolioReaderSidePanel.didSelectHighlight(_:)))
+        let iconHighlight = UIBarButtonItem(image: imageHighlight, style: .Plain, target: self, action: #selector(FolioReaderChapterList.didSelectHighlight(_:)))
         iconHighlight.width = space
         
-        let iconFont = UIBarButtonItem(image: imageFont, style: .Plain, target: self, action: #selector(FolioReaderSidePanel.didSelectFont(_:)))
+        let iconFont = UIBarButtonItem(image: imageFont, style: .Plain, target: self, action: #selector(FolioReaderChapterList.didSelectFont(_:)))
         iconFont.width = space
         
         toolBar.setItems([noSpace, iconClose, iconFont, iconHighlight], animated: false)
         
         
         // Register cell classes
-        tableView.registerClass(FolioReaderSidePanelCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.registerClass(FolioReaderChapterListCell.self, forCellReuseIdentifier: reuseIdentifier)
         tableView.separatorInset = UIEdgeInsetsZero
         tableView.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
         
@@ -113,7 +113,7 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) as! FolioReaderSidePanelCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) as! FolioReaderChapterListCell
         
         let tocReference = tocItems[indexPath.row]
         let isSection = tocReference.children.count > 0
@@ -155,7 +155,7 @@ class FolioReaderSidePanel: UIViewController, UITableViewDelegate, UITableViewDa
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let tocReference = tocItems[indexPath.row]
-        delegate?.sidePanel(self, didSelectRowAtIndexPath: indexPath, withTocReference: tocReference)
+        delegate?.chapterList(self, didSelectRowAtIndexPath: indexPath, withTocReference: tocReference)
         
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }

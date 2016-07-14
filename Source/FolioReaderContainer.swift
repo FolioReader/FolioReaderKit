@@ -27,24 +27,24 @@ protocol FolioReaderContainerDelegate: class {
     /**
     Notifies that the menu was expanded.
     */
-    func container(didExpandLeftPanel sidePanel: FolioReaderSidePanel)
+    func container(didExpandLeftPanel chapterList: FolioReaderChapterList)
     
     /**
     Notifies that the menu was closed.
     */
-    func container(didCollapseLeftPanel sidePanel: FolioReaderSidePanel)
+    func container(didCollapseLeftPanel chapterList: FolioReaderChapterList)
     
     /**
     Notifies when the user selected some item on menu.
     */
-    func container(sidePanel: FolioReaderSidePanel, didSelectRowAtIndexPath indexPath: NSIndexPath, withTocReference reference: FRTocReference)
+    func container(chapterList: FolioReaderChapterList, didSelectRowAtIndexPath indexPath: NSIndexPath, withTocReference reference: FRTocReference)
 }
 
-class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
+class FolioReaderContainer: UIViewController, FolioReaderChapterListDelegate {
     weak var delegate: FolioReaderContainerDelegate!
     var centerNavigationController: UINavigationController!
     var centerViewController: FolioReaderCenter!
-    var leftViewController: FolioReaderSidePanel!
+    var leftViewController: FolioReaderChapterList!
     var audioPlayer: FolioReaderAudioPlayer!
     var centerPanelExpandedOffset: CGFloat = 70
     var currentState = SlideOutState()
@@ -180,7 +180,7 @@ class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
     
     func addLeftPanelViewController() {
         if (leftViewController == nil) {
-            leftViewController = FolioReaderSidePanel()
+            leftViewController = FolioReaderChapterList()
             leftViewController.delegate = self
             addChildSidePanelController(leftViewController!)
             
@@ -188,7 +188,7 @@ class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
         }
     }
     
-    func addChildSidePanelController(sidePanelController: FolioReaderSidePanel) {
+    func addChildSidePanelController(sidePanelController: FolioReaderChapterList) {
         view.insertSubview(sidePanelController.view, atIndex: 0)
         addChildViewController(sidePanelController)
         sidePanelController.didMoveToParentViewController(self)
@@ -300,8 +300,8 @@ class FolioReaderContainer: UIViewController, FolioReaderSidePanelDelegate {
     
     // MARK: - Side Panel delegate
     
-    func sidePanel(sidePanel: FolioReaderSidePanel, didSelectRowAtIndexPath indexPath: NSIndexPath, withTocReference reference: FRTocReference) {
+    func chapterList(chapterList: FolioReaderChapterList, didSelectRowAtIndexPath indexPath: NSIndexPath, withTocReference reference: FRTocReference) {
         collapseSidePanels()
-        delegate.container(sidePanel, didSelectRowAtIndexPath: indexPath, withTocReference: reference)
+        delegate.container(chapterList, didSelectRowAtIndexPath: indexPath, withTocReference: reference)
     }
 }

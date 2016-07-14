@@ -1,5 +1,5 @@
 //
-//  FolioReaderSidePanelCell.swift
+//  FolioReaderChapterListCell.swift
 //  FolioReaderKit
 //
 //  Created by Heberti Almeida on 07/05/15.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FolioReaderSidePanelCell: UITableViewCell {
+class FolioReaderChapterListCell: UITableViewCell {
     var indexLabel = UILabel()
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
