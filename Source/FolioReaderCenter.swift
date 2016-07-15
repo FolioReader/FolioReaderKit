@@ -599,7 +599,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     }
 
     /**
-    Find a page by FRTocReference.
+     Find a page by FRTocReference.
     */
     func findPageByResource(reference: FRTocReference) -> Int {
         var count = 0
@@ -613,7 +613,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     /**
-    Find a page by href.
+     Find a page by href.
     */
     func findPageByHref(href: String) -> Int {
         var count = 0
@@ -627,7 +627,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     /**
-    Find and return the current chapter resource.
+     Find and return the current chapter resource.
     */
     func getCurrentChapter() -> FRResource? {
         if let currentPageNumber = currentPageNumber {
@@ -668,7 +668,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     // MARK: - Sharing
     
     /**
-    Sharing chapter method.
+     Sharing chapter method.
     */
     func shareChapter(sender: UIBarButtonItem) {
         
@@ -726,7 +726,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     /**
-    Sharing highlight method.
+     Sharing highlight method.
     */
     func shareHighlight(string: String, rect: CGRect) {
         

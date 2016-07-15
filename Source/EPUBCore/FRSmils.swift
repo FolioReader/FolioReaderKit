@@ -30,7 +30,7 @@ struct FRSmilFile {
     // MARK: - data methods
     
     /**
-    Returns a smil <par> tag which contains info about parallel audio and text to be played
+     Returns a smil <par> tag which contains info about parallel audio and text to be played
     */
     func parallelAudioForFragment(fragment: String!) -> FRSmilElement! {
         return findParElement(forTextSrc: fragment, inData: data)

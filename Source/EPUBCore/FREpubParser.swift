@@ -38,8 +38,8 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     }
     
     /**
-    Unzip, delete and read an epub file.
-    Returns a FRBook.
+     Unzip, delete and read an epub file.
+     Returns a FRBook.
     */
     func readEpub(epubPath withEpubPath: String, removeEpub: Bool = true) -> FRBook {
         epubPathToRemove = withEpubPath
@@ -61,8 +61,8 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     
     
     /**
-    Read an unziped epub file.
-    Returns a FRBook.
+     Read an unziped epub file.
+     Returns a FRBook.
     */
     func readEpub(filePath withFilePath: String) -> FRBook {
         bookBasePath = withFilePath
@@ -73,7 +73,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     }
     
     /**
-    Read and parse container.xml file.
+     Read and parse container.xml file.
     */
     private func readContainer() {
         let containerPath = "META-INF/container.xml"
@@ -92,7 +92,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     }
     
     /**
-    Read and parse .opf file.
+     Read and parse .opf file.
     */
     private func readOpf() {
         let opfPath = (bookBasePath as NSString).stringByAppendingPathComponent(book.opfResource.href)
@@ -153,7 +153,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     }
     
     /**
-    Reads and parses a .smil file
+     Reads and parses a .smil file
     */
     private func readSmilFile(resource: FRResource){
         let smilData = try? NSData(contentsOfFile: resource.fullHref, options: .DataReadingMappedAlways)
@@ -197,7 +197,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     }
 
     /**
-    Read and parse the Table of Contents.
+     Read and parse the Table of Contents.
     */
     private func findTableOfContents() -> [FRTocReference] {
         let ncxPath = (resourcesBasePath as NSString).stringByAppendingPathComponent(book.ncxResource.href)
@@ -262,7 +262,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     }
     
     /**
-    Read and parse <metadata>.
+     Read and parse <metadata>.
     */
     private func readMetadata(tags: [AEXMLElement]) -> FRMetadata {
         let metadata = FRMetadata()
@@ -329,7 +329,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     }
     
     /**
-    Read and parse <spine>.
+     Read and parse <spine>.
     */
     private func readSpine(tags: [AEXMLElement]) -> FRSpine {
         let spine = FRSpine()
@@ -350,7 +350,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     }
     
     /**
-    Add skip to backup file.
+     Add skip to backup file.
     */
     private func addSkipBackupAttributeToItemAtURL(URL: NSURL) -> Bool {
         assert(NSFileManager.defaultManager().fileExistsAtPath(URL.path!))

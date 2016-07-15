@@ -120,7 +120,7 @@ public class FolioReader : NSObject {
     // MARK: - Present Folio Reader
     
     /**
-    Present a Folio Reader for a Parent View Controller.
+     Present a Folio Reader for a Parent View Controller.
     */
     public class func presentReader(parentViewController parentViewController: UIViewController, withEpubPath epubPath: String, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated: Bool = true) {
         let reader = FolioReaderContainer(config: config, epubPath: epubPath, removeEpub: shouldRemoveEpub)
@@ -131,21 +131,21 @@ public class FolioReader : NSObject {
     // MARK: - Application State
     
     /**
-    Called when the application will resign active
+     Called when the application will resign active
     */
     public class func applicationWillResignActive() {
         saveReaderState()
     }
     
     /**
-    Called when the application will terminate
+     Called when the application will terminate
     */
     public class func applicationWillTerminate() {
         saveReaderState()
     }
     
     /**
-    Save Reader state, book, page and scroll are saved
+     Save Reader state, book, page and scroll are saved
     */
     class func saveReaderState() {
         if FolioReader.sharedInstance.isReaderOpen {

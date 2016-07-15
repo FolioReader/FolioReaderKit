@@ -16,7 +16,7 @@ public enum FolioReaderScrollDirection: Int {
     case horizontal
     
     /**
-    Returns the `UICollectionViewFlowLayout` scroll direction.
+     Returns the `UICollectionViewFlowLayout` scroll direction.
     */
     public func collectionViewScrollDirection() -> UICollectionViewScrollDirection {
         switch self {
