@@ -11,108 +11,48 @@ import UIKit
 @objc
 protocol FolioReaderChapterListDelegate: class {
     /**
-    Notifies when the user selected some item on menu.
+     Notifies when the user selected some item on menu.
     */
     func chapterList(chapterList: FolioReaderChapterList, didSelectRowAtIndexPath indexPath: NSIndexPath, withTocReference reference: FRTocReference)
+    
+    /**
+     Notifies when chapter list did totally dismissed.
+     */
+    func chapterList(didDismissedChapterList chapterList: FolioReaderChapterList)
 }
 
-class FolioReaderChapterList: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
+class FolioReaderChapterList: UITableViewController {
     weak var delegate: FolioReaderChapterListDelegate?
-    var tableView: UITableView!
-    var toolBar: UIToolbar!
-    let toolBarHeight: CGFloat = 50
     var tocItems = [FRTocReference]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var tableViewFrame = screenBounds()
-        tableViewFrame.size.height = tableViewFrame.height-toolBarHeight
-        
-        tableView = UITableView(frame: tableViewFrame)
-        tableView.delaysContentTouches = true
-        tableView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
-        tableView.backgroundColor = isNight(readerConfig.nightModeMenuBackground, readerConfig.menuBackgroundColor)
-        tableView.separatorColor = isNight(readerConfig.nightModeSeparatorColor, readerConfig.menuSeparatorColor)
-        tableView.delegate = self
-        tableView.dataSource = self
-        view.addSubview(tableView)
-        
-        toolBar = UIToolbar(frame: CGRectMake(0, screenBounds().height-toolBarHeight, view.frame.width, toolBarHeight))
-        toolBar.autoresizingMask = .FlexibleWidth
-        toolBar.barTintColor = readerConfig.toolBarBackgroundColor
-        toolBar.tintColor = readerConfig.toolBarTintColor
-        toolBar.clipsToBounds = true
-        toolBar.translucent = false
-        view.addSubview(toolBar)
-        
-        let imageHighlight = UIImage(readerImageNamed: "icon-highlight")
-        let imageClose = UIImage(readerImageNamed: "icon-close")
-        let imageFont = UIImage(readerImageNamed: "icon-font")
-        let space = 70 as CGFloat
-        
-        let blackImage = UIImage.imageWithColor(UIColor(white: 0, alpha: 0.2))
-        let closeButton = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
-        closeButton.setImage(imageClose, forState: UIControlState.Normal)
-        closeButton.setBackgroundImage(blackImage, forState: UIControlState.Normal)
-        closeButton.addTarget(self, action: #selector(FolioReaderChapterList.didSelectClose(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        
-        let noSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FixedSpace, target: nil, action: nil)
-        noSpace.width = isPad || isLargePhone ? -20 : -16
-        let iconClose = UIBarButtonItem(customView: closeButton)
-        
-        let iconHighlight = UIBarButtonItem(image: imageHighlight, style: .Plain, target: self, action: #selector(FolioReaderChapterList.didSelectHighlight(_:)))
-        iconHighlight.width = space
-        
-        let iconFont = UIBarButtonItem(image: imageFont, style: .Plain, target: self, action: #selector(FolioReaderChapterList.didSelectFont(_:)))
-        iconFont.width = space
-        
-        toolBar.setItems([noSpace, iconClose, iconFont, iconHighlight], animated: false)
-        
-        
         // Register cell classes
         tableView.registerClass(FolioReaderChapterListCell.self, forCellReuseIdentifier: reuseIdentifier)
         tableView.separatorInset = UIEdgeInsetsZero
-        tableView.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
+        tableView.backgroundColor = isNight(readerConfig.nightModeMenuBackground, readerConfig.menuBackgroundColor)
+        tableView.separatorColor = isNight(readerConfig.nightModeSeparatorColor, readerConfig.menuSeparatorColor)
         
         // Create TOC list
-        createTocList()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        tocItems = book.flatTableOfContents
     }
     
-    // MARK: - Recursive add items to a list
-    
-    func createTocList() {
-        for item in book.tableOfContents {
-            tocItems.append(item)
-            countTocChild(item)
-        }
-    }
-    
-    func countTocChild(item: FRTocReference) {
-        if item.children.count > 0 {
-            for item in item.children {
-                tocItems.append(item)
-            }
-        }
-    }
-
     // MARK: - Table view data source
 
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tocItems.count
     }
+    
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 60
+    }
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) as! FolioReaderChapterListCell
         
         let tocReference = tocItems[indexPath.row]
@@ -153,54 +93,13 @@ class FolioReaderChapterList: UIViewController, UITableViewDelegate, UITableView
     
     // MARK: - Table view delegate
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let tocReference = tocItems[indexPath.row]
         delegate?.chapterList(self, didSelectRowAtIndexPath: indexPath, withTocReference: tocReference)
         
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        dismiss { 
+            self.delegate?.chapterList(didDismissedChapterList: self)
+        }
     }
-    
-    // MARK: - Table view data source
-    
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 60
-    }
-    
-    // MARK: - Get Screen bounds
-    
-    func screenBounds() -> CGRect {
-        return UIScreen.mainScreen().bounds
-    }
-    
-    // MARK: - Rotation
-    
-    override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
-        UIView.animateWithDuration(duration, animations: { () -> Void in
-            var frame = self.toolBar.frame
-            frame.origin.y = pageHeight-self.toolBarHeight
-            self.toolBar.frame = frame
-        })
-    }
-    
-    // MARK: - Toolbar actions
-    
-    func didSelectHighlight(sender: UIBarButtonItem) {
-        FolioReader.sharedInstance.readerContainer.toggleLeftPanel()
-        FolioReader.sharedInstance.readerCenter.presentHighlightsList()
-    }
-    
-    func didSelectClose(sender: UIBarButtonItem) {
-        self.dismissViewControllerAnimated(true, completion: {
-            FolioReader.saveReaderState()
-            FolioReader.sharedInstance.isReaderOpen = false
-            FolioReader.sharedInstance.isReaderReady = false
-            FolioReader.sharedInstance.readerAudioPlayer.stop()
-        })
-    }
-    
-    func didSelectFont(sender: UIBarButtonItem) {
-        FolioReader.sharedInstance.readerContainer.toggleLeftPanel()
-        FolioReader.sharedInstance.readerCenter.presentFontsMenu()
-    }
-
 }

@@ -15,6 +15,7 @@ class FRBook: NSObject {
     var spine = FRSpine()
     var smils = FRSmils()
     var tableOfContents: [FRTocReference]!
+    var flatTableOfContents: [FRTocReference]!
     var opfResource: FRResource!
     var ncxResource: FRResource!
     var coverImage: FRResource!

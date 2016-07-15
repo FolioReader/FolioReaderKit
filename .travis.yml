@@ -25,4 +25,4 @@ before_install:
 - pod repo update
 script:
 - set -o pipefail && xcodebuild test -workspace Example/Example.xcworkspace -scheme Example -sdk iphonesimulator9.3 ONLY_ACTIVE_ARCH=NO | xcpretty
-- pod lib lint
+- pod lib lint --allow-warnings

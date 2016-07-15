@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1ABDDB041D38877200EFE73D /* ScrollScrubber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABDDB031D38877200EFE73D /* ScrollScrubber.swift */; };
 		B0D6990F1D035FA2003B4CCD /* FolioReaderKit.h in Headers */ = {isa = PBXBuildFile; fileRef = B0D6990E1D035FA2003B4CCD /* FolioReaderKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B0D699161D035FA2003B4CCD /* FolioReaderKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0D6990B1D035FA2003B4CCD /* FolioReaderKit.framework */; };
 		B0D6991B1D035FA2003B4CCD /* FolioReaderKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D6991A1D035FA2003B4CCD /* FolioReaderKitTests.swift */; };
@@ -160,6 +161,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1ABDDB031D38877200EFE73D /* ScrollScrubber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollScrubber.swift; sourceTree = "<group>"; };
 		B0D6990B1D035FA2003B4CCD /* FolioReaderKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FolioReaderKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0D6990E1D035FA2003B4CCD /* FolioReaderKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FolioReaderKit.h; sourceTree = "<group>"; };
 		B0D699101D035FA2003B4CCD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -388,6 +390,7 @@
 			children = (
 				B0D69BB81D0387F7003B4CCD /* EPUBCore */,
 				B0D69BC41D0387F7003B4CCD /* FolioReaderAudioPlayer.swift */,
+				1ABDDB031D38877200EFE73D /* ScrollScrubber.swift */,
 				B0D69BC51D0387F7003B4CCD /* FolioReaderCenter.swift */,
 				B0D69BC61D0387F7003B4CCD /* FolioReaderConfig.swift */,
 				B0D69BC71D0387F7003B4CCD /* FolioReaderContainer.swift */,
@@ -843,6 +846,7 @@
 				B0D69C491D0387F7003B4CCD /* FREpubParser.swift in Sources */,
 				B0D69C4B1D0387F7003B4CCD /* FRMediaType.swift in Sources */,
 				B0D69C551D0387F7003B4CCD /* FolioReaderConfig.swift in Sources */,
+				1ABDDB041D38877200EFE73D /* ScrollScrubber.swift in Sources */,
 				B0D69C501D0387F7003B4CCD /* FRSmils.swift in Sources */,
 				B0D69C531D0387F7003B4CCD /* FolioReaderAudioPlayer.swift in Sources */,
 				B0D69C561D0387F7003B4CCD /* FolioReaderContainer.swift in Sources */,

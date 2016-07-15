@@ -266,7 +266,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
     }
 
     func closeView() {
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss()
 
         if readerConfig.shouldHideNavigationOnTap == false {
             FolioReader.sharedInstance.readerCenter.showBars()

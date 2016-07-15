@@ -181,8 +181,8 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
                     readerCenter.configureNavBar()
                     readerCenter.scrollScrubber.updateColors()
                 })
-                readerSidePanel.tableView.backgroundColor = readerConfig.menuBackgroundColor
-                readerSidePanel.tableView.separatorColor = readerConfig.menuSeparatorColor
+//                readerSidePanel.tableView.backgroundColor = readerConfig.menuBackgroundColor
+//                readerSidePanel.tableView.separatorColor = readerConfig.menuSeparatorColor
                 break
             case 1:
                 currentPage.webView.js("nightMode(true)")
@@ -192,8 +192,8 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
                     readerCenter.configureNavBar()
                     readerCenter.scrollScrubber.updateColors()
                 })
-                readerSidePanel.tableView.backgroundColor = readerConfig.nightModeMenuBackground
-                readerSidePanel.tableView.separatorColor = readerConfig.nightModeSeparatorColor
+//                readerSidePanel.tableView.backgroundColor = readerConfig.nightModeMenuBackground
+//                readerSidePanel.tableView.separatorColor = readerConfig.nightModeSeparatorColor
                 break
             default:
                 break
@@ -255,7 +255,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
     // MARK: - Gestures
     
     func tapGesture() {
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss()
         
         if readerConfig.shouldHideNavigationOnTap == false {
             FolioReader.sharedInstance.readerCenter.showBars()

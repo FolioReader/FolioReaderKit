@@ -432,7 +432,7 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate, AVSpeechSynthesiz
      the `currentPage` in ReaderCenter may not have updated just yet
      */
     func getCurrentChapterName() -> String? {
-        for item in FolioReader.sharedInstance.readerSidePanel.tocItems {
+        for item in book.flatTableOfContents {
             if let resource = item.resource where resource.href == currentHref {
                 return item.title
             }

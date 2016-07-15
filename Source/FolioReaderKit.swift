@@ -13,11 +13,6 @@ import UIKit
 
 internal let isPad = UIDevice.currentDevice().userInterfaceIdiom == .Pad
 internal let isPhone = UIDevice.currentDevice().userInterfaceIdiom == .Phone
-internal let isPhone4 = (UIScreen.mainScreen().bounds.size.height == 480)
-internal let isPhone5 = (UIScreen.mainScreen().bounds.size.height == 568)
-internal let isPhone6P = UIDevice.currentDevice().userInterfaceIdiom == .Phone && UIScreen.mainScreen().bounds.size.height == 736
-internal let isSmallPhone = isPhone4 || isPhone5
-internal let isLargePhone = isPhone6P
 
 // MARK: - Internal constants
 
@@ -32,10 +27,12 @@ internal let kHighlightRange = 30
 internal var kBookId: String!
 
 /**
- `0` Default  
- `1` Underline  
- `2` Text Color
-*/
+ Defines the media overlay and TTS selection
+ 
+ - Default:   The background is colored
+ - Underline: The underlined is colored
+ - TextColor: The text is colored
+ */
 enum MediaOverlayStyle: Int {
     case Default
     case Underline
@@ -163,6 +160,13 @@ public class FolioReader : NSObject {
                 FolioReader.defaults.setObject(position, forKey: kBookId)
             }
         }
+    }
+    
+    class func close() {
+        FolioReader.saveReaderState()
+        FolioReader.sharedInstance.isReaderOpen = false
+        FolioReader.sharedInstance.isReaderReady = false
+        FolioReader.sharedInstance.readerAudioPlayer.stop()
     }
 }
 
@@ -495,11 +499,19 @@ internal extension UIImage {
 internal extension UIViewController {
     
     func setCloseButton() {
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(readerImageNamed: "icon-close"), style: UIBarButtonItemStyle.Plain, target: self, action:#selector(UIViewController.dismiss))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(readerImageNamed: "icon-close"), style: .Plain, target: self, action: #selector(dismiss as Void -> Void))
     }
     
     func dismiss() {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        dismiss(nil)
+    }
+    
+    func dismiss(completion: (() -> Void)?) {
+        dispatch_async(dispatch_get_main_queue()) {
+            self.dismissViewControllerAnimated(true, completion: {
+                completion?()
+            })
+        }
     }
     
     // MARK: - NavigationBar
@@ -545,6 +557,21 @@ internal extension UINavigationBar {
             }
         }
         return nil
+    }
+}
+
+internal extension UINavigationController {
+    
+    public override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return visibleViewController!.preferredStatusBarStyle()
+    }
+    
+    public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return visibleViewController!.supportedInterfaceOrientations()
+    }
+    
+    public override func shouldAutorotate() -> Bool {
+        return visibleViewController!.shouldAutorotate()
     }
 }
 

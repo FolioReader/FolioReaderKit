@@ -134,6 +134,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             
             // The book TOC
             book.tableOfContents = findTableOfContents()
+            book.flatTableOfContents = createFlatTOC()
             
             // Read metadata
             book.metadata = readMetadata(xmlDoc.root["metadata"].children)
@@ -235,6 +236,29 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             }
         }        
         return toc
+    }
+    
+    // MARK: - Recursive add items to a list
+    
+    func createFlatTOC() -> [FRTocReference] {
+        var tocItems = [FRTocReference]()
+        
+        for item in book.tableOfContents {
+            tocItems.append(item)
+            tocItems.appendContentsOf(countTocChild(item))
+        }
+        return tocItems
+    }
+    
+    func countTocChild(item: FRTocReference) -> [FRTocReference] {
+        var tocItems = [FRTocReference]()
+        
+        if item.children.count > 0 {
+            for item in item.children {
+                tocItems.append(item)
+            }
+        }
+        return tocItems
     }
     
     /**
