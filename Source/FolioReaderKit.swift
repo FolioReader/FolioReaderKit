@@ -54,7 +54,6 @@ public class FolioReader : NSObject {
     static let sharedInstance = FolioReader()
     static let defaults = NSUserDefaults.standardUserDefaults()
     weak var readerCenter: FolioReaderCenter!
-    weak var readerSidePanel: FolioReaderChapterList!
     weak var readerContainer: FolioReaderContainer!
     weak var readerAudioPlayer: FolioReaderAudioPlayer!
     var isReaderOpen = false

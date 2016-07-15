@@ -170,7 +170,6 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
             FolioReader.sharedInstance.nightMode = Bool(index)
             
             let readerCenter = FolioReader.sharedInstance.readerCenter
-            let readerSidePanel = FolioReader.sharedInstance.readerSidePanel
             
             switch index {
             case 0:
@@ -181,8 +180,6 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
                     readerCenter.configureNavBar()
                     readerCenter.scrollScrubber.updateColors()
                 })
-//                readerSidePanel.tableView.backgroundColor = readerConfig.menuBackgroundColor
-//                readerSidePanel.tableView.separatorColor = readerConfig.menuSeparatorColor
                 break
             case 1:
                 currentPage.webView.js("nightMode(true)")
@@ -192,8 +189,6 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
                     readerCenter.configureNavBar()
                     readerCenter.scrollScrubber.updateColors()
                 })
-//                readerSidePanel.tableView.backgroundColor = readerConfig.nightModeMenuBackground
-//                readerSidePanel.tableView.separatorColor = readerConfig.nightModeSeparatorColor
                 break
             default:
                 break

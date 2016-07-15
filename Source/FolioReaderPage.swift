@@ -152,7 +152,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     func webViewDidFinishLoad(webView: UIWebView) {
         self.refreshPageMode()
         
-        if (!book.hasAudio()) {
+        if (readerConfig.enableTTS) {
             FolioReader.sharedInstance.readerAudioPlayer.delegate = self;
             self.webView.js("wrappingSentencesWithinPTags()");
             if (FolioReader.sharedInstance.readerAudioPlayer.isPlaying()) {
@@ -205,8 +205,9 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
 
             let decoded = url?.absoluteString.stringByRemovingPercentEncoding as String!
             let playID = decoded.substringFromIndex(decoded.startIndex.advancedBy(13))
-
-            FolioReader.sharedInstance.readerCenter.playAudio(playID)
+            let chapter = FolioReader.sharedInstance.readerCenter.getCurrentChapter()
+            let href = chapter != nil ? chapter!.href : "";
+            FolioReader.sharedInstance.readerAudioPlayer.playAudio(href, fragmentID: playID)
 
             return false
         } else if url?.scheme == "file" {

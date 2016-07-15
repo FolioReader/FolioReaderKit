@@ -177,9 +177,9 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate, AVSpeechSynthesiz
      If this chapter does not have audio, it will delay for a second, then attempt to play the next chapter
     */
     func playAudio(href: String, fragmentID: String) {
-        isTextToSpeech = false;
+        isTextToSpeech = false
         
-        stop();
+        stop()
 
         let smilFile = book.smilFileForHref(href)
 
@@ -214,7 +214,7 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate, AVSpeechSynthesiz
         playNextChapter()
     }
 
-    func playPrevChapter(){
+    func playPrevChapter() {
         stopPlayerTimer()
         // Wait for "currentPage" to update, then request to play audio
         FolioReader.sharedInstance.readerCenter.changePageToPrevious { () -> Void in

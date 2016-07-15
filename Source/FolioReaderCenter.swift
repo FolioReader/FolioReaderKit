@@ -661,13 +661,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     // MARK: - Audio Playing
 
-    func playAudio(fragmentID: String){
-
-        let chapter = getCurrentChapter()
-        let href = chapter != nil ? chapter!.href : "";
-        FolioReader.sharedInstance.readerAudioPlayer.playAudio(href, fragmentID: fragmentID)
-    }
-
     func audioMark(href href: String, fragmentID: String) {
         changePageWith(href: href, andAudioMarkID: fragmentID)
     }
