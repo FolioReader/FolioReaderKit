@@ -166,7 +166,7 @@ public class FolioReader : NSObject {
         FolioReader.saveReaderState()
         FolioReader.sharedInstance.isReaderOpen = false
         FolioReader.sharedInstance.isReaderReady = false
-        FolioReader.sharedInstance.readerAudioPlayer.stop()
+        FolioReader.sharedInstance.readerAudioPlayer.stop(immediate: true)
     }
 }
 

@@ -118,7 +118,7 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate, AVSpeechSynthesiz
         }
     }
 
-    func stop() {
+    func stop(immediate immediate: Bool = false) {
         playing = false
 		if (!isTextToSpeech) {
 			if (player != nil && player.playing) {
@@ -127,7 +127,11 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate, AVSpeechSynthesiz
 				UIApplication.sharedApplication().idleTimerDisabled = false
 			}
 		} else {
-            synthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Word)
+            if immediate {
+                synthesizer.stopSpeakingAtBoundary(.Immediate)
+            } else {
+                synthesizer.stopSpeakingAtBoundary(.Word)
+            }
 		}
     }
     
