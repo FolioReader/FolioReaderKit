@@ -8,14 +8,16 @@
 
 import UIKit
 
-class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UIPageViewControllerDataSource {
+class PageViewController: UIPageViewController {
     
     var segmentedControl: UISegmentedControl!
-    var viewList = NSArray()
+    var viewList = [UIViewController]()
     var segmentedControlItems = [String]()
     var viewControllerOne: UIViewController!
     var viewControllerTwo: UIViewController!
     var index = 0
+    
+    // MARK: Init
     
     override init(transitionStyle style: UIPageViewControllerTransitionStyle, navigationOrientation: UIPageViewControllerNavigationOrientation, options: [String : AnyObject]?) {
         super.init(transitionStyle: style, navigationOrientation: navigationOrientation, options: options)
@@ -45,8 +47,17 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UI
         
         self.delegate = self
         self.dataSource = self
+        
         self.view.backgroundColor = UIColor.whiteColor()
         self.setViewControllers([viewControllerOne], direction: .Forward, animated: false, completion: nil)
+        
+        // FIXME: This disable scroll because of highlight swipe to delete, if you can fix this would be awesome
+        for view in self.view.subviews {
+            if view is UIScrollView {
+                let scroll = view as! UIScrollView
+                scroll.bounces = false
+            }
+        }
         
         setCloseButton()
     }
@@ -62,51 +73,6 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UI
         let navText = isNight(UIColor.whiteColor(), UIColor.blackColor())
         let font = UIFont(name: "Avenir-Light", size: 17)!
         setTranslucentNavigation(false, color: navBackground, tintColor: tintColor, titleColor: navText, andFont: font)
-    }
-    
-    // MARK: - Page View Controller Data Source
-    
-    func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController? {
-        
-        let index = viewList.indexOfObject(viewController)
-        if index == viewList.count - 1 {
-            return nil
-        }
-        
-        self.index = self.index + 1
-        return self.viewControllerAtIndex(self.index)
-    }
-    
-    func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController? {
-        
-        let index = viewList.indexOfObject(viewController)
-        if index == 0 {
-            return nil
-        }
-        
-        self.index = self.index - 1
-        return self.viewControllerAtIndex(self.index)
-    }
-    
-    func viewControllerAtIndex(index: Int) -> UIViewController! {
-        switch index {
-        case 0:
-            return viewControllerOne
-        case 1:
-            return viewControllerTwo
-        default:
-            return nil
-        }
-    }
-    
-    // MARK: - Page View Controller Delegate
-    
-    func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-        
-        if finished && completed {
-            let viewController = pageViewController.viewControllers?.last
-            segmentedControl.selectedSegmentIndex = viewList.indexOfObject(viewController!)
-        }
     }
     
     // MARK: - Segmented control changes
@@ -130,3 +96,44 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UI
         return isNight(.LightContent, .Default)
     }
 }
+
+// MARK: UIPageViewControllerDelegate
+
+extension PageViewController: UIPageViewControllerDelegate {
+    
+    func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        
+        if finished && completed {
+            let viewController = pageViewController.viewControllers?.last
+            segmentedControl.selectedSegmentIndex = viewList.indexOf(viewController!)!
+        }
+    }
+}
+
+// MARK: UIPageViewControllerDataSource
+
+extension PageViewController: UIPageViewControllerDataSource {
+    
+    func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController? {
+        
+        let index = viewList.indexOf(viewController)!
+        if index == viewList.count - 1 {
+            return nil
+        }
+        
+        self.index = self.index + 1
+        return viewList[self.index]
+    }
+    
+    func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController? {
+        
+        let index = viewList.indexOf(viewController)!
+        if index == 0 {
+            return nil
+        }
+        
+        self.index = self.index - 1
+        return viewList[self.index]
+    }
+}
+

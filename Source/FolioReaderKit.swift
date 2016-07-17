@@ -580,27 +580,13 @@ internal extension UINavigationBar {
     }
 }
 
- extension UINavigationController {
+extension UINavigationController {
     
     public override func preferredStatusBarStyle() -> UIStatusBarStyle {
         if let vc = visibleViewController {
             return vc.preferredStatusBarStyle()
         }
         return .Default
-    }
-    
-    public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        if let vc = visibleViewController {
-            return vc.supportedInterfaceOrientations()
-        }
-        return .AllButUpsideDown
-    }
-    
-    public override func shouldAutorotate() -> Bool {
-        if let vc = visibleViewController {
-            return vc.shouldAutorotate()
-        }
-        return false
     }
 }
 
