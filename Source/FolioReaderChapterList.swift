@@ -34,6 +34,9 @@ class FolioReaderChapterList: UITableViewController {
         tableView.backgroundColor = isNight(readerConfig.nightModeMenuBackground, readerConfig.menuBackgroundColor)
         tableView.separatorColor = isNight(readerConfig.nightModeSeparatorColor, readerConfig.menuSeparatorColor)
         
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 50
+        
         // Create TOC list
         tocItems = book.flatTableOfContents
     }
@@ -47,10 +50,6 @@ class FolioReaderChapterList: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tocItems.count
     }
-    
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 60
-    }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) as! FolioReaderChapterListCell
@@ -59,9 +58,8 @@ class FolioReaderChapterList: UITableViewController {
         let isSection = tocReference.children.count > 0
         
         cell.indexLabel.text = tocReference.title.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        cell.indexLabel.font = UIFont(name: "Avenir-Light", size: 17)
-        cell.indexLabel.textColor = readerConfig.menuTextColor
 
+        // Add audio duration for Media Ovelay
         if let resource = tocReference.resource {
             if(resource.mediaOverlay != nil){
                 let duration = book.durationFor("#"+resource.mediaOverlay);
@@ -77,17 +75,10 @@ class FolioReaderChapterList: UITableViewController {
             cell.indexLabel.textColor = tocReference.resource!.href == resource.href ? readerConfig.tintColor : readerConfig.menuTextColor
         }
         
-        cell.layoutMargins = UIEdgeInsetsZero
-        cell.preservesSuperviewLayoutMargins = false
+//        cell.layoutMargins = UIEdgeInsetsZero
+//        cell.preservesSuperviewLayoutMargins = false
         cell.contentView.backgroundColor = isSection ? UIColor(white: 0.7, alpha: 0.1) : UIColor.clearColor()
         cell.backgroundColor = UIColor.clearColor()
-        
-        // Adjust text position
-        cell.indexLabel.center = cell.contentView.center
-        var frame = cell.indexLabel.frame
-        frame.origin = isSection ? CGPoint(x: 40, y: frame.origin.y) : CGPoint(x: 20, y: frame.origin.y)
-        cell.indexLabel.frame = frame
-
         return cell
     }
     

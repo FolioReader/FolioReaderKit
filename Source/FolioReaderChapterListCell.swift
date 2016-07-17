@@ -14,9 +14,26 @@ class FolioReaderChapterListCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        indexLabel.frame = contentView.frame
-        indexLabel.autoresizingMask = UIViewAutoresizing.FlexibleWidth
+        indexLabel.lineBreakMode = .ByWordWrapping
+        indexLabel.numberOfLines = 0
+        indexLabel.translatesAutoresizingMaskIntoConstraints = false
+        indexLabel.font = UIFont(name: "Avenir-Light", size: 17)
+        indexLabel.textColor = readerConfig.menuTextColor
         contentView.addSubview(indexLabel)
+        
+        // Configure cell contraints
+        var constraints = [NSLayoutConstraint]()
+        let views = ["label": self.indexLabel]
+        
+        NSLayoutConstraint.constraintsWithVisualFormat("H:|-15-[label]-15-|", options: [], metrics: nil, views: views).map {
+            constraints.append($0 as NSLayoutConstraint)
+        }
+        
+        NSLayoutConstraint.constraintsWithVisualFormat("V:|-16-[label]-16-|", options: [], metrics: nil, views: views).map {
+            constraints.append($0 as NSLayoutConstraint)
+        }
+        
+        contentView.addConstraints(constraints)
     }
     
     required init?(coder aDecoder: NSCoder) {
