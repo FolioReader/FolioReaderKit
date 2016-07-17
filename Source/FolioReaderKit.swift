@@ -453,10 +453,24 @@ internal extension String {
 
 internal extension UIImage {
     convenience init?(readerImageNamed: String) {
-        let traits = UITraitCollection(displayScale: UIScreen.mainScreen().scale)
-        self.init(named: readerImageNamed, inBundle: NSBundle.frameworkBundle(), compatibleWithTraitCollection: traits)
+        self.init(named: readerImageNamed, inBundle: NSBundle.frameworkBundle(), compatibleWithTraitCollection: nil)
     }
     
+    /**
+     Forces the image to be colored with Reader Config tintColor
+     
+     - returns: Returns a colored image
+     */
+    func ignoreSystemTint() -> UIImage {
+        return self.imageTintColor(readerConfig.tintColor).imageWithRenderingMode(.AlwaysOriginal)
+    }
+    
+    /**
+     Colorize the image with a color
+     
+     - parameter tintColor: The input color
+     - returns: Returns a colored image
+     */
     func imageTintColor(tintColor: UIColor) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
         
@@ -476,6 +490,12 @@ internal extension UIImage {
         return newImage
     }
     
+    /**
+     Generate a image with a color
+     
+     - parameter color: The input color
+     - returns: Returns a colored image
+     */
     class func imageWithColor(color: UIColor?) -> UIImage! {
         let rect = CGRectMake(0.0, 0.0, 1.0, 1.0)
         UIGraphicsBeginImageContextWithOptions(rect.size, false, 0)
@@ -498,7 +518,8 @@ internal extension UIImage {
 internal extension UIViewController {
     
     func setCloseButton() {
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(readerImageNamed: "icon-close"), style: .Plain, target: self, action: #selector(dismiss as Void -> Void))
+        let closeImage = UIImage(readerImageNamed: "icon-navbar-close")?.ignoreSystemTint()
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: closeImage, style: .Plain, target: self, action: #selector(dismiss as Void -> Void))
     }
     
     func dismiss() {

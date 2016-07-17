@@ -124,26 +124,26 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     func configureNavBarButtons() {
 
         // Navbar buttons
-        let shareIcon = UIImage(readerImageNamed: "btn-navbar-share")
-        let audioIcon = UIImage(readerImageNamed: "man-speech-icon")
-        let closeIcon = UIImage(readerImageNamed: "icon-close")
-        let fontIcon = UIImage(readerImageNamed: "icon-font")
+        let shareIcon = UIImage(readerImageNamed: "icon-navbar-share")?.ignoreSystemTint()
+        let audioIcon = UIImage(readerImageNamed: "icon-navbar-tts")?.ignoreSystemTint() //man-speech-icon
+        let closeIcon = UIImage(readerImageNamed: "icon-navbar-close")?.ignoreSystemTint()
+        let tocIcon = UIImage(readerImageNamed: "icon-navbar-toc")?.ignoreSystemTint()
+        let fontIcon = UIImage(readerImageNamed: "icon-navbar-font")?.ignoreSystemTint()
         let space = 70 as CGFloat
 
-        let menu = UIBarButtonItem(image: closeIcon, style: UIBarButtonItemStyle.Plain, target: self, action:#selector(closeReader(_:)))
-        
-        let toc = UIBarButtonItem(image: closeIcon, style: UIBarButtonItemStyle.Plain, target: self, action:#selector(presentChapterList(_:)))
+        let menu = UIBarButtonItem(image: closeIcon, style: .Plain, target: self, action:#selector(closeReader(_:)))
+        let toc = UIBarButtonItem(image: tocIcon, style: .Plain, target: self, action:#selector(presentChapterList(_:)))
         
         navigationItem.leftBarButtonItems = [menu, toc]
         
         var rightBarIcons = [UIBarButtonItem]()
 
         if readerConfig.allowSharing {
-            rightBarIcons.append(UIBarButtonItem(image: shareIcon, style: UIBarButtonItemStyle.Plain, target: self, action:#selector(shareChapter(_:))))
+            rightBarIcons.append(UIBarButtonItem(image: shareIcon, style: .Plain, target: self, action:#selector(shareChapter(_:))))
         }
 
         if book.hasAudio() || readerConfig.enableTTS {
-            rightBarIcons.append(UIBarButtonItem(image: audioIcon, style: UIBarButtonItemStyle.Plain, target: self, action:#selector(presentPlayerMenu(_:))))
+            rightBarIcons.append(UIBarButtonItem(image: audioIcon, style: .Plain, target: self, action:#selector(presentPlayerMenu(_:))))
         }
         
         let font = UIBarButtonItem(image: fontIcon, style: .Plain, target: self, action: #selector(presentFontsMenu))
@@ -474,13 +474,13 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             
             switch scrollDirection {
             case .Up:
-                if first.compare(last) == NSComparisonResult.OrderedAscending {
+                if first.compare(last) == .OrderedAscending {
                     indexPath = last
                 } else {
                     indexPath = first
                 }
             default:
-                if first.compare(last) == NSComparisonResult.OrderedAscending {
+                if first.compare(last) == .OrderedAscending {
                     indexPath = first
                 } else {
                     indexPath = last
