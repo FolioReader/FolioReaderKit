@@ -205,6 +205,12 @@ extension CGSize {
     }
 }
 
+extension CGRect {
+    func forDirection() -> CGFloat {
+        return isVerticalDirection(self.height, self.width)
+    }
+}
+
 extension ScrollDirection {
     static func negative() -> ScrollDirection {
         return isVerticalDirection(.Down, .Right)

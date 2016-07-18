@@ -11,16 +11,20 @@ import SafariServices
 import UIMenuItem_CXAImageSupport
 import JSQWebViewController
 
-@objc protocol FolioPageDelegate: class {
-    optional func pageDidLoad(page: FolioReaderPage)
+protocol FolioReaderPageDelegate: class {
+    /**
+     Notify that page did loaded
+     
+     - parameter page: The loaded page
+     */
+    func pageDidLoad(page: FolioReaderPage)
 }
 
 class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate, FolioReaderAudioPlayerDelegate {
     
+    weak var delegate: FolioReaderPageDelegate?
     var pageNumber: Int!
     var webView: UIWebView!
-    private var colorView: UIView!
-    weak var delegate: FolioPageDelegate!
     private var shouldShowBar = true
     private var menuIsVisible = false
     
@@ -29,8 +33,6 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.whiteColor()
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.refreshPageMode), name: "needRefreshPageMode", object: nil)
         
         if webView == nil {
             webView = UIWebView(frame: webViewFrame())
@@ -53,34 +55,14 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
             webView.scrollView.bounces = true
         }
         
-        if colorView == nil {
-            colorView = UIView();
-            colorView.backgroundColor = UIColor(rgba: "#131313")
-            webView.scrollView.addSubview(colorView);
-        }
-        
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(FolioReaderPage.handleTapGesture(_:)))
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:)))
         tapGestureRecognizer.numberOfTapsRequired = 1
         tapGestureRecognizer.delegate = self
         webView.addGestureRecognizer(tapGestureRecognizer)
-        
-//        var swipeLeftGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(FolioReaderPage.handleSwipeGesture(_:)))
-//        swipeLeftGestureRecognizer.direction = .Left
-//        swipeLeftGestureRecognizer.delegate = self
-//        webView.addGestureRecognizer(swipeLeftGestureRecognizer)
-//        
-//        var swipeRightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(FolioReaderPage.handleSwipeGesture(_:)))
-//        swipeRightGestureRecognizer.direction = .Right
-//        swipeRightGestureRecognizer.delegate = self
-//        webView.addGestureRecognizer(swipeRightGestureRecognizer)
     }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-    }
-    
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     override func layoutSubviews() {
@@ -142,16 +124,9 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         webView.loadHTMLString(html as String, baseURL: baseURL)
     }
     
-    // MARK: - FolioReaderAudioPlayerDelegate
-    func didReadSentence() {
-        self.readCurrentSentence();
-    }
-    
     // MARK: - UIWebView Delegate
     
     func webViewDidFinishLoad(webView: UIWebView) {
-        self.refreshPageMode()
-        
         if (readerConfig.enableTTS) {
             FolioReader.sharedInstance.readerAudioPlayer.delegate = self;
             self.webView.js("wrappingSentencesWithinPTags()");
@@ -159,8 +134,6 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
                 readCurrentSentence()
             }
         }
-
-//        webView.scrollView.contentSize = CGSizeMake(pageWidth, webView.scrollView.contentSize.height)
         
         if scrollDirection == .negative() && isScrolling {
             let bottomOffset = isVerticalDirection(
@@ -180,9 +153,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
             self.webView.createMenu(options: false)
         }
 
-        delegate.pageDidLoad!(self)
-        
-        
+        delegate?.pageDidLoad(self)
     }
     
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
@@ -231,7 +202,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
                 if hrefPage == pageNumber {
                     // Handle internal #anchor
                     if anchorFromURL != nil {
-                        handleAnchor(anchorFromURL!, avoidBeginningAnchors: false, animating: true)
+                        handleAnchor(anchorFromURL!, avoidBeginningAnchors: false, animated: true)
                         return false
                     }
                 } else {
@@ -243,7 +214,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
             
             // Handle internal #anchor
             if anchorFromURL != nil {
-                handleAnchor(anchorFromURL!, avoidBeginningAnchors: false, animating: true)
+                handleAnchor(anchorFromURL!, avoidBeginningAnchors: false, animated: true)
                 return false
             }
             
@@ -263,10 +234,8 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
                 nav.view.tintColor = readerConfig.tintColor
                 FolioReader.sharedInstance.readerCenter.presentViewController(nav, animated: true, completion: nil)
             }
-            
             return false
         }
-        
         return true
     }
     
@@ -315,88 +284,62 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         menuIsVisible = false
     }
     
-    func handleSwipeGesture(recognizer: UISwipeGestureRecognizer) {
-        let width = self.webView.bounds.size.width
-        let currentPageNum = Int(self.webView.scrollView.contentOffset.x / width)
-        var totalPageNum = Int(self.webView.scrollView.contentSize.width / width)
-        if self.webView.scrollView.contentSize.width % width != 0 {
-            totalPageNum += 1
-        }
-        
-        switch recognizer.direction {
-        case UISwipeGestureRecognizerDirection.Left:
-            if currentPageNum < totalPageNum - 1 {
-//                self.webView.scrollView.contentOffset = CGPointMake(CGFloat(currentPageNum + 1) * width, 0)
-//                self.transition("pageCurl", subtype: kCATransitionFromRight, view: self.webView)
-            } else {
-                FolioReader.sharedInstance.readerCenter.changePageToNext()
-            }
-        case UISwipeGestureRecognizerDirection.Right:
-            if currentPageNum > 0 {
-//                self.webView.scrollView.contentOffset = CGPointMake(CGFloat(currentPageNum - 1) * width, 0)
-//                self.transition("pageCurl", subtype: kCATransitionFromLeft, view: self.webView)
-            } else {
-                if self.webView.scrollView.contentOffset.x == 0 {
-                    FolioReader.sharedInstance.readerCenter.changePageToPrevious()
-                }
-            }
-        default:
-            break
-        }
-        
+    // MARK: - Scroll and positioning
+    
+    /**
+     Scrolls the page to a given offset
+     
+     - parameter offset:   The offset to scroll
+     - parameter animated: Enable or not scrolling animation
+     */
+    func scrollPageToOffset(offset: CGFloat, animated: Bool) {
+        let pageOffsetPoint = isVerticalDirection(CGPoint(x: 0, y: offset), CGPoint(x: offset, y: 0))
+        webView.scrollView.setContentOffset(pageOffsetPoint, animated: animated)
     }
     
-    func transition(type: String, subtype: String, view: UIView) {
-        let animation = CATransition();
-        animation.duration = 0.7
-        animation.type = type
-        animation.subtype = subtype
-        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-        view.layer.addAnimation(animation, forKey: "animation")
-    }
-    
-    // MARK: - Scroll positioning
-    
-    func scrollPageToOffset(offset: String, animating: Bool) {
-        let jsCommand = isVerticalDirection("window.scrollTo(0,\(offset));", "window.scrollTo(\(offset),0);")
-        if animating {
-            UIView.animateWithDuration(0.35, animations: {
-                self.webView.js(jsCommand)
-            })
-        } else {
-            webView.js(jsCommand)
-        }
-    }
-    
-    func handleAnchor(anchor: String,  avoidBeginningAnchors: Bool, animating: Bool) {
+    /**
+     Handdle #anchors in html, get the offset and scroll to it
+     
+     - parameter anchor:                The #anchor
+     - parameter avoidBeginningAnchors: Sometimes the anchor is on the beggining of the text, there is not need to scroll
+     - parameter animated:              Enable or not scrolling animation
+     */
+    func handleAnchor(anchor: String,  avoidBeginningAnchors: Bool, animated: Bool) {
         if !anchor.isEmpty {
-            if let offset = getAnchorOffset(anchor) {
-                let isBeginning = CGFloat((offset as NSString).floatValue) > self.frame.height/2
-                
-                if !avoidBeginningAnchors {
-                    scrollPageToOffset(offset, animating: animating)
-                } else if avoidBeginningAnchors && isBeginning {
-                    scrollPageToOffset(offset, animating: animating)
-                }
+            let offset = getAnchorOffset(anchor)
+            let isBeginning = offset > self.frame.forDirection()/2
+            
+            if !avoidBeginningAnchors {
+                scrollPageToOffset(offset, animated: animated)
+            } else if avoidBeginningAnchors && isBeginning {
+                scrollPageToOffset(offset, animated: animated)
             }
         }
     }
     
-    func getAnchorOffset(anchor: String) -> String? {
-        let jsAnchorHandler = "(function() {var target = '\(anchor)';var elem = document.getElementById(target); if (!elem) elem=document.getElementsByName(target)[0];return elem.offsetTop;})();"
-        return webView.js(jsAnchorHandler)
-    }
-    
-    override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
-
-        if UIMenuController.sharedMenuController().menuItems?.count == 0 {
-            webView.isColors = false
-            webView.createMenu(options: false)
+    /**
+     Get the #anchor offset in the page
+     
+     - parameter anchor: The #anchor id
+     - returns: The element offset ready to scroll
+     */
+    func getAnchorOffset(anchor: String) -> CGFloat {
+        let horizontal = readerConfig.scrollDirection == .horizontal
+        if let strOffset = webView.js("getAnchorOffset('\(anchor)', \(horizontal.description))") {
+            return CGFloat((strOffset as NSString).floatValue)
         }
         
-        return super.canPerformAction(action, withSender: sender)
+        return CGFloat(0)
+    }
+    
+    // MARK: - FolioReaderAudioPlayerDelegate
+    
+    func didReadSentence() {
+        self.readCurrentSentence();
     }
 
+    // MARK: Audio on Page
+    
     func playAudio(){
 		if (book.hasAudio()) {
             webView.js("playAudio()")
@@ -443,17 +386,14 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         self.webView.js("audioMarkID('\(book.playbackActiveClass())','\(ID)')");
     }
     
-    func refreshPageMode() {
-        if FolioReader.sharedInstance.nightMode {
-            // omit create webView and colorView
-            let script = "document.documentElement.offsetHeight"
-            let contentHeight = webView.stringByEvaluatingJavaScriptFromString(script)
-            let frameHeight = webView.frame.height
-            let lastPageHeight = frameHeight * CGFloat(webView.pageCount) - CGFloat(Double(contentHeight!)!)
-            colorView.frame = CGRectMake(webView.frame.width * CGFloat(webView.pageCount-1), webView.frame.height - lastPageHeight, webView.frame.width, lastPageHeight)
-        } else {
-            colorView.frame = CGRectZero
+    // MARK: UIMenu visibility
+    
+    override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
+        if UIMenuController.sharedMenuController().menuItems?.count == 0 {
+            webView.isColors = false
+            webView.createMenu(options: false)
         }
+        return super.canPerformAction(action, withSender: sender)
     }
 }
 
@@ -504,8 +444,8 @@ extension UIWebView {
             if action == #selector(UIWebView.highlight(_:))
             || (action == #selector(UIWebView.define(_:)) && isOneWord)
             || (action == #selector(UIWebView.play(_:)) && (book.hasAudio() || readerConfig.enableTTS))
-            || (action == #selector(UIWebView.share(_:)) && readerConfig.allowSharing == true)
-            || (action == #selector(NSObject.copy(_:)) && readerConfig.allowSharing == true) {
+            || (action == #selector(UIWebView.share(_:)) && readerConfig.allowSharing)
+            || (action == #selector(NSObject.copy(_:)) && readerConfig.allowSharing) {
                 return true
             }
             return false
@@ -674,7 +614,6 @@ extension UIWebView {
     
     func js(script: String) -> String? {
         let callback = self.stringByEvaluatingJavaScriptFromString(script)
-        NSNotificationCenter.defaultCenter().postNotificationName("needRefreshPageMode", object: nil)
         if callback!.isEmpty { return nil }
         return callback
     }

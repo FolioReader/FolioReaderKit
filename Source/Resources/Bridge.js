@@ -164,6 +164,22 @@ function getReadingTime() {
     return readingTimeMinutes;
 }
 
+/**
+ Get Vertical or Horizontal paged #anchor offset
+ */
+var getAnchorOffset = function(target, horizontal) {
+    var elem = document.getElementById(target);
+    
+    if (!elem) {
+        elem = document.getElementsByName(target)[0];
+    }
+    
+    if (horizontal) {
+        return document.body.clientWidth * Math.floor(elem.offsetTop / window.innerHeight);
+    }
+    
+    return elem.offsetTop;
+}
 
 function findElementWithID(node) {
     if( !node || node.tagName == "BODY")
@@ -521,6 +537,3 @@ function wrappingSentencesWithinPTags(){
     
     guessSenetences();
 }
-                                                         
-                                                         
-

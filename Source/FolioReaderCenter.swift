@@ -105,9 +105,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        // Reset load
-        isFirstLoad = true
-        
         // Update pages
         pagesForCurrentPage(currentPage)
         pageIndicatorView.reloadView(updateShadow: true)
@@ -514,7 +511,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     func changePageWith(page page: Int, andFragment fragment: String, animated: Bool = false, completion: (() -> Void)? = nil) {
         if currentPageNumber == page {
             if fragment != "" && currentPage != nil {
-                currentPage.handleAnchor(fragment, avoidBeginningAnchors: true, animating: animated)
+                currentPage.handleAnchor(fragment, avoidBeginningAnchors: true, animated: animated)
                 completion?()
             }
         } else {
@@ -791,7 +788,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         if let currentPage = currentPage {
             currentPage.webView.createMenu(options: true)
             currentPage.webView.setMenuVisible(false)
-            currentPage.refreshPageMode()
         }
         
         scrollScrubber.scrollViewWillBeginDragging(scrollView)
@@ -918,7 +914,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
 
 // MARK: FolioPageDelegate
 
-extension FolioReaderCenter: FolioPageDelegate {
+extension FolioReaderCenter: FolioReaderPageDelegate {
     
     func pageDidLoad(page: FolioReaderPage) {
         
@@ -935,7 +931,7 @@ extension FolioReaderCenter: FolioPageDelegate {
                 isFirstLoad = false
                 
                 if currentPageNumber == pageNumber && pageOffset > 0 {
-                    page.scrollPageToOffset("\(pageOffset)", animating: false)
+                    page.scrollPageToOffset(pageOffset, animated: false)
                 }
             }
             
@@ -945,8 +941,8 @@ extension FolioReaderCenter: FolioPageDelegate {
         }
         
         // Go to fragment if needed
-        if let fragment = tempFragment where fragment != "" && currentPage != nil {
-            currentPage.handleAnchor(fragment, avoidBeginningAnchors: true, animating: true)
+        if let fragmentID = tempFragment where fragmentID != "" && currentPage != nil {
+            currentPage.handleAnchor(fragmentID, avoidBeginningAnchors: true, animated: true)
             tempFragment = nil
         }
     }
@@ -974,9 +970,9 @@ extension FolioReaderCenter: FolioReaderChapterListDelegate {
         updateCurrentPage()
         
         // Move to #fragment
-        if tempReference != nil {
-            if tempReference!.fragmentID != "" && currentPage != nil {
-                currentPage.handleAnchor(tempReference!.fragmentID!, avoidBeginningAnchors: true, animating: true)
+        if let reference = tempReference {
+            if let fragmentID = reference.fragmentID where fragmentID != "" && currentPage != nil {
+                currentPage.handleAnchor(reference.fragmentID!, avoidBeginningAnchors: false, animated: true)
             }
             tempReference = nil
         }
