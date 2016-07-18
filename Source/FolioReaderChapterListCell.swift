@@ -25,11 +25,11 @@ class FolioReaderChapterListCell: UITableViewCell {
         var constraints = [NSLayoutConstraint]()
         let views = ["label": self.indexLabel]
         
-        NSLayoutConstraint.constraintsWithVisualFormat("H:|-15-[label]-15-|", options: [], metrics: nil, views: views).map {
+        NSLayoutConstraint.constraintsWithVisualFormat("H:|-15-[label]-15-|", options: [], metrics: nil, views: views).forEach {
             constraints.append($0 as NSLayoutConstraint)
         }
         
-        NSLayoutConstraint.constraintsWithVisualFormat("V:|-16-[label]-16-|", options: [], metrics: nil, views: views).map {
+        NSLayoutConstraint.constraintsWithVisualFormat("V:|-16-[label]-16-|", options: [], metrics: nil, views: views).forEach {
             constraints.append($0 as NSLayoutConstraint)
         }
         
