@@ -57,7 +57,7 @@ class FolioReaderChapterList: UITableViewController {
         let tocReference = tocItems[indexPath.row]
         let isSection = tocReference.children.count > 0
         
-        cell.indexLabel.text = tocReference.title.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        cell.indexLabel.text = tocReference.title.stringByTrimmingCharactersInSet(.whitespaceCharacterSet())
 
         // Add audio duration for Media Ovelay
         if let resource = tocReference.resource {
@@ -75,8 +75,8 @@ class FolioReaderChapterList: UITableViewController {
             cell.indexLabel.textColor = tocReference.resource == resource ? readerConfig.tintColor : readerConfig.menuTextColor
         }
         
-//        cell.layoutMargins = UIEdgeInsetsZero
-//        cell.preservesSuperviewLayoutMargins = false
+        cell.layoutMargins = UIEdgeInsetsZero
+        cell.preservesSuperviewLayoutMargins = false
         cell.contentView.backgroundColor = isSection ? UIColor(white: 0.7, alpha: 0.1) : UIColor.clearColor()
         cell.backgroundColor = UIColor.clearColor()
         return cell
