@@ -97,6 +97,8 @@ class FolioReaderHighlightList: UITableViewController {
         highlightLabel.sizeToFit()
         highlightLabel.frame = CGRect(x: 20, y: 46, width: view.frame.width-40, height: highlightLabel.frame.height)
         
+        cell.layoutMargins = UIEdgeInsetsZero
+        cell.preservesSuperviewLayoutMargins = false
         return cell
     }
     

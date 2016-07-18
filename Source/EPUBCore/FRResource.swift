@@ -24,3 +24,9 @@ class FRResource: NSObject {
         return paths.joinWithSeparator("/")
     }
 }
+
+// MARK: Equatable
+
+func ==(lhs: FRResource, rhs: FRResource) -> Bool {
+    return lhs.id == rhs.id && lhs.href == rhs.href
+}

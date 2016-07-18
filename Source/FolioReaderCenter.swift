@@ -601,7 +601,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     func findPageByResource(reference: FRTocReference) -> Int {
         var count = 0
         for item in book.spine.spineReferences {
-            if let resource = reference.resource where item.resource.href == resource.href {
+            if let resource = reference.resource where item.resource == resource {
                 return count
             }
             count += 1
@@ -630,7 +630,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         if let currentPageNumber = currentPageNumber {
             for item in book.flatTableOfContents {
                 if let reference = book.spine.spineReferences[safe: currentPageNumber-1], resource = item.resource
-                    where resource.href == reference.resource.href {
+                    where resource == reference.resource {
                     return item.resource
                 }
             }
@@ -645,7 +645,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         if let currentPageNumber = currentPageNumber {
             for item in book.flatTableOfContents {
                 if let reference = book.spine.spineReferences[safe: currentPageNumber-1], resource = item.resource
-                    where resource.href == reference.resource.href {
+                    where resource == reference.resource {
                     if let title = item.title {
                         return title
                     }

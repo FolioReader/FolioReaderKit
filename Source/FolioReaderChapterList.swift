@@ -72,7 +72,7 @@ class FolioReaderChapterList: UITableViewController {
         // Mark current reading chapter
         if let currentPageNumber = currentPageNumber, reference = book.spine.spineReferences[safe: currentPageNumber-1] where tocReference.resource != nil {
             let resource = reference.resource
-            cell.indexLabel.textColor = tocReference.resource!.href == resource.href ? readerConfig.tintColor : readerConfig.menuTextColor
+            cell.indexLabel.textColor = tocReference.resource == resource ? readerConfig.tintColor : readerConfig.menuTextColor
         }
         
 //        cell.layoutMargins = UIEdgeInsetsZero
