@@ -25,6 +25,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     weak var delegate: FolioReaderPageDelegate?
     var pageNumber: Int!
     var webView: UIWebView!
+    private var colorView: UIView!
     private var shouldShowBar = true
     private var menuIsVisible = false
     
@@ -32,7 +33,10 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = UIColor.whiteColor()
+        self.backgroundColor = UIColor.clearColor()
+        
+        // TODO: Put the notification name in a Constants file
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(refreshPageMode), name: "needRefreshPageMode", object: nil)
         
         if webView == nil {
             webView = UIWebView(frame: webViewFrame())
@@ -55,6 +59,12 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
             webView.scrollView.bounces = true
         }
         
+        if colorView == nil {
+            colorView = UIView()
+            colorView.backgroundColor = readerConfig.nightModeBackground
+            webView.scrollView.addSubview(colorView)
+        }
+        
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:)))
         tapGestureRecognizer.numberOfTapsRequired = 1
         tapGestureRecognizer.delegate = self
@@ -63,6 +73,10 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     override func layoutSubviews() {
@@ -127,6 +141,8 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     // MARK: - UIWebView Delegate
     
     func webViewDidFinishLoad(webView: UIWebView) {
+        refreshPageMode()
+        
         if (readerConfig.enableTTS) {
             FolioReader.sharedInstance.readerAudioPlayer.delegate = self;
             self.webView.js("wrappingSentencesWithinPTags()");
@@ -399,6 +415,20 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
             webView.createMenu(options: false)
         }
         return super.canPerformAction(action, withSender: sender)
+    }
+    
+    // MARK: ColorView fix for horizontal layout
+    func refreshPageMode() {
+        if FolioReader.sharedInstance.nightMode {
+            // omit create webView and colorView
+            let script = "document.documentElement.offsetHeight"
+            let contentHeight = webView.stringByEvaluatingJavaScriptFromString(script)
+            let frameHeight = webView.frame.height
+            let lastPageHeight = frameHeight * CGFloat(webView.pageCount) - CGFloat(Double(contentHeight!)!)
+            colorView.frame = CGRectMake(webView.frame.width * CGFloat(webView.pageCount-1), webView.frame.height - lastPageHeight, webView.frame.width, lastPageHeight)
+        } else {
+            colorView.frame = CGRectZero
+        }
     }
 }
 

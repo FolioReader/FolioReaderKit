@@ -194,6 +194,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
                 break
             }
             
+            NSNotificationCenter.defaultCenter().postNotificationName("needRefreshPageMode", object: nil)
         }
         
         if segmentView.tag == 2 {
