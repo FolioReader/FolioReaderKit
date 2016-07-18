@@ -972,7 +972,7 @@ extension FolioReaderCenter: FolioReaderChapterListDelegate {
         // Move to #fragment
         if let reference = tempReference {
             if let fragmentID = reference.fragmentID where fragmentID != "" && currentPage != nil {
-                currentPage.handleAnchor(reference.fragmentID!, avoidBeginningAnchors: false, animated: true)
+                currentPage.handleAnchor(reference.fragmentID!, avoidBeginningAnchors: true, animated: true)
             }
             tempReference = nil
         }

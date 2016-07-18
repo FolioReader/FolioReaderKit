@@ -307,11 +307,16 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     func handleAnchor(anchor: String,  avoidBeginningAnchors: Bool, animated: Bool) {
         if !anchor.isEmpty {
             let offset = getAnchorOffset(anchor)
-            let isBeginning = offset > self.frame.forDirection()/2
             
-            if !avoidBeginningAnchors {
-                scrollPageToOffset(offset, animated: animated)
-            } else if avoidBeginningAnchors && isBeginning {
+            if readerConfig.scrollDirection == .vertical {
+                let isBeginning = offset < frame.forDirection()/2
+                
+                if !avoidBeginningAnchors {
+                    scrollPageToOffset(offset, animated: animated)
+                } else if avoidBeginningAnchors && !isBeginning {
+                    scrollPageToOffset(offset, animated: animated)
+                }
+            } else {
                 scrollPageToOffset(offset, animated: animated)
             }
         }
