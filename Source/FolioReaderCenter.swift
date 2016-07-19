@@ -856,6 +856,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
      Present chapter list
      */
     func presentChapterList(sender: UIBarButtonItem) {
+        FolioReader.saveReaderState()
+        
         let chapter = FolioReaderChapterList()
         chapter.delegate = self
         let highlight = FolioReaderHighlightList()
@@ -873,6 +875,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
      Present fonts and settings menu
      */
     func presentFontsMenu() {
+        FolioReader.saveReaderState()
         hideBars()
         
         let menu = FolioReaderFontsMenu()
@@ -894,6 +897,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
      Present audio player menu
      */
     func presentPlayerMenu(sender: UIBarButtonItem) {
+        FolioReader.saveReaderState()
         hideBars()
 
         let menu = FolioReaderPlayerMenu()

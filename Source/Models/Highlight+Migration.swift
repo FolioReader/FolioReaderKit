@@ -39,7 +39,7 @@ extension Highlight {
                 realm.add(newHighlight, update: true)
             }
             try! realm.commitWrite()
-            FolioReader.defaults.setBool(true, forKey: "isMigrated")
+            FolioReader.defaults.setBool(true, forKey: kMigratedToRealm)
         } catch let error as NSError {
             print("Error on migrateuserDataToRealm : \(error)")
         }

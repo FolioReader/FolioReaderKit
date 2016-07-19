@@ -15,7 +15,7 @@ class PageViewController: UIPageViewController {
     var segmentedControlItems = [String]()
     var viewControllerOne: UIViewController!
     var viewControllerTwo: UIViewController!
-    var index = 0
+    var index = FolioReader.defaults.integerForKey(kCurrentTOCMenu)
     
     // MARK: Init
     
@@ -35,7 +35,7 @@ class PageViewController: UIPageViewController {
         
         segmentedControl = UISegmentedControl(items: segmentedControlItems)
         segmentedControl.addTarget(self, action: #selector(PageViewController.didSwitchMenu(_:)), forControlEvents: UIControlEvents.ValueChanged)
-        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.selectedSegmentIndex = index
         segmentedControl.setWidth(100, forSegmentAtIndex: 0)
         segmentedControl.setWidth(100, forSegmentAtIndex: 1)
         self.navigationItem.titleView = segmentedControl
@@ -49,7 +49,7 @@ class PageViewController: UIPageViewController {
         self.dataSource = self
         
         self.view.backgroundColor = UIColor.whiteColor()
-        self.setViewControllers([viewControllerOne], direction: .Forward, animated: false, completion: nil)
+        self.setViewControllers([viewList[index]], direction: .Forward, animated: false, completion: nil)
         
         // FIXME: This disable scroll because of highlight swipe to delete, if you can fix this would be awesome
         for view in self.view.subviews {
@@ -78,16 +78,10 @@ class PageViewController: UIPageViewController {
     // MARK: - Segmented control changes
     
     func didSwitchMenu(sender: UISegmentedControl) {
-        switch sender.selectedSegmentIndex {
-        case 0:
-            self.index = 0
-            self.setViewControllers([viewControllerOne], direction: .Reverse, animated: true, completion: nil)
-        case 1:
-            self.index = 1
-            self.setViewControllers([viewControllerTwo], direction: .Forward, animated: true, completion: nil)
-        default:
-            break
-        }
+        index = sender.selectedSegmentIndex
+        let direction: UIPageViewControllerNavigationDirection = index == 0 ? .Reverse : .Forward
+        setViewControllers([viewList[index]], direction: direction, animated: true, completion: nil)
+        FolioReader.defaults.setInteger(index, forKey: kCurrentTOCMenu)
     }
     
     // MARK: - Status Bar

@@ -17,12 +17,14 @@ internal let isPhone = UIDevice.currentDevice().userInterfaceIdiom == .Phone
 // MARK: - Internal constants
 
 internal let kApplicationDocumentsDirectory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] 
-internal let kCurrentFontFamily = "kCurrentFontFamily"
-internal let kCurrentFontSize = "kCurrentFontSize"
-internal let kCurrentAudioRate = "kCurrentAudioRate"
-internal let kCurrentHighlightStyle = "kCurrentHighlightStyle"
-internal var kCurrentMediaOverlayStyle = "kMediaOverlayStyle"
-internal let kNightMode = "kNightMode"
+internal let kCurrentFontFamily = "com.folioreader.kCurrentFontFamily"
+internal let kCurrentFontSize = "com.folioreader.kCurrentFontSize"
+internal let kCurrentAudioRate = "com.folioreader.kCurrentAudioRate"
+internal let kCurrentHighlightStyle = "com.folioreader.kCurrentHighlightStyle"
+internal var kCurrentMediaOverlayStyle = "com.folioreader.kMediaOverlayStyle"
+internal let kNightMode = "com.folioreader.kNightMode"
+internal let kCurrentTOCMenu = "com.folioreader.kCurrentTOCMenu"
+internal let kMigratedToRealm = "com.folioreader.kMigratedToRealm"
 internal let kHighlightRange = 30
 internal var kBookId: String!
 
@@ -60,7 +62,7 @@ public class FolioReader : NSObject {
     var isReaderReady = false
     
     private override init() {
-        let isMigrated = FolioReader.defaults.boolForKey("isMigrated")
+        let isMigrated = FolioReader.defaults.boolForKey(kMigratedToRealm)
         if !isMigrated {
             Highlight.migrateUserDataToRealm()
         }
@@ -166,6 +168,7 @@ public class FolioReader : NSObject {
         FolioReader.sharedInstance.isReaderOpen = false
         FolioReader.sharedInstance.isReaderReady = false
         FolioReader.sharedInstance.readerAudioPlayer.stop(immediate: true)
+        FolioReader.defaults.setInteger(0, forKey: kCurrentTOCMenu)
     }
 }
 
