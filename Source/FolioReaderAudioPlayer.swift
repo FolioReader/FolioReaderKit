@@ -358,6 +358,8 @@ class FolioReaderAudioPlayer: NSObject, AVAudioPlayerDelegate, AVSpeechSynthesiz
             synthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Word)
         }
         synthesizer.speakUtterance(utterance)
+        
+        updateNowPlayingInfo()
     }
     
     // MARK: - Audio timing events
