@@ -21,7 +21,7 @@ class FRBook: NSObject {
     var coverImage: FRResource!
 
     func hasAudio() -> Bool {
-        return smils.smils.count > 0 ? true : false;
+        return smils.smils.count > 0 ? true : false
     }
 
     func title() -> String? {

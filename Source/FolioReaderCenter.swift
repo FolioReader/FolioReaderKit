@@ -543,10 +543,10 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         changePageWith(indexPath: indexPath, animated: true) { () -> Void in
             if pageUpdateNeeded {
                 self.updateCurrentPage({ () -> Void in
-                    self.currentPage.audioMarkID(markID);
+                    self.currentPage.audioMarkID(markID)
                 })
             } else {
-                self.currentPage.audioMarkID(markID);
+                self.currentPage.audioMarkID(markID)
             }
         }
     }

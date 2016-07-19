@@ -20,7 +20,7 @@ protocol FolioReaderPageDelegate: class {
     func pageDidLoad(page: FolioReaderPage)
 }
 
-class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate, FolioReaderAudioPlayerDelegate {
+class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate {
     
     weak var delegate: FolioReaderPageDelegate?
     var pageNumber: Int!
@@ -143,11 +143,11 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     func webViewDidFinishLoad(webView: UIWebView) {
         refreshPageMode()
         
-        if (readerConfig.enableTTS) {
-            FolioReader.sharedInstance.readerAudioPlayer.delegate = self;
-            self.webView.js("wrappingSentencesWithinPTags()");
-            if (FolioReader.sharedInstance.readerAudioPlayer.isPlaying()) {
-                readCurrentSentence()
+        if readerConfig.enableTTS && !book.hasAudio() {
+            webView.js("wrappingSentencesWithinPTags()");
+            
+            if FolioReader.sharedInstance.readerAudioPlayer.isPlaying() {
+                FolioReader.sharedInstance.readerAudioPlayer.readCurrentSentence()
             }
         }
         
@@ -353,58 +353,16 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         return CGFloat(0)
     }
     
-    // MARK: - FolioReaderAudioPlayerDelegate
+    // MARK: Mark ID
     
-    func didReadSentence() {
-        self.readCurrentSentence();
-    }
-
-    // MARK: Audio on Page
-    
-    func playAudio(){
-		if (book.hasAudio()) {
-            webView.js("playAudio()")
-		} else {
-			readCurrentSentence()
-		}
-    }
-    
-    func speakSentence(){
-        let sentence = self.webView.js("getSentenceWithIndex('\(book.playbackActiveClass())')")
-        if sentence != nil {
-            let chapter = FolioReader.sharedInstance.readerCenter.getCurrentChapter()
-            let href = chapter != nil ? chapter!.href : "";
-            FolioReader.sharedInstance.readerAudioPlayer.playText(href, text: sentence!)
-        } else {
-            if(FolioReader.sharedInstance.readerCenter.isLastPage()){
-                FolioReader.sharedInstance.readerAudioPlayer.stop()
-            } else{
-                FolioReader.sharedInstance.readerCenter.changePageToNext()
-            }
-        }
-    }
-    
-	func readCurrentSentence() {
-		if (FolioReader.sharedInstance.readerAudioPlayer.synthesizer == nil ) {
-            speakSentence()
-		} else {
-            if(FolioReader.sharedInstance.readerAudioPlayer.synthesizer.paused){
-                FolioReader.sharedInstance.readerAudioPlayer.synthesizer.continueSpeaking()
-            }else{
-                if(FolioReader.sharedInstance.readerAudioPlayer.synthesizer.speaking){
-                    FolioReader.sharedInstance.readerAudioPlayer.stopSynthesizer({ () -> Void in
-                        self.webView.js("resetCurrentSentenceIndex()")
-                        self.speakSentence()
-                    })
-                }else{
-                    speakSentence()
-                }
-            }
-		}
-	}
-
-    func audioMarkID(ID: String){
-        self.webView.js("audioMarkID('\(book.playbackActiveClass())','\(ID)')");
+    /**
+     Audio Mark ID - marks an element with an ID with the given class and scrolls to it
+     
+     - parameter ID: The ID
+     */
+    func audioMarkID(ID: String) {
+        let currentPage = FolioReader.sharedInstance.readerCenter.currentPage
+        currentPage.webView.js("audioMarkID('\(book.playbackActiveClass())','\(ID)')")
     }
     
     // MARK: UIMenu visibility
@@ -561,7 +519,7 @@ extension UIWebView {
     }
 
     func play(sender: UIMenuController?) {
-        FolioReader.sharedInstance.readerCenter.currentPage.playAudio()
+        FolioReader.sharedInstance.readerAudioPlayer.play()
 
         // Force remove text selection
         // @NOTE: this doesn't seem to always work
