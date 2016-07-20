@@ -8,7 +8,7 @@
 
 var thisHighlight;
 var audioMarkClass;
-var wordsPerMinute = 200;
+var wordsPerMinute = 180;
 
 document.addEventListener("DOMContentLoaded", function(event) {
 //    var lnk = document.getElementsByClassName("lnk");
