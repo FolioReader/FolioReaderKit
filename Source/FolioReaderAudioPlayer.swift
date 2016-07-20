@@ -14,7 +14,7 @@ class FolioReaderAudioPlayer: NSObject {
     var isTextToSpeech = false
     var synthesizer: AVSpeechSynthesizer!
     var playing = false
-    var player: AVAudioPlayer!
+    var player: AVAudioPlayer?
     var currentHref: String!
     var currentFragment: String!
     var currentSmilFile: FRSmilFile!
@@ -36,6 +36,8 @@ class FolioReaderAudioPlayer: NSObject {
         let session:AVAudioSession = AVAudioSession.sharedInstance()
         try! session.setCategory(AVAudioSessionCategoryPlayback)
         try! session.setActive(true)
+        
+        updateNowPlayingInfo()
     }
     
     deinit {
@@ -45,7 +47,7 @@ class FolioReaderAudioPlayer: NSObject {
     // MARK: Reading speed
 
     func setRate(rate: Int) {
-        if player != nil {
+        if let player = player {
             switch rate {
             case 0:
                 player.rate = 0.5
@@ -113,14 +115,14 @@ class FolioReaderAudioPlayer: NSObject {
     func stop(immediate immediate: Bool = false) {
         playing = false
 		if !isTextToSpeech {
-			if player != nil && player.playing {
+            if let player = player where player.playing {
 				player.stop()
 			}
 		} else {
             stopSynthesizer(immediate: immediate, completion: nil)
 		}
         
-        UIApplication.sharedApplication().idleTimerDisabled = false
+//        UIApplication.sharedApplication().idleTimerDisabled = false
     }
     
     func stopSynthesizer(immediate immediate: Bool = false, completion: (() -> Void)? = nil) {
@@ -132,7 +134,7 @@ class FolioReaderAudioPlayer: NSObject {
         playing = false
         
         if !isTextToSpeech {
-            if player != nil && player.playing {
+            if let player = player where player.playing {
                 player.pause()
             }
         } else {
@@ -141,7 +143,7 @@ class FolioReaderAudioPlayer: NSObject {
 			}
         }
         
-        UIApplication.sharedApplication().idleTimerDisabled = false
+//        UIApplication.sharedApplication().idleTimerDisabled = false
     }
 
     func togglePlay() {
@@ -156,7 +158,7 @@ class FolioReaderAudioPlayer: NSObject {
             readCurrentSentence()
         }
         
-        UIApplication.sharedApplication().idleTimerDisabled = true
+//        UIApplication.sharedApplication().idleTimerDisabled = true
     }
     
     func isPlaying() -> Bool {
@@ -257,38 +259,41 @@ class FolioReaderAudioPlayer: NSObject {
 
             let fileURL = currentSmilFile.resource.basePath().stringByAppendingString("/"+audioFile!)
             let audioData = NSData(contentsOfFile: fileURL)
-            if audioData != nil {
-                player = try! AVAudioPlayer(data: audioData!)
-                player.enableRate = true
+            
+            do {
+            
+                player = try AVAudioPlayer(data: audioData!)
+                
+                guard let player = player else { return false }
+                
                 setRate(FolioReader.sharedInstance.currentAudioRate)
+                player.enableRate = true
                 player.prepareToPlay()
                 player.delegate = self
                 
                 updateNowPlayingInfo()
-            
-            } else {
+            } catch {
                 print("could not read audio file:", audioFile)
                 return false
             }
         }
 
         // if player is initialized properly, begin playing
-        if player != nil {
+        guard let player = player else { return false }
 
-            // the audio may be playing already, so only set the player time if it is NOT already within the fragment timeframe
-            // this is done to mitigate milisecond skips in the audio when changing fragments
-            if player.currentTime < currentBeginTime || ( currentEndTime > 0 && player.currentTime > currentEndTime) {
-                player.currentTime = currentBeginTime;
-                updateNowPlayingInfo()
-            }
-
-            player.play();
-
-            // get the fragment ID so we can "mark" it in the webview
-            let textParts = textFragment!.componentsSeparatedByString("#")
-            let fragmentID = textParts[1];
-            FolioReader.sharedInstance.readerCenter.audioMark(href: currentHref, fragmentID: fragmentID)
+        // the audio may be playing already, so only set the player time if it is NOT already within the fragment timeframe
+        // this is done to mitigate milisecond skips in the audio when changing fragments
+        if player.currentTime < currentBeginTime || ( currentEndTime > 0 && player.currentTime > currentEndTime) {
+            player.currentTime = currentBeginTime;
+            updateNowPlayingInfo()
         }
+
+        player.play()
+
+        // get the fragment ID so we can "mark" it in the webview
+        let textParts = textFragment!.componentsSeparatedByString("#")
+        let fragmentID = textParts[1];
+        FolioReader.sharedInstance.readerCenter.audioMark(href: currentHref, fragmentID: fragmentID)
 
         return true
     }
@@ -399,6 +404,8 @@ class FolioReaderAudioPlayer: NSObject {
     }
 
     func playerTimerObserver() {
+        guard let player = player else { return }
+        
         if currentEndTime != nil && currentEndTime > 0 && player.currentTime > currentEndTime {
             _playFragment(nextAudioFragment())
         }
@@ -436,7 +443,7 @@ class FolioReaderAudioPlayer: NSObject {
         }
         
         // Set player times
-        if !isTextToSpeech {
+        if let player = player where !isTextToSpeech {
             songInfo[MPMediaItemPropertyPlaybackDuration] = player.duration
             songInfo[MPNowPlayingInfoPropertyPlaybackRate] = player.rate
             songInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime ] = player.currentTime
@@ -455,6 +462,12 @@ class FolioReaderAudioPlayer: NSObject {
      the `currentPage` in ReaderCenter may not have updated just yet
      */
     func getCurrentChapterName() -> String? {
+        guard let chapter = FolioReader.sharedInstance.readerCenter.getCurrentChapter() else {
+            return nil
+        }
+        
+        currentHref = chapter.href
+        
         for item in book.flatTableOfContents {
             if let resource = item.resource where resource.href == currentHref {
                 return item.title
