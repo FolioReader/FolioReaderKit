@@ -10,223 +10,16 @@ import UIKit
 import ZFDragableModalTransition
 
 let reuseIdentifier = "Cell"
-var isScrolling = false
-var recentlyScrolled = false
-var recentlyScrolledDelay = 2.0 // 2 second delay until we clear recentlyScrolled
-var recentlyScrolledTimer: NSTimer!
-var scrollDirection = ScrollDirection()
 var pageWidth: CGFloat!
 var pageHeight: CGFloat!
 var previousPageNumber: Int!
 var currentPageNumber: Int!
 var nextPageNumber: Int!
-private var tempReference: FRTocReference?
-private var isFirstLoad = true
-
-enum ScrollDirection: Int {
-    case None
-    case Right
-    case Left
-    case Up
-    case Down
-    
-    init() {
-        self = .None
-    }
-}
+var scrollDirection = ScrollDirection()
+var isScrolling = false
 
 
-class ScrollScrubber: NSObject, UIScrollViewDelegate {
-    
-    weak var delegate: FolioReaderCenter!
-    var showSpeed = 0.6
-    var hideSpeed = 0.6
-    var hideDelay = 1.0
-    
-    var visible = false
-    var usingSlider = false
-    var slider: UISlider!
-    var hideTimer: NSTimer!
-    var scrollStart: CGFloat!
-    var scrollDelta: CGFloat!
-    var scrollDeltaTimer: NSTimer!
-    
-    init(frame:CGRect) {
-        super.init()
-        
-        slider = UISlider()
-        slider.layer.anchorPoint = CGPoint(x: 0, y: 0)
-        slider.transform = CGAffineTransformMakeRotation(CGFloat(M_PI_2))
-        slider.frame = frame
-        slider.alpha = 0
-        
-        updateColors()
-        
-        // less obtrusive knob and fixes jump: http://stackoverflow.com/a/22301039/484780
-        let thumbImg = UIImage(readerImageNamed: "knob")
-        let thumbImgColor = thumbImg!.imageTintColor(readerConfig.tintColor).imageWithRenderingMode(.AlwaysOriginal)
-        slider.setThumbImage(thumbImgColor, forState: .Normal)
-        slider.setThumbImage(thumbImgColor, forState: .Selected)
-        slider.setThumbImage(thumbImgColor, forState: .Highlighted)
-        
-        slider.addTarget(self, action: #selector(ScrollScrubber.sliderChange(_:)), forControlEvents: .ValueChanged)
-        slider.addTarget(self, action: #selector(ScrollScrubber.sliderTouchDown(_:)), forControlEvents: .TouchDown)
-        slider.addTarget(self, action: #selector(ScrollScrubber.sliderTouchUp(_:)), forControlEvents: .TouchUpInside)
-        slider.addTarget(self, action: #selector(ScrollScrubber.sliderTouchUp(_:)), forControlEvents: .TouchUpOutside)
-    }
-    
-    func updateColors() {
-        slider.minimumTrackTintColor = readerConfig.tintColor
-        slider.maximumTrackTintColor = isNight(readerConfig.nightModeSeparatorColor, readerConfig.menuSeparatorColor)
-    }
-    
-    // MARK: - slider events
-    
-    func sliderTouchDown(slider:UISlider) {
-        usingSlider = true
-        show()
-    }
-    
-    func sliderTouchUp(slider:UISlider) {
-        usingSlider = false
-        hideAfterDelay()
-    }
-    
-    func sliderChange(slider:UISlider) {
-        let offset = isVerticalDirection(CGPointMake(0, height()*CGFloat(slider.value)),
-                                         CGPointMake(height()*CGFloat(slider.value), 0))
-        scrollView().setContentOffset(offset, animated: false)
-    }
-    
-    // MARK: - show / hide
-    
-    func show() {
-        
-        cancelHide()
-        
-        visible = true
-        
-        if slider.alpha <= 0 {
-            UIView.animateWithDuration(showSpeed, animations: {
-                
-                self.slider.alpha = 1
-                
-                }, completion: { (Bool) -> Void in
-                    self.hideAfterDelay()
-            })
-        } else {
-            slider.alpha = 1
-            if usingSlider == false {
-                hideAfterDelay()
-            }
-        }
-    }
-    
-    
-    func hide() {
-        visible = false
-        resetScrollDelta()
-        UIView.animateWithDuration(hideSpeed, animations: {
-            self.slider.alpha = 0
-        })
-    }
-    
-    func hideAfterDelay() {
-        cancelHide()
-        hideTimer = NSTimer.scheduledTimerWithTimeInterval(hideDelay, target: self, selector: #selector(ScrollScrubber.hide), userInfo: nil, repeats: false)
-    }
-    
-    func cancelHide() {
-        
-        if hideTimer != nil {
-            hideTimer.invalidate()
-            hideTimer = nil
-        }
-        
-        if visible == false {
-            slider.layer.removeAllAnimations()
-        }
-        
-        visible = true
-    }
-    
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        
-        if scrollDeltaTimer != nil {
-            scrollDeltaTimer.invalidate()
-            scrollDeltaTimer = nil
-        }
-        
-        if scrollStart == nil {
-            scrollStart = scrollView.contentOffset.forDirection()
-        }
-    }
-    
-    func scrollViewDidScroll(scrollView: UIScrollView) {
-        guard readerConfig.scrollDirection == .vertical else { return }
-        
-        if visible && usingSlider == false {
-            setSliderVal()
-        }
-        
-        if( slider.alpha > 0 ){
-            
-            show()
-            
-        } else if delegate.currentPage != nil && scrollStart != nil {
-            scrollDelta = scrollView.contentOffset.forDirection() - scrollStart
-            
-            if scrollDeltaTimer == nil && scrollDelta > (pageHeight * 0.2 ) || (scrollDelta * -1) > (pageHeight * 0.2) {
-                show()
-                resetScrollDelta()
-            }
-        }
-    }
-    
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        resetScrollDelta()
-    }
-    
-    func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
-        scrollDeltaTimer = NSTimer(timeInterval:0.5, target: self, selector: #selector(ScrollScrubber.resetScrollDelta), userInfo: nil, repeats: false)
-        NSRunLoop.currentRunLoop().addTimer(scrollDeltaTimer, forMode: NSRunLoopCommonModes)
-    }
-    
-    
-    func resetScrollDelta(){
-        if scrollDeltaTimer != nil {
-            scrollDeltaTimer.invalidate()
-            scrollDeltaTimer = nil
-        }
-        
-        scrollStart = scrollView().contentOffset.forDirection()
-        scrollDelta = 0
-    }
-    
-    
-    func setSliderVal(){
-        slider.value = Float(scrollTop() / height())
-    }
-    
-    // MARK: - utility methods
-    
-    private func scrollView() -> UIScrollView {
-        return delegate.currentPage.webView.scrollView
-    }
-    
-    private func height() -> CGFloat {
-        return delegate.currentPage.webView.scrollView.contentSize.height - pageHeight + 44
-    }
-    
-    private func scrollTop() -> CGFloat {
-        return delegate.currentPage.webView.scrollView.contentOffset.forDirection()
-    }
-    
-}
-
-
-
-class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, FolioPageDelegate, FolioReaderContainerDelegate {
+class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
     var collectionView: UICollectionView!
     var loadingView: UIActivityIndicatorView!
@@ -234,17 +27,21 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     var totalPages: Int!
     var tempFragment: String?
     var currentPage: FolioReaderPage!
-    weak var folioReaderContainer: FolioReaderContainer!
     var animator: ZFModalTransitionAnimator!
     var pageIndicatorView: FolioReaderPageIndicator!
     var bookShareLink: String?
     
+    var recentlyScrolled = false
+    var recentlyScrolledDelay = 2.0 // 2 second delay until we clear recentlyScrolled
+    var recentlyScrolledTimer: NSTimer!
     var scrollScrubber: ScrollScrubber!
     
     private var screenBounds: CGRect!
     private var pointNow = CGPointZero
     private let pageIndicatorHeight: CGFloat = 20
     private var pageOffsetRate: CGFloat = 0
+    private var tempReference: FRTocReference?
+    private var isFirstLoad = true
     
     // MARK: - View life cicle
     
@@ -279,8 +76,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         // Register cell classes
         collectionView!.registerClass(FolioReaderPage.self, forCellWithReuseIdentifier: reuseIdentifier)
         
-        // Delegate container
-        folioReaderContainer.delegate = self
         totalPages = book.spine.spineReferences.count
         
         // Configure navigation bar and layout
@@ -310,9 +105,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        // Reset load
-        isFirstLoad = true
-        
         // Update pages
         pagesForCurrentPage(currentPage)
         pageIndicatorView.reloadView(updateShadow: true)
@@ -324,33 +116,37 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         let navText = isNight(UIColor.whiteColor(), UIColor.blackColor())
         let font = UIFont(name: "Avenir-Light", size: 17)!
         setTranslucentNavigation(color: navBackground, tintColor: tintColor, titleColor: navText, andFont: font)
-        
-//        if FolioReader.sharedInstance.nightMode {
-//            UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: true)
-//        } else {
-//            UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.Default, animated: true)
-//        }
     }
     
     func configureNavBarButtons() {
 
         // Navbar buttons
-        let shareIcon = UIImage(readerImageNamed: "btn-navbar-share")!.imageTintColor(readerConfig.tintColor).imageWithRenderingMode(.AlwaysOriginal)
-        let audioIcon = UIImage(readerImageNamed: "man-speech-icon")!.imageTintColor(readerConfig.tintColor).imageWithRenderingMode(.AlwaysOriginal)
-        let menuIcon = UIImage(readerImageNamed: "btn-navbar-menu")!.imageTintColor(readerConfig.tintColor).imageWithRenderingMode(.AlwaysOriginal)
+        let shareIcon = UIImage(readerImageNamed: "icon-navbar-share")?.ignoreSystemTint()
+        let audioIcon = UIImage(readerImageNamed: "icon-navbar-tts")?.ignoreSystemTint() //man-speech-icon
+        let closeIcon = UIImage(readerImageNamed: "icon-navbar-close")?.ignoreSystemTint()
+        let tocIcon = UIImage(readerImageNamed: "icon-navbar-toc")?.ignoreSystemTint()
+        let fontIcon = UIImage(readerImageNamed: "icon-navbar-font")?.ignoreSystemTint()
+        let space = 70 as CGFloat
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: menuIcon, style: UIBarButtonItemStyle.Plain, target: self, action:#selector(FolioReaderCenter.toggleMenu(_:)))
-
+        let menu = UIBarButtonItem(image: closeIcon, style: .Plain, target: self, action:#selector(closeReader(_:)))
+        let toc = UIBarButtonItem(image: tocIcon, style: .Plain, target: self, action:#selector(presentChapterList(_:)))
+        
+        navigationItem.leftBarButtonItems = [menu, toc]
+        
         var rightBarIcons = [UIBarButtonItem]()
 
         if readerConfig.allowSharing {
-            rightBarIcons.append(UIBarButtonItem(image: shareIcon, style: UIBarButtonItemStyle.Plain, target: self, action:#selector(FolioReaderCenter.shareChapter(_:))))
+            rightBarIcons.append(UIBarButtonItem(image: shareIcon, style: .Plain, target: self, action:#selector(shareChapter(_:))))
         }
 
         if book.hasAudio() || readerConfig.enableTTS {
-            rightBarIcons.append(UIBarButtonItem(image: audioIcon, style: UIBarButtonItemStyle.Plain, target: self, action:#selector(FolioReaderCenter.togglePlay(_:))))
+            rightBarIcons.append(UIBarButtonItem(image: audioIcon, style: .Plain, target: self, action:#selector(presentPlayerMenu(_:))))
         }
-
+        
+        let font = UIBarButtonItem(image: fontIcon, style: .Plain, target: self, action: #selector(presentFontsMenu))
+        font.width = space
+        
+        rightBarIcons.appendContentsOf([font])
         navigationItem.rightBarButtonItems = rightBarIcons
     }
 
@@ -417,21 +213,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
 //            self.pageIndicatorView.minutesLabel.alpha = shouldHide ? 0 : 1
         })
         navigationController?.setNavigationBarHidden(shouldHide, animated: true)
-    }
-
-    func togglePlay(sender: UIBarButtonItem) {
-        presentPlayerMenu()
-    }
-
-    // MARK: Toggle menu
-    
-    func toggleMenu(sender: UIBarButtonItem) {
-        FolioReader.sharedInstance.readerContainer.toggleLeftPanel()
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     // MARK: UICollectionViewDataSource
@@ -622,7 +403,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     func updateCurrentPage(completion: (() -> Void)? = nil) {
         updateCurrentPage(nil) { () -> Void in
-            if (completion != nil) { completion!() }
+            completion?()
         }
     }
     
@@ -643,10 +424,10 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         
         nextPageNumber = currentPageNumber+1 <= totalPages ? currentPageNumber+1 : currentPageNumber
         
-        // Set navigation title
-        if let chapterName = getCurrentChapterName() {
-            title = chapterName
-        } else { title = ""}
+//        // Set navigation title
+//        if let chapterName = getCurrentChapterName() {
+//            title = chapterName
+//        } else { title = ""}
         
         // Set pages
         if let page = currentPage {
@@ -663,7 +444,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             pagesForCurrentPage(page)
         }
         
-        if (completion != nil) { completion!() }
+        completion?()
     }
     
     func pagesForCurrentPage(page: FolioReaderPage?) {
@@ -690,13 +471,13 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             
             switch scrollDirection {
             case .Up:
-                if first.compare(last) == NSComparisonResult.OrderedAscending {
+                if first.compare(last) == .OrderedAscending {
                     indexPath = last
                 } else {
                     indexPath = first
                 }
             default:
-                if first.compare(last) == NSComparisonResult.OrderedAscending {
+                if first.compare(last) == .OrderedAscending {
                     indexPath = first
                 } else {
                     indexPath = last
@@ -721,7 +502,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             let indexPath = NSIndexPath(forRow: page-1, inSection: 0)
             changePageWith(indexPath: indexPath, animated: animated, completion: { () -> Void in
                 self.updateCurrentPage({ () -> Void in
-                    if (completion != nil) { completion!() }
+                    completion?()
                 })
             })
         }
@@ -730,14 +511,14 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     func changePageWith(page page: Int, andFragment fragment: String, animated: Bool = false, completion: (() -> Void)? = nil) {
         if currentPageNumber == page {
             if fragment != "" && currentPage != nil {
-                currentPage.handleAnchor(fragment, avoidBeginningAnchors: true, animating: animated)
-                if (completion != nil) { completion!() }
+                currentPage.handleAnchor(fragment, avoidBeginningAnchors: true, animated: animated)
+                completion?()
             }
         } else {
             tempFragment = fragment
             changePageWith(page: page, animated: animated, completion: { () -> Void in
                 self.updateCurrentPage({ () -> Void in
-                    if (completion != nil) { completion!() }
+                    completion?()
                 })
             })
         }
@@ -748,9 +529,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         let indexPath = NSIndexPath(forRow: item, inSection: 0)
         changePageWith(indexPath: indexPath, animated: animated, completion: { () -> Void in
             self.updateCurrentPage({ () -> Void in
-                if (completion != nil) {
-                    completion!()
-                }
+                completion?()
             })
         })
     }
@@ -764,27 +543,25 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         changePageWith(indexPath: indexPath, animated: true) { () -> Void in
             if pageUpdateNeeded {
                 self.updateCurrentPage({ () -> Void in
-                    self.currentPage.audioMarkID(markID);
+                    self.currentPage.audioMarkID(markID)
                 })
             } else {
-                self.currentPage.audioMarkID(markID);
+                self.currentPage.audioMarkID(markID)
             }
         }
     }
 
     func changePageWith(indexPath indexPath: NSIndexPath, animated: Bool = false, completion: (() -> Void)? = nil) {
-        if !indexPathIsValid(indexPath) {
+        guard indexPathIsValid(indexPath) else {
             print("ERROR: Attempt to scroll to invalid index path")
-            if (completion != nil) {
-                completion!()
-            }
+            completion?()
             return
         }
         
         UIView.animateWithDuration(animated ? 0.3 : 0, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
             self.collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .direction(), animated: false)
-            }) { (finished: Bool) -> Void in
-                if (completion != nil) { completion!() }
+        }) { (finished: Bool) -> Void in
+            completion?()
         }
     }
     
@@ -808,23 +585,23 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
 
     func changePageToNext(completion: (() -> Void)? = nil) {
         changePageWith(page: nextPageNumber, animated: true) { () -> Void in
-            if (completion != nil) { completion!() }
+            completion?()
         }
     }
     
     func changePageToPrevious(completion: (() -> Void)? = nil) {
         changePageWith(page: previousPageNumber, animated: true) { () -> Void in
-            if (completion != nil) { completion!() }
+            completion?()
         }
     }
 
     /**
-    Find a page by FRTocReference.
+     Find a page by FRTocReference.
     */
     func findPageByResource(reference: FRTocReference) -> Int {
         var count = 0
         for item in book.spine.spineReferences {
-            if let resource = reference.resource where item.resource.href == resource.href {
+            if let resource = reference.resource where item.resource == resource {
                 return count
             }
             count += 1
@@ -833,7 +610,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     /**
-    Find a page by href.
+     Find a page by href.
     */
     func findPageByHref(href: String) -> Int {
         var count = 0
@@ -847,13 +624,13 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     /**
-    Find and return the current chapter resource.
+     Find and return the current chapter resource.
     */
     func getCurrentChapter() -> FRResource? {
         if let currentPageNumber = currentPageNumber {
-            for item in FolioReader.sharedInstance.readerSidePanel.tocItems {
+            for item in book.flatTableOfContents {
                 if let reference = book.spine.spineReferences[safe: currentPageNumber-1], resource = item.resource
-                    where resource.href == reference.resource.href {
+                    where resource == reference.resource {
                     return item.resource
                 }
             }
@@ -866,9 +643,9 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
      */
     func getCurrentChapterName() -> String? {
         if let currentPageNumber = currentPageNumber {
-            for item in FolioReader.sharedInstance.readerSidePanel.tocItems {
+            for item in book.flatTableOfContents {
                 if let reference = book.spine.spineReferences[safe: currentPageNumber-1], resource = item.resource
-                    where resource.href == reference.resource.href {
+                    where resource == reference.resource {
                     if let title = item.title {
                         return title
                     }
@@ -881,13 +658,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     // MARK: - Audio Playing
 
-    func playAudio(fragmentID: String){
-
-        let chapter = getCurrentChapter()
-        let href = chapter != nil ? chapter!.href : "";
-        FolioReader.sharedInstance.readerAudioPlayer.playAudio(href, fragmentID: fragmentID)
-    }
-
     func audioMark(href href: String, fragmentID: String) {
         changePageWith(href: href, andAudioMarkID: fragmentID)
     }
@@ -895,7 +665,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     // MARK: - Sharing
     
     /**
-    Sharing chapter method.
+     Sharing chapter method.
     */
     func shareChapter(sender: UIBarButtonItem) {
         
@@ -953,7 +723,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     /**
-    Sharing highlight method.
+     Sharing highlight method.
     */
     func shareHighlight(string: String, rect: CGRect) {
         
@@ -1007,39 +777,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         presentViewController(activityViewController, animated: true, completion: nil)
     }
     
-    // MARK: - Folio Page Delegate
-    
-    func pageDidLoad(page: FolioReaderPage) {
-        
-        if let position = FolioReader.defaults.valueForKey(kBookId) as? NSDictionary {
-            let pageNumber = position["pageNumber"]! as! Int
-            var pageOffset: CGFloat = 0
-            
-            if let offset = isVerticalDirection(position["pageOffsetY"], position["pageOffsetX"]) as? CGFloat {
-                pageOffset = offset
-            }
-            
-            if isFirstLoad {
-                updateCurrentPage(page)
-                isFirstLoad = false
-                
-                if currentPageNumber == pageNumber && pageOffset > 0 {
-                    page.scrollPageToOffset("\(pageOffset)", animating: false)
-                }
-            }
-            
-        } else if isFirstLoad {
-            updateCurrentPage(page)
-            isFirstLoad = false
-        }
-        
-        // Go to fragment if needed
-        if let fragment = tempFragment where fragment != "" && currentPage != nil {
-            currentPage.handleAnchor(fragment, avoidBeginningAnchors: true, animating: true)
-            tempFragment = nil
-        }
-    }
-    
     // MARK: - ScrollView Delegate
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
@@ -1054,12 +791,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         }
         
         scrollScrubber.scrollViewWillBeginDragging(scrollView)
-        
-//        let currentPageNum = Int(pointNow.x / scrollView.bounds.size.width) + 1
-//        if currentPage.webView.pageCount - 1 == currentPageNum {
-//            currentPage.refreshPageMode()
-//        }
-        currentPage.refreshPageMode()
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
@@ -1101,8 +832,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         NSRunLoop.currentRunLoop().addTimer(recentlyScrolledTimer, forMode: NSRunLoopCommonModes)
     }
 
-    func clearRecentlyScrolled(){
-        if( recentlyScrolledTimer != nil ){
+    func clearRecentlyScrolled() {
+        if(recentlyScrolledTimer != nil) {
             recentlyScrolledTimer.invalidate()
             recentlyScrolledTimer = nil
         }
@@ -1113,43 +844,38 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         scrollScrubber.scrollViewDidEndScrollingAnimation(scrollView)
     }
     
-    // MARK: - Container delegate
     
-    func container(didExpandLeftPanel sidePanel: FolioReaderSidePanel) {
-        collectionView.userInteractionEnabled = false
+    // MARK: NavigationBar Actions
+    
+    func closeReader(sender: UIBarButtonItem) {
+        FolioReader.close()
+        dismiss()
+    }
+    
+    /**
+     Present chapter list
+     */
+    func presentChapterList(sender: UIBarButtonItem) {
         FolioReader.saveReaderState()
-    }
-    
-    func container(didCollapseLeftPanel sidePanel: FolioReaderSidePanel) {
-        collectionView.userInteractionEnabled = true
-        updateCurrentPage()
         
-        // Move to #fragment
-        if tempReference != nil {
-            if tempReference!.fragmentID != "" && currentPage != nil {
-                currentPage.handleAnchor(tempReference!.fragmentID!, avoidBeginningAnchors: true, animating: true)
-            }
-            tempReference = nil
-        }
-    }
-    
-    func container(sidePanel: FolioReaderSidePanel, didSelectRowAtIndexPath indexPath: NSIndexPath, withTocReference reference: FRTocReference) {
-        let item = findPageByResource(reference)
+        let chapter = FolioReaderChapterList()
+        chapter.delegate = self
+        let highlight = FolioReaderHighlightList()
         
-        if item < totalPages-1 {
-            let indexPath = NSIndexPath(forRow: item, inSection: 0)
-            changePageWith(indexPath: indexPath, animated: false, completion: { () -> Void in
-                self.updateCurrentPage()
-            })
-            tempReference = reference
-        } else {
-            print("Failed to load book because the requested resource is missing.")
-        }
+        let pageController = PageViewController(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options:nil)
+        pageController.viewControllerOne = chapter
+        pageController.viewControllerTwo = highlight
+        pageController.segmentedControlItems = ["Contents", readerConfig.localizedHighlightsTitle]
+        
+        let nav = UINavigationController(rootViewController: pageController)
+        presentViewController(nav, animated: true, completion: nil)
     }
     
-    // MARK: - Fonts Menu
-    
+    /**
+     Present fonts and settings menu
+     */
     func presentFontsMenu() {
+        FolioReader.saveReaderState()
         hideBars()
         
         let menu = FolioReaderFontsMenu()
@@ -1166,18 +892,12 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         menu.transitioningDelegate = animator
         presentViewController(menu, animated: true, completion: nil)
     }
-    
-    // MARK: - Highlights List
-    
-    func presentHighlightsList() {
-        let menu = UINavigationController(rootViewController: FolioReaderHighlightList())
-        presentViewController(menu, animated: true, completion: nil)
-    }
 
-
-    // MARK: - Audio Player Menu
-
-    func presentPlayerMenu() {
+    /**
+     Present audio player menu
+     */
+    func presentPlayerMenu(sender: UIBarButtonItem) {
+        FolioReader.saveReaderState()
         hideBars()
 
         let menu = FolioReaderPlayerMenu()
@@ -1193,5 +913,72 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
 
         menu.transitioningDelegate = animator
         presentViewController(menu, animated: true, completion: nil)
+    }
+}
+
+// MARK: FolioPageDelegate
+
+extension FolioReaderCenter: FolioReaderPageDelegate {
+    
+    func pageDidLoad(page: FolioReaderPage) {
+        
+        if let position = FolioReader.defaults.valueForKey(kBookId) as? NSDictionary {
+            let pageNumber = position["pageNumber"]! as! Int
+            var pageOffset: CGFloat = 0
+            
+            if let offset = isVerticalDirection(position["pageOffsetY"], position["pageOffsetX"]) as? CGFloat {
+                pageOffset = offset
+            }
+            
+            if isFirstLoad {
+                updateCurrentPage(page)
+                isFirstLoad = false
+                
+                if currentPageNumber == pageNumber && pageOffset > 0 {
+                    page.scrollPageToOffset(pageOffset, animated: false)
+                }
+            }
+            
+        } else if isFirstLoad {
+            updateCurrentPage(page)
+            isFirstLoad = false
+        }
+        
+        // Go to fragment if needed
+        if let fragmentID = tempFragment where fragmentID != "" && currentPage != nil {
+            currentPage.handleAnchor(fragmentID, avoidBeginningAnchors: true, animated: true)
+            tempFragment = nil
+        }
+    }
+}
+
+// MARK: FolioReaderChapterListDelegate
+
+extension FolioReaderCenter: FolioReaderChapterListDelegate {
+    
+    func chapterList(chapterList: FolioReaderChapterList, didSelectRowAtIndexPath indexPath: NSIndexPath, withTocReference reference: FRTocReference) {
+        let item = findPageByResource(reference)
+        
+        if item < totalPages-1 {
+            let indexPath = NSIndexPath(forRow: item, inSection: 0)
+            changePageWith(indexPath: indexPath, animated: false, completion: { () -> Void in
+                self.updateCurrentPage()
+            })
+            tempReference = reference
+        } else {
+            print("Failed to load book because the requested resource is missing.")
+        }
+    }
+    
+    func chapterList(didDismissedChapterList chapterList: FolioReaderChapterList) {
+        updateCurrentPage()
+        
+        // Move to #fragment
+        if let reference = tempReference {
+            if let fragmentID = reference.fragmentID where fragmentID != "" && currentPage != nil {
+                currentPage.handleAnchor(reference.fragmentID!, avoidBeginningAnchors: true, animated: true)
+            }
+            tempReference = nil
+        }
     }
 }

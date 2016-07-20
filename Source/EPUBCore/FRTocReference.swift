@@ -18,15 +18,16 @@ class FRTocReference: NSObject {
         self.init(title: title, resource: resource, fragmentID: fragmentID, children: [FRTocReference]())
     }
     
-    init(title:String, resource: FRResource?, fragmentID: String, children: [FRTocReference]) {
+    init(title: String, resource: FRResource?, fragmentID: String, children: [FRTocReference]) {
         self.resource = resource
         self.title = title
         self.fragmentID = fragmentID
         self.children = children
     }
-    
-    override func isEqual(object: AnyObject?) -> Bool {
-        let obj = object as! FRTocReference
-        return obj.title == self.title && obj.fragmentID == self.fragmentID
-    }
+}
+
+// MARK: Equatable
+
+func ==(lhs: FRTocReference, rhs: FRTocReference) -> Bool {
+    return lhs.title == rhs.title && lhs.fragmentID == rhs.fragmentID
 }

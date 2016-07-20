@@ -15,12 +15,13 @@ class FRBook: NSObject {
     var spine = FRSpine()
     var smils = FRSmils()
     var tableOfContents: [FRTocReference]!
+    var flatTableOfContents: [FRTocReference]!
     var opfResource: FRResource!
     var ncxResource: FRResource!
     var coverImage: FRResource!
 
     func hasAudio() -> Bool {
-        return smils.smils.count > 0 ? true : false;
+        return smils.smils.count > 0 ? true : false
     }
 
     func title() -> String? {

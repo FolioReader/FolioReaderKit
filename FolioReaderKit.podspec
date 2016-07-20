@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
   ]
   s.resources = [
     'Source/**/*.{js,css,xcdatamodeld}',
-    'Source/Resources/Images/*.png',
+    'Source/Resources/*.xcassets',
     'Source/Resources/Fonts/**/*.{otf,ttf}'
   ]
   s.preserve_paths = 'Source/**/*.xcdatamodeld'

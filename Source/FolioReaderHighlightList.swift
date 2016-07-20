@@ -15,32 +15,12 @@ class FolioReaderHighlightList: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
-        tableView.backgroundColor = isNight(readerConfig.nightModeBackground, UIColor.whiteColor())
+        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)       
+        tableView.separatorInset = UIEdgeInsetsZero
+        tableView.backgroundColor = isNight(readerConfig.nightModeMenuBackground, readerConfig.menuBackgroundColor)
         tableView.separatorColor = isNight(readerConfig.nightModeSeparatorColor, readerConfig.menuSeparatorColor)
         
         highlights = Highlight.allByBookId((kBookId as NSString).stringByDeletingPathExtension)
-        title = readerConfig.localizedHighlightsTitle
-        
-        setCloseButton()
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        configureNavBar()
-    }
-    
-    func configureNavBar() {
-        let navBackground = isNight(readerConfig.nightModeMenuBackground, UIColor.whiteColor())
-        let tintColor = readerConfig.tintColor
-        let navText = isNight(UIColor.whiteColor(), UIColor.blackColor())
-        let font = UIFont(name: "Avenir-Light", size: 17)!
-        setTranslucentNavigation(color: navBackground, tintColor: tintColor, titleColor: navText, andFont: font)
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     // MARK: - Table view data source
@@ -117,6 +97,8 @@ class FolioReaderHighlightList: UITableViewController {
         highlightLabel.sizeToFit()
         highlightLabel.frame = CGRect(x: 20, y: 46, width: view.frame.width-40, height: highlightLabel.frame.height)
         
+        cell.layoutMargins = UIEdgeInsetsZero
+        cell.preservesSuperviewLayoutMargins = false
         return cell
     }
     
@@ -144,8 +126,7 @@ class FolioReaderHighlightList: UITableViewController {
         let highlight = highlights[indexPath.row]
 
         FolioReader.sharedInstance.readerCenter.changePageWith(page: highlight.page, andFragment: highlight.highlightId)
-        
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss()
     }
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {

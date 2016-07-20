@@ -12,7 +12,7 @@ class FRResources: NSObject {
     var resources = [String: FRResource]()
     
     /**
-    Adds a resource to the resources.
+     Adds a resource to the resources.
     */
     func add(resource: FRResource) {
         self.resources[resource.href] = resource
@@ -20,9 +20,9 @@ class FRResources: NSObject {
     
     
     /**
-    Gets the first resource (random order) with the give mediatype.
+     Gets the first resource (random order) with the give mediatype.
     
-    Useful for looking up the table of contents as it's supposed to be the only resource with NCX mediatype.
+     Useful for looking up the table of contents as it's supposed to be the only resource with NCX mediatype.
     */
     func findFirstResource(byMediaType mediaType: MediaType) -> FRResource? {
         for resource in resources.values {
@@ -48,7 +48,7 @@ class FRResources: NSObject {
     }
     
     /**
-    Whether there exists a resource with the given href.
+     Whether there exists a resource with the given href.
     */
     func containsByHref(href: String) -> Bool {
         if href.isEmpty {
@@ -59,7 +59,7 @@ class FRResources: NSObject {
     }
     
     /**
-    Whether there exists a resource with the given id.
+     Whether there exists a resource with the given id.
     */
     func containsById(id: String) -> Bool {
         if id.isEmpty {
@@ -75,7 +75,7 @@ class FRResources: NSObject {
     }
     
     /**
-    Gets the resource with the given href.
+     Gets the resource with the given href.
     */
     func getByHref(href: String) -> FRResource? {
         if href.isEmpty {
@@ -85,7 +85,7 @@ class FRResources: NSObject {
     }
     
     /**
-    Gets the resource with the given href.
+     Gets the resource with the given href.
     */
     func getById(id: String) -> FRResource? {
         for resource in resources.values {

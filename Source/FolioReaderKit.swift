@@ -13,29 +13,28 @@ import UIKit
 
 internal let isPad = UIDevice.currentDevice().userInterfaceIdiom == .Pad
 internal let isPhone = UIDevice.currentDevice().userInterfaceIdiom == .Phone
-internal let isPhone4 = (UIScreen.mainScreen().bounds.size.height == 480)
-internal let isPhone5 = (UIScreen.mainScreen().bounds.size.height == 568)
-internal let isPhone6P = UIDevice.currentDevice().userInterfaceIdiom == .Phone && UIScreen.mainScreen().bounds.size.height == 736
-internal let isSmallPhone = isPhone4 || isPhone5
-internal let isLargePhone = isPhone6P
 
 // MARK: - Internal constants
 
 internal let kApplicationDocumentsDirectory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] 
-internal let kCurrentFontFamily = "kCurrentFontFamily"
-internal let kCurrentFontSize = "kCurrentFontSize"
-internal let kCurrentAudioRate = "kCurrentAudioRate"
-internal let kCurrentHighlightStyle = "kCurrentHighlightStyle"
-internal var kCurrentMediaOverlayStyle = "kMediaOverlayStyle"
-internal let kNightMode = "kNightMode"
+internal let kCurrentFontFamily = "com.folioreader.kCurrentFontFamily"
+internal let kCurrentFontSize = "com.folioreader.kCurrentFontSize"
+internal let kCurrentAudioRate = "com.folioreader.kCurrentAudioRate"
+internal let kCurrentHighlightStyle = "com.folioreader.kCurrentHighlightStyle"
+internal var kCurrentMediaOverlayStyle = "com.folioreader.kMediaOverlayStyle"
+internal let kNightMode = "com.folioreader.kNightMode"
+internal let kCurrentTOCMenu = "com.folioreader.kCurrentTOCMenu"
+internal let kMigratedToRealm = "com.folioreader.kMigratedToRealm"
 internal let kHighlightRange = 30
 internal var kBookId: String!
 
 /**
- `0` Default  
- `1` Underline  
- `2` Text Color
-*/
+ Defines the media overlay and TTS selection
+ 
+ - Default:   The background is colored
+ - Underline: The underlined is colored
+ - TextColor: The text is colored
+ */
 enum MediaOverlayStyle: Int {
     case Default
     case Underline
@@ -57,14 +56,13 @@ public class FolioReader : NSObject {
     static let sharedInstance = FolioReader()
     static let defaults = NSUserDefaults.standardUserDefaults()
     weak var readerCenter: FolioReaderCenter!
-    weak var readerSidePanel: FolioReaderSidePanel!
     weak var readerContainer: FolioReaderContainer!
     weak var readerAudioPlayer: FolioReaderAudioPlayer!
     var isReaderOpen = false
     var isReaderReady = false
     
     private override init() {
-        let isMigrated = FolioReader.defaults.boolForKey("isMigrated")
+        let isMigrated = FolioReader.defaults.boolForKey(kMigratedToRealm)
         if !isMigrated {
             Highlight.migrateUserDataToRealm()
         }
@@ -124,7 +122,7 @@ public class FolioReader : NSObject {
     // MARK: - Present Folio Reader
     
     /**
-    Present a Folio Reader for a Parent View Controller.
+     Present a Folio Reader for a Parent View Controller.
     */
     public class func presentReader(parentViewController parentViewController: UIViewController, withEpubPath epubPath: String, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated: Bool = true) {
         let reader = FolioReaderContainer(config: config, epubPath: epubPath, removeEpub: shouldRemoveEpub)
@@ -135,21 +133,21 @@ public class FolioReader : NSObject {
     // MARK: - Application State
     
     /**
-    Called when the application will resign active
+     Called when the application will resign active
     */
     public class func applicationWillResignActive() {
         saveReaderState()
     }
     
     /**
-    Called when the application will terminate
+     Called when the application will terminate
     */
     public class func applicationWillTerminate() {
         saveReaderState()
     }
     
     /**
-    Save Reader state, book, page and scroll are saved
+     Save Reader state, book, page and scroll are saved
     */
     class func saveReaderState() {
         if FolioReader.sharedInstance.isReaderOpen {
@@ -163,6 +161,14 @@ public class FolioReader : NSObject {
                 FolioReader.defaults.setObject(position, forKey: kBookId)
             }
         }
+    }
+    
+    class func close() {
+        FolioReader.saveReaderState()
+        FolioReader.sharedInstance.isReaderOpen = false
+        FolioReader.sharedInstance.isReaderReady = false
+        FolioReader.sharedInstance.readerAudioPlayer.stop(immediate: true)
+        FolioReader.defaults.setInteger(0, forKey: kCurrentTOCMenu)
     }
 }
 
@@ -197,6 +203,12 @@ extension CGPoint {
 }
 
 extension CGSize {
+    func forDirection() -> CGFloat {
+        return isVerticalDirection(self.height, self.width)
+    }
+}
+
+extension CGRect {
     func forDirection() -> CGFloat {
         return isVerticalDirection(self.height, self.width)
     }
@@ -450,10 +462,24 @@ internal extension String {
 
 internal extension UIImage {
     convenience init?(readerImageNamed: String) {
-        let traits = UITraitCollection(displayScale: UIScreen.mainScreen().scale)
-        self.init(named: readerImageNamed, inBundle: NSBundle.frameworkBundle(), compatibleWithTraitCollection: traits)
+        self.init(named: readerImageNamed, inBundle: NSBundle.frameworkBundle(), compatibleWithTraitCollection: nil)
     }
     
+    /**
+     Forces the image to be colored with Reader Config tintColor
+     
+     - returns: Returns a colored image
+     */
+    func ignoreSystemTint() -> UIImage {
+        return self.imageTintColor(readerConfig.tintColor).imageWithRenderingMode(.AlwaysOriginal)
+    }
+    
+    /**
+     Colorize the image with a color
+     
+     - parameter tintColor: The input color
+     - returns: Returns a colored image
+     */
     func imageTintColor(tintColor: UIColor) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
         
@@ -473,6 +499,12 @@ internal extension UIImage {
         return newImage
     }
     
+    /**
+     Generate a image with a color
+     
+     - parameter color: The input color
+     - returns: Returns a colored image
+     */
     class func imageWithColor(color: UIColor?) -> UIImage! {
         let rect = CGRectMake(0.0, 0.0, 1.0, 1.0)
         UIGraphicsBeginImageContextWithOptions(rect.size, false, 0)
@@ -495,11 +527,20 @@ internal extension UIImage {
 internal extension UIViewController {
     
     func setCloseButton() {
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(readerImageNamed: "icon-close"), style: UIBarButtonItemStyle.Plain, target: self, action:#selector(UIViewController.dismiss))
+        let closeImage = UIImage(readerImageNamed: "icon-navbar-close")?.ignoreSystemTint()
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: closeImage, style: .Plain, target: self, action: #selector(dismiss as Void -> Void))
     }
     
     func dismiss() {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        dismiss(nil)
+    }
+    
+    func dismiss(completion: (() -> Void)?) {
+        dispatch_async(dispatch_get_main_queue()) {
+            self.dismissViewControllerAnimated(true, completion: {
+                completion?()
+            })
+        }
     }
     
     // MARK: - NavigationBar
@@ -545,6 +586,16 @@ internal extension UINavigationBar {
             }
         }
         return nil
+    }
+}
+
+extension UINavigationController {
+    
+    public override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        if let vc = visibleViewController {
+            return vc.preferredStatusBarStyle()
+        }
+        return .Default
     }
 }
 
