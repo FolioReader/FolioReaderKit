@@ -40,11 +40,12 @@ public class FolioReaderConfig: NSObject {
     
     // Custom actions
     public var scrollDirection: FolioReaderScrollDirection = .vertical
+    public var canChangeScrollDirection = true
     public var shouldHideNavigationOnTap = true
     public var allowSharing = true
     public var enableTTS = true
     
-    // Licalized strings
+    // Localized strings
     public var localizedHighlightsTitle = NSLocalizedString("Highlights", comment: "")
     public var localizedHighlightsDateFormat = "MMM dd, YYYY | HH:mm"
     public var localizedHighlightMenu = NSLocalizedString("Highlight", comment: "")
@@ -54,6 +55,8 @@ public class FolioReaderConfig: NSObject {
     public var localizedFontMenuNight = NSLocalizedString("Night", comment: "")
     public var localizedPlayerMenuStyle = NSLocalizedString("Style", comment: "")
     public var localizedFontMenuDay = NSLocalizedString("Day", comment: "")
+    public var localizedLayoutHorizontal = NSLocalizedString("Horizontal", comment: "")
+    public var localizedLayoutVertical = NSLocalizedString("Vertical", comment: "")
     public var localizedReaderOnePageLeft = NSLocalizedString("1 page left", comment: "")
     public var localizedReaderManyPagesLeft = NSLocalizedString("pages left", comment: "")
     public var localizedReaderManyMinutes = NSLocalizedString("minutes", comment: "")

@@ -22,6 +22,7 @@ internal let kCurrentFontSize = "com.folioreader.kCurrentFontSize"
 internal let kCurrentAudioRate = "com.folioreader.kCurrentAudioRate"
 internal let kCurrentHighlightStyle = "com.folioreader.kCurrentHighlightStyle"
 internal var kCurrentMediaOverlayStyle = "com.folioreader.kMediaOverlayStyle"
+internal var kCurrentScrollDirection = "com.folioreader.kCurrentScrollDirection"
 internal let kNightMode = "com.folioreader.kNightMode"
 internal let kCurrentTOCMenu = "com.folioreader.kCurrentTOCMenu"
 internal let kMigratedToRealm = "com.folioreader.kMigratedToRealm"
@@ -106,6 +107,13 @@ public class FolioReader : NSObject {
         get { return MediaOverlayStyle(rawValue: FolioReader.defaults.valueForKey(kCurrentMediaOverlayStyle) as! Int)! }
         set (value) {
             FolioReader.defaults.setValue(value.rawValue, forKey: kCurrentMediaOverlayStyle)
+        }
+    }
+    
+    var currentScrollDirection: Int {
+        get { return FolioReader.defaults.valueForKey(kCurrentScrollDirection) as! Int }
+        set (value) {
+            FolioReader.defaults.setValue(value, forKey: kCurrentScrollDirection)
         }
     }
     
@@ -198,19 +206,23 @@ extension UICollectionViewScrollPosition {
 
 extension CGPoint {
     func forDirection() -> CGFloat {
-        return isVerticalDirection(self.y, self.x)
+        return isVerticalDirection(y, x)
     }
 }
 
 extension CGSize {
     func forDirection() -> CGFloat {
-        return isVerticalDirection(self.height, self.width)
+        return isVerticalDirection(height, width)
+    }
+    
+    func forReverseDirection() -> CGFloat {
+        return isVerticalDirection(width, height)
     }
 }
 
 extension CGRect {
     func forDirection() -> CGFloat {
-        return isVerticalDirection(self.height, self.width)
+        return isVerticalDirection(height, width)
     }
 }
 
@@ -222,6 +234,24 @@ extension ScrollDirection {
     static func positive() -> ScrollDirection {
         return isVerticalDirection(.Up, .Left)
     }
+}
+
+// MARK: Helpers
+
+/**
+ Delay function
+ From: http://stackoverflow.com/a/24318861/517707
+ 
+ - parameter delay:   Delay in seconds
+ - parameter closure: Closure
+ */
+func delay(delay:Double, closure:()->()) {
+    dispatch_after(
+        dispatch_time(
+            DISPATCH_TIME_NOW,
+            Int64(delay * Double(NSEC_PER_SEC))
+        ),
+        dispatch_get_main_queue(), closure)
 }
 
 

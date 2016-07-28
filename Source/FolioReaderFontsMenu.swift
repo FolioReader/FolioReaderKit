@@ -25,7 +25,8 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
         view.addGestureRecognizer(tapGesture)
         
         // Menu view
-        menuView = UIView(frame: CGRectMake(0, view.frame.height-170, view.frame.width, view.frame.height))
+        let visibleHeight: CGFloat = readerConfig.canChangeScrollDirection ? 222 : 170
+        menuView = UIView(frame: CGRectMake(0, view.frame.height-visibleHeight, view.frame.width, view.frame.height))
         menuView.backgroundColor = isNight(readerConfig.nightModeMenuBackground, UIColor.whiteColor())
         menuView.autoresizingMask = .FlexibleWidth
         menuView.layer.shadowColor = UIColor.blackColor().CGColor
@@ -125,9 +126,9 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
         slider.addTarget(self, action: #selector(FolioReaderFontsMenu.sliderValueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         // Force remove fill color
-        for layer in slider.layer.sublayers! {
+        slider.layer.sublayers?.forEach({ layer in
             layer.backgroundColor = UIColor.clearColor().CGColor
-        }
+        })
         
         menuView.addSubview(slider)
         
@@ -142,22 +143,39 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
         fontBigView.contentMode = UIViewContentMode.Center
         menuView.addSubview(fontBigView)
         
-//        // Separator 3
-//        let line3 = UIView(frame: CGRectMake(0, line2.frame.origin.y+56, view.frame.width, 1))
-//        line3.backgroundColor = readerConfig.nightModeSeparatorColor
-//        menuView.addSubview(line3)
+        // Only continues if user can change scroll direction
+        guard readerConfig.canChangeScrollDirection else { return }
         
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    // MARK: - Status Bar
-    
-    override func prefersStatusBarHidden() -> Bool {
-        return readerConfig.shouldHideNavigationOnTap == true
+        // Separator 3
+        let line3 = UIView(frame: CGRectMake(0, line2.frame.origin.y+56, view.frame.width, 1))
+        line3.backgroundColor = readerConfig.nightModeSeparatorColor
+        menuView.addSubview(line3)
+        
+        let vertical = UIImage(readerImageNamed: "icon-menu-vertical")
+        let horizontal = UIImage(readerImageNamed: "icon-menu-horizontal")
+        let verticalNormal = vertical!.imageTintColor(normalColor).imageWithRenderingMode(.AlwaysOriginal)
+        let horizontalNormal = horizontal!.imageTintColor(normalColor).imageWithRenderingMode(.AlwaysOriginal)
+        let verticalSelected = vertical!.imageTintColor(selectedColor).imageWithRenderingMode(.AlwaysOriginal)
+        let horizontalSelected = horizontal!.imageTintColor(selectedColor).imageWithRenderingMode(.AlwaysOriginal)
+        
+        // Layout direction
+        let layoutDirection = SMSegmentView(frame: CGRect(x: 0, y: line3.frame.origin.y, width: view.frame.width, height: 55),
+                                     separatorColour: readerConfig.nightModeSeparatorColor,
+                                     separatorWidth: 1,
+                                     segmentProperties:  [
+                                        keySegmentTitleFont: UIFont(name: "Avenir-Light", size: 17)!,
+                                        keySegmentOnSelectionColour: UIColor.clearColor(),
+                                        keySegmentOffSelectionColour: UIColor.clearColor(),
+                                        keySegmentOnSelectionTextColour: selectedColor,
+                                        keySegmentOffSelectionTextColour: normalColor,
+                                        keyContentVerticalMargin: 17
+            ])
+        layoutDirection.delegate = self
+        layoutDirection.tag = 3
+        layoutDirection.addSegmentWithTitle(readerConfig.localizedLayoutVertical, onSelectionImage: verticalSelected, offSelectionImage: verticalNormal)
+        layoutDirection.addSegmentWithTitle(readerConfig.localizedLayoutHorizontal, onSelectionImage: horizontalSelected, offSelectionImage: horizontalNormal)
+        layoutDirection.selectSegmentAtIndex(Int(FolioReader.sharedInstance.currentScrollDirection))
+        menuView.addSubview(layoutDirection)
     }
     
     // MARK: - SMSegmentView delegate
@@ -217,6 +235,12 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
             
             FolioReader.sharedInstance.currentFontName = index
         }
+        
+        if segmentView.tag == 3 {
+            guard FolioReader.sharedInstance.currentScrollDirection != index else { return }
+            FolioReader.sharedInstance.readerCenter.setScrollDirection(FolioReaderScrollDirection(rawValue: index)!)
+            FolioReader.sharedInstance.currentScrollDirection = index
+        }
     }
     
     // MARK: - Font slider changed
@@ -263,5 +287,11 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
             return true
         }
         return false
+    }
+    
+    // MARK: - Status Bar
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return readerConfig.shouldHideNavigationOnTap == true
     }
 }

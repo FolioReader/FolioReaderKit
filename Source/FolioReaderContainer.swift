@@ -47,7 +47,8 @@ class FolioReaderContainer: UIViewController {
             kCurrentAudioRate: 1,
             kCurrentHighlightStyle: 0,
             kCurrentTOCMenu: 0,
-            kCurrentMediaOverlayStyle: MediaOverlayStyle.Default.rawValue
+            kCurrentMediaOverlayStyle: MediaOverlayStyle.Default.rawValue,
+            kCurrentScrollDirection: FolioReaderScrollDirection.vertical.rawValue
         ])
     }
     
