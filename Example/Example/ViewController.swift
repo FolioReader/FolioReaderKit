@@ -35,6 +35,7 @@ class ViewController: UIViewController {
         config.scrollDirection = sampleNum == 1 ? .horizontal : .vertical
         
         // See more at FolioReaderConfig.swift
+//        config.canChangeScrollDirection = false
 //        config.enableTTS = false
 //        config.allowSharing = false
 //        config.tintColor = UIColor.blueColor()

@@ -28,7 +28,9 @@ public enum FolioReaderScrollDirection: Int {
 }
 
 public class FolioReaderConfig: NSObject {
-    // Colors
+    
+    // MARK: Colors
+    
     public var tintColor = UIColor(rgba: "#6ACC50")
     public var menuBackgroundColor = UIColor.whiteColor()
     public var menuSeparatorColor = UIColor(rgba: "#D7D7D7")
@@ -38,14 +40,25 @@ public class FolioReaderConfig: NSObject {
     public var nightModeSeparatorColor = UIColor(white: 0.5, alpha: 0.2)
     public lazy var mediaOverlayColor: UIColor! = self.tintColor
     
-    // Custom actions
+    // MARK: Custom actions
+    
+    /// If `canChangeScrollDirection` is `true` it will be overrided by user's option.
     public var scrollDirection: FolioReaderScrollDirection = .vertical
+    
+    /// Enable or disable hability to user change scroll direction on menu.
     public var canChangeScrollDirection = true
+    
+    /// Should hide navigation bar on user tap
     public var shouldHideNavigationOnTap = true
+    
+    /// Allow sharing option, if `false` will hide all sharing icons and options
     public var allowSharing = true
+    
+    /// Enable TTS (Text To Speech)
     public var enableTTS = true
     
-    // Localized strings
+    // MARK: Localized strings
+    
     public var localizedHighlightsTitle = NSLocalizedString("Highlights", comment: "")
     public var localizedHighlightsDateFormat = "MMM dd, YYYY | HH:mm"
     public var localizedHighlightMenu = NSLocalizedString("Highlight", comment: "")

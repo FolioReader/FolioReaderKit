@@ -57,6 +57,12 @@ class FolioReaderContainer: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // If user can change scroll direction use the last saved
+        if readerConfig.canChangeScrollDirection {
+            let direction = FolioReaderScrollDirection(rawValue: FolioReader.sharedInstance.currentScrollDirection) ?? .vertical
+            readerConfig.scrollDirection = direction
+        }
+        
         centerViewController = FolioReaderCenter()
         FolioReader.sharedInstance.readerCenter = centerViewController
         

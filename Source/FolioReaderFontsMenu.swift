@@ -238,7 +238,9 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
         
         if segmentView.tag == 3 {
             guard FolioReader.sharedInstance.currentScrollDirection != index else { return }
-            FolioReader.sharedInstance.readerCenter.setScrollDirection(FolioReaderScrollDirection(rawValue: index)!)
+            
+            let direction = FolioReaderScrollDirection(rawValue: index) ?? .vertical
+            FolioReader.sharedInstance.readerCenter.setScrollDirection(direction)
             FolioReader.sharedInstance.currentScrollDirection = index
         }
     }
