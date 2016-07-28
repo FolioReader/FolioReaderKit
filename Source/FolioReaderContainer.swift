@@ -47,7 +47,8 @@ class FolioReaderContainer: UIViewController {
             kCurrentAudioRate: 1,
             kCurrentHighlightStyle: 0,
             kCurrentTOCMenu: 0,
-            kCurrentMediaOverlayStyle: MediaOverlayStyle.Default.rawValue
+            kCurrentMediaOverlayStyle: MediaOverlayStyle.Default.rawValue,
+            kCurrentScrollDirection: FolioReaderScrollDirection.vertical.rawValue
         ])
     }
     
@@ -55,6 +56,12 @@ class FolioReaderContainer: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // If user can change scroll direction use the last saved
+        if readerConfig.canChangeScrollDirection {
+            let direction = FolioReaderScrollDirection(rawValue: FolioReader.sharedInstance.currentScrollDirection) ?? .vertical
+            readerConfig.scrollDirection = direction
+        }
         
         centerViewController = FolioReaderCenter()
         FolioReader.sharedInstance.readerCenter = centerViewController

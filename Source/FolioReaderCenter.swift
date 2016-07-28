@@ -22,6 +22,7 @@ var isScrolling = false
 class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
     var collectionView: UICollectionView!
+    let collectionViewLayout = UICollectionViewFlowLayout()
     var loadingView: UIActivityIndicatorView!
     var pages: [String]!
     var totalPages: Int!
@@ -52,17 +53,16 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         setPageSize(UIApplication.sharedApplication().statusBarOrientation)
         
         // Layout
-        let layout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsetsZero
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
-        layout.scrollDirection = .direction()
+        collectionViewLayout.sectionInset = UIEdgeInsetsZero
+        collectionViewLayout.minimumLineSpacing = 0
+        collectionViewLayout.minimumInteritemSpacing = 0
+        collectionViewLayout.scrollDirection = .direction()
         
         let background = isNight(readerConfig.nightModeBackground, UIColor.whiteColor())
         view.backgroundColor = background
         
         // CollectionView
-        collectionView = UICollectionView(frame: screenBounds, collectionViewLayout: layout)
+        collectionView = UICollectionView(frame: screenBounds, collectionViewLayout: collectionViewLayout)
         collectionView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -100,7 +100,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         loadingView.startAnimating()
         view.addSubview(loadingView)
     }
-    
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -168,8 +167,40 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         currentPageNumber = 1
     }
     
-    // MARK: Status bar and Navigation bar
+    // MARK: Change layout orientation
     
+    func setScrollDirection(direction: FolioReaderScrollDirection) {
+        // Get internal page offset before layout change
+        let pageScrollView = currentPage.webView.scrollView
+        pageOffsetRate = pageScrollView.contentOffset.forDirection() / pageScrollView.contentSize.forDirection()
+        
+        // Change layout
+        readerConfig.scrollDirection = direction
+        collectionViewLayout.scrollDirection = .direction()
+        currentPage.setNeedsLayout()
+        collectionView.collectionViewLayout.invalidateLayout()
+        collectionView.setContentOffset(frameForPage(currentPageNumber).origin, animated: false)
+        
+        /**
+         *  This delay is needed because the page will not be ready yet
+         *  so the delay wait until layout finished the changes.
+         */
+        delay(0.1) {
+            var pageOffset = pageScrollView.contentSize.forDirection() * self.pageOffsetRate
+            
+            // Fix the offset for paged scroll
+            if readerConfig.scrollDirection == .horizontal {
+                let page = round(pageOffset / pageWidth)
+                pageOffset = page * pageWidth
+            }
+            
+            let pageOffsetPoint = isVerticalDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0))
+            pageScrollView.setContentOffset(pageOffsetPoint, animated: true)
+        }
+    }
+
+    // MARK: Status bar and Navigation bar
+
     func hideBars() {
 
         if readerConfig.shouldHideNavigationOnTap == false { return }
@@ -230,6 +261,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         
         cell.pageNumber = indexPath.row+1
         cell.webView.scrollView.delegate = self
+        cell.webView.setupScrollDirection()
         cell.delegate = self
         cell.backgroundColor = UIColor.clearColor()
         
@@ -353,6 +385,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         
         // Update pages
         pagesForCurrentPage(currentPage)
+        currentPage.refreshPageMode()
         
         scrollScrubber.setSliderVal()
         

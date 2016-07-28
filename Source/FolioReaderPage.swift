@@ -50,15 +50,6 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         }
         webView.delegate = self
         
-        if readerConfig.scrollDirection == .horizontal {
-            webView.scrollView.pagingEnabled = true
-            webView.paginationMode = .LeftToRight
-            webView.paginationBreakingMode = .Page
-            webView.scrollView.bounces = false
-        } else {
-            webView.scrollView.bounces = true
-        }
-        
         if colorView == nil {
             colorView = UIView()
             colorView.backgroundColor = readerConfig.nightModeBackground
@@ -83,6 +74,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         super.layoutSubviews()
         
         webView.frame = webViewFrame()
+        webView.setupScrollDirection()
     }
     
     func webViewFrame() -> CGRect {
@@ -609,6 +601,21 @@ extension UIWebView {
         let callback = self.stringByEvaluatingJavaScriptFromString(script)
         if callback!.isEmpty { return nil }
         return callback
+    }
+    
+    // MARK: WebView direction config
+    
+    func setupScrollDirection() {
+        if readerConfig.scrollDirection == .horizontal {
+            self.scrollView.pagingEnabled = true
+            self.paginationMode = .LeftToRight
+            self.paginationBreakingMode = .Page
+            self.scrollView.bounces = false
+        } else {
+            self.scrollView.pagingEnabled = false
+            self.paginationMode = .Unpaginated
+            self.scrollView.bounces = true
+        }
     }
 }
 
