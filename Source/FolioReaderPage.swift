@@ -353,7 +353,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
      - parameter ID: The ID
      */
     func audioMarkID(ID: String) {
-        let currentPage = FolioReader.sharedInstance.readerCenter.currentPage
+        guard let currentPage = FolioReader.sharedInstance.readerCenter.currentPage else { return }
         currentPage.webView.js("audioMarkID('\(book.playbackActiveClass())','\(ID)')")
     }
     

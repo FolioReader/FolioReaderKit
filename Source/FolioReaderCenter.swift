@@ -27,7 +27,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     var pages: [String]!
     var totalPages: Int!
     var tempFragment: String?
-    var currentPage: FolioReaderPage!
+    var currentPage: FolioReaderPage?
     var animator: ZFModalTransitionAnimator!
     var pageIndicatorView: FolioReaderPageIndicator!
     var bookShareLink: String?
@@ -170,6 +170,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     // MARK: Change layout orientation
     
     func setScrollDirection(direction: FolioReaderScrollDirection) {
+        guard let currentPage = currentPage else { return }
+        
         // Get internal page offset before layout change
         let pageScrollView = currentPage.webView.scrollView
         pageOffsetRate = pageScrollView.contentOffset.forDirection() / pageScrollView.contentSize.forDirection()
@@ -375,13 +377,15 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             self.collectionView.collectionViewLayout.invalidateLayout()
             
             // Adjust internal page offset
-            let pageScrollView = self.currentPage.webView.scrollView
+            guard let currentPage = self.currentPage else { return }
+            let pageScrollView = currentPage.webView.scrollView
             self.pageOffsetRate = pageScrollView.contentOffset.forDirection() / pageScrollView.contentSize.forDirection()
         })
     }
     
     override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
         if !FolioReader.sharedInstance.isReaderReady { return }
+        guard let currentPage = currentPage else { return }
         
         // Update pages
         pagesForCurrentPage(currentPage)
@@ -390,7 +394,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         scrollScrubber.setSliderVal()
         
         // After rotation fix internal page offset
-        var pageOffset = self.currentPage.webView.scrollView.contentSize.forDirection() * pageOffsetRate
+        var pageOffset = currentPage.webView.scrollView.contentSize.forDirection() * pageOffsetRate
         
         // Fix the offset for paged scroll
         if readerConfig.scrollDirection == .horizontal {
@@ -399,7 +403,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         }
         
         let pageOffsetPoint = isVerticalDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0))
-        self.currentPage.webView.scrollView.setContentOffset(pageOffsetPoint, animated: true)
+        currentPage.webView.scrollView.setContentOffset(pageOffsetPoint, animated: true)
     }
     
     override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
@@ -484,7 +488,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         if let page = page {
             let pageSize = isVerticalDirection(pageHeight, pageWidth)
             pageIndicatorView.totalPages = Int(ceil(page.webView.scrollView.contentSize.forDirection()/pageSize))
-            let webViewPage = pageForOffset(currentPage.webView.scrollView.contentOffset.x, pageHeight: pageSize)
+            let webViewPage = pageForOffset(page.webView.scrollView.contentOffset.x, pageHeight: pageSize)
             pageIndicatorView.currentPage = webViewPage
         }
     }
@@ -543,10 +547,10 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     func changePageWith(page page: Int, andFragment fragment: String, animated: Bool = false, completion: (() -> Void)? = nil) {
         if currentPageNumber == page {
-            if fragment != "" && currentPage != nil {
+            if let currentPage = currentPage where fragment != "" {
                 currentPage.handleAnchor(fragment, avoidBeginningAnchors: true, animated: animated)
-                completion?()
             }
+            completion?()
         } else {
             tempFragment = fragment
             changePageWith(page: page, animated: animated, completion: { () -> Void in
@@ -569,6 +573,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
 
     func changePageWith(href href: String, andAudioMarkID markID: String) {
         if recentlyScrolled { return } // if user recently scrolled, do not change pages or scroll the webview
+        guard let currentPage = currentPage else { return }
 
         let item = findPageByHref(href)
         let pageUpdateNeeded = item+1 != currentPage.pageNumber
@@ -576,10 +581,10 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         changePageWith(indexPath: indexPath, animated: true) { () -> Void in
             if pageUpdateNeeded {
                 self.updateCurrentPage({ () -> Void in
-                    self.currentPage.audioMarkID(markID)
+                    currentPage.audioMarkID(markID)
                 })
             } else {
-                self.currentPage.audioMarkID(markID)
+                currentPage.audioMarkID(markID)
             }
         }
     }
@@ -701,6 +706,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
      Sharing chapter method.
     */
     func shareChapter(sender: UIBarButtonItem) {
+        guard let currentPage = currentPage else { return }
         
         if let chapterText = currentPage.webView.js("getBodyText()") {
             
@@ -978,7 +984,7 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
         }
         
         // Go to fragment if needed
-        if let fragmentID = tempFragment where fragmentID != "" && currentPage != nil {
+        if let fragmentID = tempFragment, let currentPage = currentPage where fragmentID != "" {
             currentPage.handleAnchor(fragmentID, avoidBeginningAnchors: true, animated: true)
             tempFragment = nil
         }
@@ -1008,7 +1014,7 @@ extension FolioReaderCenter: FolioReaderChapterListDelegate {
         
         // Move to #fragment
         if let reference = tempReference {
-            if let fragmentID = reference.fragmentID where fragmentID != "" && currentPage != nil {
+            if let fragmentID = reference.fragmentID, let currentPage = currentPage where fragmentID != "" {
                 currentPage.handleAnchor(reference.fragmentID!, avoidBeginningAnchors: true, animated: true)
             }
             tempReference = nil

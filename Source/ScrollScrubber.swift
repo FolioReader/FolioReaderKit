@@ -195,14 +195,14 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     // MARK: - utility methods
     
     private func scrollView() -> UIScrollView {
-        return delegate.currentPage.webView.scrollView
+        return delegate.currentPage!.webView.scrollView
     }
     
     private func height() -> CGFloat {
-        return delegate.currentPage.webView.scrollView.contentSize.height - pageHeight + 44
+        return delegate.currentPage!.webView.scrollView.contentSize.height - pageHeight + 44
     }
     
     private func scrollTop() -> CGFloat {
-        return delegate.currentPage.webView.scrollView.contentOffset.forDirection()
+        return delegate.currentPage!.webView.scrollView.contentOffset.forDirection()
     }
 }

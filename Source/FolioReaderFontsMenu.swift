@@ -181,7 +181,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
     // MARK: - SMSegmentView delegate
     
     func segmentView(segmentView: SMSegmentView, didSelectSegmentAtIndex index: Int) {
-        let currentPage = FolioReader.sharedInstance.readerCenter.currentPage
+        guard let currentPage = FolioReader.sharedInstance.readerCenter.currentPage else { return }
         
         if segmentView.tag == 1 {
 
@@ -248,7 +248,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
     // MARK: - Font slider changed
     
     func sliderValueChanged(sender: HADiscreteSlider) {
-        let currentPage = FolioReader.sharedInstance.readerCenter.currentPage
+        guard let currentPage = FolioReader.sharedInstance.readerCenter.currentPage else { return }
         let index = Int(sender.value)
         
         switch index {
