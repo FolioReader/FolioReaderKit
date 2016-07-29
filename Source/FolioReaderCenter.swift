@@ -992,7 +992,7 @@ extension FolioReaderCenter: FolioReaderChapterListDelegate {
     func chapterList(chapterList: FolioReaderChapterList, didSelectRowAtIndexPath indexPath: NSIndexPath, withTocReference reference: FRTocReference) {
         let item = findPageByResource(reference)
         
-        if item < totalPages-1 {
+        if item < totalPages {
             let indexPath = NSIndexPath(forRow: item, inSection: 0)
             changePageWith(indexPath: indexPath, animated: false, completion: { () -> Void in
                 self.updateCurrentPage()
