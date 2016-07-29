@@ -143,7 +143,10 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
             }
         }
         
-        if scrollDirection == .negative() && isScrolling {
+//        if scrollDirection == .negative() && isScrolling {
+        let direction: ScrollDirection = book.spine.isRtl && readerConfig.scrollDirection == .horizontal ? .positive() : .negative()
+        
+        if scrollDirection == direction && isScrolling {
             let bottomOffset = isVerticalDirection(
                 CGPointMake(0, webView.scrollView.contentSize.height - webView.scrollView.bounds.height),
                 CGPointMake(webView.scrollView.contentSize.width - webView.scrollView.bounds.width, 0)

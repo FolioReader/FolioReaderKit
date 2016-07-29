@@ -156,6 +156,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
 
         collectionView.reloadData()
         configureNavBarButtons()
+        setCollectionViewProgressiveDirection()
         
         if let position = FolioReader.defaults.valueForKey(kBookId) as? NSDictionary,
             let pageNumber = position["pageNumber"] as? Int where pageNumber > 0 {
@@ -166,6 +167,27 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         
         currentPageNumber = 1
     }
+    
+    // MARK: Change page progressive direction
+    
+    func setCollectionViewProgressiveDirection() {
+        if book.spine.isRtl && readerConfig.scrollDirection == .horizontal {
+            collectionView.transform = CGAffineTransformMakeScale(-1, 1)
+        } else {
+            collectionView.transform = CGAffineTransformIdentity
+        }
+    }
+    
+    func setPageProgressiveDirection(page: FolioReaderPage) {
+        
+        if book.spine.isRtl && readerConfig.scrollDirection == .horizontal {
+//            if page.transform.a == -1 { return }
+            page.transform = CGAffineTransformMakeScale(-1, 1)
+        } else {
+            page.transform = CGAffineTransformIdentity
+        }
+    }
+
     
     // MARK: Change layout orientation
     
@@ -182,6 +204,11 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         currentPage.setNeedsLayout()
         collectionView.collectionViewLayout.invalidateLayout()
         collectionView.setContentOffset(frameForPage(currentPageNumber).origin, animated: false)
+        
+        // Page progressive direction
+        setCollectionViewProgressiveDirection()
+        delay(0.2) { self.setPageProgressiveDirection(currentPage) }
+        
         
         /**
          *  This delay is needed because the page will not be ready yet
@@ -266,6 +293,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         cell.webView.setupScrollDirection()
         cell.delegate = self
         cell.backgroundColor = UIColor.clearColor()
+        
+        setPageProgressiveDirection(cell)
         
         // Configure the cell
         let resource = book.spine.spineReferences[indexPath.row].resource
