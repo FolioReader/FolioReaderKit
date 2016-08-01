@@ -92,7 +92,7 @@ class FolioReaderContainer: UIViewController {
                     self.errorOnLoad = true
                 }
                 
-                FolioReader.sharedInstance.isReaderOpen = true
+                FolioReader.isReaderOpen = true
                 
                 if !self.errorOnLoad {
                     // Reload data
@@ -105,7 +105,7 @@ class FolioReaderContainer: UIViewController {
                         
                         self.centerViewController.reloadData()
                         
-                        FolioReader.sharedInstance.isReaderReady = true
+                        FolioReader.isReaderReady = true
                     })
                 }
             })

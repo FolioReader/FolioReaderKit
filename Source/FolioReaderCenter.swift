@@ -171,7 +171,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     // MARK: Change page progressive direction
     
     func setCollectionViewProgressiveDirection() {
-        if book.spine.isRtl && readerConfig.scrollDirection == .horizontal {
+        if FolioReader.needsRTLChange {
             collectionView.transform = CGAffineTransformMakeScale(-1, 1)
         } else {
             collectionView.transform = CGAffineTransformIdentity
@@ -179,8 +179,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     func setPageProgressiveDirection(page: FolioReaderPage) {
-        
-        if book.spine.isRtl && readerConfig.scrollDirection == .horizontal {
+        if FolioReader.needsRTLChange {
 //            if page.transform.a == -1 { return }
             page.transform = CGAffineTransformMakeScale(-1, 1)
         } else {
@@ -374,7 +373,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     // MARK: - Device rotation
     
     override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
-        if !FolioReader.sharedInstance.isReaderReady { return }
+        guard FolioReader.isReaderReady else { return }
         
         setPageSize(toInterfaceOrientation)
         updateCurrentPage()
@@ -413,7 +412,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
-        if !FolioReader.sharedInstance.isReaderReady { return }
+        guard FolioReader.isReaderReady else { return }
         guard let currentPage = currentPage else { return }
         
         // Update pages
@@ -436,7 +435,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
-        if !FolioReader.sharedInstance.isReaderReady { return }
+        guard FolioReader.isReaderReady else { return }
         
         if currentPageNumber+1 >= totalPages {
             UIView.animateWithDuration(duration, animations: {
@@ -514,12 +513,11 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     func pagesForCurrentPage(page: FolioReaderPage?) {
-        if let page = page {
-            let pageSize = isVerticalDirection(pageHeight, pageWidth)
-            pageIndicatorView.totalPages = Int(ceil(page.webView.scrollView.contentSize.forDirection()/pageSize))
-            let webViewPage = pageForOffset(page.webView.scrollView.contentOffset.x, pageHeight: pageSize)
-            pageIndicatorView.currentPage = webViewPage
-        }
+        guard let page = page else { return }
+        let pageSize = isVerticalDirection(pageHeight, pageWidth)
+        pageIndicatorView.totalPages = Int(ceil(page.webView.scrollView.contentSize.forDirection()/pageSize))
+        let webViewPage = pageForOffset(page.webView.scrollView.contentOffset.x, pageHeight: pageSize)
+        pageIndicatorView.currentPage = webViewPage
     }
     
     func pageForOffset(offset: CGFloat, pageHeight height: CGFloat) -> Int {
