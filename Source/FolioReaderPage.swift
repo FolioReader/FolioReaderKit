@@ -73,8 +73,8 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        webView.frame = webViewFrame()
         webView.setupScrollDirection()
+        webView.frame = webViewFrame()
     }
     
     func webViewFrame() -> CGRect {
