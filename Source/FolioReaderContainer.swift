@@ -59,7 +59,7 @@ class FolioReaderContainer: UIViewController {
         
         // If user can change scroll direction use the last saved
         if readerConfig.canChangeScrollDirection {
-            let direction = FolioReaderScrollDirection(rawValue: FolioReader.sharedInstance.currentScrollDirection) ?? .vertical
+            let direction = FolioReaderScrollDirection(rawValue: FolioReader.currentScrollDirection) ?? .vertical
             readerConfig.scrollDirection = direction
         }
         

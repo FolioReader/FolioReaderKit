@@ -313,7 +313,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         
         // Font class name
         var classes = ""
-        let currentFontName = FolioReader.sharedInstance.currentFontName
+        let currentFontName = FolioReader.currentFontName
         switch currentFontName {
         case 0:
             classes = "andada"
@@ -331,15 +331,15 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             break
         }
         
-        classes += " "+FolioReader.sharedInstance.currentMediaOverlayStyle.className()
+        classes += " "+FolioReader.currentMediaOverlayStyle.className()
         
         // Night mode
-        if FolioReader.sharedInstance.nightMode {
+        if FolioReader.nightMode {
             classes += " nightMode"
         }
         
         // Font Size
-        let currentFontSize = FolioReader.sharedInstance.currentFontSize
+        let currentFontSize = FolioReader.currentFontSize
         switch currentFontSize {
         case 0:
             classes += " textSizeOne"

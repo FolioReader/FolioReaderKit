@@ -266,7 +266,7 @@ class FolioReaderAudioPlayer: NSObject {
                 
                 guard let player = player else { return false }
                 
-                setRate(FolioReader.sharedInstance.currentAudioRate)
+                setRate(FolioReader.currentAudioRate)
                 player.enableRate = true
                 player.prepareToPlay()
                 player.delegate = self
@@ -335,7 +335,7 @@ class FolioReaderAudioPlayer: NSObject {
         if synthesizer == nil {
             synthesizer = AVSpeechSynthesizer()
             synthesizer.delegate = self
-            setRate(FolioReader.sharedInstance.currentAudioRate)
+            setRate(FolioReader.currentAudioRate)
         }
         
         let utterance = AVSpeechUtterance(string: text)

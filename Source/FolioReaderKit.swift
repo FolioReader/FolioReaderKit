@@ -69,48 +69,49 @@ public class FolioReader : NSObject {
         }
     }
     
-    var nightMode: Bool {
+    static var nightMode: Bool {
         get { return FolioReader.defaults.boolForKey(kNightMode) }
         set (value) {
             FolioReader.defaults.setBool(value, forKey: kNightMode)
         }
     }
-    var currentFontName: Int {
+    
+    static var currentFontName: Int {
         get { return FolioReader.defaults.valueForKey(kCurrentFontFamily) as! Int }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentFontFamily)
         }
     }
     
-    var currentFontSize: Int {
+    static var currentFontSize: Int {
         get { return FolioReader.defaults.valueForKey(kCurrentFontSize) as! Int }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentFontSize)
         }
     }
     
-    var currentAudioRate: Int {
+    static var currentAudioRate: Int {
         get { return FolioReader.defaults.valueForKey(kCurrentAudioRate) as! Int }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentAudioRate)
         }
     }
 
-    var currentHighlightStyle: Int {
+    static var currentHighlightStyle: Int {
         get { return FolioReader.defaults.valueForKey(kCurrentHighlightStyle) as! Int }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentHighlightStyle)
         }
     }
     
-    var currentMediaOverlayStyle: MediaOverlayStyle {
+    static var currentMediaOverlayStyle: MediaOverlayStyle {
         get { return MediaOverlayStyle(rawValue: FolioReader.defaults.valueForKey(kCurrentMediaOverlayStyle) as! Int)! }
         set (value) {
             FolioReader.defaults.setValue(value.rawValue, forKey: kCurrentMediaOverlayStyle)
         }
     }
     
-    var currentScrollDirection: Int {
+    static var currentScrollDirection: Int {
         get { return FolioReader.defaults.valueForKey(kCurrentScrollDirection) as! Int }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentScrollDirection)
@@ -183,7 +184,7 @@ public class FolioReader : NSObject {
 // MARK: - Global Functions
 
 func isNight<T> (f: T, _ l: T) -> T {
-    return FolioReader.sharedInstance.nightMode ? f : l
+    return FolioReader.nightMode ? f : l
 }
 
 // MARK: - Scroll Direction Functions

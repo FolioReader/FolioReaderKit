@@ -143,8 +143,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
             }
         }
         
-//        if scrollDirection == .negative() && isScrolling {
-        let direction: ScrollDirection = book.spine.isRtl && readerConfig.scrollDirection == .horizontal ? .positive() : .negative()
+        let direction: ScrollDirection = FolioReader.needsRTLChange ? .positive() : .negative()
         
         if scrollDirection == direction && isScrolling {
             let bottomOffset = isVerticalDirection(
@@ -372,7 +371,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     
     // MARK: ColorView fix for horizontal layout
     func refreshPageMode() {
-        if FolioReader.sharedInstance.nightMode {
+        if FolioReader.nightMode {
             // omit create webView and colorView
             let script = "document.documentElement.offsetHeight"
             let contentHeight = webView.stringByEvaluatingJavaScriptFromString(script)
@@ -474,7 +473,7 @@ extension UIWebView {
     }
     
     func highlight(sender: UIMenuController?) {
-        let highlightAndReturn = js("highlightString('\(HighlightStyle.classForStyle(FolioReader.sharedInstance.currentHighlightStyle))')")
+        let highlightAndReturn = js("highlightString('\(HighlightStyle.classForStyle(FolioReader.currentHighlightStyle))')")
         let jsonData = highlightAndReturn?.dataUsingEncoding(NSUTF8StringEncoding)
         
         do {
@@ -546,7 +545,7 @@ extension UIWebView {
     }
 
     func changeHighlightStyle(sender: UIMenuController?, style: HighlightStyle) {
-        FolioReader.sharedInstance.currentHighlightStyle = style.rawValue
+        FolioReader.currentHighlightStyle = style.rawValue
 
         if let updateId = js("setHighlightStyle('\(HighlightStyle.classForStyle(style.rawValue))')") {
             Highlight.updateById(updateId, type: style)
