@@ -97,6 +97,7 @@ func applicationWillTerminate(application: UIApplication) {
 - [x] TTS - Text to Speech Support
 - [x] Parse epub cover image
 - [x] Vertical and Horizontal scrolling
+- [x] RTL Support
 - [ ] PDF support
 - [ ] Book Search
 - [ ] Add Notes to a Highlight
