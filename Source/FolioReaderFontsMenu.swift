@@ -69,7 +69,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
         dayNight.tag = 1
         dayNight.addSegmentWithTitle(readerConfig.localizedFontMenuDay, onSelectionImage: sunSelected, offSelectionImage: sunNormal)
         dayNight.addSegmentWithTitle(readerConfig.localizedFontMenuNight, onSelectionImage: moonSelected, offSelectionImage: moonNormal)
-        dayNight.selectSegmentAtIndex(Int(FolioReader.sharedInstance.nightMode))
+        dayNight.selectSegmentAtIndex(Int(FolioReader.nightMode))
         menuView.addSubview(dayNight)
         
         
@@ -99,7 +99,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
         fontName.segments[1].titleFont = UIFont(name: "Lato-Regular", size: 18)!
         fontName.segments[2].titleFont = UIFont(name: "Lora-Regular", size: 18)!
         fontName.segments[3].titleFont = UIFont(name: "Raleway-Regular", size: 18)!
-        fontName.selectSegmentAtIndex(FolioReader.sharedInstance.currentFontName)
+        fontName.selectSegmentAtIndex(FolioReader.currentFontName)
         menuView.addSubview(fontName)
         
         // Separator 2
@@ -122,7 +122,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
         slider.backgroundColor = UIColor.clearColor()
         slider.tintColor = readerConfig.nightModeSeparatorColor
         slider.minimumValue = 0
-        slider.value = CGFloat(FolioReader.sharedInstance.currentFontSize)
+        slider.value = CGFloat(FolioReader.currentFontSize)
         slider.addTarget(self, action: #selector(FolioReaderFontsMenu.sliderValueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         // Force remove fill color
@@ -174,18 +174,18 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
         layoutDirection.tag = 3
         layoutDirection.addSegmentWithTitle(readerConfig.localizedLayoutVertical, onSelectionImage: verticalSelected, offSelectionImage: verticalNormal)
         layoutDirection.addSegmentWithTitle(readerConfig.localizedLayoutHorizontal, onSelectionImage: horizontalSelected, offSelectionImage: horizontalNormal)
-        layoutDirection.selectSegmentAtIndex(Int(FolioReader.sharedInstance.currentScrollDirection))
+        layoutDirection.selectSegmentAtIndex(Int(FolioReader.currentScrollDirection))
         menuView.addSubview(layoutDirection)
     }
     
     // MARK: - SMSegmentView delegate
     
     func segmentView(segmentView: SMSegmentView, didSelectSegmentAtIndex index: Int) {
-        let currentPage = FolioReader.sharedInstance.readerCenter.currentPage
+        guard let currentPage = FolioReader.sharedInstance.readerCenter.currentPage else { return }
         
         if segmentView.tag == 1 {
 
-            FolioReader.sharedInstance.nightMode = Bool(index)
+            FolioReader.nightMode = Bool(index)
             
             let readerCenter = FolioReader.sharedInstance.readerCenter
             
@@ -233,22 +233,22 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
                 break
             }
             
-            FolioReader.sharedInstance.currentFontName = index
+            FolioReader.currentFontName = index
         }
         
         if segmentView.tag == 3 {
-            guard FolioReader.sharedInstance.currentScrollDirection != index else { return }
+            guard FolioReader.currentScrollDirection != index else { return }
             
             let direction = FolioReaderScrollDirection(rawValue: index) ?? .vertical
             FolioReader.sharedInstance.readerCenter.setScrollDirection(direction)
-            FolioReader.sharedInstance.currentScrollDirection = index
+            FolioReader.currentScrollDirection = index
         }
     }
     
     // MARK: - Font slider changed
     
     func sliderValueChanged(sender: HADiscreteSlider) {
-        let currentPage = FolioReader.sharedInstance.readerCenter.currentPage
+        guard let currentPage = FolioReader.sharedInstance.readerCenter.currentPage else { return }
         let index = Int(sender.value)
         
         switch index {
@@ -271,7 +271,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
             break
         }
         
-        FolioReader.sharedInstance.currentFontSize = index
+        FolioReader.currentFontSize = index
     }
     
     // MARK: - Gestures

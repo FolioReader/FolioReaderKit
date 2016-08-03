@@ -59,7 +59,7 @@ class FolioReaderContainer: UIViewController {
         
         // If user can change scroll direction use the last saved
         if readerConfig.canChangeScrollDirection {
-            let direction = FolioReaderScrollDirection(rawValue: FolioReader.sharedInstance.currentScrollDirection) ?? .vertical
+            let direction = FolioReaderScrollDirection(rawValue: FolioReader.currentScrollDirection) ?? .vertical
             readerConfig.scrollDirection = direction
         }
         
@@ -92,7 +92,7 @@ class FolioReaderContainer: UIViewController {
                     self.errorOnLoad = true
                 }
                 
-                FolioReader.sharedInstance.isReaderOpen = true
+                FolioReader.isReaderOpen = true
                 
                 if !self.errorOnLoad {
                     // Reload data
@@ -105,7 +105,7 @@ class FolioReaderContainer: UIViewController {
                         
                         self.centerViewController.reloadData()
                         
-                        FolioReader.sharedInstance.isReaderReady = true
+                        FolioReader.isReaderReady = true
                     })
                 }
             })

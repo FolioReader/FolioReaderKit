@@ -74,10 +74,10 @@ class FolioReaderHighlightList: UITableViewController {
         
         if highlight.type == HighlightStyle.Underline.rawValue {
             text.addAttribute(NSBackgroundColorAttributeName, value: UIColor.clearColor(), range: range)
-            text.addAttribute(NSUnderlineColorAttributeName, value: HighlightStyle.colorForStyle(highlight.type, nightMode: FolioReader.sharedInstance.nightMode), range: range)
+            text.addAttribute(NSUnderlineColorAttributeName, value: HighlightStyle.colorForStyle(highlight.type, nightMode: FolioReader.nightMode), range: range)
             text.addAttribute(NSUnderlineStyleAttributeName, value: NSNumber(integer: NSUnderlineStyle.StyleSingle.rawValue), range: range)
         } else {
-            text.addAttribute(NSBackgroundColorAttributeName, value: HighlightStyle.colorForStyle(highlight.type, nightMode: FolioReader.sharedInstance.nightMode), range: range)
+            text.addAttribute(NSBackgroundColorAttributeName, value: HighlightStyle.colorForStyle(highlight.type, nightMode: FolioReader.nightMode), range: range)
         }
         
         // Text

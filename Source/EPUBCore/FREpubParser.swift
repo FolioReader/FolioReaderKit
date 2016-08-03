@@ -146,7 +146,13 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             }
             
             // Read Spine
-            book.spine = readSpine(xmlDoc.root["spine"].children)
+            let spine = xmlDoc.root["spine"]
+            book.spine = readSpine(spine.children)
+            
+            // Page progress direction `ltr` or `rtl`
+            if let pageProgressionDirection = spine.attributes["page-progression-direction"] {
+                book.spine.pageProgressionDirection = pageProgressionDirection
+            }
         } catch {
             print("Cannot read .opf file.")
         }

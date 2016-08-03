@@ -41,7 +41,7 @@ enum MediaOverlayStyle: Int {
     case Underline
     case TextColor
     
-    init () {
+    init() {
         self = .Default
     }
     
@@ -51,16 +51,14 @@ enum MediaOverlayStyle: Int {
 }
 
 /**
-*  Main Library class with some useful constants and methods
-*/
+ *  Main Library class with some useful constants and methods
+ */
 public class FolioReader : NSObject {
     static let sharedInstance = FolioReader()
     static let defaults = NSUserDefaults.standardUserDefaults()
     weak var readerCenter: FolioReaderCenter!
     weak var readerContainer: FolioReaderContainer!
     weak var readerAudioPlayer: FolioReaderAudioPlayer!
-    var isReaderOpen = false
-    var isReaderReady = false
     
     private override init() {
         let isMigrated = FolioReader.defaults.boolForKey(kMigratedToRealm)
@@ -69,48 +67,67 @@ public class FolioReader : NSObject {
         }
     }
     
-    var nightMode: Bool {
+    /// Check if reader is open
+    static var isReaderOpen = false
+    
+    /// Check if reader is open and ready
+    static var isReaderReady = false
+    
+    /// Check if layout needs to change to fit Right To Left
+    static var needsRTLChange: Bool {
+        return book.spine.isRtl && readerConfig.scrollDirection == .horizontal
+    }
+    
+    /// Check if current theme is Night mode
+    static var nightMode: Bool {
         get { return FolioReader.defaults.boolForKey(kNightMode) }
         set (value) {
             FolioReader.defaults.setBool(value, forKey: kNightMode)
         }
     }
-    var currentFontName: Int {
+    
+    /// Check current font name
+    static var currentFontName: Int {
         get { return FolioReader.defaults.valueForKey(kCurrentFontFamily) as! Int }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentFontFamily)
         }
     }
     
-    var currentFontSize: Int {
+    /// Check current font size
+    static var currentFontSize: Int {
         get { return FolioReader.defaults.valueForKey(kCurrentFontSize) as! Int }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentFontSize)
         }
     }
     
-    var currentAudioRate: Int {
+    /// Check current audio rate, the speed of speech voice
+    static var currentAudioRate: Int {
         get { return FolioReader.defaults.valueForKey(kCurrentAudioRate) as! Int }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentAudioRate)
         }
     }
 
-    var currentHighlightStyle: Int {
+    /// Check the current highlight style
+    static var currentHighlightStyle: Int {
         get { return FolioReader.defaults.valueForKey(kCurrentHighlightStyle) as! Int }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentHighlightStyle)
         }
     }
     
-    var currentMediaOverlayStyle: MediaOverlayStyle {
+    /// Check the current Media Overlay or TTS style
+    static var currentMediaOverlayStyle: MediaOverlayStyle {
         get { return MediaOverlayStyle(rawValue: FolioReader.defaults.valueForKey(kCurrentMediaOverlayStyle) as! Int)! }
         set (value) {
             FolioReader.defaults.setValue(value.rawValue, forKey: kCurrentMediaOverlayStyle)
         }
     }
     
-    var currentScrollDirection: Int {
+    /// Check the current scroll direction
+    static var currentScrollDirection: Int {
         get { return FolioReader.defaults.valueForKey(kCurrentScrollDirection) as! Int }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentScrollDirection)
@@ -122,7 +139,6 @@ public class FolioReader : NSObject {
     /**
      Read Cover Image and Return an IUImage
      */
-    
     public class func getCoverImage(epubPath: String) -> UIImage? {
         return FREpubParser().parseCoverImage(epubPath)
     }
@@ -158,23 +174,26 @@ public class FolioReader : NSObject {
      Save Reader state, book, page and scroll are saved
     */
     class func saveReaderState() {
-        if FolioReader.sharedInstance.isReaderOpen {
-            if let currentPage = FolioReader.sharedInstance.readerCenter.currentPage {
-                let position = [
-                    "pageNumber": currentPageNumber,
-                    "pageOffsetX": currentPage.webView.scrollView.contentOffset.x,
-                    "pageOffsetY": currentPage.webView.scrollView.contentOffset.y
-                ]
-                
-                FolioReader.defaults.setObject(position, forKey: kBookId)
-            }
+        guard FolioReader.isReaderOpen else { return }
+        
+        if let currentPage = FolioReader.sharedInstance.readerCenter.currentPage {
+            let position = [
+                "pageNumber": currentPageNumber,
+                "pageOffsetX": currentPage.webView.scrollView.contentOffset.x,
+                "pageOffsetY": currentPage.webView.scrollView.contentOffset.y
+            ]
+            
+            FolioReader.defaults.setObject(position, forKey: kBookId)
         }
     }
     
+    /**
+     Closes and save the reader current instance
+     */
     class func close() {
         FolioReader.saveReaderState()
-        FolioReader.sharedInstance.isReaderOpen = false
-        FolioReader.sharedInstance.isReaderReady = false
+        FolioReader.isReaderOpen = false
+        FolioReader.isReaderReady = false
         FolioReader.sharedInstance.readerAudioPlayer.stop(immediate: true)
         FolioReader.defaults.setInteger(0, forKey: kCurrentTOCMenu)
     }
@@ -183,7 +202,7 @@ public class FolioReader : NSObject {
 // MARK: - Global Functions
 
 func isNight<T> (f: T, _ l: T) -> T {
-    return FolioReader.sharedInstance.nightMode ? f : l
+    return FolioReader.nightMode ? f : l
 }
 
 // MARK: - Scroll Direction Functions

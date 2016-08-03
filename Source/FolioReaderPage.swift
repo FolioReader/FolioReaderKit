@@ -73,8 +73,8 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        webView.frame = webViewFrame()
         webView.setupScrollDirection()
+        webView.frame = webViewFrame()
     }
     
     func webViewFrame() -> CGRect {
@@ -143,17 +143,10 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
             }
         }
         
-        if scrollDirection == .negative() && isScrolling {
-            let bottomOffset = isVerticalDirection(
-                CGPointMake(0, webView.scrollView.contentSize.height - webView.scrollView.bounds.height),
-                CGPointMake(webView.scrollView.contentSize.width - webView.scrollView.bounds.width, 0)
-            )
-            
-            if bottomOffset.forDirection() >= 0 {
-                dispatch_async(dispatch_get_main_queue(), {
-                    webView.scrollView.setContentOffset(bottomOffset, animated: false)
-                })
-            }
+        let direction: ScrollDirection = FolioReader.needsRTLChange ? .positive() : .negative()
+        
+        if scrollDirection == direction && isScrolling {
+            scrollPageToBottom()
         }
         
         UIView.animateWithDuration(0.2, animations: {webView.alpha = 1}) { finished in
@@ -306,6 +299,22 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     }
     
     /**
+     Scrolls the page to bottom
+     */
+    func scrollPageToBottom() {
+        let bottomOffset = isVerticalDirection(
+            CGPointMake(0, webView.scrollView.contentSize.height - webView.scrollView.bounds.height),
+            CGPointMake(webView.scrollView.contentSize.width - webView.scrollView.bounds.width, 0)
+        )
+        
+        if bottomOffset.forDirection() >= 0 {
+            dispatch_async(dispatch_get_main_queue(), {
+                self.webView.scrollView.setContentOffset(bottomOffset, animated: false)
+            })
+        }
+    }
+    
+    /**
      Handdle #anchors in html, get the offset and scroll to it
      
      - parameter anchor:                The #anchor
@@ -353,7 +362,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
      - parameter ID: The ID
      */
     func audioMarkID(ID: String) {
-        let currentPage = FolioReader.sharedInstance.readerCenter.currentPage
+        guard let currentPage = FolioReader.sharedInstance.readerCenter.currentPage else { return }
         currentPage.webView.js("audioMarkID('\(book.playbackActiveClass())','\(ID)')")
     }
     
@@ -369,7 +378,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     
     // MARK: ColorView fix for horizontal layout
     func refreshPageMode() {
-        if FolioReader.sharedInstance.nightMode {
+        if FolioReader.nightMode {
             // omit create webView and colorView
             let script = "document.documentElement.offsetHeight"
             let contentHeight = webView.stringByEvaluatingJavaScriptFromString(script)
@@ -471,7 +480,7 @@ extension UIWebView {
     }
     
     func highlight(sender: UIMenuController?) {
-        let highlightAndReturn = js("highlightString('\(HighlightStyle.classForStyle(FolioReader.sharedInstance.currentHighlightStyle))')")
+        let highlightAndReturn = js("highlightString('\(HighlightStyle.classForStyle(FolioReader.currentHighlightStyle))')")
         let jsonData = highlightAndReturn?.dataUsingEncoding(NSUTF8StringEncoding)
         
         do {
@@ -543,7 +552,7 @@ extension UIWebView {
     }
 
     func changeHighlightStyle(sender: UIMenuController?, style: HighlightStyle) {
-        FolioReader.sharedInstance.currentHighlightStyle = style.rawValue
+        FolioReader.currentHighlightStyle = style.rawValue
 
         if let updateId = js("setHighlightStyle('\(HighlightStyle.classForStyle(style.rawValue))')") {
             Highlight.updateById(updateId, type: style)
@@ -607,14 +616,14 @@ extension UIWebView {
     
     func setupScrollDirection() {
         if readerConfig.scrollDirection == .horizontal {
-            self.scrollView.pagingEnabled = true
-            self.paginationMode = .LeftToRight
-            self.paginationBreakingMode = .Page
-            self.scrollView.bounces = false
+            scrollView.pagingEnabled = true
+            paginationMode = .LeftToRight
+            paginationBreakingMode = .Page
+            scrollView.bounces = false
         } else {
-            self.scrollView.pagingEnabled = false
-            self.paginationMode = .Unpaginated
-            self.scrollView.bounces = true
+            scrollView.pagingEnabled = false
+            paginationMode = .Unpaginated
+            scrollView.bounces = true
         }
     }
 }

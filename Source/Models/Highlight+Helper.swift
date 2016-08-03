@@ -204,7 +204,7 @@ extension Highlight {
     }
     
     public static func removeFromHTMLById(highlightId: String) -> String? {
-        let currentPage = FolioReader.sharedInstance.readerCenter.currentPage
+        guard let currentPage = FolioReader.sharedInstance.readerCenter.currentPage else { return nil }
         
         if let removedId = currentPage.webView.js("removeHighlightById('\(highlightId)')") {
             return removedId
