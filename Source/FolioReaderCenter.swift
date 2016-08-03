@@ -1003,8 +1003,13 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
                 if currentPageNumber == pageNumber && pageOffset > 0 {
                     page.scrollPageToOffset(pageOffset, animated: false)
                 }
+            } else {
+                updateCurrentPage(page)
+                
+                if !isScrolling && FolioReader.needsRTLChange {
+                    page.scrollPageToBottom()
+                }
             }
-            
         } else if isFirstLoad {
             updateCurrentPage(page)
             isFirstLoad = false

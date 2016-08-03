@@ -146,16 +146,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         let direction: ScrollDirection = FolioReader.needsRTLChange ? .positive() : .negative()
         
         if scrollDirection == direction && isScrolling {
-            let bottomOffset = isVerticalDirection(
-                CGPointMake(0, webView.scrollView.contentSize.height - webView.scrollView.bounds.height),
-                CGPointMake(webView.scrollView.contentSize.width - webView.scrollView.bounds.width, 0)
-            )
-            
-            if bottomOffset.forDirection() >= 0 {
-                dispatch_async(dispatch_get_main_queue(), {
-                    webView.scrollView.setContentOffset(bottomOffset, animated: false)
-                })
-            }
+            scrollPageToBottom()
         }
         
         UIView.animateWithDuration(0.2, animations: {webView.alpha = 1}) { finished in
@@ -305,6 +296,22 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     func scrollPageToOffset(offset: CGFloat, animated: Bool) {
         let pageOffsetPoint = isVerticalDirection(CGPoint(x: 0, y: offset), CGPoint(x: offset, y: 0))
         webView.scrollView.setContentOffset(pageOffsetPoint, animated: animated)
+    }
+    
+    /**
+     Scrolls the page to bottom
+     */
+    func scrollPageToBottom() {
+        let bottomOffset = isVerticalDirection(
+            CGPointMake(0, webView.scrollView.contentSize.height - webView.scrollView.bounds.height),
+            CGPointMake(webView.scrollView.contentSize.width - webView.scrollView.bounds.width, 0)
+        )
+        
+        if bottomOffset.forDirection() >= 0 {
+            dispatch_async(dispatch_get_main_queue(), {
+                self.webView.scrollView.setContentOffset(bottomOffset, animated: false)
+            })
+        }
     }
     
     /**
@@ -609,14 +616,14 @@ extension UIWebView {
     
     func setupScrollDirection() {
         if readerConfig.scrollDirection == .horizontal {
-            self.scrollView.pagingEnabled = true
-            self.paginationMode = .LeftToRight
-            self.paginationBreakingMode = .Page
-            self.scrollView.bounces = false
+            scrollView.pagingEnabled = true
+            paginationMode = .LeftToRight
+            paginationBreakingMode = .Page
+            scrollView.bounces = false
         } else {
-            self.scrollView.pagingEnabled = false
-            self.paginationMode = .Unpaginated
-            self.scrollView.bounces = true
+            scrollView.pagingEnabled = false
+            paginationMode = .Unpaginated
+            scrollView.bounces = true
         }
     }
 }
