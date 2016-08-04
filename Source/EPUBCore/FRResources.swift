@@ -61,10 +61,8 @@ class FRResources: NSObject {
     /**
      Whether there exists a resource with the given id.
     */
-    func containsById(id: String) -> Bool {
-        if id.isEmpty {
-            return false
-        }
+    func containsById(id: String?) -> Bool {
+        guard let id = id else { return false }
         
         for resource in resources.values {
             if resource.id == id {
@@ -90,7 +88,9 @@ class FRResources: NSObject {
     /**
      Gets the resource with the given href.
     */
-    func getById(id: String) -> FRResource? {
+    func getById(id: String?) -> FRResource? {
+        guard let id = id else { return nil }
+        
         for resource in resources.values {
             if resource.id == id {
                 return resource

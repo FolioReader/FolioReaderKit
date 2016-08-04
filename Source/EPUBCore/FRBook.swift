@@ -17,9 +17,11 @@ class FRBook: NSObject {
     var tableOfContents: [FRTocReference]!
     var flatTableOfContents: [FRTocReference]!
     var opfResource: FRResource!
-    var ncxResource: FRResource!
-    var coverImage: FRResource!
-
+    var ncxResource: FRResource?
+    var coverImage: FRResource?
+    var version: Double?
+    var uniqueIdentifier: String?
+    
     func hasAudio() -> Bool {
         return smils.smils.count > 0 ? true : false
     }

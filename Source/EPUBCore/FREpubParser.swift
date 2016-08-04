@@ -25,8 +25,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
      Parse the Cover Image from an epub file.
      Returns an UIImage.
      */
-    func parseCoverImage(epubPath: String)-> UIImage? {
-
+    func parseCoverImage(epubPath: String) -> UIImage? {
         let book = readEpub(epubPath: epubPath, removeEpub: false)
         
         // Read the cover image
@@ -41,6 +40,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
      Unzip, delete and read an epub file.
      Returns a FRBook.
     */
+    
     func readEpub(epubPath withEpubPath: String, removeEpub: Bool = true) -> FRBook {
         epubPathToRemove = withEpubPath
         shouldRemoveEpub = removeEpub
@@ -58,7 +58,6 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         readOpf()
         return book
     }
-    
     
     /**
      Read an unziped epub file.
@@ -96,12 +95,22 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     */
     private func readOpf() {
         let opfPath = (bookBasePath as NSString).stringByAppendingPathComponent(book.opfResource.href)
-        let opfData = try? NSData(contentsOfFile: opfPath, options: .DataReadingMappedAlways)
+        var identifier: String?
         
         do {
-            let xmlDoc = try AEXMLDocument(xmlData: opfData!)
+            let opfData = try NSData(contentsOfFile: opfPath, options: .DataReadingMappedAlways)
+            let xmlDoc = try AEXMLDocument(xmlData: opfData)
             
-            // parse and save each "manifest item"
+            // Base OPF info
+            if let package = xmlDoc.children.first {
+                identifier = package.attributes["unique-identifier"]
+                
+                if let version = package.attributes["version"] {
+                    book.version = Double(version)
+                }
+            }
+            
+            // Parse and save each "manifest item"
             for item in xmlDoc.root["manifest"]["item"].all! {
                 let resource = FRResource()
                 resource.id = item.attributes["id"]
@@ -111,14 +120,39 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
                 resource.mediaOverlay = item.attributes["media-overlay"]
                 
                 // if a .smil file is listed in resources, go parse that file now and save it on book model
-                if( resource.mediaType != nil && resource.mediaType == FRMediaType.SMIL ){
-                    readSmilFile(resource);
+                if (resource.mediaType != nil && resource.mediaType == FRMediaType.SMIL) {
+                    readSmilFile(resource)
                 }
                 
                 book.resources.add(resource)
             }
             
             book.smils.basePath = resourcesBasePath
+            
+            // Read metadata
+            book.metadata = readMetadata(xmlDoc.root["metadata"].children)
+            
+            // Read the book unique identifier
+            if let uniqueIdentifier = book.metadata.findIdentifierById(identifier) {
+                book.uniqueIdentifier = uniqueIdentifier
+            }
+            
+            // Read the cover image
+            let coverImageId = book.metadata.findMetaByName("cover")
+            if let coverResource = book.resources.getById(coverImageId) {
+                book.coverImage = coverResource
+            }
+            
+            //
+            //
+            print(book.version)
+            
+            if let version = book.version where version >= 3.0 {
+                print("Este é epub 3 ****")
+            } else {
+                print("Este é epub 2 ****")
+            }
+
 
             // Get the first resource with the NCX mediatype
             if let ncxResource = book.resources.findFirstResource(byMediaType: FRMediaType.NCX) {
@@ -135,15 +169,6 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             // The book TOC
             book.tableOfContents = findTableOfContents()
             book.flatTableOfContents = createFlatTOC()
-            
-            // Read metadata
-            book.metadata = readMetadata(xmlDoc.root["metadata"].children)
-            
-            // Read the cover image
-            let coverImageID = book.metadata.findMetaByName("cover")
-            if (coverImageID != nil && book.resources.containsById(coverImageID!)) {
-                book.coverImage = book.resources.getById(coverImageID!)
-            }
             
             // Read Spine
             let spine = xmlDoc.root["spine"]
@@ -206,7 +231,9 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
      Read and parse the Table of Contents.
     */
     private func findTableOfContents() -> [FRTocReference] {
-        let ncxPath = (resourcesBasePath as NSString).stringByAppendingPathComponent(book.ncxResource.href)
+        guard let ncxResource = book.ncxResource else { return [FRTocReference]() }
+        
+        let ncxPath = (resourcesBasePath as NSString).stringByAppendingPathComponent(ncxResource.href)
         let ncxData = try? NSData(contentsOfFile: ncxPath, options: .DataReadingMappedAlways)
         var tableOfContent = [FRTocReference]()
         
@@ -279,7 +306,8 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             }
             
             if tag.name == "dc:identifier" {
-                metadata.identifiers.append(Identifier(scheme: tag.attributes["opf:scheme"] ?? "", value: tag.value ?? ""))
+                let identifier = Identifier(id: tag.attributes["id"], scheme: tag.attributes["opf:scheme"], value: tag.value)
+                metadata.identifiers.append(identifier)
             }
             
             if tag.name == "dc:language" {
