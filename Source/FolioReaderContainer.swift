@@ -72,7 +72,7 @@ public class FolioReaderContainer: UIViewController {
         addChildViewController(centerNavigationController)
         centerNavigationController.didMoveToParentViewController(self)
 
-		if (readerConfig.hideAllBars == true) {
+		if (readerConfig.hideBars == true) {
 			readerConfig.shouldHideNavigationOnTap = false
 			readerConfig.scrollDirection = .sectionHorizontalContentVertical
 			self.navigationController?.navigationBar.hidden = true

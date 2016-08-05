@@ -78,10 +78,10 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     }
     
     func webViewFrame() -> CGRect {
-		let paddingTop: CGFloat = ((readerConfig.hideAllBars == true) ? 0 : 20)
-        let paddingBottom: CGFloat = ((readerConfig.hideAllBars == true) ? 0 : 30)
+		let paddingTop: CGFloat = ((readerConfig.hideBars == true) ? 0 : 20)
+        let paddingBottom: CGFloat = ((readerConfig.hideBars == true) ? 0 : 30)
 
-		guard (readerConfig.shouldHideNavigationOnTap && readerConfig.hideAllBars == true) else {
+		guard (readerConfig.shouldHideNavigationOnTap && readerConfig.hideBars == true) else {
 			let statusbarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
 			let navBarHeight = FolioReader.sharedInstance.readerCenter.navigationController?.navigationBar.frame.size.height
 			let navTotal = statusbarHeight + navBarHeight!

@@ -43,7 +43,7 @@ public class FolioReaderConfig: NSObject {
     
     // MARK: Custom actions
 	/// hide the navigation bar and the bottom status view 
-	public var hideAllBars = false
+	public var hideBars = false
 
     /// If `canChangeScrollDirection` is `true` it will be overrided by user's option.
     public var scrollDirection: FolioReaderScrollDirection = .vertical
