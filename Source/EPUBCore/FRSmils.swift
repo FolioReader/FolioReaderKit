@@ -120,7 +120,7 @@ class FRSmils: NSObject {
     /**
      Gets the resource with the given href.
      */
-    func getByHref(href: String) -> FRSmilFile? {
+    func findByHref(href: String) -> FRSmilFile? {
         for smil in smils.values {
             if smil.resource.href == href {
                 return smil
@@ -132,7 +132,7 @@ class FRSmils: NSObject {
     /**
      Gets the resource with the given id.
      */
-    func getById(ID: String) -> FRSmilFile? {
+    func findById(ID: String) -> FRSmilFile? {
         for smil in smils.values {
             if smil.resource.id == ID {
                 return smil

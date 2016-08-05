@@ -61,8 +61,8 @@ class FolioReaderChapterList: UITableViewController {
 
         // Add audio duration for Media Ovelay
         if let resource = tocReference.resource {
-            if(resource.mediaOverlay != nil){
-                let duration = book.durationFor("#"+resource.mediaOverlay);
+            if let mediaOverlay = resource.mediaOverlay {
+                let duration = book.durationFor("#"+mediaOverlay)
                 let durationFormatted = (duration != nil ? duration : "")?.clockTimeToMinutesString()
 
                 cell.indexLabel.text = cell.indexLabel.text! + (duration != nil ? " - "+durationFormatted! : "");
