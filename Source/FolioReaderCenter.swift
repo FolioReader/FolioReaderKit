@@ -31,7 +31,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     var animator: ZFModalTransitionAnimator!
     var pageIndicatorView: FolioReaderPageIndicator!
     var bookShareLink: String?
-    
+	var pageIndicatorHeight: CGFloat = 20
+
     var recentlyScrolled = false
     var recentlyScrolledDelay = 2.0 // 2 second delay until we clear recentlyScrolled
     var recentlyScrolledTimer: NSTimer!
@@ -39,7 +40,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     private var screenBounds: CGRect!
     private var pointNow = CGPointZero
-    private let pageIndicatorHeight: CGFloat = 20
     private var pageOffsetRate: CGFloat = 0
     private var tempReference: FRTocReference?
     private var isFirstLoad = true

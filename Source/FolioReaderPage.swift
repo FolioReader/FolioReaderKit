@@ -78,21 +78,21 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     }
     
     func webViewFrame() -> CGRect {
-        let paddingTop: CGFloat = 20
-        let paddingBottom: CGFloat = 30
-        
-        guard readerConfig.shouldHideNavigationOnTap else {
-            let statusbarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
-            let navBarHeight = FolioReader.sharedInstance.readerCenter.navigationController?.navigationBar.frame.size.height
-            let navTotal = statusbarHeight + navBarHeight!
-            let newFrame = CGRect(
-                x: bounds.origin.x,
-                y: isVerticalDirection(bounds.origin.y + navTotal, bounds.origin.y + navTotal + paddingTop),
-                width: bounds.width,
-                height: isVerticalDirection(bounds.height - navTotal, bounds.height - navTotal - paddingTop - paddingBottom))
-            return newFrame
-        }
-        
+		let paddingTop: CGFloat = ((readerConfig.hideAllBars == true) ? 0 : 20)
+        let paddingBottom: CGFloat = ((readerConfig.hideAllBars == true) ? 0 : 30)
+
+		guard (readerConfig.shouldHideNavigationOnTap && readerConfig.hideAllBars == true) else {
+			let statusbarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
+			let navBarHeight = FolioReader.sharedInstance.readerCenter.navigationController?.navigationBar.frame.size.height
+			let navTotal = statusbarHeight + navBarHeight!
+			let newFrame = CGRect(
+				x: bounds.origin.x,
+				y: isVerticalDirection(bounds.origin.y + navTotal, bounds.origin.y + navTotal + paddingTop),
+				width: bounds.width,
+				height: isVerticalDirection(bounds.height - navTotal, bounds.height - navTotal - paddingTop - paddingBottom))
+			return newFrame
+		}
+
         let newFrame = CGRect(
             x: bounds.origin.x,
             y: isVerticalDirection(bounds.origin.y, bounds.origin.y + paddingTop),
@@ -620,11 +620,15 @@ extension UIWebView {
             paginationMode = .LeftToRight
             paginationBreakingMode = .Page
             scrollView.bounces = false
-        } else {
+        } else if readerConfig.scrollDirection == .vertical {
             scrollView.pagingEnabled = false
             paginationMode = .Unpaginated
             scrollView.bounces = true
-        }
+		} else {
+			// swipe paragraphs horizontal, read content vertical  
+			scrollView.bounces = true
+			self.scrollView.showsVerticalScrollIndicator = true
+		}
     }
 }
 

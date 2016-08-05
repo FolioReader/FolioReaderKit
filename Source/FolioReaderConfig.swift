@@ -11,6 +11,7 @@ import UIKit
 public enum FolioReaderScrollDirection: Int {
     case vertical
     case horizontal
+	case sectionHorizontalContentVertical
     
     /**
      The current scroll direction
@@ -19,7 +20,7 @@ public enum FolioReaderScrollDirection: Int {
      */
     func collectionViewScrollDirection() -> UICollectionViewScrollDirection {
         switch self {
-        case vertical:
+        case vertical, sectionHorizontalContentVertical:
             return .Vertical
         case horizontal:
             return .Horizontal
@@ -41,7 +42,9 @@ public class FolioReaderConfig: NSObject {
     public lazy var mediaOverlayColor: UIColor! = self.tintColor
     
     // MARK: Custom actions
-    
+	/// hide the navigation bar and the bottom status view 
+	public var hideAllBars = false
+
     /// If `canChangeScrollDirection` is `true` it will be overrided by user's option.
     public var scrollDirection: FolioReaderScrollDirection = .vertical
     

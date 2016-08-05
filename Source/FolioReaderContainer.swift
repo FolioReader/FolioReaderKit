@@ -13,7 +13,7 @@ var readerConfig: FolioReaderConfig!
 var epubPath: String?
 var book: FRBook!
 
-class FolioReaderContainer: UIViewController {
+public class FolioReaderContainer: UIViewController {
     var centerNavigationController: UINavigationController!
     var centerViewController: FolioReaderCenter!
     var audioPlayer: FolioReaderAudioPlayer!
@@ -23,7 +23,7 @@ class FolioReaderContainer: UIViewController {
     
     // MARK: - Init
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
@@ -54,7 +54,7 @@ class FolioReaderContainer: UIViewController {
     
     // MARK: - View life cicle
     
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         
         // If user can change scroll direction use the last saved
@@ -71,6 +71,13 @@ class FolioReaderContainer: UIViewController {
         view.addSubview(centerNavigationController.view)
         addChildViewController(centerNavigationController)
         centerNavigationController.didMoveToParentViewController(self)
+
+		if (readerConfig.hideAllBars == true) {
+			readerConfig.shouldHideNavigationOnTap = false
+			readerConfig.scrollDirection = .sectionHorizontalContentVertical
+			self.navigationController?.navigationBar.hidden = true
+			self.centerViewController.pageIndicatorHeight = 0
+		}
 
         // Read async book
         if (epubPath != nil) {
@@ -115,7 +122,7 @@ class FolioReaderContainer: UIViewController {
         }
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override public func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
         if errorOnLoad {
@@ -133,15 +140,15 @@ class FolioReaderContainer: UIViewController {
     
     // MARK: - Status Bar
     
-    override func prefersStatusBarHidden() -> Bool {
+    override public func prefersStatusBarHidden() -> Bool {
         return readerConfig.shouldHideNavigationOnTap == false ? false : shouldHideStatusBar
     }
     
-    override func preferredStatusBarUpdateAnimation() -> UIStatusBarAnimation {
+    override public func preferredStatusBarUpdateAnimation() -> UIStatusBarAnimation {
         return UIStatusBarAnimation.Slide
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+    override public func preferredStatusBarStyle() -> UIStatusBarStyle {
         return isNight(.LightContent, .Default)
     }
 }
