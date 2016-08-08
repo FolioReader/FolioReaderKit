@@ -87,7 +87,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         pageIndicatorView = FolioReaderPageIndicator(frame: CGRect(x: 0, y: view.frame.height-pageIndicatorHeight, width: view.frame.width, height: pageIndicatorHeight))
         view.addSubview(pageIndicatorView)
         
-        let scrubberY: CGFloat = readerConfig.shouldHideNavigationOnTap == true ? 50 : 74
+        let scrubberY: CGFloat = ((readerConfig.shouldHideNavigationOnTap == true || readerConfig.hideBars == true) ? 50 : 74)
         scrollScrubber = ScrollScrubber(frame: CGRect(x: pageWidth + 10, y: scrubberY, width: 40, height: pageHeight - 100))
         scrollScrubber.delegate = self
         view.addSubview(scrollScrubber.slider)

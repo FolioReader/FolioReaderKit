@@ -20,9 +20,9 @@ public enum FolioReaderScrollDirection: Int {
      */
     func collectionViewScrollDirection() -> UICollectionViewScrollDirection {
         switch self {
-        case vertical, sectionHorizontalContentVertical:
+        case vertical:
             return .Vertical
-        case horizontal:
+        case horizontal, sectionHorizontalContentVertical:
             return .Horizontal
         }
     }

@@ -58,11 +58,13 @@ public class FolioReaderContainer: UIViewController {
         super.viewDidLoad()
         
         // If user can change scroll direction use the last saved
-        if readerConfig.canChangeScrollDirection {
+        if (readerConfig.canChangeScrollDirection && readerConfig.scrollDirection != .sectionHorizontalContentVertical) {
             let direction = FolioReaderScrollDirection(rawValue: FolioReader.currentScrollDirection) ?? .vertical
             readerConfig.scrollDirection = direction
         }
-        
+
+		readerConfig.shouldHideNavigationOnTap = ((readerConfig.hideBars == true) ? true : readerConfig.shouldHideNavigationOnTap)
+
         centerViewController = FolioReaderCenter()
         FolioReader.sharedInstance.readerCenter = centerViewController
         
@@ -74,7 +76,6 @@ public class FolioReaderContainer: UIViewController {
 
 		if (readerConfig.hideBars == true) {
 			readerConfig.shouldHideNavigationOnTap = false
-			readerConfig.scrollDirection = .sectionHorizontalContentVertical
 			self.navigationController?.navigationBar.hidden = true
 			self.centerViewController.pageIndicatorHeight = 0
 		}
