@@ -25,8 +25,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
      Parse the Cover Image from an epub file.
      Returns an UIImage.
      */
-    func parseCoverImage(epubPath: String)-> UIImage? {
-
+    func parseCoverImage(epubPath: String) -> UIImage? {
         let book = readEpub(epubPath: epubPath, removeEpub: false)
         
         // Read the cover image
@@ -41,6 +40,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
      Unzip, delete and read an epub file.
      Returns a FRBook.
     */
+    
     func readEpub(epubPath withEpubPath: String, removeEpub: Bool = true) -> FRBook {
         epubPathToRemove = withEpubPath
         shouldRemoveEpub = removeEpub
@@ -59,7 +59,6 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         return book
     }
     
-    
     /**
      Read an unziped epub file.
      Returns a FRBook.
@@ -77,10 +76,10 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     */
     private func readContainer() {
         let containerPath = "META-INF/container.xml"
-        let containerData = try? NSData(contentsOfFile: (bookBasePath as NSString).stringByAppendingPathComponent(containerPath), options: .DataReadingMappedAlways)
         
         do {
-            let xmlDoc = try AEXMLDocument(xmlData: containerData!)
+            let containerData = try NSData(contentsOfFile: (bookBasePath as NSString).stringByAppendingPathComponent(containerPath), options: .DataReadingMappedAlways)
+            let xmlDoc = try AEXMLDocument(xmlData: containerData)
             let opfResource = FRResource()
             opfResource.href = xmlDoc.root["rootfiles"]["rootfile"].attributes["full-path"]
             opfResource.mediaType = FRMediaType.determineMediaType(xmlDoc.root["rootfiles"]["rootfile"].attributes["full-path"]!)
@@ -96,54 +95,73 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     */
     private func readOpf() {
         let opfPath = (bookBasePath as NSString).stringByAppendingPathComponent(book.opfResource.href)
-        let opfData = try? NSData(contentsOfFile: opfPath, options: .DataReadingMappedAlways)
+        var identifier: String?
         
         do {
-            let xmlDoc = try AEXMLDocument(xmlData: opfData!)
+            let opfData = try NSData(contentsOfFile: opfPath, options: .DataReadingMappedAlways)
+            let xmlDoc = try AEXMLDocument(xmlData: opfData)
             
-            // parse and save each "manifest item"
+            // Base OPF info
+            if let package = xmlDoc.children.first {
+                identifier = package.attributes["unique-identifier"]
+                
+                if let version = package.attributes["version"] {
+                    book.version = Double(version)
+                }
+            }
+            
+            // Parse and save each "manifest item"
             for item in xmlDoc.root["manifest"]["item"].all! {
                 let resource = FRResource()
                 resource.id = item.attributes["id"]
+                resource.properties = item.attributes["properties"]
                 resource.href = item.attributes["href"]
                 resource.fullHref = (resourcesBasePath as NSString).stringByAppendingPathComponent(item.attributes["href"]!).stringByRemovingPercentEncoding
                 resource.mediaType = FRMediaType.mediaTypeByName(item.attributes["media-type"]!, fileName: resource.href)
                 resource.mediaOverlay = item.attributes["media-overlay"]
                 
                 // if a .smil file is listed in resources, go parse that file now and save it on book model
-                if( resource.mediaType != nil && resource.mediaType == FRMediaType.SMIL ){
-                    readSmilFile(resource);
+                if (resource.mediaType != nil && resource.mediaType == FRMediaType.SMIL) {
+                    readSmilFile(resource)
                 }
                 
                 book.resources.add(resource)
             }
             
             book.smils.basePath = resourcesBasePath
-
-            // Get the first resource with the NCX mediatype
-            if let ncxResource = book.resources.findFirstResource(byMediaType: FRMediaType.NCX) {
-                book.ncxResource = ncxResource
-            }
-            
-            // Non-standard books may use wrong mediatype, fallback with extension
-            if let ncxResource = book.resources.findFirstResource(byExtension: FRMediaType.NCX.defaultExtension) {
-                book.ncxResource = ncxResource
-            }
-            
-            assert(book.ncxResource != nil, "ERROR: Could not find table of contents resource. The book don't have a NCX resource.")
-            
-            // The book TOC
-            book.tableOfContents = findTableOfContents()
-            book.flatTableOfContents = createFlatTOC()
             
             // Read metadata
             book.metadata = readMetadata(xmlDoc.root["metadata"].children)
             
-            // Read the cover image
-            let coverImageID = book.metadata.findMetaByName("cover")
-            if (coverImageID != nil && book.resources.containsById(coverImageID!)) {
-                book.coverImage = book.resources.getById(coverImageID!)
+            // Read the book unique identifier
+            if let uniqueIdentifier = book.metadata.findIdentifierById(identifier) {
+                book.uniqueIdentifier = uniqueIdentifier
             }
+
+            // Read the cover image
+            let coverImageId = book.metadata.findMetaByName("cover")
+            if let coverResource = book.resources.findById(coverImageId) {
+                book.coverImage = coverResource
+            } else if let coverResource = book.resources.findByProperties("cover-image") {
+                book.coverImage = coverResource
+            }
+        
+            // Specific TOC for ePub 2 and 3
+            // Get the first resource with the NCX mediatype
+            if let tocResource = book.resources.findByMediaType(FRMediaType.NCX) {
+                book.tocResource = tocResource
+            } else if let tocResource = book.resources.findByExtension(FRMediaType.NCX.defaultExtension) {
+                // Non-standard books may use wrong mediatype, fallback with extension
+                book.tocResource = tocResource
+            } else if let tocResource = book.resources.findByProperties("nav") {
+                book.tocResource = tocResource
+            }
+            
+            assert(book.tocResource != nil, "ERROR: Could not find table of contents resource. The book don't have a TOC resource.")
+            
+            // The book TOC
+            book.tableOfContents = findTableOfContents()
+            book.flatTableOfContents = createFlatTOC()
             
             // Read Spine
             let spine = xmlDoc.root["spine"]
@@ -161,29 +179,25 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     /**
      Reads and parses a .smil file
     */
-    private func readSmilFile(resource: FRResource){
-        let smilData = try? NSData(contentsOfFile: resource.fullHref, options: .DataReadingMappedAlways)
-        
-        var smilFile = FRSmilFile(resource: resource);
-        
+    private func readSmilFile(resource: FRResource) {
         do {
-            let xmlDoc = try AEXMLDocument(xmlData: smilData!)
+            let smilData = try NSData(contentsOfFile: resource.fullHref, options: .DataReadingMappedAlways)
+            var smilFile = FRSmilFile(resource: resource)
+            let xmlDoc = try AEXMLDocument(xmlData: smilData)
             
             let children = xmlDoc.root["body"].children
 
-            if( children.count > 0 ){
-                smilFile.data.appendContentsOf( readSmilFileElements(children) )
+            if children.count > 0 {
+                smilFile.data.appendContentsOf(readSmilFileElements(children))
             }
             
+            book.smils.add(smilFile)
         } catch {
             print("Cannot read .smil file: "+resource.href)
         }
-        
-        book.smils.add(smilFile);
     }
     
     private func readSmilFileElements(children:[AEXMLElement]) -> [FRSmilElement] {
-
         var data = [FRSmilElement]()
 
         // convert each smil element to a FRSmil object
@@ -192,8 +206,8 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             let smil = FRSmilElement(name: item.name, attributes: item.attributes)
 
             // if this element has children, convert them to objects too
-            if( item.children.count > 0 ){
-                smil.children.appendContentsOf( readSmilFileElements(item.children) )
+            if item.children.count > 0 {
+                smil.children.appendContentsOf(readSmilFileElements(item.children))
             }
 
             data.append(smil)
@@ -206,42 +220,102 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
      Read and parse the Table of Contents.
     */
     private func findTableOfContents() -> [FRTocReference] {
-        let ncxPath = (resourcesBasePath as NSString).stringByAppendingPathComponent(book.ncxResource.href)
-        let ncxData = try? NSData(contentsOfFile: ncxPath, options: .DataReadingMappedAlways)
         var tableOfContent = [FRTocReference]()
+        var tocItems: [AEXMLElement]?
+        guard let tocResource = book.tocResource else { return tableOfContent }
+        let tocPath = (resourcesBasePath as NSString).stringByAppendingPathComponent(tocResource.href)
         
         do {
-            let xmlDoc = try AEXMLDocument(xmlData: ncxData!)
-            for item in xmlDoc.root["navMap"]["navPoint"].all! {
-                tableOfContent.append(readTOCReference(item))
+            if tocResource.mediaType == FRMediaType.NCX {
+                let ncxData = try NSData(contentsOfFile: tocPath, options: .DataReadingMappedAlways)
+                let xmlDoc = try AEXMLDocument(xmlData: ncxData)
+                if let itemsList = xmlDoc.root["navMap"]["navPoint"].all {
+                    tocItems = itemsList
+                }
+            } else {
+                let tocData = try NSData(contentsOfFile: tocPath, options: .DataReadingMappedAlways)
+                let xmlDoc = try AEXMLDocument(xmlData: tocData)
+                
+                if let nav = xmlDoc.root["body"]["nav"].first, itemsList = nav["ol"]["li"].all {
+                    tocItems = itemsList
+                } else if let nav = findNavTag(xmlDoc.root["body"]), itemsList = nav["ol"]["li"].all {
+                    tocItems = itemsList
+                }
             }
         } catch {
             print("Cannot find Table of Contents.")
         }
+        
+        guard let items = tocItems else { return tableOfContent }
+        
+        for item in items {
+            tableOfContent.append(readTOCReference(item))
+        }
+        
         return tableOfContent
+    }
+    
+    /**
+     Recursively finds a `<nav>` tag on html
+     
+     - parameter element: A `AEXMLElement`, usually the `<body>`
+     - returns: If found the `<nav>` `AEXMLElement`
+     */
+    func findNavTag(element: AEXMLElement) -> AEXMLElement? {
+        for element in element.children {
+            if let nav = element["nav"].first {
+                return nav
+            } else {
+                findNavTag(element)
+            }
+        }
+        return nil
     }
     
     private func readTOCReference(navpointElement: AEXMLElement) -> FRTocReference {
         var label = ""
         
-        if let labelText = navpointElement["navLabel"]["text"].value {
-            label = labelText
-        }
-        
-        let reference = navpointElement["content"].attributes["src"]
-        let hrefSplit = reference!.characters.split {$0 == "#"}.map { String($0) }
-        let fragmentID = hrefSplit.count > 1 ? hrefSplit[1] : ""
-        let href = hrefSplit[0]
-        
-        let resource = book.resources.getByHref(href)
-        let toc = FRTocReference(title: label, resource: resource, fragmentID: fragmentID)
-        
-        if navpointElement["navPoint"].all != nil {
-            for navPoint in navpointElement["navPoint"].all! {
-                toc.children.append(readTOCReference(navPoint))
+        if book.tocResource!.mediaType == FRMediaType.NCX {
+            if let labelText = navpointElement["navLabel"]["text"].value {
+                label = labelText
             }
-        }        
-        return toc
+            
+            let reference = navpointElement["content"].attributes["src"]
+            let hrefSplit = reference!.characters.split {$0 == "#"}.map { String($0) }
+            let fragmentID = hrefSplit.count > 1 ? hrefSplit[1] : ""
+            let href = hrefSplit[0]
+            
+            let resource = book.resources.findByHref(href)
+            let toc = FRTocReference(title: label, resource: resource, fragmentID: fragmentID)
+            
+            // Recursively find child
+            if let navPoints = navpointElement["navPoint"].all {
+                for navPoint in navPoints {
+                    toc.children.append(readTOCReference(navPoint))
+                }
+            }
+            return toc
+        } else {
+            if let labelText = navpointElement["a"].value {
+                label = labelText
+            }
+            
+            let reference = navpointElement["a"].attributes["href"]
+            let hrefSplit = reference!.characters.split {$0 == "#"}.map { String($0) }
+            let fragmentID = hrefSplit.count > 1 ? hrefSplit[1] : ""
+            let href = hrefSplit[0]
+            
+            let resource = book.resources.findByHref(href)
+            let toc = FRTocReference(title: label, resource: resource, fragmentID: fragmentID)
+            
+            // Recursively find child
+            if let nav = navpointElement["ol"]["li"].all {
+                for item in nav {
+                    toc.children.append(readTOCReference(item))
+                }
+            }
+            return toc
+        }
     }
     
     // MARK: - Recursive add items to a list
@@ -279,7 +353,8 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             }
             
             if tag.name == "dc:identifier" {
-                metadata.identifiers.append(Identifier(scheme: tag.attributes["opf:scheme"] ?? "", value: tag.value ?? ""))
+                let identifier = Identifier(id: tag.attributes["id"], scheme: tag.attributes["opf:scheme"], value: tag.value)
+                metadata.identifiers.append(identifier)
             }
             
             if tag.name == "dc:language" {
@@ -349,7 +424,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             }
             
             if book.resources.containsById(idref) {
-                spine.spineReferences.append(Spine(resource: book.resources.getById(idref)!, linear: linear))
+                spine.spineReferences.append(Spine(resource: book.resources.findById(idref)!, linear: linear))
             }
         }
         return spine

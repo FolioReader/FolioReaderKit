@@ -17,9 +17,11 @@ class FRBook: NSObject {
     var tableOfContents: [FRTocReference]!
     var flatTableOfContents: [FRTocReference]!
     var opfResource: FRResource!
-    var ncxResource: FRResource!
-    var coverImage: FRResource!
-
+    var tocResource: FRResource?
+    var coverImage: FRResource?
+    var version: Double?
+    var uniqueIdentifier: String?
+    
     func hasAudio() -> Bool {
         return smils.smils.count > 0 ? true : false
     }
@@ -63,18 +65,18 @@ class FRBook: NSObject {
         }
         
         // lookup the smile resource to get info about the file
-        let smilResource = resources.getById(resource.mediaOverlay)
+        let smilResource = resources.findById(resource.mediaOverlay)
         
         // use the resource to get the file
-        return smils.getByHref( smilResource!.href )
+        return smils.findByHref( smilResource!.href )
     }
     
     func smilFileForHref(href: String) -> FRSmilFile! {
-        return smilFileForResource(resources.getByHref(href))
+        return smilFileForResource(resources.findByHref(href))
     }
     
     func smilFileForId(ID: String) -> FRSmilFile! {
-        return smilFileForResource(resources.getById(ID))
+        return smilFileForResource(resources.findById(ID))
     }
     
 }
