@@ -95,8 +95,6 @@ func applicationWillTerminate(application: UIApplication) {
 }
 ```
 
-
-
 ## Features
 
 - [x] Custom Fonts
