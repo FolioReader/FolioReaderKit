@@ -243,9 +243,9 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
                 let tocData = try? NSData(contentsOfFile: tocPath, options: .DataReadingMappedAlways)
                 let xmlDoc = try AEXMLDocument(xmlData: tocData!)
                 
-                if let nav = xmlDoc.root["body"]["section"]["nav"].first, itemsList = nav["ol"]["li"].all {
+                if let nav = xmlDoc.root["body"]["nav"].first, itemsList = nav["ol"]["li"].all {
                     tocItems = itemsList
-                } else if let nav = xmlDoc.root["body"]["nav"].first, itemsList = nav["ol"]["li"].all {
+                } else if let nav = findNavTag(xmlDoc.root["body"]), itemsList = nav["ol"]["li"].all {
                     tocItems = itemsList
                 }
             } else {
@@ -266,6 +266,23 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         }
         
         return tableOfContent
+    }
+    
+    /**
+     Recursively finds a `<nav>` tag on html
+     
+     - parameter element: A `AEXMLElement`, usually the `<body>`
+     - returns: If found the `<nav>` `AEXMLElement`
+     */
+    func findNavTag(element: AEXMLElement) -> AEXMLElement? {
+        for element in element.children {
+            if let nav = element["nav"].first {
+                return nav
+            } else {
+                findNavTag(element)
+            }
+        }
+        return nil
     }
     
     private func readTOCReference(navpointElement: AEXMLElement) -> FRTocReference {
