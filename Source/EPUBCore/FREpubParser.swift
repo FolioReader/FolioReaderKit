@@ -76,10 +76,10 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     */
     private func readContainer() {
         let containerPath = "META-INF/container.xml"
-        let containerData = try? NSData(contentsOfFile: (bookBasePath as NSString).stringByAppendingPathComponent(containerPath), options: .DataReadingMappedAlways)
         
         do {
-            let xmlDoc = try AEXMLDocument(xmlData: containerData!)
+            let containerData = try NSData(contentsOfFile: (bookBasePath as NSString).stringByAppendingPathComponent(containerPath), options: .DataReadingMappedAlways)
+            let xmlDoc = try AEXMLDocument(xmlData: containerData)
             let opfResource = FRResource()
             opfResource.href = xmlDoc.root["rootfiles"]["rootfile"].attributes["full-path"]
             opfResource.mediaType = FRMediaType.determineMediaType(xmlDoc.root["rootfiles"]["rootfile"].attributes["full-path"]!)
@@ -188,29 +188,25 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     /**
      Reads and parses a .smil file
     */
-    private func readSmilFile(resource: FRResource){
-        let smilData = try? NSData(contentsOfFile: resource.fullHref, options: .DataReadingMappedAlways)
-        
-        var smilFile = FRSmilFile(resource: resource);
-        
+    private func readSmilFile(resource: FRResource) {
         do {
-            let xmlDoc = try AEXMLDocument(xmlData: smilData!)
+            let smilData = try NSData(contentsOfFile: resource.fullHref, options: .DataReadingMappedAlways)
+            var smilFile = FRSmilFile(resource: resource)
+            let xmlDoc = try AEXMLDocument(xmlData: smilData)
             
             let children = xmlDoc.root["body"].children
 
-            if( children.count > 0 ){
-                smilFile.data.appendContentsOf( readSmilFileElements(children) )
+            if children.count > 0 {
+                smilFile.data.appendContentsOf(readSmilFileElements(children))
             }
             
+            book.smils.add(smilFile)
         } catch {
             print("Cannot read .smil file: "+resource.href)
         }
-        
-        book.smils.add(smilFile);
     }
     
     private func readSmilFileElements(children:[AEXMLElement]) -> [FRSmilElement] {
-
         var data = [FRSmilElement]()
 
         // convert each smil element to a FRSmil object
@@ -240,8 +236,8 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         
         do {
             if let version = book.version where version >= 3.0 {
-                let tocData = try? NSData(contentsOfFile: tocPath, options: .DataReadingMappedAlways)
-                let xmlDoc = try AEXMLDocument(xmlData: tocData!)
+                let tocData = try NSData(contentsOfFile: tocPath, options: .DataReadingMappedAlways)
+                let xmlDoc = try AEXMLDocument(xmlData: tocData)
                 
                 if let nav = xmlDoc.root["body"]["nav"].first, itemsList = nav["ol"]["li"].all {
                     tocItems = itemsList
@@ -249,8 +245,8 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
                     tocItems = itemsList
                 }
             } else {
-                let ncxData = try? NSData(contentsOfFile: tocPath, options: .DataReadingMappedAlways)
-                let xmlDoc = try AEXMLDocument(xmlData: ncxData!)
+                let ncxData = try NSData(contentsOfFile: tocPath, options: .DataReadingMappedAlways)
+                let xmlDoc = try AEXMLDocument(xmlData: ncxData)
                 if let itemsList = xmlDoc.root["navMap"]["navPoint"].all {
                     tocItems = itemsList
                 }
