@@ -215,8 +215,8 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             let smil = FRSmilElement(name: item.name, attributes: item.attributes)
 
             // if this element has children, convert them to objects too
-            if( item.children.count > 0 ){
-                smil.children.appendContentsOf( readSmilFileElements(item.children) )
+            if item.children.count > 0 {
+                smil.children.appendContentsOf(readSmilFileElements(item.children))
             }
 
             data.append(smil)

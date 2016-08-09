@@ -145,7 +145,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         
         let direction: ScrollDirection = FolioReader.needsRTLChange ? .positive() : .negative()
         
-        if scrollDirection == direction && isScrolling {
+        if pageScrollDirection == direction && isScrolling {
             scrollPageToBottom()
         }
         
