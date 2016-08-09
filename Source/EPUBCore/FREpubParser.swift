@@ -137,33 +137,24 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             if let uniqueIdentifier = book.metadata.findIdentifierById(identifier) {
                 book.uniqueIdentifier = uniqueIdentifier
             }
-            
+
+            // Read the cover image
+            let coverImageId = book.metadata.findMetaByName("cover")
+            if let coverResource = book.resources.findById(coverImageId) {
+                book.coverImage = coverResource
+            } else if let coverResource = book.resources.findByProperties("cover-image") {
+                book.coverImage = coverResource
+            }
+        
             // Specific TOC for ePub 2 and 3
-            if let version = book.version where version >= 3.0 {
-                // Read the cover image
-                if let coverResource = book.resources.findByProperties("cover-image") {
-                    book.coverImage = coverResource
-                }
-                
-                if let tocResource = book.resources.findByProperties("nav") {
-                    book.tocResource = tocResource
-                }
-            } else {
-                // Read the cover image
-                let coverImageId = book.metadata.findMetaByName("cover")
-                if let coverResource = book.resources.findById(coverImageId) {
-                    book.coverImage = coverResource
-                }
-                
-                // Get the first resource with the NCX mediatype
-                if let tocResource = book.resources.findByMediaType(FRMediaType.NCX) {
-                    book.tocResource = tocResource
-                }
-                
+            // Get the first resource with the NCX mediatype
+            if let tocResource = book.resources.findByMediaType(FRMediaType.NCX) {
+                book.tocResource = tocResource
+            } else if let tocResource = book.resources.findByExtension(FRMediaType.NCX.defaultExtension) {
                 // Non-standard books may use wrong mediatype, fallback with extension
-                if let tocResource = book.resources.findByExtension(FRMediaType.NCX.defaultExtension) {
-                    book.tocResource = tocResource
-                }
+                book.tocResource = tocResource
+            } else if let tocResource = book.resources.findByProperties("nav") {
+                book.tocResource = tocResource
             }
             
             assert(book.tocResource != nil, "ERROR: Could not find table of contents resource. The book don't have a TOC resource.")
@@ -235,19 +226,19 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         let tocPath = (resourcesBasePath as NSString).stringByAppendingPathComponent(tocResource.href)
         
         do {
-            if let version = book.version where version >= 3.0 {
+            if tocResource.mediaType == FRMediaType.NCX {
+                let ncxData = try NSData(contentsOfFile: tocPath, options: .DataReadingMappedAlways)
+                let xmlDoc = try AEXMLDocument(xmlData: ncxData)
+                if let itemsList = xmlDoc.root["navMap"]["navPoint"].all {
+                    tocItems = itemsList
+                }
+            } else {
                 let tocData = try NSData(contentsOfFile: tocPath, options: .DataReadingMappedAlways)
                 let xmlDoc = try AEXMLDocument(xmlData: tocData)
                 
                 if let nav = xmlDoc.root["body"]["nav"].first, itemsList = nav["ol"]["li"].all {
                     tocItems = itemsList
                 } else if let nav = findNavTag(xmlDoc.root["body"]), itemsList = nav["ol"]["li"].all {
-                    tocItems = itemsList
-                }
-            } else {
-                let ncxData = try NSData(contentsOfFile: tocPath, options: .DataReadingMappedAlways)
-                let xmlDoc = try AEXMLDocument(xmlData: ncxData)
-                if let itemsList = xmlDoc.root["navMap"]["navPoint"].all {
                     tocItems = itemsList
                 }
             }
@@ -284,27 +275,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     private func readTOCReference(navpointElement: AEXMLElement) -> FRTocReference {
         var label = ""
         
-        if let version = book.version where version >= 3.0 {
-            if let labelText = navpointElement["a"].value {
-                label = labelText
-            }
-            
-            let reference = navpointElement["a"].attributes["href"]
-            let hrefSplit = reference!.characters.split {$0 == "#"}.map { String($0) }
-            let fragmentID = hrefSplit.count > 1 ? hrefSplit[1] : ""
-            let href = hrefSplit[0]
-            
-            let resource = book.resources.findByHref(href)
-            let toc = FRTocReference(title: label, resource: resource, fragmentID: fragmentID)
-
-            // Recursively find child
-            if let nav = navpointElement["ol"]["li"].all {
-                for item in nav {
-                    toc.children.append(readTOCReference(item))
-                }
-            }
-            return toc
-        } else {
+        if book.tocResource!.mediaType == FRMediaType.NCX {
             if let labelText = navpointElement["navLabel"]["text"].value {
                 label = labelText
             }
@@ -321,6 +292,26 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             if let navPoints = navpointElement["navPoint"].all {
                 for navPoint in navPoints {
                     toc.children.append(readTOCReference(navPoint))
+                }
+            }
+            return toc
+        } else {
+            if let labelText = navpointElement["a"].value {
+                label = labelText
+            }
+            
+            let reference = navpointElement["a"].attributes["href"]
+            let hrefSplit = reference!.characters.split {$0 == "#"}.map { String($0) }
+            let fragmentID = hrefSplit.count > 1 ? hrefSplit[1] : ""
+            let href = hrefSplit[0]
+            
+            let resource = book.resources.findByHref(href)
+            let toc = FRTocReference(title: label, resource: resource, fragmentID: fragmentID)
+            
+            // Recursively find child
+            if let nav = navpointElement["ol"]["li"].all {
+                for item in nav {
+                    toc.children.append(readTOCReference(item))
                 }
             }
             return toc
