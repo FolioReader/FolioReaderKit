@@ -234,46 +234,38 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     */
     private func findTableOfContents() -> [FRTocReference] {
         var tableOfContent = [FRTocReference]()
+        var tocItems: [AEXMLElement]?
         guard let tocResource = book.tocResource else { return tableOfContent }
+        let tocPath = (resourcesBasePath as NSString).stringByAppendingPathComponent(tocResource.href)
         
-        if let version = book.version where version >= 3.0 {
-            let tocPath = (resourcesBasePath as NSString).stringByAppendingPathComponent(tocResource.href)
-            
-            do {
+        do {
+            if let version = book.version where version >= 3.0 {
                 let tocData = try? NSData(contentsOfFile: tocPath, options: .DataReadingMappedAlways)
                 let xmlDoc = try AEXMLDocument(xmlData: tocData!)
                 
-                if let nav = xmlDoc.root["body"]["section"]["nav"].first {
-                    if let items = nav["ol"]["li"].all {
-                        for item in items {
-                            tableOfContent.append(readTOCReference(item))
-                        }
-                    }
-                } else if let nav = xmlDoc.root["body"]["nav"].first {
-                    if let items = nav["ol"]["li"].all {
-                        for item in items {
-                            tableOfContent.append(readTOCReference(item))
-                        }
-                    }
+                if let nav = xmlDoc.root["body"]["section"]["nav"].first, itemsList = nav["ol"]["li"].all {
+                    tocItems = itemsList
+                } else if let nav = xmlDoc.root["body"]["nav"].first, itemsList = nav["ol"]["li"].all {
+                    tocItems = itemsList
                 }
-            } catch {
-                print("Cannot find Table of Contents.")
-            }
-            return tableOfContent
-        } else {
-            let ncxPath = (resourcesBasePath as NSString).stringByAppendingPathComponent(tocResource.href)
-            
-            do {
-                let ncxData = try? NSData(contentsOfFile: ncxPath, options: .DataReadingMappedAlways)
+            } else {
+                let ncxData = try? NSData(contentsOfFile: tocPath, options: .DataReadingMappedAlways)
                 let xmlDoc = try AEXMLDocument(xmlData: ncxData!)
-                for item in xmlDoc.root["navMap"]["navPoint"].all! {
-                    tableOfContent.append(readTOCReference(item))
+                if let itemsList = xmlDoc.root["navMap"]["navPoint"].all {
+                    tocItems = itemsList
                 }
-            } catch {
-                print("Cannot find Table of Contents.")
             }
-            return tableOfContent
+        } catch {
+            print("Cannot find Table of Contents.")
         }
+        
+        guard let items = tocItems else { return tableOfContent }
+        
+        for item in items {
+            tableOfContent.append(readTOCReference(item))
+        }
+        
+        return tableOfContent
     }
     
     private func readTOCReference(navpointElement: AEXMLElement) -> FRTocReference {
