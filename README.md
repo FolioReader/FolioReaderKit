@@ -68,7 +68,7 @@ func open(sender: AnyObject) {
 }
 ```
 
-In your AppDelegate call `applicationWillResignActive` and `applicationWillTerminate`. This will save the reader state even if you kill the app.
+In your `AppDelegate` call `applicationWillResignActive` and `applicationWillTerminate`. This will save the reader state even if you kill the app.
 
 ```swift
 import FolioReaderKit
@@ -84,6 +84,7 @@ func applicationWillTerminate(application: UIApplication) {
 
 ## Features
 
+- [x] ePub 2 and ePub 3 support
 - [x] Custom Fonts
 - [x] Custom Text Size
 - [x] Text Highlighting
@@ -101,7 +102,6 @@ func applicationWillTerminate(application: UIApplication) {
 - [ ] PDF support
 - [ ] Book Search
 - [ ] Add Notes to a Highlight
-- [ ] Better Documentation
 
 ## Demo
 ##### Custom Fonts :smirk:
@@ -116,7 +116,7 @@ func applicationWillTerminate(application: UIApplication) {
 ![Time left](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/media-overlays.gif)
 
 ## Documentation
-For now the documentation is the sample project, I will write a better documentation in the next weeks.
+For now the best documentation is the sample project. I ~~will write a better~~ am working to improve the code documentation for [CocoaDocs](http://cocoadocs.org/docsets/FolioReaderKit), this is the current progress:  [![CocoaPods](https://img.shields.io/cocoapods/metrics/doc-percent/FolioReaderKit.svg?maxAge=2592000)]()
 
 You have a problem that cannot be solved by having a look at the example project? No problem, let's talk:
 [![Join the chat at https://gitter.im/FolioReader/FolioReaderKit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/FolioReader/FolioReaderKit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -142,4 +142,4 @@ You have a problem that cannot be solved by having a look at the example project
  - Of course, you can also [**choose what you want to donate**](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=hebertialmeida%40gmail%2ecom&lc=US&item_name=FolioReader%20Libraries&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted), all donations are awesome!
 
 ## License
-FolioReaderKit is available under the BSD license. See the [LICENSE file](https://github.com/FolioReader/FolioReaderKit/blob/master/LICENSE).
+FolioReaderKit is available under the BSD license. See the [LICENSE](https://github.com/FolioReader/FolioReaderKit/blob/master/LICENSE) file.
