@@ -116,7 +116,7 @@ func applicationWillTerminate(application: UIApplication) {
 ![Time left](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/media-overlays.gif)
 
 ## Documentation
-For now the best documentation is the sample project. I ~~will write a better~~ am working to improve the code documentation for [CocoaDocs](http://cocoadocs.org/docsets/FolioReaderKit), this is the current progress:  [![CocoaPods](https://img.shields.io/cocoapods/metrics/doc-percent/FolioReaderKit.svg?maxAge=2592000)]()
+For now the best documentation is the sample project. I ~~will write a better~~ am working to improve the code documentation, this is the current progress: [![CocoaPods](https://img.shields.io/cocoapods/metrics/doc-percent/FolioReaderKit.svg?maxAge=2592000)](http://cocoadocs.org/docsets/FolioReaderKit)
 
 You have a problem that cannot be solved by having a look at the example project? No problem, let's talk:
 [![Join the chat at https://gitter.im/FolioReader/FolioReaderKit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/FolioReader/FolioReaderKit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
