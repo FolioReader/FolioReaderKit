@@ -75,7 +75,6 @@ You can also use your own FolioReader view controller like this.
 
 		let bookPath = NSBundle.mainBundle().pathForResource("book", ofType: "epub")
 		let epubVC = FolioReaderContainer(config: config, epubPath: bookPath, removeEpub: true)
-		FolioReader.sharedInstance.readerContainer = epubVC
 
 		// present the epubVC view controller like every other UIViewController instance
 		self.presentViewController(epubVC, animated: true, completion: nil)
