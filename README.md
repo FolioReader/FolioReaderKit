@@ -33,6 +33,12 @@ Then, run the following command:
 $ pod install
 ```
 
+Alternatively to give it a test run, run the command:
+
+```bash
+$ pod try FolioReaderKit
+```
+
 ### Carthage
 
 Add the following to your [Cartfile](https://github.com/Carthage/Carthage/blob/master/Documentation/Artifacts.md#cartfile)
