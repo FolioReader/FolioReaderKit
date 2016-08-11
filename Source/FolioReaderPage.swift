@@ -148,7 +148,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         
         let direction: ScrollDirection = FolioReader.needsRTLChange ? .positive() : .negative()
         
-        if scrollDirection == direction && isScrolling && readerConfig.scrollDirection != .sectionHorizontalContentVertical {
+        if pageScrollDirection == direction && isScrolling && readerConfig.scrollDirection != .sectionHorizontalContentVertical {
             scrollPageToBottom()
         }
         
@@ -162,13 +162,13 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         
-        let url = request.URL
+        guard let url = request.URL else { return false }
         
-        if url?.scheme == "highlight" {
+        if url.scheme == "highlight" {
             
             shouldShowBar = false
             
-            let decoded = url?.absoluteString.stringByRemovingPercentEncoding as String!
+            let decoded = url.absoluteString.stringByRemovingPercentEncoding as String!
             let rect = CGRectFromString(decoded.substringFromIndex(decoded.startIndex.advancedBy(12)))
             
             webView.createMenu(options: true)
@@ -176,23 +176,23 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
             menuIsVisible = true
             
             return false
-        } else if url?.scheme == "play-audio" {
+        } else if url.scheme == "play-audio" {
 
-            let decoded = url?.absoluteString.stringByRemovingPercentEncoding as String!
+            let decoded = url.absoluteString.stringByRemovingPercentEncoding as String!
             let playID = decoded.substringFromIndex(decoded.startIndex.advancedBy(13))
             let chapter = FolioReader.sharedInstance.readerCenter.getCurrentChapter()
             let href = chapter != nil ? chapter!.href : "";
             FolioReader.sharedInstance.readerAudioPlayer.playAudio(href, fragmentID: playID)
 
             return false
-        } else if url?.scheme == "file" {
+        } else if url.scheme == "file" {
             
-            let anchorFromURL = url?.fragment
+            let anchorFromURL = url.fragment
             
             // Handle internal url
-            if (url!.path! as NSString).pathExtension != "" {
+            if (url.path! as NSString).pathExtension != "" {
                 let base = (book.opfResource.href as NSString).stringByDeletingLastPathComponent
-                let path = url?.path
+                let path = url.path
                 let splitedPath = path!.componentsSeparatedByString(base.isEmpty ? kBookId : base)
                 
                 // Return to avoid crash
@@ -223,10 +223,10 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
             }
             
             return true
-        } else if url?.scheme == "mailto" {
+        } else if url.scheme == "mailto" {
             print("Email")
             return true
-        } else if request.URL!.absoluteString != "about:blank" && navigationType == .LinkClicked {
+        } else if url.absoluteString != "about:blank" && url.scheme.containsString("http") && navigationType == .LinkClicked {
             
             if #available(iOS 9.0, *) {
                 let safariVC = SFSafariViewController(URL: request.URL!)
@@ -239,7 +239,11 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
                 FolioReader.sharedInstance.readerCenter.presentViewController(nav, animated: true, completion: nil)
             }
             return false
+        } else if UIApplication.sharedApplication().canOpenURL(url) {
+            UIApplication.sharedApplication().openURL(url)
+            return false
         }
+        
         return true
     }
     

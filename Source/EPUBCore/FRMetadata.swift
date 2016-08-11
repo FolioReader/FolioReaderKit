@@ -27,10 +27,12 @@ struct Author {
 A Book's identifier.
 */
 struct Identifier {
-    var scheme: String!
-    var value: String!
+    var id: String?
+    var scheme: String?
+    var value: String?
     
-    init(scheme: String, value: String) {
+    init(id: String?, scheme: String?, value: String?) {
+        self.id = id
         self.scheme = scheme
         self.value = value
     }
@@ -95,25 +97,36 @@ class FRMetadata: NSObject {
     var rights = [String]()
     var metaAttributes = [Meta]()
     
-    func findMetaByName(name: String) -> String? {
-        if name.isEmpty {
-            return nil
+    /**
+     Find a book unique identifier by ID
+     
+     - parameter id: The ID
+     - returns: The unique identifier of a book
+     */
+    func findIdentifierById(id: String?) -> String? {
+        guard let id = id else { return nil }
+        
+        for identifier in identifiers {
+            if let identifierId = identifier.id where identifierId == id {
+                return identifier.value
+            }
         }
+        return nil
+    }
+    
+    func findMetaByName(name: String) -> String? {
+        guard !name.isEmpty else { return nil }
         
         for meta in metaAttributes {
-            if meta.name != nil {
-                if meta.name == name {
-                    return meta.content
-                }
+            if let metaName = meta.name where metaName == name {
+                return meta.content
             }
         }
         return nil
     }
 
     func findMetaByProperty(property: String, refinedBy: String?) -> String? {
-        if property.isEmpty {
-            return nil
-        }
+        guard !property.isEmpty else { return nil }
 
         for meta in metaAttributes {
             if meta.property != nil {

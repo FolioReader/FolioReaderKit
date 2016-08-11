@@ -15,7 +15,7 @@ var pageHeight: CGFloat!
 var previousPageNumber: Int!
 var currentPageNumber: Int!
 var nextPageNumber: Int!
-var scrollDirection = ScrollDirection()
+var pageScrollDirection = ScrollDirection()
 var isScrolling = false
 
 
@@ -541,7 +541,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             let first = indexPaths.first! as NSIndexPath
             let last = indexPaths.last! as NSIndexPath
             
-            switch scrollDirection {
+            switch pageScrollDirection {
             case .Up:
                 if first.compare(last) == .OrderedAscending {
                     indexPath = last
@@ -902,8 +902,9 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
                     pageIndicatorView.currentPage = webViewPage
                 }
             }
-		}
-        scrollDirection = scrollView.contentOffset.forDirection() < pointNow.forDirection() ? .negative() : .positive()
+        }
+        
+        pageScrollDirection = scrollView.contentOffset.forDirection() < pointNow.forDirection() ? .negative() : .positive()
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
@@ -1035,12 +1036,8 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
                 if currentPageNumber == pageNumber && pageOffset > 0 {
                     page.scrollPageToOffset(pageOffset, animated: false)
                 }
-            } else {
-                updateCurrentPage(page)
-                
-                if !isScrolling && FolioReader.needsRTLChange {
-                    page.scrollPageToBottom()
-                }
+            } else if !isScrolling && FolioReader.needsRTLChange {
+                page.scrollPageToBottom()
             }
         } else if isFirstLoad {
             updateCurrentPage(page)
