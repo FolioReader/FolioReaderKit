@@ -515,9 +515,16 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     func pagesForCurrentPage(page: FolioReaderPage?) {
         guard let page = page else { return }
-        let pageSize = isVerticalDirection(pageHeight, pageWidth)
-        pageIndicatorView.totalPages = Int(ceil(page.webView.scrollView.contentSize.forDirection()/pageSize))
-        let webViewPage = pageForOffset(page.webView.scrollView.contentOffset.x, pageHeight: pageSize)
+
+		var pageSize = isVerticalDirection(pageHeight, pageWidth)
+		pageIndicatorView.totalPages = Int(ceil(page.webView.scrollView.contentSize.forDirection()/pageSize))
+		var webViewPage = pageForOffset(page.webView.scrollView.contentOffset.x, pageHeight: pageSize)
+
+		if readerConfig.scrollDirection == .sectionHorizontalContentVertical {
+			pageSize = pageHeight
+			pageIndicatorView.totalPages = Int(ceil(page.webView.scrollView.contentSize.height/pageSize))
+			webViewPage = pageForOffset(page.webView.scrollView.contentOffset.y, pageHeight: pageSize)
+		}
         pageIndicatorView.currentPage = webViewPage
     }
     
@@ -874,23 +881,27 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             
             if let page = currentPage
                 where page.webView.scrollView.contentOffset.forDirection()+pageSize <= page.webView.scrollView.contentSize.forDirection() {
-                let webViewPage = pageForOffset(page.webView.scrollView.contentOffset.forDirection(), pageHeight: pageSize)
-                if pageIndicatorView.currentPage != webViewPage {
-                    pageIndicatorView.currentPage = webViewPage
-                }
-            }
 
-			if (readerConfig.scrollDirection == .sectionHorizontalContentVertical),
-				let cell = ((scrollView.superview as? UIWebView)?.delegate as? FolioReaderPage) {
+				var webViewPage = pageForOffset(page.webView.scrollView.contentOffset.forDirection(), pageHeight: pageSize)
+
+				if (readerConfig.scrollDirection == .sectionHorizontalContentVertical),
+					let cell = ((scrollView.superview as? UIWebView)?.delegate as? FolioReaderPage) {
 
 					let currentIndexPathRow = cell.pageNumber - 1
 
 					// if the cell reload don't save the top position offset
 					if let oldOffSet = self.currentWebViewScrollPositions[currentIndexPathRow]
-						where (abs(oldOffSet.y - scrollView.contentOffset.y) > 100) {} else {
-							self.currentWebViewScrollPositions[currentIndexPathRow] = scrollView.contentOffset
+					where (abs(oldOffSet.y - scrollView.contentOffset.y) > 100) {} else {
+						self.currentWebViewScrollPositions[currentIndexPathRow] = scrollView.contentOffset
 					}
-			}
+
+					webViewPage = pageForOffset(page.webView.scrollView.contentOffset.y, pageHeight: pageHeight)
+				}
+
+                if pageIndicatorView.currentPage != webViewPage {
+                    pageIndicatorView.currentPage = webViewPage
+                }
+            }
 		}
         scrollDirection = scrollView.contentOffset.forDirection() < pointNow.forDirection() ? .negative() : .positive()
     }
