@@ -50,6 +50,11 @@ public class FolioReaderContainer: UIViewController {
             kCurrentMediaOverlayStyle: MediaOverlayStyle.Default.rawValue,
             kCurrentScrollDirection: FolioReaderScrollDirection.vertical.rawValue
         ])
+		FolioReader.sharedInstance.readerContainer = self
+
+		if (readerConfig.scrollDirection == .sectionHorizontalContentVertical) {
+			readerConfig.canChangeScrollDirection = false
+		}
     }
     
     // MARK: - View life cicle
@@ -58,7 +63,7 @@ public class FolioReaderContainer: UIViewController {
         super.viewDidLoad()
         
         // If user can change scroll direction use the last saved
-        if (readerConfig.canChangeScrollDirection && readerConfig.scrollDirection != .sectionHorizontalContentVertical) {
+        if (readerConfig.canChangeScrollDirection) {
             let direction = FolioReaderScrollDirection(rawValue: FolioReader.currentScrollDirection) ?? .vertical
             readerConfig.scrollDirection = direction
         }

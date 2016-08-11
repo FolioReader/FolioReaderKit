@@ -79,9 +79,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     
     func webViewFrame() -> CGRect {
 
-		if (readerConfig.hideBars == true) {
-			return UIScreen.mainScreen().bounds
-		}
+		guard readerConfig.hideBars == false else { return UIScreen.mainScreen().bounds }
 
 		let paddingTop: CGFloat = 20
         let paddingBottom: CGFloat = 30
@@ -150,7 +148,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         
         let direction: ScrollDirection = FolioReader.needsRTLChange ? .positive() : .negative()
         
-        if scrollDirection == direction && isScrolling {
+        if scrollDirection == direction && isScrolling && readerConfig.scrollDirection != .sectionHorizontalContentVertical {
             scrollPageToBottom()
         }
         
@@ -299,8 +297,13 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
      - parameter animated: Enable or not scrolling animation
      */
     func scrollPageToOffset(offset: CGFloat, animated: Bool) {
-        let pageOffsetPoint = isVerticalDirection(CGPoint(x: 0, y: offset), CGPoint(x: offset, y: 0))
-        webView.scrollView.setContentOffset(pageOffsetPoint, animated: animated)
+		if readerConfig.scrollDirection == .sectionHorizontalContentVertical {
+			let pageOffsetPoint = CGPoint(x: 0, y: offset)
+			webView.scrollView.setContentOffset(pageOffsetPoint, animated: animated)
+		} else {
+			let pageOffsetPoint = isVerticalDirection(CGPoint(x: 0, y: offset), CGPoint(x: offset, y: 0))
+			webView.scrollView.setContentOffset(pageOffsetPoint, animated: animated)
+		}
     }
     
     /**
