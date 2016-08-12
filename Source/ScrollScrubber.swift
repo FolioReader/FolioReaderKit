@@ -77,8 +77,8 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     }
     
     func sliderChange(slider:UISlider) {
-        let offset = isVerticalDirection(CGPointMake(0, height()*CGFloat(slider.value)),
-                                         CGPointMake(height()*CGFloat(slider.value), 0))
+        let offset = isDirection(CGPointMake(0, height()*CGFloat(slider.value)),
+                                         CGPointMake(height()*CGFloat(slider.value), 0), CGPointMake(height()*CGFloat(slider.value), 0))
         scrollView().setContentOffset(offset, animated: false)
     }
     
