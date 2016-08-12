@@ -37,6 +37,6 @@ class FolioReaderChapterListCell: UITableViewCell {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        fatalError("storyboards are incompatible with truth and beauty")
     }
 }

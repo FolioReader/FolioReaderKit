@@ -27,7 +27,7 @@ class PageViewController: UIPageViewController {
     }
 
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("storyboards are incompatible with truth and beauty")
     }
     
     override func viewDidLoad() {

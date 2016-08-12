@@ -43,7 +43,7 @@ class FolioReaderPageIndicator: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        fatalError("storyboards are incompatible with truth and beauty")
     }
     
     func reloadView(updateShadow updateShadow: Bool) {
