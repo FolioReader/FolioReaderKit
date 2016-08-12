@@ -58,9 +58,7 @@ public class FolioReaderContainer: UIViewController {
         ])
 		FolioReader.sharedInstance.readerContainer = self
 
-		if (readerConfig.scrollDirection == .sectionHorizontalContentVertical) {
-			readerConfig.canChangeScrollDirection = false
-		}
+		readerConfig.canChangeScrollDirection = isDirection(readerConfig.canChangeScrollDirection, readerConfig.canChangeScrollDirection, false)
     }
     
     required public init?(coder aDecoder: NSCoder) {
