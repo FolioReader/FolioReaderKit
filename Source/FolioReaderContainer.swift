@@ -23,10 +23,6 @@ public class FolioReaderContainer: UIViewController {
     
     // MARK: - Init
     
-    required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
     /**
      Init a Container
      
@@ -64,6 +60,10 @@ public class FolioReaderContainer: UIViewController {
 		if (readerConfig.scrollDirection == .sectionHorizontalContentVertical) {
 			readerConfig.canChangeScrollDirection = false
 		}
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("storyboards are incompatible with truth and beauty")
     }
     
     // MARK: - View life cicle
