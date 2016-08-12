@@ -425,6 +425,10 @@ extension UIWebView {
     }
     
     public override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
+        
+        if(readerConfig == nil){
+            return super.canPerformAction(action, withSender: sender)
+        }
 
         // menu on existing highlight
         if isShare {
