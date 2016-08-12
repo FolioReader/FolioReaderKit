@@ -109,6 +109,13 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         pagesForCurrentPage(currentPage)
         pageIndicatorView.reloadView(updateShadow: true)
     }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        // Close Reader instance and save positions
+        FolioReader.close()
+    }
 
     func configureNavBar() {
         let navBackground = isNight(readerConfig.nightModeMenuBackground, UIColor.whiteColor())
@@ -944,7 +951,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     // MARK: NavigationBar Actions
     
     func closeReader(sender: UIBarButtonItem) {
-        FolioReader.close()
         dismiss()
     }
     
