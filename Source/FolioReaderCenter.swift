@@ -430,9 +430,11 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             let page = round(pageOffset / pageWidth)
             pageOffset = page * pageWidth
         }
-        
-        let pageOffsetPoint = isVerticalDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0))
-        currentPage.webView.scrollView.setContentOffset(pageOffsetPoint, animated: true)
+
+		if readerConfig.scrollDirection != .sectionHorizontalContentVertical {
+			let pageOffsetPoint = isVerticalDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0))
+			currentPage.webView.scrollView.setContentOffset(pageOffsetPoint, animated: true)
+		}
     }
     
     override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
