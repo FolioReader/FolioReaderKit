@@ -13,6 +13,7 @@ var readerConfig: FolioReaderConfig!
 var epubPath: String?
 var book: FRBook!
 
+/// Reader container
 public class FolioReaderContainer: UIViewController {
     var centerNavigationController: UINavigationController!
     var centerViewController: FolioReaderCenter!

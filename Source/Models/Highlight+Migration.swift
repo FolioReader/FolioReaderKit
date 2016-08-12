@@ -11,6 +11,10 @@ import RealmSwift
 import CoreData
 
 extension Highlight {
+    
+    /**
+     Migrate user data to Realm, before we used Core Data.
+     */
     public static func migrateUserDataToRealm() {
         var highlights: [NSManagedObject]?
         let coreDataManager = CoreDataManager()

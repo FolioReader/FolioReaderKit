@@ -51,7 +51,7 @@ enum MediaOverlayStyle: Int {
 }
 
 /**
- *  Main Library class with some useful constants and methods
+ Main Library class with some useful constants and methods
  */
 public class FolioReader : NSObject {
     public static let sharedInstance = FolioReader()
@@ -147,7 +147,7 @@ public class FolioReader : NSObject {
     
     /**
      Present a Folio Reader for a Parent View Controller.
-    */
+     */
     public class func presentReader(parentViewController parentViewController: UIViewController, withEpubPath epubPath: String, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated: Bool = true) {
         let reader = FolioReaderContainer(config: config, epubPath: epubPath, removeEpub: shouldRemoveEpub)
         FolioReader.sharedInstance.readerContainer = reader
@@ -158,22 +158,22 @@ public class FolioReader : NSObject {
     
     /**
      Called when the application will resign active
-    */
+     */
     public class func applicationWillResignActive() {
         saveReaderState()
     }
     
     /**
      Called when the application will terminate
-    */
+     */
     public class func applicationWillTerminate() {
         saveReaderState()
     }
     
     /**
      Save Reader state, book, page and scroll are saved
-    */
-    class func saveReaderState() {
+     */
+    public class func saveReaderState() {
         guard FolioReader.isReaderOpen else { return }
         
         if let currentPage = FolioReader.sharedInstance.readerCenter.currentPage {
@@ -190,7 +190,7 @@ public class FolioReader : NSObject {
     /**
      Closes and save the reader current instance
      */
-    class func close() {
+    public class func close() {
         FolioReader.saveReaderState()
         FolioReader.isReaderOpen = false
         FolioReader.isReaderReady = false
@@ -640,7 +640,7 @@ internal extension UINavigationBar {
 
 extension UINavigationController {
     
-    public override func preferredStatusBarStyle() -> UIStatusBarStyle {
+    override public func preferredStatusBarStyle() -> UIStatusBarStyle {
         if let vc = visibleViewController {
             return vc.preferredStatusBarStyle()
         }

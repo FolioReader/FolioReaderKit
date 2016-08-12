@@ -8,9 +8,18 @@
 
 import UIKit
 
+/**
+ Defines the Reader scrolling direction
+ */
 public enum FolioReaderScrollDirection: Int {
+    
+    /// Section and content scroll on vertical
     case vertical
+    
+    /// Section and content scroll on horizontal
     case horizontal
+    
+    /// Sections scroll horizontal and content scroll on vertical
 	case sectionHorizontalContentVertical
     
     /**
@@ -28,20 +37,40 @@ public enum FolioReaderScrollDirection: Int {
     }
 }
 
+
+/**
+ Defines the Reader custom configuration
+ */
 public class FolioReaderConfig: NSObject {
     
     // MARK: Colors
     
+    /// Base header custom TintColor
     public var tintColor = UIColor(rgba: "#6ACC50")
+    
+    /// Menu background color
     public var menuBackgroundColor = UIColor.whiteColor()
+    
+    /// Menu separator Color
     public var menuSeparatorColor = UIColor(rgba: "#D7D7D7")
+    
+    /// Menu text color
     public var menuTextColor = UIColor(rgba: "#767676")
+    
+    /// Night mode background color
     public var nightModeBackground = UIColor(rgba: "#131313")
+    
+    /// Night mode menu background color
     public var nightModeMenuBackground = UIColor(rgba: "#1E1E1E")
+    
+    /// Night mode separator color
     public var nightModeSeparatorColor = UIColor(white: 0.5, alpha: 0.2)
+    
+    /// Media overlay or TTS selection color
     public lazy var mediaOverlayColor: UIColor! = self.tintColor
     
     // MARK: Custom actions
+    
 	/// hide the navigation bar and the bottom status view 
 	public var hideBars = false
 
@@ -62,7 +91,10 @@ public class FolioReaderConfig: NSObject {
     
     // MARK: Localized strings
     
+    /// Localizes Highlight title
     public var localizedHighlightsTitle = NSLocalizedString("Highlights", comment: "")
+    
+    /// Localizes Highlight date format. This is a `dateFormat` from `NSDateFormatter`, so be careful 🤔
     public var localizedHighlightsDateFormat = "MMM dd, YYYY | HH:mm"
     public var localizedHighlightMenu = NSLocalizedString("Highlight", comment: "")
     public var localizedDefineMenu = NSLocalizedString("Define", comment: "")

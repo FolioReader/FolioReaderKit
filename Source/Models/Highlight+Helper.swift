@@ -82,9 +82,16 @@ public enum HighlightStyle: Int {
     }
 }
 
+/// Completion block
 public typealias Completion = (error: NSError?) -> ()
 
 extension Highlight {
+    
+    /**
+     Save a Highlight with completion block
+     
+     - parameter completion: Completion block
+     */
     public func persist(completion: Completion? = nil) {
         do {
             let realm = try! Realm()
@@ -98,6 +105,9 @@ extension Highlight {
         }
     }
     
+    /**
+     Remove a Highlight
+     */
     public func remove() {
         do {
             let realm = try! Realm()
@@ -109,6 +119,11 @@ extension Highlight {
         }
     }
     
+    /**
+     Remove a Highlight by ID
+     
+     - parameter highlightId: The ID to be removed
+     */
     public static func removeById(highlightId: String) {
         var highlight: Highlight?
         let predicate = NSPredicate(format:"highlightId = %@", highlightId)
@@ -119,6 +134,12 @@ extension Highlight {
             
     }
     
+    /**
+     Update a Highlight by ID
+     
+     - parameter highlightId: The ID to be removed
+     - parameter type:        The `HighlightStyle`
+     */
     public static func updateById(highlightId: String, type: HighlightStyle) {
         var highlight: Highlight?
         let predicate = NSPredicate(format:"highlightId = %@", highlightId)
@@ -136,6 +157,14 @@ extension Highlight {
         
     }
     
+    /**
+     Return a list of Highlights with a given ID
+     
+     - parameter bookId: Book ID
+     - parameter page:   Page number
+     
+     - returns: Return a list of Highlights
+     */
     public static func allByBookId(bookId: String, andPage page: NSNumber? = nil) -> [Highlight] {
         var highlights: [Highlight]?
         let predicate = (page != nil) ? NSPredicate(format: "bookId = %@ && page = %@", bookId, page!) : NSPredicate(format: "bookId = %@", bookId)
@@ -144,6 +173,11 @@ extension Highlight {
         return highlights!
     }
     
+    /**
+     Return all Highlights
+     
+     - returns: Return all Highlights
+     */
     public static func all() -> [Highlight] {
         var highlights: [Highlight]?
         let realm = try! Realm()
@@ -203,6 +237,12 @@ extension Highlight {
         return mapped.first
     }
     
+    /**
+     Remove a Highlight from HTML by ID
+     
+     - parameter highlightId: The ID to be removed
+     - returns: The removed id
+     */
     public static func removeFromHTMLById(highlightId: String) -> String? {
         guard let currentPage = FolioReader.sharedInstance.readerCenter.currentPage else { return nil }
         

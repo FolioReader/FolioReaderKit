@@ -9,6 +9,7 @@
 import Foundation
 import RealmSwift
 
+/// A Highlight object
 public class Highlight: Object {
     public dynamic var bookId: String!
     public dynamic var content: String!
