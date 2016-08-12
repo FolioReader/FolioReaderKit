@@ -31,7 +31,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     var animator: ZFModalTransitionAnimator!
     var pageIndicatorView: FolioReaderPageIndicator!
     var bookShareLink: String?
-    
+	var pageIndicatorHeight: CGFloat = 20
+
     var recentlyScrolled = false
     var recentlyScrolledDelay = 2.0 // 2 second delay until we clear recentlyScrolled
     var recentlyScrolledTimer: NSTimer!
@@ -39,10 +40,10 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     private var screenBounds: CGRect!
     private var pointNow = CGPointZero
-    private let pageIndicatorHeight: CGFloat = 20
     private var pageOffsetRate: CGFloat = 0
     private var tempReference: FRTocReference?
     private var isFirstLoad = true
+	private var currentWebViewScrollPositions = [Int: CGPoint]()
     
     // MARK: - View life cicle
     
@@ -87,7 +88,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         pageIndicatorView = FolioReaderPageIndicator(frame: CGRect(x: 0, y: view.frame.height-pageIndicatorHeight, width: view.frame.width, height: pageIndicatorHeight))
         view.addSubview(pageIndicatorView)
         
-        let scrubberY: CGFloat = readerConfig.shouldHideNavigationOnTap == true ? 50 : 74
+        let scrubberY: CGFloat = ((readerConfig.shouldHideNavigationOnTap == true || readerConfig.hideBars == true) ? 50 : 74)
         scrollScrubber = ScrollScrubber(frame: CGRect(x: pageWidth + 10, y: scrubberY, width: 40, height: pageHeight - 100))
         scrollScrubber.delegate = self
         view.addSubview(scrollScrubber.slider)
@@ -514,9 +515,16 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     func pagesForCurrentPage(page: FolioReaderPage?) {
         guard let page = page else { return }
-        let pageSize = isVerticalDirection(pageHeight, pageWidth)
-        pageIndicatorView.totalPages = Int(ceil(page.webView.scrollView.contentSize.forDirection()/pageSize))
-        let webViewPage = pageForOffset(page.webView.scrollView.contentOffset.x, pageHeight: pageSize)
+
+		var pageSize = isVerticalDirection(pageHeight, pageWidth)
+		pageIndicatorView.totalPages = Int(ceil(page.webView.scrollView.contentSize.forDirection()/pageSize))
+		var webViewPage = pageForOffset(page.webView.scrollView.contentOffset.x, pageHeight: pageSize)
+
+		if readerConfig.scrollDirection == .sectionHorizontalContentVertical {
+			pageSize = pageHeight
+			pageIndicatorView.totalPages = Int(ceil(page.webView.scrollView.contentSize.height/pageSize))
+			webViewPage = pageForOffset(page.webView.scrollView.contentOffset.y, pageHeight: pageSize)
+		}
         pageIndicatorView.currentPage = webViewPage
     }
     
@@ -873,7 +881,23 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             
             if let page = currentPage
                 where page.webView.scrollView.contentOffset.forDirection()+pageSize <= page.webView.scrollView.contentSize.forDirection() {
-                let webViewPage = pageForOffset(page.webView.scrollView.contentOffset.forDirection(), pageHeight: pageSize)
+
+				var webViewPage = pageForOffset(page.webView.scrollView.contentOffset.forDirection(), pageHeight: pageSize)
+
+				if (readerConfig.scrollDirection == .sectionHorizontalContentVertical),
+					let cell = ((scrollView.superview as? UIWebView)?.delegate as? FolioReaderPage) {
+
+					let currentIndexPathRow = cell.pageNumber - 1
+
+					// if the cell reload don't save the top position offset
+					if let oldOffSet = self.currentWebViewScrollPositions[currentIndexPathRow]
+					where (abs(oldOffSet.y - scrollView.contentOffset.y) > 100) {} else {
+						self.currentWebViewScrollPositions[currentIndexPathRow] = scrollView.contentOffset
+					}
+
+					webViewPage = pageForOffset(page.webView.scrollView.contentOffset.y, pageHeight: pageHeight)
+				}
+
                 if pageIndicatorView.currentPage != webViewPage {
                     pageIndicatorView.currentPage = webViewPage
                 }
@@ -885,7 +909,13 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         isScrolling = false
-        
+
+		if (readerConfig.scrollDirection == .sectionHorizontalContentVertical),
+			let cell = ((scrollView.superview as? UIWebView)?.delegate as? FolioReaderPage) {
+				let currentIndexPathRow = cell.pageNumber - 1
+				self.currentWebViewScrollPositions[currentIndexPathRow] = scrollView.contentOffset
+		}
+
         if scrollView is UICollectionView {
             if totalPages > 0 { updateCurrentPage() }
         }
@@ -991,11 +1021,14 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
         if let position = FolioReader.defaults.valueForKey(kBookId) as? NSDictionary {
             let pageNumber = position["pageNumber"]! as! Int
             var pageOffset: CGFloat = 0
-            
-            if let offset = isVerticalDirection(position["pageOffsetY"], position["pageOffsetX"]) as? CGFloat {
-                pageOffset = offset
-            }
-            
+
+			if readerConfig.scrollDirection == .sectionHorizontalContentVertical,
+				let offSetY = position["pageOffsetY"] as? CGFloat {
+					pageOffset = offSetY
+			} else if let offset = isVerticalDirection(position["pageOffsetY"], position["pageOffsetX"]) as? CGFloat {
+				pageOffset = offset
+			}
+
             if isFirstLoad {
                 updateCurrentPage(page)
                 isFirstLoad = false
@@ -1016,6 +1049,11 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
             currentPage.handleAnchor(fragmentID, avoidBeginningAnchors: true, animated: true)
             tempFragment = nil
         }
+
+		if (readerConfig.scrollDirection == .sectionHorizontalContentVertical),
+			let offsetPoint = self.currentWebViewScrollPositions[page.pageNumber - 1] {
+				page.webView.scrollView.setContentOffset(offsetPoint, animated: false)
+		}
     }
 }
 

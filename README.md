@@ -62,7 +62,7 @@ Then, follow the steps as described in Carthage's [README](https://github.com/Ca
 
 ## Basic Usage
 
-To get started, this is a simple usage sample.
+To get started, this is a simple usage sample of using the integrated view controller.
 
 ```swift
 import FolioReaderKit
@@ -72,6 +72,18 @@ func open(sender: AnyObject) {
     let bookPath = NSBundle.mainBundle().pathForResource("book", ofType: "epub")
     FolioReader.presentReader(parentViewController: self, withEpubPath: bookPath!, andConfig: config)
 }
+```
+
+You can also use your own FolioReader view controller like this.
+
+```swift
+		let config = FolioReaderConfig()
+
+		let bookPath = NSBundle.mainBundle().pathForResource("book", ofType: "epub")
+		let epubVC = FolioReaderContainer(config: config, epubPath: bookPath, removeEpub: true)
+
+		// present the epubVC view controller like every other UIViewController instance
+		self.presentViewController(epubVC, animated: true, completion: nil)
 ```
 
 In your `AppDelegate` call `applicationWillResignActive` and `applicationWillTerminate`. This will save the reader state even if you kill the app.
@@ -103,7 +115,7 @@ func applicationWillTerminate(application: UIApplication) {
 - [x] Media Overlays (Sync text rendering with audio playback)
 - [x] TTS - Text to Speech Support
 - [x] Parse epub cover image
-- [x] Vertical and Horizontal scrolling
+- [x] Vertical or/and Horizontal scrolling
 - [x] RTL Support
 - [ ] PDF support
 - [ ] Book Search
