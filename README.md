@@ -30,6 +30,7 @@ end
 Then, run the following command:
 
 ```bash
+$ cd Example
 $ pod install
 ```
 
