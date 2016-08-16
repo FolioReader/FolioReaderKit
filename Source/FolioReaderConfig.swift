@@ -20,7 +20,7 @@ public enum FolioReaderScrollDirection: Int {
     case horizontal
     
     /// Sections scroll horizontal and content scroll on vertical
-	case sectionHorizontalContentVertical
+	case horizontalWithVerticalContent
     
     /**
      The current scroll direction
@@ -31,7 +31,7 @@ public enum FolioReaderScrollDirection: Int {
         switch self {
         case vertical:
             return .Vertical
-        case horizontal, sectionHorizontalContentVertical:
+        case horizontal, horizontalWithVerticalContent:
             return .Horizontal
         }
     }

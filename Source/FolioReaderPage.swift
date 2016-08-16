@@ -90,17 +90,17 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
 			let navTotal = statusbarHeight + navBarHeight!
 			let newFrame = CGRect(
 				x: bounds.origin.x,
-				y: isVerticalDirection(bounds.origin.y + navTotal, bounds.origin.y + navTotal + paddingTop),
+				y: isDirection(bounds.origin.y + navTotal, bounds.origin.y + navTotal + paddingTop, bounds.origin.y + navTotal + paddingTop),
 				width: bounds.width,
-				height: isVerticalDirection(bounds.height - navTotal, bounds.height - navTotal - paddingTop - paddingBottom))
+				height: isDirection(bounds.height - navTotal, bounds.height - navTotal - paddingTop - paddingBottom, bounds.height - navTotal - paddingTop - paddingBottom))
 			return newFrame
 		}
 
         let newFrame = CGRect(
             x: bounds.origin.x,
-            y: isVerticalDirection(bounds.origin.y, bounds.origin.y + paddingTop),
+            y: isDirection(bounds.origin.y, bounds.origin.y + paddingTop, bounds.origin.y + paddingTop),
             width: bounds.width,
-            height: isVerticalDirection(bounds.height, bounds.height - paddingTop - paddingBottom))
+            height: isDirection(bounds.height, bounds.height - paddingTop - paddingBottom, bounds.height - paddingTop - paddingBottom))
         return newFrame
     }
     
@@ -148,7 +148,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         
         let direction: ScrollDirection = FolioReader.needsRTLChange ? .positive() : .negative()
         
-        if pageScrollDirection == direction && isScrolling && readerConfig.scrollDirection != .sectionHorizontalContentVertical {
+        if pageScrollDirection == direction && isScrolling && readerConfig.scrollDirection != .horizontalWithVerticalContent {
             scrollPageToBottom()
         }
         
@@ -301,21 +301,17 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
      - parameter animated: Enable or not scrolling animation
      */
     func scrollPageToOffset(offset: CGFloat, animated: Bool) {
-		if readerConfig.scrollDirection == .sectionHorizontalContentVertical {
-			let pageOffsetPoint = CGPoint(x: 0, y: offset)
-			webView.scrollView.setContentOffset(pageOffsetPoint, animated: animated)
-		} else {
-			let pageOffsetPoint = isVerticalDirection(CGPoint(x: 0, y: offset), CGPoint(x: offset, y: 0))
-			webView.scrollView.setContentOffset(pageOffsetPoint, animated: animated)
-		}
-    }
+		let pageOffsetPoint = isDirection(CGPoint(x: 0, y: offset), CGPoint(x: offset, y: 0), CGPoint(x: 0, y: offset))
+		webView.scrollView.setContentOffset(pageOffsetPoint, animated: animated)
+	}
     
     /**
      Scrolls the page to bottom
      */
     func scrollPageToBottom() {
-        let bottomOffset = isVerticalDirection(
+        let bottomOffset = isDirection(
             CGPointMake(0, webView.scrollView.contentSize.height - webView.scrollView.bounds.height),
+            CGPointMake(webView.scrollView.contentSize.width - webView.scrollView.bounds.width, 0),
             CGPointMake(webView.scrollView.contentSize.width - webView.scrollView.bounds.width, 0)
         )
         
@@ -425,6 +421,10 @@ extension UIWebView {
     }
     
     public override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
+        
+        if(readerConfig == nil){
+            return super.canPerformAction(action, withSender: sender)
+        }
 
         // menu on existing highlight
         if isShare {

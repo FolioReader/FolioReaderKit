@@ -207,51 +207,55 @@ func isNight<T> (f: T, _ l: T) -> T {
 
 // MARK: - Scroll Direction Functions
 
-func isVerticalDirection<T> (f: T, _ l: T) -> T {
-    return readerConfig.scrollDirection == .vertical ? f : l
+func isDirection<T> (vertical: T, _ horizontal: T, _ horizontalContentVertical: T) -> T {
+	switch readerConfig.scrollDirection {
+	case .vertical: return vertical
+	case .horizontal: return horizontal
+	case .horizontalWithVerticalContent: return horizontalContentVertical
+	}
 }
 
 extension UICollectionViewScrollDirection {
     static func direction() -> UICollectionViewScrollDirection {
-        return isVerticalDirection(.Vertical, .Horizontal)
+        return isDirection(.Vertical, .Horizontal, .Horizontal)
     }
 }
 
 extension UICollectionViewScrollPosition {
     static func direction() -> UICollectionViewScrollPosition {
-        return isVerticalDirection(.Top, .Left)
+        return isDirection(.Top, .Left, .Left)
     }
 }
 
 extension CGPoint {
     func forDirection() -> CGFloat {
-        return isVerticalDirection(y, x)
+        return isDirection(y, x, y)
     }
 }
 
 extension CGSize {
     func forDirection() -> CGFloat {
-        return isVerticalDirection(height, width)
+        return isDirection(height, width, height)
     }
     
     func forReverseDirection() -> CGFloat {
-        return isVerticalDirection(width, height)
+        return isDirection(width, height, width)
     }
 }
 
 extension CGRect {
     func forDirection() -> CGFloat {
-        return isVerticalDirection(height, width)
+        return isDirection(height, width, height)
     }
 }
 
 extension ScrollDirection {
     static func negative() -> ScrollDirection {
-        return isVerticalDirection(.Down, .Right)
+        return isDirection(.Down, .Right, .Right)
     }
     
     static func positive() -> ScrollDirection {
-        return isVerticalDirection(.Up, .Left)
+        return isDirection(.Up, .Left, .Left)
     }
 }
 
