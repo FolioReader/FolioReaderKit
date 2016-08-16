@@ -27,10 +27,15 @@ target '<Your Target Name>' do
 end
 ```
 
-Then, run the following command:
+Or if trying the demo, move to the example directory
 
 ```bash
 $ cd Example
+```
+
+Then, run the following command:
+
+```bash
 $ pod install
 ```
 
