@@ -1016,6 +1016,15 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         menu.transitioningDelegate = animator
         presentViewController(menu, animated: true, completion: nil)
     }
+    
+    /**
+     Present Quote Share
+     */
+    func presentQuoteShare() {
+        let quoteShare = FolioReaderQuoteShare()
+        let nav = UINavigationController(rootViewController: quoteShare)
+        presentViewController(nav, animated: true, completion: nil)
+    }
 }
 
 // MARK: FolioPageDelegate
