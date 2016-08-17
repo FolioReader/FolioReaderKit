@@ -1,6 +1,6 @@
 PODS:
   - AEXML (3.0.0)
-  - FolioReaderKit (0.8.5):
+  - FolioReaderKit (0.8.6):
     - AEXML
     - FontBlaster
     - JSQWebViewController
@@ -32,7 +32,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AEXML: 716fb0a8decba4a3517324a71fee3685b30233d2
-  FolioReaderKit: 5a78b2dc16204e670023fce56d199775ead37ce5
+  FolioReaderKit: e0c89ecec9bd253363e842210a3e10fe43af2923
   FontBlaster: b780f709b8f705638d0c80a1ecdfb23b3077d0a6
   JSQWebViewController: eaa6bd68d9e1426ae25ade99c9bbde4c6cdd4120
   Nimble: 97a0a4cae5124c117115634b2d055d8c97d0af19

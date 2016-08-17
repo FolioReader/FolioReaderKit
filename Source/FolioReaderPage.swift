@@ -463,32 +463,17 @@ extension UIWebView {
     }
     
     func share(sender: UIMenuController) {
+        if isShare {
+            if let textToShare = js("getHighlightContent()") {
+                FolioReader.sharedInstance.readerCenter.shareHighlight(textToShare, rect: sender.menuFrame)
+            }
+        } else {
+            if let textToShare = js("getSelectedText()") {
+                FolioReader.sharedInstance.readerCenter.shareHighlight(textToShare, rect: sender.menuFrame)
+            }
+        }
         
-//        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
-//        let shareImage = UIAlertAction(title: "Share image quote", style: .Default, handler: { (action) -> Void in
-//            FolioReader.sharedInstance.readerCenter.presentQuoteShare()
-//        })
-//        
-//        let shareText = UIAlertAction(title: "Share text quote", style: .Default) { (action) -> Void in
-//            if self.isShare {
-//                if let textToShare = self.js("getHighlightContent()") {
-//                    FolioReader.sharedInstance.readerCenter.shareHighlight(textToShare, rect: sender.menuFrame)
-//                }
-//            } else {
-//                if let textToShare = self.js("getSelectedText()") {
-//                    FolioReader.sharedInstance.readerCenter.shareHighlight(textToShare, rect: sender.menuFrame)
-//                }
-//            }
-//            self.setMenuVisible(false)
-//        }
-//        
-//        let cancel = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-//        
-//        alertController.addAction(shareImage)
-//        alertController.addAction(shareText)
-//        alertController.addAction(cancel)
-        
-//        FolioReader.sharedInstance.readerCenter.presentViewController(alertController, animated: true, completion: nil)
+        setMenuVisible(false)
     }
     
     func colors(sender: UIMenuController?) {
