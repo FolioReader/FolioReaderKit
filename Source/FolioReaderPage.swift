@@ -463,7 +463,6 @@ extension UIWebView {
     }
     
     func share(sender: UIMenuController) {
-        
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
         let shareImage = UIAlertAction(title: "Share image quote", style: .Default, handler: { (action) -> Void in
             FolioReader.sharedInstance.readerCenter.presentQuoteShare()
