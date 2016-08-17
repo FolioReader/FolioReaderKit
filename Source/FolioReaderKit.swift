@@ -58,7 +58,7 @@ public class FolioReader : NSObject {
     static let defaults = NSUserDefaults.standardUserDefaults()
     weak var readerCenter: FolioReaderCenter!
     weak var readerContainer: FolioReaderContainer!
-    weak var readerAudioPlayer: FolioReaderAudioPlayer!
+    weak var readerAudioPlayer: FolioReaderAudioPlayer?
     
     private override init() {
         let isMigrated = FolioReader.defaults.boolForKey(kMigratedToRealm)
@@ -194,7 +194,7 @@ public class FolioReader : NSObject {
         FolioReader.saveReaderState()
         FolioReader.isReaderOpen = false
         FolioReader.isReaderReady = false
-        FolioReader.sharedInstance.readerAudioPlayer.stop(immediate: true)
+        FolioReader.sharedInstance.readerAudioPlayer?.stop(immediate: true)
         FolioReader.defaults.setInteger(0, forKey: kCurrentTOCMenu)
     }
 }
