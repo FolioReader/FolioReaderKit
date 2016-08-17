@@ -139,10 +139,10 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         refreshPageMode()
         
         if readerConfig.enableTTS && !book.hasAudio() {
-            webView.js("wrappingSentencesWithinPTags()");
+            webView.js("wrappingSentencesWithinPTags()")
             
-            if FolioReader.sharedInstance.readerAudioPlayer.isPlaying() {
-                FolioReader.sharedInstance.readerAudioPlayer.readCurrentSentence()
+            if let audioPlayer = FolioReader.sharedInstance.readerAudioPlayer where audioPlayer.isPlaying() {
+                audioPlayer.readCurrentSentence()
             }
         }
         
@@ -182,7 +182,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
             let playID = decoded.substringFromIndex(decoded.startIndex.advancedBy(13))
             let chapter = FolioReader.sharedInstance.readerCenter.getCurrentChapter()
             let href = chapter != nil ? chapter!.href : "";
-            FolioReader.sharedInstance.readerAudioPlayer.playAudio(href, fragmentID: playID)
+            FolioReader.sharedInstance.readerAudioPlayer?.playAudio(href, fragmentID: playID)
 
             return false
         } else if url.scheme == "file" {
@@ -464,17 +464,31 @@ extension UIWebView {
     
     func share(sender: UIMenuController) {
         
-        if isShare {
-            if let textToShare = js("getHighlightContent()") {
-                FolioReader.sharedInstance.readerCenter.shareHighlight(textToShare, rect: sender.menuFrame)
-            }
-        } else {
-            if let textToShare = js("getSelectedText()") {
-                FolioReader.sharedInstance.readerCenter.shareHighlight(textToShare, rect: sender.menuFrame)
-            }
-        }
+//        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+//        let shareImage = UIAlertAction(title: "Share image quote", style: .Default, handler: { (action) -> Void in
+//            FolioReader.sharedInstance.readerCenter.presentQuoteShare()
+//        })
+//        
+//        let shareText = UIAlertAction(title: "Share text quote", style: .Default) { (action) -> Void in
+//            if self.isShare {
+//                if let textToShare = self.js("getHighlightContent()") {
+//                    FolioReader.sharedInstance.readerCenter.shareHighlight(textToShare, rect: sender.menuFrame)
+//                }
+//            } else {
+//                if let textToShare = self.js("getSelectedText()") {
+//                    FolioReader.sharedInstance.readerCenter.shareHighlight(textToShare, rect: sender.menuFrame)
+//                }
+//            }
+//            self.setMenuVisible(false)
+//        }
+//        
+//        let cancel = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+//        
+//        alertController.addAction(shareImage)
+//        alertController.addAction(shareText)
+//        alertController.addAction(cancel)
         
-        setMenuVisible(false)
+//        FolioReader.sharedInstance.readerCenter.presentViewController(alertController, animated: true, completion: nil)
     }
     
     func colors(sender: UIMenuController?) {
@@ -532,7 +546,7 @@ extension UIWebView {
     }
 
     func play(sender: UIMenuController?) {
-        FolioReader.sharedInstance.readerAudioPlayer.play()
+        FolioReader.sharedInstance.readerAudioPlayer?.play()
 
         // Force remove text selection
         // @NOTE: this doesn't seem to always work
