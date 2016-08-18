@@ -53,7 +53,7 @@ enum MediaOverlayStyle: Int {
 /**
  Main Library class with some useful constants and methods
  */
-public class FolioReader : NSObject {
+public class FolioReader: NSObject {
     public static let sharedInstance = FolioReader()
     static let defaults = NSUserDefaults.standardUserDefaults()
     weak var readerCenter: FolioReaderCenter!
@@ -558,7 +558,7 @@ internal extension UIImage {
      - parameter color: The input color
      - returns: Returns a colored image
      */
-    class func imageWithColor(color: UIColor?) -> UIImage! {
+    class func imageWithColor(color: UIColor?) -> UIImage {
         let rect = CGRectMake(0.0, 0.0, 1.0, 1.0)
         UIGraphicsBeginImageContextWithOptions(rect.size, false, 0)
         let context = UIGraphicsGetCurrentContext()
@@ -574,6 +574,20 @@ internal extension UIImage {
         UIGraphicsEndImageContext()
         
         return image
+    }
+    
+    /**
+     Generates a image with a `CALayer`
+     
+     - parameter layer: The input `CALayer`
+     - returns: Return a rendered image
+     */
+    class func imageWithLayer(layer: CALayer) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(layer.bounds.size, layer.opaque, 0.0)
+        layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return img
     }
 }
 

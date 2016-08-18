@@ -1011,8 +1011,8 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     /**
      Present Quote Share
      */
-    func presentQuoteShare() {
-        let quoteShare = FolioReaderQuoteShare()
+    func presentQuoteShare(string: String) {
+        let quoteShare = FolioReaderQuoteShare(initWithText: string)
         let nav = UINavigationController(rootViewController: quoteShare)
         presentViewController(nav, animated: true, completion: nil)
     }
