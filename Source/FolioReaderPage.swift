@@ -79,7 +79,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     
     func webViewFrame() -> CGRect {
 
-		guard readerConfig.hideBars == false else { return UIScreen.mainScreen().bounds }
+		guard readerConfig.hideBars == false else { return bounds }
 
 		let paddingTop: CGFloat = 20
         let paddingBottom: CGFloat = 30

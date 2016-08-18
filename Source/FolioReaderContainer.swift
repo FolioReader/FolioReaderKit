@@ -12,6 +12,7 @@ import FontBlaster
 var readerConfig: FolioReaderConfig!
 var epubPath: String?
 var book: FRBook!
+var initFromStoryboard: Bool = false
 
 /// Reader container
 public class FolioReaderContainer: UIViewController {
@@ -38,31 +39,21 @@ public class FolioReaderContainer: UIViewController {
         epubPath = path
         shouldRemoveEpub = removeEpub
         super.init(nibName: nil, bundle: NSBundle.frameworkBundle())
-        
-        // Init with empty book
-        book = FRBook()
-        
-        // Register custom fonts
-        FontBlaster.blast(NSBundle.frameworkBundle())
-        
-        // Register initial defaults
-        FolioReader.defaults.registerDefaults([
-            kCurrentFontFamily: 0,
-            kNightMode: false,
-            kCurrentFontSize: 2,
-            kCurrentAudioRate: 1,
-            kCurrentHighlightStyle: 0,
-            kCurrentTOCMenu: 0,
-            kCurrentMediaOverlayStyle: MediaOverlayStyle.Default.rawValue,
-            kCurrentScrollDirection: FolioReaderScrollDirection.vertical.rawValue
-        ])
 		FolioReader.sharedInstance.readerContainer = self
-
-		readerConfig.canChangeScrollDirection = isDirection(readerConfig.canChangeScrollDirection, readerConfig.canChangeScrollDirection, false)
+		FolioReaderContainer.initSetup()
     }
     
     required public init?(coder aDecoder: NSCoder) {
-        fatalError("storyboards are incompatible with truth and beauty")
+		FolioReaderContainer.initSetup()
+
+		// Default values when the init called from storyboard
+		// TODO: Integrate contraints or storyboard to be more dynamic https://github.com/FolioReader/FolioReaderKit/issues/119
+		initFromStoryboard = true
+		readerConfig.hideBars = true
+		readerConfig.canChangeScrollDirection = false
+
+		super.init(coder: aDecoder)
+		FolioReader.sharedInstance.readerContainer = self
     }
     
     // MARK: - View life cicle
@@ -165,4 +156,35 @@ public class FolioReaderContainer: UIViewController {
     override public func preferredStatusBarStyle() -> UIStatusBarStyle {
         return isNight(.LightContent, .Default)
     }
+
+	// MARK: - Helpers
+
+	static func setUpConfig(config: FolioReaderConfig, epubPath path: String) {
+		readerConfig = config
+		epubPath = path
+	}
+
+	private static func initSetup() {
+
+		// Init with empty book
+		book = FRBook()
+
+		// Register custom fonts
+		FontBlaster.blast(NSBundle.frameworkBundle())
+
+		// Register initial defaults
+		FolioReader.defaults.registerDefaults([
+			kCurrentFontFamily: 0,
+			kNightMode: false,
+			kCurrentFontSize: 2,
+			kCurrentAudioRate: 1,
+			kCurrentHighlightStyle: 0,
+			kCurrentTOCMenu: 0,
+			kCurrentMediaOverlayStyle: MediaOverlayStyle.Default.rawValue,
+			kCurrentScrollDirection: FolioReaderScrollDirection.vertical.rawValue
+			])
+
+		readerConfig.canChangeScrollDirection = isDirection(readerConfig.canChangeScrollDirection, readerConfig.canChangeScrollDirection, false)
+	}
+
 }
