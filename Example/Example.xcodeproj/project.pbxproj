@@ -13,6 +13,7 @@
 		1A42C2921C0E3883000F2137 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A42C2901C0E3883000F2137 /* Main.storyboard */; };
 		1A42C2941C0E3883000F2137 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A42C2931C0E3883000F2137 /* Assets.xcassets */; };
 		1A42C2A21C0E3A8D000F2137 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A42C2A01C0E3A8D000F2137 /* LaunchScreen.storyboard */; };
+		4F1E0825EC0180ACA3E98C0E /* Pods_StoryboardExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 318E62E766AB854BE290FB53 /* Pods_StoryboardExample.framework */; };
 		6E3C4A3F1C3C6708009CBC8C /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E3C4A3E1C3C6708009CBC8C /* MediaPlayer.framework */; };
 		6E5C9B051C4037B7008F6FD9 /* The Silver Chair.epub in Resources */ = {isa = PBXBuildFile; fileRef = 6E5C9B031C4037B7008F6FD9 /* The Silver Chair.epub */; };
 		6E5C9B091C403968008F6FD9 /* The Adventures Of Sherlock Holmes - Adventure I.epub in Resources */ = {isa = PBXBuildFile; fileRef = 6E5C9B081C403942008F6FD9 /* The Adventures Of Sherlock Holmes - Adventure I.epub */; };
@@ -20,6 +21,14 @@
 		CA61603F1C572C4C00ACD034 /* The Adventures Of Sherlock Holmes - Adventure I.epub in Resources */ = {isa = PBXBuildFile; fileRef = 6E5C9B081C403942008F6FD9 /* The Adventures Of Sherlock Holmes - Adventure I.epub */; };
 		CA6160401C572C4C00ACD034 /* The Silver Chair.epub in Resources */ = {isa = PBXBuildFile; fileRef = 6E5C9B031C4037B7008F6FD9 /* The Silver Chair.epub */; };
 		CAF233291C57E1F400CB930C /* SharingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF233281C57E1F400CB930C /* SharingProviderTests.swift */; };
+		D12066661D65FABE006E1D18 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12066651D65FABE006E1D18 /* AppDelegate.swift */; };
+		D12066681D65FABE006E1D18 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12066671D65FABE006E1D18 /* ViewController.swift */; };
+		D120666B1D65FABE006E1D18 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D12066691D65FABE006E1D18 /* Main.storyboard */; };
+		D120666D1D65FABE006E1D18 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D120666C1D65FABE006E1D18 /* Assets.xcassets */; };
+		D12066701D65FABE006E1D18 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D120666E1D65FABE006E1D18 /* LaunchScreen.storyboard */; };
+		D12066751D65FB17006E1D18 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A42C2931C0E3883000F2137 /* Assets.xcassets */; };
+		D12066761D65FEBA006E1D18 /* The Adventures Of Sherlock Holmes - Adventure I.epub in Resources */ = {isa = PBXBuildFile; fileRef = 6E5C9B081C403942008F6FD9 /* The Adventures Of Sherlock Holmes - Adventure I.epub */; };
+		D12066771D65FEBA006E1D18 /* The Silver Chair.epub in Resources */ = {isa = PBXBuildFile; fileRef = 6E5C9B031C4037B7008F6FD9 /* The Silver Chair.epub */; };
 		DB8597912791266AA602B5B1 /* Pods_FolioReaderTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27131F41E20F15F72AAF7176 /* Pods_FolioReaderTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -42,7 +51,9 @@
 		1A42C2931C0E3883000F2137 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1A42C2981C0E3883000F2137 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1A42C2A11C0E3A8D000F2137 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		1D4790507F22E69298DC06E1 /* Pods-StoryboardExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StoryboardExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-StoryboardExample/Pods-StoryboardExample.release.xcconfig"; sourceTree = "<group>"; };
 		27131F41E20F15F72AAF7176 /* Pods_FolioReaderTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FolioReaderTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		318E62E766AB854BE290FB53 /* Pods_StoryboardExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_StoryboardExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CE90B4095B5C7E6237EEBDD /* Pods-FolioReaderTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FolioReaderTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FolioReaderTests/Pods-FolioReaderTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5C8EADB52E1D834750CD7D23 /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
 		6E3C4A3E1C3C6708009CBC8C /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
@@ -53,6 +64,14 @@
 		CA10C1331C572A4B0049165D /* FolioReaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolioReaderTests.swift; sourceTree = "<group>"; };
 		CA10C1351C572A4B0049165D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CAF233281C57E1F400CB930C /* SharingProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharingProviderTests.swift; sourceTree = "<group>"; };
+		D12066631D65FABD006E1D18 /* StoryboardExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StoryboardExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D12066651D65FABE006E1D18 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D12066671D65FABE006E1D18 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		D120666A1D65FABE006E1D18 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		D120666C1D65FABE006E1D18 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D120666F1D65FABE006E1D18 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		D12066711D65FABE006E1D18 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D7C82C879F323C6E960F882B /* Pods-StoryboardExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StoryboardExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-StoryboardExample/Pods-StoryboardExample.debug.xcconfig"; sourceTree = "<group>"; };
 		F4CBB0C2C0FDFA3E1648DB43 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -74,6 +93,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D12066601D65FABD006E1D18 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F1E0825EC0180ACA3E98C0E /* Pods_StoryboardExample.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -82,6 +109,7 @@
 			children = (
 				1A42C28B1C0E3882000F2137 /* Example */,
 				CA10C1321C572A4B0049165D /* FolioReaderTests */,
+				D12066641D65FABE006E1D18 /* StoryboardExample */,
 				1A42C28A1C0E3882000F2137 /* Products */,
 				D394FAB8B11D7C692E7BE00D /* Frameworks */,
 				4FAF8E8BF5565FFE2E47F8F7 /* Pods */,
@@ -93,6 +121,7 @@
 			children = (
 				1A42C2891C0E3882000F2137 /* Example.app */,
 				CA10C1311C572A4B0049165D /* FolioReaderTests.xctest */,
+				D12066631D65FABD006E1D18 /* StoryboardExample.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -118,6 +147,8 @@
 				F4CBB0C2C0FDFA3E1648DB43 /* Pods-Example.release.xcconfig */,
 				3CE90B4095B5C7E6237EEBDD /* Pods-FolioReaderTests.debug.xcconfig */,
 				8E1BE6465444C567F5D1B8E6 /* Pods-FolioReaderTests.release.xcconfig */,
+				D7C82C879F323C6E960F882B /* Pods-StoryboardExample.debug.xcconfig */,
+				1D4790507F22E69298DC06E1 /* Pods-StoryboardExample.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -141,12 +172,26 @@
 			path = FolioReaderTests;
 			sourceTree = "<group>";
 		};
+		D12066641D65FABE006E1D18 /* StoryboardExample */ = {
+			isa = PBXGroup;
+			children = (
+				D12066651D65FABE006E1D18 /* AppDelegate.swift */,
+				D12066671D65FABE006E1D18 /* ViewController.swift */,
+				D12066691D65FABE006E1D18 /* Main.storyboard */,
+				D120666C1D65FABE006E1D18 /* Assets.xcassets */,
+				D120666E1D65FABE006E1D18 /* LaunchScreen.storyboard */,
+				D12066711D65FABE006E1D18 /* Info.plist */,
+			);
+			path = StoryboardExample;
+			sourceTree = "<group>";
+		};
 		D394FAB8B11D7C692E7BE00D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				6E3C4A3E1C3C6708009CBC8C /* MediaPlayer.framework */,
 				0D6C7FEDB0C1CA1F769F87ED /* Pods_Example.framework */,
 				27131F41E20F15F72AAF7176 /* Pods_FolioReaderTests.framework */,
+				318E62E766AB854BE290FB53 /* Pods_StoryboardExample.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -201,6 +246,26 @@
 			productReference = CA10C1311C572A4B0049165D /* FolioReaderTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		D12066621D65FABD006E1D18 /* StoryboardExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D12066741D65FABE006E1D18 /* Build configuration list for PBXNativeTarget "StoryboardExample" */;
+			buildPhases = (
+				244846C72E9B5C5622D08585 /* [CP] Check Pods Manifest.lock */,
+				D120665F1D65FABD006E1D18 /* Sources */,
+				D12066601D65FABD006E1D18 /* Frameworks */,
+				D12066611D65FABD006E1D18 /* Resources */,
+				ACD2A7368ACAFB17422DAA7F /* [CP] Embed Pods Frameworks */,
+				B26D5E41B862346EA808EDB9 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = StoryboardExample;
+			productName = StoryboardExample;
+			productReference = D12066631D65FABD006E1D18 /* StoryboardExample.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -223,6 +288,9 @@
 						CreatedOnToolsVersion = 7.3;
 						TestTargetID = 1A42C2881C0E3882000F2137;
 					};
+					D12066621D65FABD006E1D18 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
 				};
 			};
 			buildConfigurationList = 1A42C2841C0E3882000F2137 /* Build configuration list for PBXProject "Example" */;
@@ -240,6 +308,7 @@
 			targets = (
 				1A42C2881C0E3882000F2137 /* Example */,
 				CA10C1301C572A4B0049165D /* FolioReaderTests */,
+				D12066621D65FABD006E1D18 /* StoryboardExample */,
 			);
 		};
 /* End PBXProject section */
@@ -263,6 +332,19 @@
 			files = (
 				CA6160401C572C4C00ACD034 /* The Silver Chair.epub in Resources */,
 				CA61603F1C572C4C00ACD034 /* The Adventures Of Sherlock Holmes - Adventure I.epub in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D12066611D65FABD006E1D18 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D12066701D65FABE006E1D18 /* LaunchScreen.storyboard in Resources */,
+				D120666D1D65FABE006E1D18 /* Assets.xcassets in Resources */,
+				D12066761D65FEBA006E1D18 /* The Adventures Of Sherlock Holmes - Adventure I.epub in Resources */,
+				D12066751D65FB17006E1D18 /* Assets.xcassets in Resources */,
+				D12066771D65FEBA006E1D18 /* The Silver Chair.epub in Resources */,
+				D120666B1D65FABE006E1D18 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -300,6 +382,21 @@
 			showEnvVarsInLog = 0;
 		};
 		1D8126CC73301F2413345444 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		244846C72E9B5C5622D08585 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -372,6 +469,36 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Example/Pods-Example-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		ACD2A7368ACAFB17422DAA7F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-StoryboardExample/Pods-StoryboardExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B26D5E41B862346EA808EDB9 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-StoryboardExample/Pods-StoryboardExample-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B6A166DC30D64CDC32736E22 /* [CP] Embed Pods Frameworks */ = {
@@ -470,6 +597,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D120665F1D65FABD006E1D18 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D12066681D65FABE006E1D18 /* ViewController.swift in Sources */,
+				D12066661D65FABE006E1D18 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -493,6 +629,22 @@
 			isa = PBXVariantGroup;
 			children = (
 				1A42C2A11C0E3A8D000F2137 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		D12066691D65FABE006E1D18 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D120666A1D65FABE006E1D18 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		D120666E1D65FABE006E1D18 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D120666F1D65FABE006E1D18 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -636,6 +788,34 @@
 			};
 			name = Release;
 		};
+		D12066721D65FABE006E1D18 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D7C82C879F323C6E960F882B /* Pods-StoryboardExample.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				INFOPLIST_FILE = StoryboardExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.panajotis.maroungas.StoryboardExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		D12066731D65FABE006E1D18 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1D4790507F22E69298DC06E1 /* Pods-StoryboardExample.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				INFOPLIST_FILE = StoryboardExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.panajotis.maroungas.StoryboardExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -662,6 +842,15 @@
 			buildConfigurations = (
 				CA10C1391C572A4B0049165D /* Debug */,
 				CA10C13A1C572A4B0049165D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D12066741D65FABE006E1D18 /* Build configuration list for PBXNativeTarget "StoryboardExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D12066721D65FABE006E1D18 /* Debug */,
+				D12066731D65FABE006E1D18 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
