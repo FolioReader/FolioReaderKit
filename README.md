@@ -105,6 +105,28 @@ func applicationWillTerminate(application: UIApplication) {
 }
 ```
 
+## Storyboard
+
+To get started, here is a simple example how to use the integrated view controller with storyboards.
+
+```swift
+import FolioReaderKit
+
+class StoryboardFolioReaderContrainer: FolioReaderContainer {
+
+	required init?(coder aDecoder: NSCoder) {
+		let config = FolioReaderConfig()
+
+		config.scrollDirection = .horizontal
+		let bookPath = NSBundle.mainBundle().pathForResource("book", ofType: "epub")
+		FolioReaderContainer.setUpConfig(config, epubPath: bookPath!)
+
+		super.init(coder: aDecoder)
+	}
+}
+```
+Go to your storyboard file, choose or create the view controller that should present the epub reader. In the identity inspector set StoryboardFolioReaderContrainer as class.
+
 ## Features
 
 - [x] ePub 2 and ePub 3 support
