@@ -159,7 +159,7 @@ public class FolioReaderContainer: UIViewController {
 
 	// MARK: - Helpers
 
-	static func setUpConfig(config: FolioReaderConfig, epubPath path: String) {
+	public static func setUpConfig(config: FolioReaderConfig, epubPath path: String) {
 		readerConfig = config
 		epubPath = path
 	}
