@@ -47,6 +47,9 @@ class FolioReaderPageIndicator: UIView {
     }
     
     func reloadView(updateShadow updateShadow: Bool) {
+		// TODO: Integrate pageindicator for the storyboard initialized view controller https://github.com/FolioReader/FolioReaderKit/issues/119
+		if initFromStoryboard { return }
+
         minutesLabel.sizeToFit()
         pagesLabel.sizeToFit()
         
@@ -68,6 +71,9 @@ class FolioReaderPageIndicator: UIView {
     }
     
     private func reloadViewWithPage(page: Int) {
+		// TODO: Integrate pageindicator for the storyboard initialized view controller https://github.com/FolioReader/FolioReaderKit/issues/119
+		if initFromStoryboard { return }
+
         let pagesRemaining = FolioReader.needsRTLChange ? totalPages-(totalPages-page+1) : totalPages-page
         
         if pagesRemaining == 1 {

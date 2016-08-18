@@ -196,7 +196,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
                     self.menuView.backgroundColor = UIColor.whiteColor()
                     readerCenter.collectionView.backgroundColor = UIColor.whiteColor()
                     readerCenter.configureNavBar()
-                    readerCenter.scrollScrubber.updateColors()
+                    readerCenter.scrollScrubber?.updateColors()
                 })
                 break
             case 1:
@@ -205,7 +205,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
                     self.menuView.backgroundColor = readerConfig.nightModeMenuBackground
                     readerCenter.collectionView.backgroundColor = readerConfig.nightModeBackground
                     readerCenter.configureNavBar()
-                    readerCenter.scrollScrubber.updateColors()
+                    readerCenter.scrollScrubber?.updateColors()
                 })
                 break
             default:
