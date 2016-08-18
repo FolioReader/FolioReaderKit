@@ -139,10 +139,10 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         refreshPageMode()
         
         if readerConfig.enableTTS && !book.hasAudio() {
-            webView.js("wrappingSentencesWithinPTags()");
+            webView.js("wrappingSentencesWithinPTags()")
             
-            if FolioReader.sharedInstance.readerAudioPlayer.isPlaying() {
-                FolioReader.sharedInstance.readerAudioPlayer.readCurrentSentence()
+            if let audioPlayer = FolioReader.sharedInstance.readerAudioPlayer where audioPlayer.isPlaying() {
+                audioPlayer.readCurrentSentence()
             }
         }
         
@@ -182,7 +182,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
             let playID = decoded.substringFromIndex(decoded.startIndex.advancedBy(13))
             let chapter = FolioReader.sharedInstance.readerCenter.getCurrentChapter()
             let href = chapter != nil ? chapter!.href : "";
-            FolioReader.sharedInstance.readerAudioPlayer.playAudio(href, fragmentID: playID)
+            FolioReader.sharedInstance.readerAudioPlayer?.playAudio(href, fragmentID: playID)
 
             return false
         } else if url.scheme == "file" {
@@ -463,7 +463,6 @@ extension UIWebView {
     }
     
     func share(sender: UIMenuController) {
-        
         if isShare {
             if let textToShare = js("getHighlightContent()") {
                 FolioReader.sharedInstance.readerCenter.shareHighlight(textToShare, rect: sender.menuFrame)
@@ -532,7 +531,7 @@ extension UIWebView {
     }
 
     func play(sender: UIMenuController?) {
-        FolioReader.sharedInstance.readerAudioPlayer.play()
+        FolioReader.sharedInstance.readerAudioPlayer?.play()
 
         // Force remove text selection
         // @NOTE: this doesn't seem to always work

@@ -82,7 +82,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
         playPauseBtn.addTarget(self, action: #selector(FolioReaderPlayerMenu.togglePlay(_:)), forControlEvents: .TouchUpInside)
         menuView.addSubview(playPauseBtn)
         
-        if FolioReader.sharedInstance.readerAudioPlayer.isPlaying() {
+        if let audioPlayer = FolioReader.sharedInstance.readerAudioPlayer where audioPlayer.isPlaying() {
             playPauseBtn.selected = true
         }
         
@@ -220,30 +220,25 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
     // MARK: - SMSegmentView delegate
 
     func segmentView(segmentView: SMSegmentView, didSelectSegmentAtIndex index: Int) {
+        guard viewDidAppear else { return }
 
-        if( viewDidAppear != true ){ return }
-
-        let audioPlayer = FolioReader.sharedInstance.readerAudioPlayer
-
-        if segmentView.tag == 2 {
-
+        if let audioPlayer = FolioReader.sharedInstance.readerAudioPlayer where segmentView.tag == 2 {
             audioPlayer.setRate(index)
-
             FolioReader.currentAudioRate = index
         }
     }
 
     func prevChapter(sender: UIButton!) {
-        FolioReader.sharedInstance.readerAudioPlayer.playPrevChapter()
+        FolioReader.sharedInstance.readerAudioPlayer?.playPrevChapter()
     }
     
     func nextChapter(sender: UIButton!) {
-        FolioReader.sharedInstance.readerAudioPlayer.playNextChapter()
+        FolioReader.sharedInstance.readerAudioPlayer?.playNextChapter()
     }
     
     func togglePlay(sender: UIButton!) {
         sender.selected = sender.selected != true
-        FolioReader.sharedInstance.readerAudioPlayer.togglePlay()
+        FolioReader.sharedInstance.readerAudioPlayer?.togglePlay()
         closeView()
     }
     
