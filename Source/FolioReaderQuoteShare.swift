@@ -34,6 +34,8 @@ class FolioReaderQuoteShare: UIViewController {
     var quoteText: String!
     var imageView: UIImageView!
     var quoteLabel: UILabel!
+    var authorLabel: UILabel!
+    var logoImageView: UIImageView!
     var collectionView: UICollectionView!
     let collectionViewLayout = UICollectionViewFlowLayout()
     let itemSize: CGFloat = 90
@@ -43,7 +45,7 @@ class FolioReaderQuoteShare: UIViewController {
     
     init(initWithText shareText: String) {
         super.init(nibName: nil, bundle: NSBundle.frameworkBundle())
-        self.quoteText = shareText
+        self.quoteText = shareText.stripLineBreaks().stripHtml()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -69,23 +71,48 @@ class FolioReaderQuoteShare: UIViewController {
         quoteLabel.font = UIFont(name: "Andada-Regular", size: 26)
         quoteLabel.textColor = UIColor.whiteColor()
         quoteLabel.numberOfLines = 0
+        quoteLabel.baselineAdjustment = .AlignCenters
         quoteLabel.translatesAutoresizingMaskIntoConstraints = false
         quoteLabel.adjustsFontSizeToFitWidth = true
         quoteLabel.minimumScaleFactor = 0.3
 //        quoteLabel.setContentCompressionResistancePriority(UILayoutPriorityDefaultLow, forAxis: .Horizontal)
-//        quoteLabel.setContentCompressionResistancePriority(UILayoutPriorityDefaultLow, forAxis: .Vertical)
+        quoteLabel.setContentCompressionResistancePriority(UILayoutPriorityDefaultHigh, forAxis: .Vertical)
         imageView.addSubview(quoteLabel)
         
-        // Configure cell contraints
-        var constraints = [NSLayoutConstraint]()
-        let views = ["label": self.quoteLabel]
+        var bookTitle = ""
+        var authorName = ""
         
-        NSLayoutConstraint.constraintsWithVisualFormat("H:|-15-[label]-15-|", options: [], metrics: nil, views: views).forEach {
-            constraints.append($0)
-        }
-        NSLayoutConstraint.constraintsWithVisualFormat("V:|-50-[label]-50-|", options: [], metrics: nil, views: views).forEach {
-            constraints.append($0)
-        }
+        if let title = book.title() { bookTitle = title }
+        if let author = book.metadata.creators.first { authorName = author.name }
+        
+        authorLabel = UILabel()
+        authorLabel.text = "from \(bookTitle) \nby \(authorName)"
+        authorLabel.textAlignment = .Center
+        authorLabel.font = UIFont(name: "Avenir-Regular", size: 15)
+        authorLabel.textColor = UIColor.whiteColor()
+        authorLabel.numberOfLines = 2
+        authorLabel.translatesAutoresizingMaskIntoConstraints = false
+//        quoteLabel.setContentCompressionResistancePriority(UILayoutPriorityDefaultLow, forAxis: .Horizontal)
+        quoteLabel.setContentCompressionResistancePriority(UILayoutPriorityDefaultLow, forAxis: .Vertical)
+        imageView.addSubview(authorLabel)
+        
+        let logoImage = UIImage(readerImageNamed: "icon-logo")
+        let logoHeight = logoImage?.size.height ?? 0
+        logoImageView = UIImageView(image: logoImage)
+        logoImageView.contentMode = .Center
+        logoImageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.addSubview(logoImageView)
+        
+        // Configure layout contraints
+        var constraints = [NSLayoutConstraint]()
+        let views = ["quoteLabel": self.quoteLabel, "authorLabel": self.authorLabel, "logoImageView": self.logoImageView]
+        
+        NSLayoutConstraint.constraintsWithVisualFormat("V:|-40-[quoteLabel]-20-[authorLabel]", options: [], metrics: nil, views: views).forEach { constraints.append($0) }
+        NSLayoutConstraint.constraintsWithVisualFormat("V:[authorLabel]-25-[logoImageView(\(Int(logoHeight)))]-18-|", options: [], metrics: nil, views: views).forEach { constraints.append($0) }
+        NSLayoutConstraint.constraintsWithVisualFormat("H:|-15-[quoteLabel]-15-|", options: [], metrics: nil, views: views).forEach { constraints.append($0) }
+        NSLayoutConstraint.constraintsWithVisualFormat("H:|-15-[authorLabel]-15-|", options: [], metrics: nil, views: views).forEach { constraints.append($0) }
+        NSLayoutConstraint.constraintsWithVisualFormat("H:|-15-[logoImageView]-15-|", options: [], metrics: nil, views: views).forEach { constraints.append($0) }
+        
         imageView.addConstraints(constraints)
         
         // Layout
@@ -155,6 +182,8 @@ class FolioReaderQuoteShare: UIViewController {
         UIView.transitionWithView(imageView, duration: 0.4, options: .TransitionCrossDissolve, animations: {
             self.imageView.image = quoteImage.image
             self.quoteLabel.textColor = quoteImage.textColor
+            self.authorLabel.textColor = quoteImage.textColor
+            self.logoImageView.image = self.logoImageView.image?.imageTintColor(quoteImage.textColor)
             }, completion: nil)
     }
     
