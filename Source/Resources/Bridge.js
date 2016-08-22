@@ -360,6 +360,28 @@ function resetCurrentSentenceIndex() {
     currentIndex = -1;
 }
 
+// listeners
+
+var listenerParameter;
+
+function setListenerDictionary(listenrerArray) {
+	listenerParameter = listenrerArray;
+}
+
+
+document.onclick = function (e) {
+	e = e ||  window.event;
+	var element = e.target || e.srcElement;
+
+	for(var i = 0, len = listenerParameter.length; i < len; i++) {
+		if (element.className == listenerParameter[i].className) {
+			var json = element.getAttribute(listenerParameter[i].parameterName);
+			window.location = "listener://" + encodeURIComponent(json);
+			return false
+		}
+	}
+};
+
 function getSentenceWithIndex(className) {
     var sentence;
     var sel = getSelection();

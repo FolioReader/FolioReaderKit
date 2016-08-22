@@ -136,6 +136,8 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     // MARK: - UIWebView Delegate
     
     func webViewDidFinishLoad(webView: UIWebView) {
+
+		self.setupListeners()
         refreshPageMode()
         
         if readerConfig.enableTTS && !book.hasAudio() {
@@ -223,7 +225,12 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
             }
             
             return true
-        } else if url.scheme == "mailto" {
+		} else if url.scheme == "listener" {
+			
+			let parameter = (request.URL?.absoluteString.stringByReplacingOccurrencesOfString("listener://", withString: "").stringByRemovingPercentEncoding)
+			readerConfig.listenerBlock?(json: parameter)
+			return false
+		}else if url.scheme == "mailto" {
             print("Email")
             return true
         } else if url.absoluteString != "about:blank" && url.scheme.containsString("http") && navigationType == .LinkClicked {
@@ -655,4 +662,34 @@ extension UIMenuItem {
         self.init(title: title, action: action, settings: settings)
       #endif
     }
+}
+
+// MARK: - Private helpers
+extension FolioReaderPage {
+
+	private func setupListeners() {
+
+		let javascriptArray = self.extractListenerDictionary()
+		self.webView.js("setListenerDictionary(\(javascriptArray))");
+	}
+
+	private func extractListenerDictionary() -> String {
+		var javascriptDictionary = "["
+
+		for index in 0..<readerConfig.listernetDictionary.count {
+			if let
+				classValue = readerConfig.listernetDictionary[index][Listener.className] as? String,
+				parameterValue = readerConfig.listernetDictionary[index][Listener.parameterName] as? String {
+					javascriptDictionary +=
+						"{" + Listener.className + ": \"" + classValue + "\", " +
+						Listener.parameterName + ": \"" + parameterValue + "\"}"
+
+					if (index < readerConfig.listernetDictionary.count - 1) {
+						javascriptDictionary += ","
+					}
+			}
+		}
+		javascriptDictionary += "]"
+		return javascriptDictionary
+	}
 }

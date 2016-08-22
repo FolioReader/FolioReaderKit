@@ -42,7 +42,12 @@ public enum FolioReaderScrollDirection: Int {
  Defines the Reader custom configuration
  */
 public class FolioReaderConfig: NSObject {
-    
+
+	/// array of disctionary with  keys className and parameterName
+	public var listernetDictionary = [[:]]
+
+	public var listenerBlock: ((json: String?) -> Void)?
+
     // MARK: Colors
     
     /// Base header custom TintColor
@@ -118,4 +123,11 @@ public class FolioReaderConfig: NSObject {
     public var localizedShareHighlightSubject = NSLocalizedString("Notes from", comment: "")
     public var localizedShareAllExcerptsFrom = NSLocalizedString("All excerpts from", comment: "")
     public var localizedShareBy = NSLocalizedString("by", comment: "")
+}
+
+// MARK: - Constants
+
+public struct Listener {
+	static let className		= "className"
+	static let parameterName 	= "parameterName"
 }
