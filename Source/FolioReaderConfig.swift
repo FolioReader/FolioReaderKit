@@ -89,6 +89,12 @@ public class FolioReaderConfig: NSObject {
     /// Enable TTS (Text To Speech)
     public var enableTTS = true
     
+    // MARK: Quote image share
+    
+    public var quoteCustomLogoImage = UIImage(readerImageNamed: "icon-logo")
+    public var quoteCustomBackgrounds = [QuoteImage]()
+    public var quotePreserveDefaultBackgrounds = true
+    
     // MARK: Localized strings
     
     /// Localizes Highlight title
@@ -115,4 +121,10 @@ public class FolioReaderConfig: NSObject {
     public var localizedShareHighlightSubject = NSLocalizedString("Notes from", comment: "")
     public var localizedShareAllExcerptsFrom = NSLocalizedString("All excerpts from", comment: "")
     public var localizedShareBy = NSLocalizedString("by", comment: "")
+    public var localizedCancel = NSLocalizedString("Cancel", comment: "")
+    public var localizedChooseExisting = NSLocalizedString("Choose existing", comment: "")
+    public var localizedTakePhoto = NSLocalizedString("Take Photo", comment: "")
+    public var localizedShareImageQuote = NSLocalizedString("Share image quote", comment: "")
+    public var localizedShareTextQuote = NSLocalizedString("Share text quote", comment: "")
+    
 }

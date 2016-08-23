@@ -10,36 +10,47 @@ import UIKit
 
 public struct QuoteImage {
     public var image: UIImage!
+    public var alpha: CGFloat!
     public var textColor: UIColor!
+    public var backgroundColor: UIColor!
     
-    public init(withImage image: UIImage, textColor: UIColor = UIColor.whiteColor()) {
+    public init(withImage image: UIImage, alpha: CGFloat = 1, textColor: UIColor = UIColor.whiteColor(), backgroundColor: UIColor = UIColor.whiteColor()) {
         self.image = image
+        self.alpha = alpha
         self.textColor = textColor
+        self.backgroundColor = backgroundColor
     }
     
-    public init(withGradient gradient: CAGradientLayer, textColor: UIColor = UIColor.whiteColor()) {
+    public init(withGradient gradient: CAGradientLayer, alpha: CGFloat = 1, textColor: UIColor = UIColor.whiteColor(), backgroundColor: UIColor = UIColor.whiteColor()) {
         let screenBounds = UIScreen.mainScreen().bounds
         gradient.frame = CGRect(x: 0, y: 0, width: screenBounds.width, height: screenBounds.width)
         self.image = UIImage.imageWithLayer(gradient)
+        self.alpha = alpha
         self.textColor = textColor
+        self.backgroundColor = backgroundColor
     }
     
-    public init(withColor color: UIColor, textColor: UIColor = UIColor.whiteColor()) {
+    public init(withColor color: UIColor, alpha: CGFloat = 1, textColor: UIColor = UIColor.whiteColor(), backgroundColor: UIColor = UIColor.whiteColor()) {
         self.image = UIImage.imageWithColor(color)
+        self.alpha = alpha
         self.textColor = textColor
+        self.backgroundColor = backgroundColor
     }
 }
 
 class FolioReaderQuoteShare: UIViewController {
     var quoteText: String!
+    var filterImage: UIView!
     var imageView: UIImageView!
     var quoteLabel: UILabel!
+    var titleLabel: UILabel!
     var authorLabel: UILabel!
     var logoImageView: UIImageView!
     var collectionView: UICollectionView!
     let collectionViewLayout = UICollectionViewFlowLayout()
     let itemSize: CGFloat = 90
     var dataSource = [QuoteImage]()
+    let imagePicker = UIImagePickerController()
     
     // MARK: Init
     
@@ -61,9 +72,12 @@ class FolioReaderQuoteShare: UIViewController {
         
         let screenBounds = UIScreen.mainScreen().bounds
         
-        imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: screenBounds.width, height: screenBounds.width))
-        imageView.backgroundColor = readerConfig.menuSeparatorColor
-        view.addSubview(imageView)
+        filterImage = UIView(frame: CGRect(x: 0, y: 0, width: screenBounds.width, height: screenBounds.width))
+        filterImage.backgroundColor = readerConfig.menuSeparatorColor
+        view.addSubview(filterImage)
+        
+        imageView = UIImageView(frame: filterImage.bounds)
+        filterImage.addSubview(imageView)
         
         quoteLabel = UILabel()
         quoteLabel.text = quoteText
@@ -75,9 +89,8 @@ class FolioReaderQuoteShare: UIViewController {
         quoteLabel.translatesAutoresizingMaskIntoConstraints = false
         quoteLabel.adjustsFontSizeToFitWidth = true
         quoteLabel.minimumScaleFactor = 0.3
-//        quoteLabel.setContentCompressionResistancePriority(UILayoutPriorityDefaultLow, forAxis: .Horizontal)
-        quoteLabel.setContentCompressionResistancePriority(UILayoutPriorityDefaultHigh, forAxis: .Vertical)
-        imageView.addSubview(quoteLabel)
+        quoteLabel.setContentCompressionResistancePriority(100, forAxis: .Vertical)
+        filterImage.addSubview(quoteLabel)
         
         var bookTitle = ""
         var authorName = ""
@@ -85,35 +98,62 @@ class FolioReaderQuoteShare: UIViewController {
         if let title = book.title() { bookTitle = title }
         if let author = book.metadata.creators.first { authorName = author.name }
         
-        authorLabel = UILabel()
-        authorLabel.text = "from \(bookTitle) \nby \(authorName)"
-        authorLabel.textAlignment = .Center
-        authorLabel.font = UIFont(name: "Avenir-Regular", size: 15)
-        authorLabel.textColor = UIColor.whiteColor()
-        authorLabel.numberOfLines = 2
-        authorLabel.translatesAutoresizingMaskIntoConstraints = false
-//        quoteLabel.setContentCompressionResistancePriority(UILayoutPriorityDefaultLow, forAxis: .Horizontal)
-        quoteLabel.setContentCompressionResistancePriority(UILayoutPriorityDefaultLow, forAxis: .Vertical)
-        imageView.addSubview(authorLabel)
+        titleLabel = UILabel()
+        titleLabel.text = bookTitle
+        titleLabel.font = UIFont(name: "Lato-Bold", size: 15)
+        titleLabel.textAlignment = .Center
+        titleLabel.textColor = UIColor.whiteColor()
+        titleLabel.numberOfLines = 1
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.adjustsFontSizeToFitWidth = true
+        titleLabel.minimumScaleFactor = 0.8
+        titleLabel.setContentCompressionResistancePriority(600, forAxis: .Vertical)
+        filterImage.addSubview(titleLabel)
         
-        let logoImage = UIImage(readerImageNamed: "icon-logo")
+        // Attributed author
+        var attrs = [NSFontAttributeName: UIFont(name: "Lato-Italic", size: 15)!]
+        var attributedString = NSMutableAttributedString(string:"\(readerConfig.localizedShareBy) ", attributes: attrs)
+        
+        var attrs1 = [NSFontAttributeName: UIFont(name: "Lato-Regular", size: 15)!]
+        var boldString = NSMutableAttributedString(string: authorName, attributes:attrs1)
+        attributedString.appendAttributedString(boldString)
+        
+        authorLabel = UILabel()
+        authorLabel.attributedText = attributedString
+        authorLabel.textAlignment = .Center
+        authorLabel.textColor = UIColor.whiteColor()
+        authorLabel.numberOfLines = 1
+        authorLabel.translatesAutoresizingMaskIntoConstraints = false
+        authorLabel.adjustsFontSizeToFitWidth = true
+        authorLabel.minimumScaleFactor = 0.5
+        filterImage.addSubview(authorLabel)
+        
+        let logoImage = readerConfig.quoteCustomLogoImage
         let logoHeight = logoImage?.size.height ?? 0
         logoImageView = UIImageView(image: logoImage)
         logoImageView.contentMode = .Center
         logoImageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.addSubview(logoImageView)
+        filterImage.addSubview(logoImageView)
         
         // Configure layout contraints
         var constraints = [NSLayoutConstraint]()
-        let views = ["quoteLabel": self.quoteLabel, "authorLabel": self.authorLabel, "logoImageView": self.logoImageView]
+        let views = [
+            "quoteLabel": self.quoteLabel,
+            "titleLabel": self.titleLabel,
+            "authorLabel": self.authorLabel,
+            "logoImageView": self.logoImageView
+        ]
         
-        NSLayoutConstraint.constraintsWithVisualFormat("V:|-40-[quoteLabel]-20-[authorLabel]", options: [], metrics: nil, views: views).forEach { constraints.append($0) }
+        NSLayoutConstraint.constraintsWithVisualFormat("V:|-40-[quoteLabel]-20-[titleLabel]", options: [], metrics: nil, views: views).forEach { constraints.append($0) }
+        NSLayoutConstraint.constraintsWithVisualFormat("V:[titleLabel]-0-[authorLabel]", options: [], metrics: nil, views: views).forEach { constraints.append($0) }
         NSLayoutConstraint.constraintsWithVisualFormat("V:[authorLabel]-25-[logoImageView(\(Int(logoHeight)))]-18-|", options: [], metrics: nil, views: views).forEach { constraints.append($0) }
+        
         NSLayoutConstraint.constraintsWithVisualFormat("H:|-15-[quoteLabel]-15-|", options: [], metrics: nil, views: views).forEach { constraints.append($0) }
+        NSLayoutConstraint.constraintsWithVisualFormat("H:|-15-[titleLabel]-15-|", options: [], metrics: nil, views: views).forEach { constraints.append($0) }
         NSLayoutConstraint.constraintsWithVisualFormat("H:|-15-[authorLabel]-15-|", options: [], metrics: nil, views: views).forEach { constraints.append($0) }
         NSLayoutConstraint.constraintsWithVisualFormat("H:|-15-[logoImageView]-15-|", options: [], metrics: nil, views: views).forEach { constraints.append($0) }
         
-        imageView.addConstraints(constraints)
+        filterImage.addConstraints(constraints)
         
         // Layout
         collectionViewLayout.sectionInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
@@ -139,7 +179,13 @@ class FolioReaderQuoteShare: UIViewController {
         collectionView!.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         
         // Create images
-        createDefaultImages()
+        dataSource = readerConfig.quoteCustomBackgrounds
+        if readerConfig.quotePreserveDefaultBackgrounds {
+            createDefaultImages()
+        }
+        
+        // Picker delegate
+        imagePicker.delegate = self
         
         // Select first item
         setSelectedIndex(0)
@@ -179,9 +225,14 @@ class FolioReaderQuoteShare: UIViewController {
     
     func setSelectedIndex(index: Int) {
         let quoteImage = dataSource[index]
-        UIView.transitionWithView(imageView, duration: 0.4, options: .TransitionCrossDissolve, animations: {
+        
+        filterImage.backgroundColor = quoteImage.backgroundColor
+        imageView.alpha = quoteImage.alpha
+        
+        UIView.transitionWithView(filterImage, duration: 0.4, options: .TransitionCrossDissolve, animations: {
             self.imageView.image = quoteImage.image
             self.quoteLabel.textColor = quoteImage.textColor
+            self.titleLabel.textColor = quoteImage.textColor
             self.authorLabel.textColor = quoteImage.textColor
             self.logoImageView.image = self.logoImageView.image?.imageTintColor(quoteImage.textColor)
             }, completion: nil)
@@ -198,20 +249,37 @@ class FolioReaderQuoteShare: UIViewController {
 
 extension FolioReaderQuoteShare: UICollectionViewDataSource {
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSource.count
+        return dataSource.count + 1
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath)
-        let quoteImage = dataSource[indexPath.row]
-        
-        let imageView = UIImageView(frame: cell.bounds)
-        imageView.image = quoteImage.image
-        cell.contentView.addSubview(imageView)
+        let imageView: UIImageView!
+        let tag = 9999
         
         cell.contentView.layer.borderColor = UIColor(white: 0.5, alpha: 0.2).CGColor
         cell.contentView.layer.borderWidth = 1
         
+        if let view = cell.contentView.viewWithTag(tag) as? UIImageView {
+            imageView = view
+        } else {
+            imageView = UIImageView(frame: cell.bounds)
+            imageView.tag = tag
+            cell.contentView.addSubview(imageView)
+        }
+        
+        // Camera
+        guard indexPath.row > 0 else {
+            imageView.contentMode = .Center
+            imageView.image = UIImage(readerImageNamed: "icon-camera")
+            return cell
+        }
+        
+        let quoteImage = dataSource[indexPath.row-1]
+        imageView.image = quoteImage.image
+        imageView.alpha = quoteImage.alpha
+        imageView.contentMode = .ScaleAspectFit
+        cell.contentView.backgroundColor = quoteImage.backgroundColor
         return cell
     }
     
@@ -224,6 +292,52 @@ extension FolioReaderQuoteShare: UICollectionViewDataSource {
 
 extension FolioReaderQuoteShare: UICollectionViewDelegate {
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        setSelectedIndex(indexPath.row)
+        
+        guard indexPath.row > 0 else {
+            let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+            
+            let takePhoto = UIAlertAction(title: readerConfig.localizedTakePhoto, style: .Default, handler: { (action) -> Void in
+                self.imagePicker.sourceType = .Camera
+                self.imagePicker.allowsEditing = true
+                self.presentViewController(self.imagePicker, animated: true, completion: nil)
+            })
+            
+            let existingPhoto = UIAlertAction(title: readerConfig.localizedChooseExisting, style: .Default) { (action) -> Void in
+                self.imagePicker.sourceType = .PhotoLibrary
+                self.imagePicker.allowsEditing = true
+                self.presentViewController(self.imagePicker, animated: true, completion: nil)
+            }
+            
+            let cancel = UIAlertAction(title: readerConfig.localizedCancel, style: .Cancel, handler: nil)
+            
+            alertController.addAction(takePhoto)
+            alertController.addAction(existingPhoto)
+            alertController.addAction(cancel)
+            
+            presentViewController(alertController, animated: true, completion: nil)
+            return
+        }
+        
+        setSelectedIndex(indexPath.row-1)
+    }
+}
+
+// MARK: 
+
+extension FolioReaderQuoteShare: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        if let image = info[UIImagePickerControllerEditedImage] as? UIImage {
+
+            let quoteImage = QuoteImage(withImage: image, alpha: 0.6, backgroundColor: UIColor.blackColor())
+
+            collectionView.performBatchUpdates({
+                self.dataSource.insert(quoteImage, atIndex: 0)
+                self.collectionView.insertItemsAtIndexPaths([NSIndexPath(forItem: 1, inSection: 0)])
+            }, completion: { (finished) in
+                self.setSelectedIndex(0)
+            })
+        }
+        
+        dismissViewControllerAnimated(true, completion: nil)
     }
 }

@@ -589,6 +589,20 @@ internal extension UIImage {
         UIGraphicsEndImageContext()
         return img
     }
+    
+    /**
+     Generates a image from a `UIView`
+     
+     - parameter view: The input `UIView`
+     - returns: Return a rendered image
+     */
+    class func imageWithView(view: UIView) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.opaque, 0.0)
+        view.drawViewHierarchyInRect(view.bounds, afterScreenUpdates: true)
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return img
+    }
 }
 
 internal extension UIViewController {

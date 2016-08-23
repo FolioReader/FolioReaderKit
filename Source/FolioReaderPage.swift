@@ -465,7 +465,7 @@ extension UIWebView {
     func share(sender: UIMenuController) {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
         
-        let shareImage = UIAlertAction(title: "Share image quote", style: .Default, handler: { (action) -> Void in
+        let shareImage = UIAlertAction(title: readerConfig.localizedShareImageQuote, style: .Default, handler: { (action) -> Void in
             if self.isShare {
                 if let textToShare = self.js("getHighlightContent()") {
                     FolioReader.sharedInstance.readerCenter.presentQuoteShare(textToShare)
@@ -480,7 +480,7 @@ extension UIWebView {
             self.setMenuVisible(false)
         })
         
-        let shareText = UIAlertAction(title: "Share text quote", style: .Default) { (action) -> Void in
+        let shareText = UIAlertAction(title: readerConfig.localizedShareTextQuote, style: .Default) { (action) -> Void in
             if self.isShare {
                 if let textToShare = self.js("getHighlightContent()") {
                     FolioReader.sharedInstance.readerCenter.shareHighlight(textToShare, rect: sender.menuFrame)
@@ -493,7 +493,7 @@ extension UIWebView {
             self.setMenuVisible(false)
         }
         
-        let cancel = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        let cancel = UIAlertAction(title: readerConfig.localizedCancel, style: .Cancel, handler: nil)
         
         alertController.addAction(shareImage)
         alertController.addAction(shareText)
