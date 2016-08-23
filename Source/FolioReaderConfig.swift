@@ -44,9 +44,9 @@ public enum FolioReaderScrollDirection: Int {
 public class FolioReaderConfig: NSObject {
 
 	/// array of disctionary with  keys className and parameterName
-	public var listernetDictionary = [[:]]
+	public var userTapListenerConfiguration = [ListenerCofiguration]()
 
-	public var listenerBlock: ((json: String?) -> Void)?
+	public var userTapListenerBlock: ((json: String?) -> Void)?
 
     // MARK: Colors
     
@@ -127,7 +127,12 @@ public class FolioReaderConfig: NSObject {
 
 // MARK: - Constants
 
-public struct Listener {
+
+public struct ListenerCofiguration {
+
 	static let className		= "className"
 	static let parameterName 	= "parameterName"
+
+	var classNameValue			: String
+	var parameterNameValue		: String
 }

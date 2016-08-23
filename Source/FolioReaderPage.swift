@@ -228,7 +228,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
 		} else if url.scheme == "listener" {
 			
 			let parameter = (request.URL?.absoluteString.stringByReplacingOccurrencesOfString("listener://", withString: "").stringByRemovingPercentEncoding)
-			readerConfig.listenerBlock?(json: parameter)
+			readerConfig.userTapListenerBlock?(json: parameter)
 			return false
 		}else if url.scheme == "mailto" {
             print("Email")
@@ -676,17 +676,13 @@ extension FolioReaderPage {
 	private func extractListenerDictionary() -> String {
 		var javascriptDictionary = "["
 
-		for index in 0..<readerConfig.listernetDictionary.count {
-			if let
-				classValue = readerConfig.listernetDictionary[index][Listener.className] as? String,
-				parameterValue = readerConfig.listernetDictionary[index][Listener.parameterName] as? String {
-					javascriptDictionary +=
-						"{" + Listener.className + ": \"" + classValue + "\", " +
-						Listener.parameterName + ": \"" + parameterValue + "\"}"
+		for index in 0..<readerConfig.userTapListenerConfiguration.count {
+			javascriptDictionary +=
+				"{" + ListenerCofiguration.className + ": \"" + readerConfig.userTapListenerConfiguration[index].classNameValue + "\", " +
+				ListenerCofiguration.parameterName + ": \"" + readerConfig.userTapListenerConfiguration[index].parameterNameValue + "\"}"
 
-					if (index < readerConfig.listernetDictionary.count - 1) {
-						javascriptDictionary += ","
-					}
+			if (index < readerConfig.userTapListenerConfiguration.count - 1) {
+				javascriptDictionary += ","
 			}
 		}
 		javascriptDictionary += "]"
