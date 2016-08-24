@@ -779,7 +779,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             }
             
             html += "</center></body></html>"
-            text = "\(chapterName)\n\n“\(chapterText)” \n\n\(bookTitle) \nby \(authorName)"
+            text = "\(chapterName)\n\n“\(chapterText)” \n\n\(bookTitle) \n\(readerConfig.localizedShareBy) \(authorName)"
             
             let act = FolioReaderSharingProvider(subject: subject, text: text, html: html)
             shareItems.insertContentsOf([act, ""], at: 0)
@@ -838,7 +838,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         }
         
         html += "</center></body></html>"
-        text = "\(chapterName)\n\n“\(string)” \n\n\(bookTitle) \nby \(authorName)"
+        text = "\(chapterName)\n\n“\(string)” \n\n\(bookTitle) \n\(readerConfig.localizedShareBy) \(authorName)"
         
         let act = FolioReaderSharingProvider(subject: subject, text: text, html: html)
         shareItems.insertContentsOf([act, ""], at: 0)

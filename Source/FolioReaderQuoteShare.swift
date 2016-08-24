@@ -68,8 +68,12 @@ class FolioReaderQuoteShare: UIViewController {
         setCloseButton()
         configureNavBar()
         
-        title = "Share"
+//        title = "Share"
         
+        let share = UIBarButtonItem(title: "Share", style: .Plain, target: self, action: #selector(shareQuote(_:)))
+        navigationItem.rightBarButtonItem = share
+        
+        //
         let screenBounds = UIScreen.mainScreen().bounds
         
         filterImage = UIView(frame: CGRect(x: 0, y: 0, width: screenBounds.width, height: screenBounds.width))
@@ -238,7 +242,50 @@ class FolioReaderQuoteShare: UIViewController {
             }, completion: nil)
     }
     
-    // MARK: - Status Bar
+    // MARK: Share
+    
+    func shareQuote(sender: UIBarButtonItem) {
+        var subject = readerConfig.localizedShareHighlightSubject
+        var text = ""
+        var bookTitle = ""
+        var authorName = ""
+        var shareItems = [AnyObject]()
+        
+        // Get book title
+        if let title = book.title() {
+            bookTitle = title
+            subject += " “\(title)”"
+        }
+        
+        // Get author name
+        if let author = book.metadata.creators.first {
+            authorName = author.name
+        }
+        
+        text = "\(bookTitle) \n\(readerConfig.localizedShareBy) \(authorName)"
+        
+        let imageQuote = UIImage.imageWithView(filterImage)
+        shareItems.append(imageQuote)
+        
+        if let bookShareLink = readerConfig.localizedShareWebLink {
+            text += "\n\(bookShareLink.absoluteString)"
+        }
+        
+        let act = FolioReaderSharingProvider(subject: subject, text: text)
+        shareItems.insert(act, atIndex: 0)
+        
+        let activityViewController = UIActivityViewController(activityItems: shareItems, applicationActivities: nil)
+        activityViewController.excludedActivityTypes = [UIActivityTypePrint, UIActivityTypePostToVimeo]
+        
+        // Pop style on iPad
+        if let actv = activityViewController.popoverPresentationController {
+            actv.barButtonItem = sender
+        }
+        
+        presentViewController(activityViewController, animated: true, completion: nil)
+    }
+    
+    // MARK: Status Bar
     
     override public func preferredStatusBarStyle() -> UIStatusBarStyle {
         return isNight(.LightContent, .Default)
