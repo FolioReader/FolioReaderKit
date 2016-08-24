@@ -116,7 +116,7 @@ public class FolioReaderConfig: NSObject {
     public var localizedReaderManyMinutes = NSLocalizedString("minutes", comment: "")
     public var localizedReaderOneMinute = NSLocalizedString("1 minute", comment: "")
     public var localizedReaderLessThanOneMinute = NSLocalizedString("Less than a minute", comment: "")
-    public var localizedShareWebLink: String? = nil
+    public var localizedShareWebLink: NSURL? = nil
     public var localizedShareChapterSubject = NSLocalizedString("Check out this chapter from", comment: "")
     public var localizedShareHighlightSubject = NSLocalizedString("Notes from", comment: "")
     public var localizedShareAllExcerptsFrom = NSLocalizedString("All excerpts from", comment: "")

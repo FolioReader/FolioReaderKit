@@ -30,7 +30,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     var currentPage: FolioReaderPage?
     var animator: ZFModalTransitionAnimator!
     var pageIndicatorView: FolioReaderPageIndicator!
-    var bookShareLink: String?
 	var pageIndicatorHeight: CGFloat = 20
 
     var recentlyScrolled = false
@@ -152,7 +151,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
 
     func reloadData() {
         loadingView.stopAnimating()
-        bookShareLink = readerConfig.localizedShareWebLink
         totalPages = book.spine.spineReferences.count
 
         collectionView.reloadData()
@@ -743,15 +741,14 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         guard let currentPage = currentPage else { return }
         
         if let chapterText = currentPage.webView.js("getBodyText()") {
-            
             let htmlText = chapterText.stringByReplacingOccurrencesOfString("[\\n\\r]+", withString: "<br />", options: .RegularExpressionSearch)
-
             var subject = readerConfig.localizedShareChapterSubject
             var html = ""
             var text = ""
             var bookTitle = ""
             var chapterName = ""
             var authorName = ""
+            var shareItems = [AnyObject]()
             
             // Get book title
             if let title = book.title() {
@@ -775,16 +772,20 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             html += "<center><p style=\"color:gray\">"+readerConfig.localizedShareAllExcerptsFrom+"</p>"
             html += "<b>\(bookTitle)</b><br />"
             html += readerConfig.localizedShareBy+" <i>\(authorName)</i><br />"
-            if (bookShareLink != nil) { html += "<a href=\"\(bookShareLink!)\">\(bookShareLink!)</a>" }
+            
+            if let bookShareLink = readerConfig.localizedShareWebLink {
+                html += "<a href=\"\(bookShareLink.absoluteString)\">\(bookShareLink.absoluteString)</a>"
+                shareItems.append(bookShareLink)
+            }
+            
             html += "</center></body></html>"
             text = "\(chapterName)\n\n“\(chapterText)” \n\n\(bookTitle) \nby \(authorName)"
-            if (bookShareLink != nil) { text += " \n\(bookShareLink!)" }
-            
             
             let act = FolioReaderSharingProvider(subject: subject, text: text, html: html)
-            let shareItems = [act, ""]
+            shareItems.insertContentsOf([act, ""], at: 0)
+            
             let activityViewController = UIActivityViewController(activityItems: shareItems, applicationActivities: nil)
-            activityViewController.excludedActivityTypes = [UIActivityTypePrint, UIActivityTypePostToVimeo, UIActivityTypePostToFacebook]
+            activityViewController.excludedActivityTypes = [UIActivityTypePrint, UIActivityTypePostToVimeo]
             
             // Pop style on iPad
             if let actv = activityViewController.popoverPresentationController {
@@ -799,13 +800,13 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
      Sharing highlight method.
     */
     func shareHighlight(string: String, rect: CGRect) {
-        
         var subject = readerConfig.localizedShareHighlightSubject
         var html = ""
         var text = ""
         var bookTitle = ""
         var chapterName = ""
         var authorName = ""
+        var shareItems = [AnyObject]()
         
         // Get book title
         if let title = book.title() {
@@ -830,16 +831,20 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         html += "<center><p style=\"color:gray\">"+readerConfig.localizedShareAllExcerptsFrom+"</p>"
         html += "<b>\(bookTitle)</b><br />"
         html += readerConfig.localizedShareBy+" <i>\(authorName)</i><br />"
-        if (bookShareLink != nil) { html += "<a href=\"\(bookShareLink!)\">\(bookShareLink!)</a>" }
+        
+        if let bookShareLink = readerConfig.localizedShareWebLink {
+            html += "<a href=\"\(bookShareLink.absoluteString)\">\(bookShareLink.absoluteString)</a>"
+            shareItems.append(bookShareLink)
+        }
+        
         html += "</center></body></html>"
         text = "\(chapterName)\n\n“\(string)” \n\n\(bookTitle) \nby \(authorName)"
-        if (bookShareLink != nil) { text += " \n\(bookShareLink!)" }
-        
         
         let act = FolioReaderSharingProvider(subject: subject, text: text, html: html)
-        let shareItems = [act, ""]
+        shareItems.insertContentsOf([act, ""], at: 0)
+        
         let activityViewController = UIActivityViewController(activityItems: shareItems, applicationActivities: nil)
-        activityViewController.excludedActivityTypes = [UIActivityTypePrint, UIActivityTypePostToVimeo, UIActivityTypePostToFacebook]
+        activityViewController.excludedActivityTypes = [UIActivityTypePrint, UIActivityTypePostToVimeo]
         
         // Pop style on iPad
         if let actv = activityViewController.popoverPresentationController {
