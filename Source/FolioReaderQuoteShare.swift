@@ -51,6 +51,7 @@ class FolioReaderQuoteShare: UIViewController {
     let itemSize: CGFloat = 90
     var dataSource = [QuoteImage]()
     let imagePicker = UIImagePickerController()
+    var selectedIndex = 0
     
     // MARK: Init
     
@@ -192,7 +193,7 @@ class FolioReaderQuoteShare: UIViewController {
         imagePicker.delegate = self
         
         // Select first item
-        setSelectedIndex(0)
+        selectIndex(0)
     }
     
     func configureNavBar() {
@@ -227,9 +228,10 @@ class FolioReaderQuoteShare: UIViewController {
         dataSource.appendContentsOf([color1, color2, color3, color4, color5, gradient1, gradient2, gradient3])
     }
     
-    func setSelectedIndex(index: Int) {
+    func selectIndex(index: Int) {
         let quoteImage = dataSource[index]
-        
+        let row = index+1
+            
         filterImage.backgroundColor = quoteImage.backgroundColor
         imageView.alpha = quoteImage.alpha
         
@@ -240,6 +242,17 @@ class FolioReaderQuoteShare: UIViewController {
             self.authorLabel.textColor = quoteImage.textColor
             self.logoImageView.image = self.logoImageView.image?.imageTintColor(quoteImage.textColor)
             }, completion: nil)
+        
+        //
+        let prevSelectedIndex = selectedIndex
+        selectedIndex = row
+        
+        collectionView.performBatchUpdates({
+            self.collectionView.reloadItemsAtIndexPaths([
+                NSIndexPath(forItem: self.selectedIndex, inSection: 0),
+                NSIndexPath(forItem: prevSelectedIndex, inSection: 0)
+            ])
+        }, completion: nil)
     }
     
     // MARK: Share
@@ -322,6 +335,11 @@ extension FolioReaderQuoteShare: UICollectionViewDataSource {
             return cell
         }
         
+        if selectedIndex == indexPath.row {
+            cell.contentView.layer.borderColor = readerConfig.tintColor.CGColor
+            cell.contentView.layer.borderWidth = 2
+        }
+        
         let quoteImage = dataSource[indexPath.row-1]
         imageView.image = quoteImage.image
         imageView.alpha = quoteImage.alpha
@@ -365,7 +383,7 @@ extension FolioReaderQuoteShare: UICollectionViewDelegate {
             return
         }
         
-        setSelectedIndex(indexPath.row-1)
+        selectIndex(indexPath.row-1)
     }
 }
 
@@ -380,8 +398,9 @@ extension FolioReaderQuoteShare: UIImagePickerControllerDelegate, UINavigationCo
             collectionView.performBatchUpdates({
                 self.dataSource.insert(quoteImage, atIndex: 0)
                 self.collectionView.insertItemsAtIndexPaths([NSIndexPath(forItem: 1, inSection: 0)])
+                self.collectionView.reloadItemsAtIndexPaths([NSIndexPath(forItem: self.selectedIndex, inSection: 0)])
             }, completion: { (finished) in
-                self.setSelectedIndex(0)
+                self.selectIndex(0)
             })
         }
         
