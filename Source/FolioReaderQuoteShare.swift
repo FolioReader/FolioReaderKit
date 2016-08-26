@@ -361,7 +361,7 @@ extension FolioReaderQuoteShare: UICollectionViewDataSource {
         
         if selectedIndex == indexPath.row {
             cell.contentView.layer.borderColor = readerConfig.tintColor.CGColor
-            cell.contentView.layer.borderWidth = 2
+            cell.contentView.layer.borderWidth = 3
         } else {
             cell.contentView.layer.borderColor = UIColor(white: 0.5, alpha: 0.2).CGColor
         }
