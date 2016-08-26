@@ -672,15 +672,37 @@ internal extension UINavigationBar {
 
 extension UINavigationController {
     
-    override public func preferredStatusBarStyle() -> UIStatusBarStyle {
-        if let vc = visibleViewController {
-            return vc.preferredStatusBarStyle()
-        }
-        return .Default
+    public override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        guard let viewController = visibleViewController else { return .Default }
+        return viewController.preferredStatusBarStyle()
+    }
+    
+    public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        guard let viewController = visibleViewController else { return .Portrait }
+        return viewController.supportedInterfaceOrientations()
+    }
+    
+    public override func shouldAutorotate() -> Bool {
+        guard let viewController = visibleViewController else { return false }
+        return viewController.shouldAutorotate()
     }
 }
 
-internal extension Array {
+/**
+ This fixes iOS 9 crash
+ http://stackoverflow.com/a/32010520/517707
+ */
+extension UIAlertController {
+    public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return .Portrait
+    }
+    
+    public override func shouldAutorotate() -> Bool {
+        return false
+    }
+}
+
+extension Array {
     
     /**
      Return index if is safe, if not return nil

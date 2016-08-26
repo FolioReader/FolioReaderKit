@@ -64,6 +64,11 @@ class FolioReaderQuoteShare: UIViewController {
         fatalError("storyboards are incompatible with truth and beauty")
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        setNeedsStatusBarAppearanceUpdate()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setCloseButton()
@@ -247,6 +252,8 @@ class FolioReaderQuoteShare: UIViewController {
         let prevSelectedIndex = selectedIndex
         selectedIndex = row
         
+        guard prevSelectedIndex != selectedIndex else { return }
+        
         collectionView.performBatchUpdates({
             self.collectionView.reloadItemsAtIndexPaths([
                 NSIndexPath(forItem: self.selectedIndex, inSection: 0),
@@ -300,8 +307,16 @@ class FolioReaderQuoteShare: UIViewController {
     
     // MARK: Status Bar
     
-    override public func preferredStatusBarStyle() -> UIStatusBarStyle {
+    public override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return isNight(.LightContent, .Default)
+    }
+    
+    public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return .Portrait
+    }
+    
+    public override func shouldAutorotate() -> Bool {
+        return false
     }
 }
 
@@ -317,7 +332,8 @@ extension FolioReaderQuoteShare: UICollectionViewDataSource {
         let imageView: UIImageView!
         let tag = 9999
         
-        cell.contentView.layer.borderColor = UIColor(white: 0.5, alpha: 0.2).CGColor
+        cell.backgroundColor = UIColor.clearColor()
+        cell.contentView.backgroundColor = UIColor.clearColor()
         cell.contentView.layer.borderWidth = 1
         
         if let view = cell.contentView.viewWithTag(tag) as? UIImageView {
@@ -328,16 +344,26 @@ extension FolioReaderQuoteShare: UICollectionViewDataSource {
             cell.contentView.addSubview(imageView)
         }
         
+        // Image color
+        let normalColor = UIColor(white: 0.5, alpha: 0.7)
+        let camera = UIImage(readerImageNamed: "icon-camera")
+        let dash = UIImage(readerImageNamed: "border-dashed-pattern")
+        let cameraNormal = camera!.imageTintColor(normalColor)
+        let dashNormal = dash!.imageTintColor(normalColor)
+        
         // Camera
         guard indexPath.row > 0 else {
             imageView.contentMode = .Center
-            imageView.image = UIImage(readerImageNamed: "icon-camera")
+            imageView.image = cameraNormal
+            cell.contentView.layer.borderColor = UIColor(patternImage: dashNormal).CGColor
             return cell
         }
         
         if selectedIndex == indexPath.row {
             cell.contentView.layer.borderColor = readerConfig.tintColor.CGColor
             cell.contentView.layer.borderWidth = 2
+        } else {
+            cell.contentView.layer.borderColor = UIColor(white: 0.5, alpha: 0.2).CGColor
         }
         
         let quoteImage = dataSource[indexPath.row-1]
@@ -387,7 +413,7 @@ extension FolioReaderQuoteShare: UICollectionViewDelegate {
     }
 }
 
-// MARK: 
+// MARK: ImagePicker delegate
 
 extension FolioReaderQuoteShare: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
