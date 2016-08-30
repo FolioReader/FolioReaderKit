@@ -1,6 +1,6 @@
 PODS:
   - AEXML (3.0.0)
-  - FolioReaderKit (0.8.4):
+  - FolioReaderKit (0.8.6):
     - AEXML
     - FontBlaster
     - JSQWebViewController
@@ -28,11 +28,11 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   FolioReaderKit:
-    :path: "../"
+    :path: ../
 
 SPEC CHECKSUMS:
   AEXML: 716fb0a8decba4a3517324a71fee3685b30233d2
-  FolioReaderKit: a416ba416e6a7a76b099c99ade726a61ef8f786d
+  FolioReaderKit: e0c89ecec9bd253363e842210a3e10fe43af2923
   FontBlaster: b780f709b8f705638d0c80a1ecdfb23b3077d0a6
   JSQWebViewController: eaa6bd68d9e1426ae25ade99c9bbde4c6cdd4120
   Nimble: 97a0a4cae5124c117115634b2d055d8c97d0af19
@@ -43,6 +43,6 @@ SPEC CHECKSUMS:
   UIMenuItem-CXAImageSupport: 2945e2af4487414caad801ed8ff6ac8db274e986
   ZFDragableModalTransition: 0d294eaaba6edfcb9839595de765f9ca06a4b524
 
-PODFILE CHECKSUM: 7bafcb0eb37bf78bf161a6ebcb80be176777e3a8
+PODFILE CHECKSUM: 4e2bdc3d5df531d3cd0f70bd1071cee2d4bbb240
 
 COCOAPODS: 1.0.1

@@ -22,7 +22,7 @@
 		CA6160401C572C4C00ACD034 /* The Silver Chair.epub in Resources */ = {isa = PBXBuildFile; fileRef = 6E5C9B031C4037B7008F6FD9 /* The Silver Chair.epub */; };
 		CAF233291C57E1F400CB930C /* SharingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF233281C57E1F400CB930C /* SharingProviderTests.swift */; };
 		D12066661D65FABE006E1D18 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12066651D65FABE006E1D18 /* AppDelegate.swift */; };
-		D12066681D65FABE006E1D18 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12066671D65FABE006E1D18 /* ViewController.swift */; };
+		D12066681D65FABE006E1D18 /* ExampleFolioReaderContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12066671D65FABE006E1D18 /* ExampleFolioReaderContainer.swift */; };
 		D120666B1D65FABE006E1D18 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D12066691D65FABE006E1D18 /* Main.storyboard */; };
 		D120666D1D65FABE006E1D18 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D120666C1D65FABE006E1D18 /* Assets.xcassets */; };
 		D12066701D65FABE006E1D18 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D120666E1D65FABE006E1D18 /* LaunchScreen.storyboard */; };
@@ -66,7 +66,7 @@
 		CAF233281C57E1F400CB930C /* SharingProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharingProviderTests.swift; sourceTree = "<group>"; };
 		D12066631D65FABD006E1D18 /* StoryboardExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StoryboardExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D12066651D65FABE006E1D18 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		D12066671D65FABE006E1D18 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		D12066671D65FABE006E1D18 /* ExampleFolioReaderContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleFolioReaderContainer.swift; sourceTree = "<group>"; };
 		D120666A1D65FABE006E1D18 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D120666C1D65FABE006E1D18 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D120666F1D65FABE006E1D18 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -176,7 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				D12066651D65FABE006E1D18 /* AppDelegate.swift */,
-				D12066671D65FABE006E1D18 /* ViewController.swift */,
+				D12066671D65FABE006E1D18 /* ExampleFolioReaderContainer.swift */,
 				D12066691D65FABE006E1D18 /* Main.storyboard */,
 				D120666C1D65FABE006E1D18 /* Assets.xcassets */,
 				D120666E1D65FABE006E1D18 /* LaunchScreen.storyboard */,
@@ -601,7 +601,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D12066681D65FABE006E1D18 /* ViewController.swift in Sources */,
+				D12066681D65FABE006E1D18 /* ExampleFolioReaderContainer.swift in Sources */,
 				D12066661D65FABE006E1D18 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
