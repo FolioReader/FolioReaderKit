@@ -76,7 +76,9 @@ class FolioReaderQuoteShare: UIViewController {
         
 //        title = "Share"
         
+        let titleAttrs = [NSForegroundColorAttributeName: readerConfig.tintColor]
         let share = UIBarButtonItem(title: "Share", style: .Plain, target: self, action: #selector(shareQuote(_:)))
+        share.setTitleTextAttributes(titleAttrs, forState: .Normal)
         navigationItem.rightBarButtonItem = share
         
         //
