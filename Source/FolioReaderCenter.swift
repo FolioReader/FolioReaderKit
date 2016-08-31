@@ -89,42 +89,59 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         extendedLayoutIncludesOpaqueBars = true
         configureNavBar()
 
-        if initFromStoryboard == false {
-            // Page indicator view
-            pageIndicatorView = FolioReaderPageIndicator(frame: CGRect(x: 0, y: view.frame.height-pageIndicatorHeight, width: view.frame.width, height: pageIndicatorHeight))
-            if let _pageIndicatorView = pageIndicatorView {
-                view.addSubview(_pageIndicatorView)
-            }
+		// Page indicator view
+		pageIndicatorView = FolioReaderPageIndicator(frame: self.frameForPageIndicatorView())
+		if let _pageIndicatorView = pageIndicatorView {
+			view.addSubview(_pageIndicatorView)
+		}
 
-            let scrubberY: CGFloat = ((readerConfig.shouldHideNavigationOnTap == true || readerConfig.hideBars == true) ? 50 : 74)
-            scrollScrubber = ScrollScrubber(frame: CGRect(x: pageWidth + 10, y: scrubberY, width: 40, height: pageHeight - 100))
-            scrollScrubber?.delegate = self
+		scrollScrubber = ScrollScrubber(frame: self.frameForScrollScrubber())
+		scrollScrubber?.delegate = self
 
-            if let _scrollScruber = scrollScrubber {
-                view.addSubview(_scrollScruber.slider)
-            }
-        }
+		if let _scrollScruber = scrollScrubber {
+			view.addSubview(_scrollScruber.slider)
+		}
 
         // Update pages
         pagesForCurrentPage(currentPage)
         pageIndicatorView?.reloadView(updateShadow: true)
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+	override func viewDidLayoutSubviews() {
+		super.viewDidLayoutSubviews()
 
-        setPageSize(UIApplication.sharedApplication().statusBarOrientation)
+		screenBounds = self.view.frame
 
-        if (self.loadingView == nil) {
-            // Loading indicator
-            let style: UIActivityIndicatorViewStyle = isNight(.White, .Gray)
-            loadingView = UIActivityIndicatorView(activityIndicatorStyle: style)
-            loadingView.center = view.center
-            loadingView.hidesWhenStopped = true
-            loadingView.startAnimating()
-            view.addSubview(loadingView)
-        }
-    }
+		setPageSize(UIApplication.sharedApplication().statusBarOrientation)
+
+		self.updateSubviewFrames()
+
+		if (self.loadingView == nil) {
+			// Loading indicator
+			let style: UIActivityIndicatorViewStyle = isNight(.White, .Gray)
+			loadingView = UIActivityIndicatorView(activityIndicatorStyle: style)
+			loadingView.center = view.center
+			loadingView.hidesWhenStopped = true
+			loadingView.startAnimating()
+			view.addSubview(loadingView)
+		}
+	}
+
+	// MARK: Layout
+
+	private func updateSubviewFrames() {
+		self.pageIndicatorView?.frame = self.frameForPageIndicatorView()
+		self.scrollScrubber?.frame = self.frameForScrollScrubber()
+	}
+
+	private func frameForPageIndicatorView() -> CGRect {
+		return CGRect(x: 0, y: view.frame.height-pageIndicatorHeight, width: view.frame.width, height: pageIndicatorHeight)
+	}
+
+	private func frameForScrollScrubber() -> CGRect {
+		let scrubberY: CGFloat = ((readerConfig.shouldHideNavigationOnTap == true || readerConfig.hideBars == true) ? 50 : 74)
+		return CGRect(x: pageWidth + 10, y: scrubberY, width: 40, height: pageHeight - 100)
+	}
 
     func configureNavBar() {
         let navBackground = isNight(readerConfig.nightModeMenuBackground, UIColor.whiteColor())
