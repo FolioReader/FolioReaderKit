@@ -9,7 +9,7 @@
 
 import UIKit
 
-class FRBook: NSObject {
+public class FRBook: NSObject {
     var resources = FRResources()
     var metadata = FRMetadata()
     var spine = FRSpine()

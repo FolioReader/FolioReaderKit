@@ -50,15 +50,33 @@ enum MediaOverlayStyle: Int {
     }
 }
 
+/// FolioReader actions delegate
+@objc public protocol FolioReaderDelegate: class {
+    
+    /**
+     Did finished loading book
+     
+     - parameter folioReader: The FolioReader instance
+     - parameter book:        The Book instance
+     */
+    optional func folioReader(folioReader: FolioReader, didFinishedLoading book: FRBook)
+    
+    /**
+     Called when reader did closed
+     */
+    optional func folioReaderDidClosed()
+}
+
 /**
  Main Library class with some useful constants and methods
  */
 public class FolioReader: NSObject {
     public static let sharedInstance = FolioReader()
     static let defaults = NSUserDefaults.standardUserDefaults()
-    weak var readerCenter: FolioReaderCenter!
-    weak var readerContainer: FolioReaderContainer!
-    weak var readerAudioPlayer: FolioReaderAudioPlayer?
+    public weak var delegate: FolioReaderDelegate?
+    public weak var readerCenter: FolioReaderCenter!
+    public weak var readerContainer: FolioReaderContainer!
+    public weak var readerAudioPlayer: FolioReaderAudioPlayer?
     
     private override init() {
         let isMigrated = FolioReader.defaults.boolForKey(kMigratedToRealm)
@@ -196,6 +214,7 @@ public class FolioReader: NSObject {
         FolioReader.isReaderReady = false
         FolioReader.sharedInstance.readerAudioPlayer?.stop(immediate: true)
         FolioReader.defaults.setInteger(0, forKey: kCurrentTOCMenu)
+        FolioReader.sharedInstance.delegate?.folioReaderDidClosed?()
     }
 }
 
