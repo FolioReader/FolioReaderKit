@@ -963,7 +963,7 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
         let pageController = PageViewController(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options:nil)
         pageController.viewControllerOne = chapter
         pageController.viewControllerTwo = highlight
-        pageController.segmentedControlItems = ["Contents", readerConfig.localizedHighlightsTitle]
+        pageController.segmentedControlItems = [readerConfig.localizedContentsTitle, readerConfig.localizedHighlightsTitle]
         
         let nav = UINavigationController(rootViewController: pageController)
         presentViewController(nav, animated: true, completion: nil)
