@@ -12,7 +12,6 @@ import FontBlaster
 var readerConfig: FolioReaderConfig!
 var epubPath: String?
 var book: FRBook!
-var initFromStoryboard: Bool = false
 
 /// Reader container
 public class FolioReaderContainer: UIViewController {
@@ -48,8 +47,6 @@ public class FolioReaderContainer: UIViewController {
 
 		// Default values when the init called from storyboard
 		// TODO: Integrate contraints or storyboard to be more dynamic https://github.com/FolioReader/FolioReaderKit/issues/119
-		initFromStoryboard = true
-		readerConfig.hideBars = true
 		readerConfig.canChangeScrollDirection = false
 
 		super.init(coder: aDecoder)

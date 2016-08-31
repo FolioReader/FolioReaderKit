@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="76c-NV-rFk">
-                                <rect key="frame" x="40" y="120" width="520" height="380"/>
+                                <rect key="frame" x="100" y="100" width="500" height="400"/>
                                 <connections>
                                     <segue destination="ohM-0F-lQn" kind="embed" id="GwJ-h1-STP"/>
                                 </connections>
@@ -27,11 +27,23 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="76c-NV-rFk" secondAttribute="bottom" constant="100" id="8t2-cj-MBZ"/>
+                            <constraint firstItem="76c-NV-rFk" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="100" id="NRZ-uj-OHl"/>
+                            <constraint firstItem="76c-NV-rFk" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="100" id="Oo2-Kp-m9H"/>
                             <constraint firstItem="76c-NV-rFk" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="100" id="QPp-IK-WD4"/>
+                            <constraint firstAttribute="trailing" secondItem="76c-NV-rFk" secondAttribute="trailing" id="ZS5-v1-RfB"/>
                             <constraint firstItem="76c-NV-rFk" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="20" id="aFJ-E1-Z7h"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="76c-NV-rFk" secondAttribute="bottom" constant="100" id="bTg-k8-90V"/>
                             <constraint firstAttribute="trailingMargin" secondItem="76c-NV-rFk" secondAttribute="trailing" constant="20" id="vz9-fJ-FdF"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="QPp-IK-WD4"/>
+                                <exclude reference="aFJ-E1-Z7h"/>
+                                <exclude reference="vz9-fJ-FdF"/>
+                                <exclude reference="bTg-k8-90V"/>
+                            </mask>
+                        </variation>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -47,7 +59,7 @@
                         <viewControllerLayoutGuide type="bottom" id="hph-6f-D8P"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="ICb-Up-C2B">
-                        <rect key="frame" x="0.0" y="0.0" width="520" height="380"/>
+                        <rect key="frame" x="0.0" y="0.0" width="500" height="400"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
