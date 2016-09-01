@@ -16,9 +16,9 @@ class ExampleFolioReaderContainer: FolioReaderContainer {
 		let config = FolioReaderConfig()
 		config.scrollDirection = .horizontalWithVerticalContent
 		if let _bookPath = NSBundle.mainBundle().pathForResource("The Silver Chair", ofType: "epub") {
-			FolioReaderContainer.setUpConfig(config, epubPath: _bookPath)
+			FolioReaderContainer.setupConfig(config, epubPath: _bookPath)
 		}
-
+		
 		super.init(coder: aDecoder)
 	}
 }

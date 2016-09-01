@@ -11,6 +11,7 @@ import FontBlaster
 
 var readerConfig: FolioReaderConfig!
 var epubPath: String?
+var shouldRemoveEpub = true
 var book: FRBook!
 
 /// Reader container
@@ -20,8 +21,7 @@ public class FolioReaderContainer: UIViewController {
     var audioPlayer: FolioReaderAudioPlayer!
     var shouldHideStatusBar = true
     private var errorOnLoad = false
-    private var shouldRemoveEpub = true
-    
+
     // MARK: - Init
     
     /**
@@ -93,7 +93,7 @@ public class FolioReaderContainer: UIViewController {
                     if isDir {
                         book = FREpubParser().readEpub(filePath: epubPath!)
                     } else {
-                        book = FREpubParser().readEpub(epubPath: epubPath!, removeEpub: self.shouldRemoveEpub)
+                        book = FREpubParser().readEpub(epubPath: epubPath!, removeEpub: shouldRemoveEpub)
                     }
                 }
                 else {
@@ -156,9 +156,17 @@ public class FolioReaderContainer: UIViewController {
 
 	// MARK: - Helpers
 
-	public static func setUpConfig(config: FolioReaderConfig, epubPath path: String) {
+	/*
+	Set the `FolioReaderConfig` and epubPath.
+
+	- parameter config:     A instance of `FolioReaderConfig`
+	- parameter path:       The ePub path on system
+	- parameter removeEpub: Should delete the original file after unzip? Default to `true` so the ePub will be unziped only once.
+	*/
+	public class func setupConfig(config: FolioReaderConfig, epubPath path: String, removeEpub: Bool = true) {
 		readerConfig = config
 		epubPath = path
+		shouldRemoveEpub = removeEpub
 	}
 
 	private static func initSetup() {
