@@ -111,9 +111,10 @@ class StoryboardFolioReaderContrainer: FolioReaderContainer {
 	required init?(coder aDecoder: NSCoder) {
 		let config = FolioReaderConfig()
 
-		config.scrollDirection = .horizontal
-		let bookPath = NSBundle.mainBundle().pathForResource("book", ofType: "epub")
-		FolioReaderContainer.setUpConfig(config, epubPath: bookPath!)
+		config.scrollDirection = .horizontalWithVerticalContent
+		if let _bookPath = NSBundle.mainBundle().pathForResource("The Silver Chair", ofType: "epub") {
+			FolioReaderContainer.setupConfig(config, epubPath: _bookPath)
+		}
 
 		super.init(coder: aDecoder)
 	}
