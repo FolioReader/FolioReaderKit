@@ -50,15 +50,33 @@ enum MediaOverlayStyle: Int {
     }
 }
 
+/// FolioReader actions delegate
+@objc public protocol FolioReaderDelegate: class {
+    
+    /**
+     Did finished loading book.
+     
+     - parameter folioReader: The FolioReader instance
+     - parameter book:        The Book instance
+     */
+    optional func folioReader(folioReader: FolioReader, didFinishedLoading book: FRBook)
+    
+    /**
+     Called when reader did closed.
+     */
+    optional func folioReaderDidClosed()
+}
+
 /**
  Main Library class with some useful constants and methods
  */
-public class FolioReader : NSObject {
+public class FolioReader: NSObject {
     public static let sharedInstance = FolioReader()
     static let defaults = NSUserDefaults.standardUserDefaults()
-    weak var readerCenter: FolioReaderCenter!
-    weak var readerContainer: FolioReaderContainer!
-    weak var readerAudioPlayer: FolioReaderAudioPlayer?
+    public weak var delegate: FolioReaderDelegate?
+    public weak var readerCenter: FolioReaderCenter!
+    public weak var readerContainer: FolioReaderContainer!
+    public weak var readerAudioPlayer: FolioReaderAudioPlayer?
     
     private override init() {
         let isMigrated = FolioReader.defaults.boolForKey(kMigratedToRealm)
@@ -196,6 +214,7 @@ public class FolioReader : NSObject {
         FolioReader.isReaderReady = false
         FolioReader.sharedInstance.readerAudioPlayer?.stop(immediate: true)
         FolioReader.defaults.setInteger(0, forKey: kCurrentTOCMenu)
+        FolioReader.sharedInstance.delegate?.folioReaderDidClosed?()
     }
 }
 
@@ -558,7 +577,7 @@ internal extension UIImage {
      - parameter color: The input color
      - returns: Returns a colored image
      */
-    class func imageWithColor(color: UIColor?) -> UIImage! {
+    class func imageWithColor(color: UIColor?) -> UIImage {
         let rect = CGRectMake(0.0, 0.0, 1.0, 1.0)
         UIGraphicsBeginImageContextWithOptions(rect.size, false, 0)
         let context = UIGraphicsGetCurrentContext()
@@ -574,6 +593,34 @@ internal extension UIImage {
         UIGraphicsEndImageContext()
         
         return image
+    }
+    
+    /**
+     Generates a image with a `CALayer`
+     
+     - parameter layer: The input `CALayer`
+     - returns: Return a rendered image
+     */
+    class func imageWithLayer(layer: CALayer) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(layer.bounds.size, layer.opaque, 0.0)
+        layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return img
+    }
+    
+    /**
+     Generates a image from a `UIView`
+     
+     - parameter view: The input `UIView`
+     - returns: Return a rendered image
+     */
+    class func imageWithView(view: UIView) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.opaque, 0.0)
+        view.drawViewHierarchyInRect(view.bounds, afterScreenUpdates: true)
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return img
     }
 }
 
@@ -644,15 +691,37 @@ internal extension UINavigationBar {
 
 extension UINavigationController {
     
-    override public func preferredStatusBarStyle() -> UIStatusBarStyle {
-        if let vc = visibleViewController {
-            return vc.preferredStatusBarStyle()
-        }
-        return .Default
+    public override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        guard let viewController = visibleViewController else { return .Default }
+        return viewController.preferredStatusBarStyle()
+    }
+    
+    public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        guard let viewController = visibleViewController else { return .Portrait }
+        return viewController.supportedInterfaceOrientations()
+    }
+    
+    public override func shouldAutorotate() -> Bool {
+        guard let viewController = visibleViewController else { return false }
+        return viewController.shouldAutorotate()
     }
 }
 
-internal extension Array {
+/**
+ This fixes iOS 9 crash
+ http://stackoverflow.com/a/32010520/517707
+ */
+extension UIAlertController {
+    public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return .Portrait
+    }
+    
+    public override func shouldAutorotate() -> Bool {
+        return false
+    }
+}
+
+extension Array {
     
     /**
      Return index if is safe, if not return nil

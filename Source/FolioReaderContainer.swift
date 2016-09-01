@@ -127,6 +127,7 @@ public class FolioReaderContainer: UIViewController {
                         self.centerViewController.reloadData()
                         
                         FolioReader.isReaderReady = true
+                        FolioReader.sharedInstance.delegate?.folioReader?(FolioReader.sharedInstance, didFinishedLoading: book)
                     })
                 }
             })

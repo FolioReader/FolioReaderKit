@@ -19,8 +19,8 @@ var pageScrollDirection = ScrollDirection()
 var isScrolling = false
 
 
-class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
-    
+public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+
     var collectionView: UICollectionView!
     let collectionViewLayout = UICollectionViewFlowLayout()
     var loadingView: UIActivityIndicatorView!
@@ -30,7 +30,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     var currentPage: FolioReaderPage?
     var animator: ZFModalTransitionAnimator!
     var pageIndicatorView: FolioReaderPageIndicator!
-    var bookShareLink: String?
 	var pageIndicatorHeight: CGFloat = 20
 
     var recentlyScrolled = false
@@ -47,7 +46,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     // MARK: - View life cicle
     
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         
         screenBounds = UIScreen.mainScreen().bounds
@@ -102,7 +101,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         view.addSubview(loadingView)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override public func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
         // Update pages
@@ -152,7 +151,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
 
     func reloadData() {
         loadingView.stopAnimating()
-        bookShareLink = readerConfig.localizedShareWebLink
         totalPages = book.spine.spineReferences.count
 
         collectionView.reloadData()
@@ -277,15 +275,15 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     // MARK: UICollectionViewDataSource
     
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    public func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    public func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return totalPages
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! FolioReaderPage
         
         cell.pageNumber = indexPath.row+1
@@ -373,7 +371,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     // MARK: - Device rotation
     
-    override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
+    override public func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
         guard FolioReader.isReaderReady else { return }
         
         setPageSize(toInterfaceOrientation)
@@ -413,7 +411,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         })
     }
     
-    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
+    override public func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
         guard FolioReader.isReaderReady else { return }
         guard let currentPage = currentPage else { return }
         
@@ -436,7 +434,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
 		currentPage.webView.scrollView.setContentOffset(pageOffsetPoint, animated: true)
     }
     
-    override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
+    override public func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
         guard FolioReader.isReaderReady else { return }
         
         if currentPageNumber+1 >= totalPages {
@@ -743,15 +741,14 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         guard let currentPage = currentPage else { return }
         
         if let chapterText = currentPage.webView.js("getBodyText()") {
-            
             let htmlText = chapterText.stringByReplacingOccurrencesOfString("[\\n\\r]+", withString: "<br />", options: .RegularExpressionSearch)
-
             var subject = readerConfig.localizedShareChapterSubject
             var html = ""
             var text = ""
             var bookTitle = ""
             var chapterName = ""
             var authorName = ""
+            var shareItems = [AnyObject]()
             
             // Get book title
             if let title = book.title() {
@@ -775,16 +772,20 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             html += "<center><p style=\"color:gray\">"+readerConfig.localizedShareAllExcerptsFrom+"</p>"
             html += "<b>\(bookTitle)</b><br />"
             html += readerConfig.localizedShareBy+" <i>\(authorName)</i><br />"
-            if (bookShareLink != nil) { html += "<a href=\"\(bookShareLink!)\">\(bookShareLink!)</a>" }
-            html += "</center></body></html>"
-            text = "\(chapterName)\n\n“\(chapterText)” \n\n\(bookTitle) \nby \(authorName)"
-            if (bookShareLink != nil) { text += " \n\(bookShareLink!)" }
             
+            if let bookShareLink = readerConfig.localizedShareWebLink {
+                html += "<a href=\"\(bookShareLink.absoluteString)\">\(bookShareLink.absoluteString)</a>"
+                shareItems.append(bookShareLink)
+            }
+            
+            html += "</center></body></html>"
+            text = "\(chapterName)\n\n“\(chapterText)” \n\n\(bookTitle) \n\(readerConfig.localizedShareBy) \(authorName)"
             
             let act = FolioReaderSharingProvider(subject: subject, text: text, html: html)
-            let shareItems = [act, ""]
+            shareItems.insertContentsOf([act, ""], at: 0)
+            
             let activityViewController = UIActivityViewController(activityItems: shareItems, applicationActivities: nil)
-            activityViewController.excludedActivityTypes = [UIActivityTypePrint, UIActivityTypePostToVimeo, UIActivityTypePostToFacebook]
+            activityViewController.excludedActivityTypes = [UIActivityTypePrint, UIActivityTypePostToVimeo]
             
             // Pop style on iPad
             if let actv = activityViewController.popoverPresentationController {
@@ -799,13 +800,13 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
      Sharing highlight method.
     */
     func shareHighlight(string: String, rect: CGRect) {
-        
         var subject = readerConfig.localizedShareHighlightSubject
         var html = ""
         var text = ""
         var bookTitle = ""
         var chapterName = ""
         var authorName = ""
+        var shareItems = [AnyObject]()
         
         // Get book title
         if let title = book.title() {
@@ -830,16 +831,20 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         html += "<center><p style=\"color:gray\">"+readerConfig.localizedShareAllExcerptsFrom+"</p>"
         html += "<b>\(bookTitle)</b><br />"
         html += readerConfig.localizedShareBy+" <i>\(authorName)</i><br />"
-        if (bookShareLink != nil) { html += "<a href=\"\(bookShareLink!)\">\(bookShareLink!)</a>" }
-        html += "</center></body></html>"
-        text = "\(chapterName)\n\n“\(string)” \n\n\(bookTitle) \nby \(authorName)"
-        if (bookShareLink != nil) { text += " \n\(bookShareLink!)" }
         
+        if let bookShareLink = readerConfig.localizedShareWebLink {
+            html += "<a href=\"\(bookShareLink.absoluteString)\">\(bookShareLink.absoluteString)</a>"
+            shareItems.append(bookShareLink)
+        }
+        
+        html += "</center></body></html>"
+        text = "\(chapterName)\n\n“\(string)” \n\n\(bookTitle) \n\(readerConfig.localizedShareBy) \(authorName)"
         
         let act = FolioReaderSharingProvider(subject: subject, text: text, html: html)
-        let shareItems = [act, ""]
+        shareItems.insertContentsOf([act, ""], at: 0)
+        
         let activityViewController = UIActivityViewController(activityItems: shareItems, applicationActivities: nil)
-        activityViewController.excludedActivityTypes = [UIActivityTypePrint, UIActivityTypePostToVimeo, UIActivityTypePostToFacebook]
+        activityViewController.excludedActivityTypes = [UIActivityTypePrint, UIActivityTypePostToVimeo]
         
         // Pop style on iPad
         if let actv = activityViewController.popoverPresentationController {
@@ -852,7 +857,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     // MARK: - ScrollView Delegate
     
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    public func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         isScrolling = true
         clearRecentlyScrolled()
         recentlyScrolled = true
@@ -866,7 +871,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         scrollScrubber.scrollViewWillBeginDragging(scrollView)
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    public func scrollViewDidScroll(scrollView: UIScrollView) {
         
         if !navigationController!.navigationBarHidden {
             toggleBars()
@@ -904,7 +909,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         pageScrollDirection = scrollView.contentOffset.forDirection() < pointNow.forDirection() ? .negative() : .positive()
     }
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    public func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         isScrolling = false
 
 		if (readerConfig.scrollDirection == .horizontalWithVerticalContent),
@@ -920,7 +925,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         scrollScrubber.scrollViewDidEndDecelerating(scrollView)
     }
     
-    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    public func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         recentlyScrolledTimer = NSTimer(timeInterval:recentlyScrolledDelay, target: self, selector: #selector(FolioReaderCenter.clearRecentlyScrolled), userInfo: nil, repeats: false)
         NSRunLoop.currentRunLoop().addTimer(recentlyScrolledTimer, forMode: NSRunLoopCommonModes)
     }
@@ -933,7 +938,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         recentlyScrolled = false
     }
 
-    func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
+    public func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
         scrollScrubber.scrollViewDidEndScrollingAnimation(scrollView)
     }
     
@@ -1006,6 +1011,15 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
 
         menu.transitioningDelegate = animator
         presentViewController(menu, animated: true, completion: nil)
+    }
+    
+    /**
+     Present Quote Share
+     */
+    func presentQuoteShare(string: String) {
+        let quoteShare = FolioReaderQuoteShare(initWithText: string)
+        let nav = UINavigationController(rootViewController: quoteShare)
+        presentViewController(nav, animated: true, completion: nil)
     }
 }
 

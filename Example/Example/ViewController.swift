@@ -44,7 +44,13 @@ class ViewController: UIViewController {
 //        config.menuTextColor = UIColor.brownColor()
 //        config.menuBackgroundColor = UIColor.lightGrayColor()
         
+        // Custom sharing quote background
+        let customImageQuote = QuoteImage(withImage: UIImage(named: "demo-bg")!, alpha: 0.6, backgroundColor: UIColor.blackColor())
+        let customQuote = QuoteImage(withColor: UIColor(red:0.30, green:0.26, blue:0.20, alpha:1.0), alpha: 1.0, textColor: UIColor(red:0.86, green:0.73, blue:0.70, alpha:1.0))
         
+        config.quoteCustomBackgrounds = [customImageQuote, customQuote]
+        
+        // Epub file
         let epubName = epubSampleFiles[sampleNum-1];
         let bookPath = NSBundle.mainBundle().pathForResource(epubName, ofType: "epub")
         FolioReader.presentReader(parentViewController: self, withEpubPath: bookPath!, andConfig: config, shouldRemoveEpub: false)
