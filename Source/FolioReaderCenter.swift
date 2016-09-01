@@ -19,7 +19,7 @@ var pageScrollDirection = ScrollDirection()
 var isScrolling = false
 
 
-class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
     var collectionView: UICollectionView!
     let collectionViewLayout = UICollectionViewFlowLayout()
@@ -48,7 +48,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     // MARK: - View life cicle
     
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
 
         if (readerConfig.hideBars == true) {
@@ -107,7 +107,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         pageIndicatorView?.reloadView(updateShadow: true)
     }
 
-	override func viewDidLayoutSubviews() {
+	override public func viewDidLayoutSubviews() {
 		super.viewDidLayoutSubviews()
 
 		screenBounds = self.view.frame
@@ -310,15 +310,15 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     // MARK: UICollectionViewDataSource
     
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    public func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    public func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return totalPages
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! FolioReaderPage
         
         cell.pageNumber = indexPath.row+1
@@ -406,7 +406,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     // MARK: - Device rotation
     
-    override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
+    override public func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
         guard FolioReader.isReaderReady else { return }
         
         setPageSize(toInterfaceOrientation)
@@ -458,7 +458,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
 		self.currentOrientation = toInterfaceOrientation
     }
     
-    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
+    override public func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
         guard FolioReader.isReaderReady else { return }
         guard let currentPage = currentPage else { return }
         
@@ -481,7 +481,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
 		currentPage.webView.scrollView.setContentOffset(pageOffsetPoint, animated: true)
     }
     
-    override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
+    override public func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
         guard FolioReader.isReaderReady else { return }
         
 		self.collectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: currentPageNumber - 1, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.None, animated: false)
@@ -614,17 +614,6 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         )
     }
     
-    func changePageWith(page page: Int, animated: Bool = false, completion: (() -> Void)? = nil) {
-        if page > 0 && page-1 < totalPages {
-            let indexPath = NSIndexPath(forRow: page-1, inSection: 0)
-            changePageWith(indexPath: indexPath, animated: animated, completion: { () -> Void in
-                self.updateCurrentPage({ () -> Void in
-                    completion?()
-                })
-            })
-        }
-    }
-    
     func changePageWith(page page: Int, andFragment fragment: String, animated: Bool = false, completion: (() -> Void)? = nil) {
         if currentPageNumber == page {
             if let currentPage = currentPage where fragment != "" {
@@ -641,7 +630,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
-    func changePageWith(href href: String, animated: Bool = false, completion: (() -> Void)? = nil) {
+	func changePageWith(href href: String, animated: Bool = false, completion: (() -> Void)? = nil) {
         let item = findPageByHref(href)
         let indexPath = NSIndexPath(forRow: item, inSection: 0)
         changePageWith(indexPath: indexPath, animated: animated, completion: { () -> Void in
@@ -682,7 +671,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
             completion?()
         }
     }
-    
+
     func indexPathIsValid(indexPath: NSIndexPath) -> Bool {
         let section = indexPath.section
         let row = indexPath.row
@@ -773,6 +762,23 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         }
         return nil
     }
+
+	// MARK: Public page methods
+
+	public func changePageWith(page page: Int, animated: Bool = false, completion: (() -> Void)? = nil) {
+		if page > 0 && page-1 < totalPages {
+			let indexPath = NSIndexPath(forRow: page-1, inSection: 0)
+			changePageWith(indexPath: indexPath, animated: animated, completion: { () -> Void in
+				self.updateCurrentPage({ () -> Void in
+					completion?()
+				})
+			})
+		}
+	}
+
+	public func getCurrentPage() -> FolioReaderPage? {
+		return self.currentPage
+	}
     
     // MARK: - Audio Playing
 
@@ -898,7 +904,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
     
     // MARK: - ScrollView Delegate
     
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    public func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         isScrolling = true
         clearRecentlyScrolled()
         recentlyScrolled = true
@@ -912,7 +918,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         scrollScrubber?.scrollViewWillBeginDragging(scrollView)
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    public func scrollViewDidScroll(scrollView: UIScrollView) {
         
         if !navigationController!.navigationBarHidden {
             toggleBars()
@@ -950,7 +956,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         pageScrollDirection = scrollView.contentOffset.forDirection() < pointNow.forDirection() ? .negative() : .positive()
     }
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    public func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         isScrolling = false
 
 		if (readerConfig.scrollDirection == .horizontalWithVerticalContent),
@@ -966,7 +972,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         scrollScrubber?.scrollViewDidEndDecelerating(scrollView)
     }
     
-    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    public func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         recentlyScrolledTimer = NSTimer(timeInterval:recentlyScrolledDelay, target: self, selector: #selector(FolioReaderCenter.clearRecentlyScrolled), userInfo: nil, repeats: false)
         NSRunLoop.currentRunLoop().addTimer(recentlyScrolledTimer, forMode: NSRunLoopCommonModes)
     }
@@ -979,7 +985,7 @@ class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectio
         recentlyScrolled = false
     }
 
-    func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
+    public func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
         scrollScrubber?.scrollViewDidEndScrollingAnimation(scrollView)
     }
     

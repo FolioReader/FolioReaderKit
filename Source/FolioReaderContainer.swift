@@ -17,7 +17,7 @@ var book: FRBook!
 /// Reader container
 public class FolioReaderContainer: UIViewController {
     var centerNavigationController: UINavigationController!
-    var centerViewController: FolioReaderCenter!
+	var centerViewController: FolioReaderCenter!
     var audioPlayer: FolioReaderAudioPlayer!
     var shouldHideStatusBar = true
     private var errorOnLoad = false
@@ -156,19 +156,6 @@ public class FolioReaderContainer: UIViewController {
 
 	// MARK: - Helpers
 
-	/*
-	Set the `FolioReaderConfig` and epubPath.
-
-	- parameter config:     A instance of `FolioReaderConfig`
-	- parameter path:       The ePub path on system
-	- parameter removeEpub: Should delete the original file after unzip? Default to `true` so the ePub will be unziped only once.
-	*/
-	public class func setupConfig(config: FolioReaderConfig, epubPath path: String, removeEpub: Bool = true) {
-		readerConfig = config
-		epubPath = path
-		shouldRemoveEpub = removeEpub
-	}
-
 	private static func initSetup() {
 
 		// Init with empty book
@@ -190,6 +177,25 @@ public class FolioReaderContainer: UIViewController {
 			])
 
 		readerConfig.canChangeScrollDirection = isDirection(readerConfig.canChangeScrollDirection, readerConfig.canChangeScrollDirection, false)
+	}
+
+	// MARK: - Public 
+
+	/*
+	Set the `FolioReaderConfig` and epubPath.
+
+	- parameter config:     A instance of `FolioReaderConfig`
+	- parameter path:       The ePub path on system
+	- parameter removeEpub: Should delete the original file after unzip? Default to `true` so the ePub will be unziped only once.
+	*/
+	public class func setupConfig(config: FolioReaderConfig, epubPath path: String, removeEpub: Bool = true) {
+		readerConfig = config
+		epubPath = path
+		shouldRemoveEpub = removeEpub
+	}
+
+	public func readerCenter() -> FolioReaderCenter {
+		return self.centerViewController
 	}
 
 }
