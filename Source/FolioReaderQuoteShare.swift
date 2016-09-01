@@ -8,35 +8,6 @@
 
 import UIKit
 
-public struct QuoteImage {
-    public var image: UIImage!
-    public var alpha: CGFloat!
-    public var textColor: UIColor!
-    public var backgroundColor: UIColor!
-    
-    public init(withImage image: UIImage, alpha: CGFloat = 1, textColor: UIColor = UIColor.whiteColor(), backgroundColor: UIColor = UIColor.whiteColor()) {
-        self.image = image
-        self.alpha = alpha
-        self.textColor = textColor
-        self.backgroundColor = backgroundColor
-    }
-    
-    public init(withGradient gradient: CAGradientLayer, alpha: CGFloat = 1, textColor: UIColor = UIColor.whiteColor(), backgroundColor: UIColor = UIColor.whiteColor()) {
-        let screenBounds = UIScreen.mainScreen().bounds
-        gradient.frame = CGRect(x: 0, y: 0, width: screenBounds.width, height: screenBounds.width)
-        self.image = UIImage.imageWithLayer(gradient)
-        self.alpha = alpha
-        self.textColor = textColor
-        self.backgroundColor = backgroundColor
-    }
-    
-    public init(withColor color: UIColor, alpha: CGFloat = 1, textColor: UIColor = UIColor.whiteColor(), backgroundColor: UIColor = UIColor.whiteColor()) {
-        self.image = UIImage.imageWithColor(color)
-        self.alpha = alpha
-        self.textColor = textColor
-        self.backgroundColor = backgroundColor
-    }
-}
 
 class FolioReaderQuoteShare: UIViewController {
     var quoteText: String!
@@ -73,8 +44,6 @@ class FolioReaderQuoteShare: UIViewController {
         super.viewDidLoad()
         setCloseButton()
         configureNavBar()
-        
-//        title = "Share"
         
         let titleAttrs = [NSForegroundColorAttributeName: readerConfig.tintColor]
         let share = UIBarButtonItem(title: "Share", style: .Plain, target: self, action: #selector(shareQuote(_:)))

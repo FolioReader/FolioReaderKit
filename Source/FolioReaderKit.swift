@@ -54,7 +54,7 @@ enum MediaOverlayStyle: Int {
 @objc public protocol FolioReaderDelegate: class {
     
     /**
-     Did finished loading book
+     Did finished loading book.
      
      - parameter folioReader: The FolioReader instance
      - parameter book:        The Book instance
@@ -62,7 +62,7 @@ enum MediaOverlayStyle: Int {
     optional func folioReader(folioReader: FolioReader, didFinishedLoading book: FRBook)
     
     /**
-     Called when reader did closed
+     Called when reader did closed.
      */
     optional func folioReaderDidClosed()
 }

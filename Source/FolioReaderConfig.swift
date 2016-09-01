@@ -91,8 +91,13 @@ public class FolioReaderConfig: NSObject {
     
     // MARK: Quote image share
     
+    /// Custom Quote logo
     public var quoteCustomLogoImage = UIImage(readerImageNamed: "icon-logo")
+    
+    /// Add custom backgrounds and font colors to Quote Images
     public var quoteCustomBackgrounds = [QuoteImage]()
+    
+    /// Enable or disable default Quote Image backgrounds
     public var quotePreserveDefaultBackgrounds = true
     
     // MARK: Localized strings
@@ -129,5 +134,4 @@ public class FolioReaderConfig: NSObject {
     public var localizedTakePhoto = NSLocalizedString("Take Photo", comment: "")
     public var localizedShareImageQuote = NSLocalizedString("Share image quote", comment: "")
     public var localizedShareTextQuote = NSLocalizedString("Share text quote", comment: "")
-    
 }
