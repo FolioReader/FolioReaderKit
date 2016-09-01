@@ -34,17 +34,24 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     var scrollStart: CGFloat!
     var scrollDelta: CGFloat!
     var scrollDeltaTimer: NSTimer!
-    
+
+	var frame: CGRect! {
+		didSet {
+			self.slider.frame = frame
+		}
+	}
+
     init(frame:CGRect) {
         super.init()
         
         slider = UISlider()
         slider.layer.anchorPoint = CGPoint(x: 0, y: 0)
         slider.transform = CGAffineTransformMakeRotation(CGFloat(M_PI_2))
-        slider.frame = frame
         slider.alpha = 0
-        
-        updateColors()
+
+		self.frame = frame
+
+		updateColors()
         
         // less obtrusive knob and fixes jump: http://stackoverflow.com/a/22301039/484780
         let thumbImg = UIImage(readerImageNamed: "knob")

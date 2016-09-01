@@ -16,6 +16,10 @@ target 'Example' do
   shared_pods
 end
 
+target 'StoryboardExample' do
+	shared_pods
+end
+
 target 'FolioReaderTests' do
   shared_pods
   testing_pods
