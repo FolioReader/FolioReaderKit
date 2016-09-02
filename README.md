@@ -27,12 +27,6 @@ target '<Your Target Name>' do
 end
 ```
 
-Or if trying the demo, move to the example directory
-
-```bash
-$ cd Example
-```
-
 Then, run the following command:
 
 ```bash
@@ -113,16 +107,15 @@ To get started, here is a simple example how to use the integrated view controll
 import FolioReaderKit
 
 class StoryboardFolioReaderContrainer: FolioReaderContainer {
-
-	required init?(coder aDecoder: NSCoder) {
-		let config = FolioReaderConfig()
-
-		config.scrollDirection = .horizontal
-		let bookPath = NSBundle.mainBundle().pathForResource("book", ofType: "epub")
-		FolioReaderContainer.setUpConfig(config, epubPath: bookPath!)
-
-		super.init(coder: aDecoder)
-	}
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        
+        let config = FolioReaderConfig()
+        config.scrollDirection = .horizontalWithVerticalContent
+        
+        guard let bookPath = NSBundle.mainBundle().pathForResource("The Silver Chair", ofType: "epub") else { return }
+        setupConfig(config, epubPath: bookPath)
+    }
 }
 ```
 Go to your storyboard file, choose or create the view controller that should present the epub reader. In the identity inspector set StoryboardFolioReaderContrainer as class.
@@ -161,7 +154,7 @@ Go to your storyboard file, choose or create the view controller that should pre
 ![Time left](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/media-overlays.gif)
 
 ## Documentation
-For now the best documentation is the sample project. I ~~will write a better~~ am working to improve the code documentation, this is the current progress: [![CocoaPods](https://img.shields.io/cocoapods/metrics/doc-percent/FolioReaderKit.svg?maxAge=100)](http://cocoadocs.org/docsets/FolioReaderKit)
+For now the best documentation is the sample project. I ~~will write a better~~ am working to improve the code documentation, this is the current progress: [![CocoaPods](https://img.shields.io/cocoapods/metrics/doc-percent/FolioReaderKit.svg?maxAge=2592000)](http://cocoadocs.org/docsets/FolioReaderKit)
 
 You have a problem that cannot be solved by having a look at the example project? No problem, let's talk:
 [![Join the chat at https://gitter.im/FolioReader/FolioReaderKit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/FolioReader/FolioReaderKit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)

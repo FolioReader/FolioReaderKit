@@ -50,15 +50,33 @@ enum MediaOverlayStyle: Int {
     }
 }
 
+/// FolioReader actions delegate
+@objc public protocol FolioReaderDelegate: class {
+    
+    /**
+     Did finished loading book.
+     
+     - parameter folioReader: The FolioReader instance
+     - parameter book:        The Book instance
+     */
+    optional func folioReader(folioReader: FolioReader, didFinishedLoading book: FRBook)
+    
+    /**
+     Called when reader did closed.
+     */
+    optional func folioReaderDidClosed()
+}
+
 /**
  Main Library class with some useful constants and methods
  */
-public class FolioReader : NSObject {
+public class FolioReader: NSObject {
     public static let sharedInstance = FolioReader()
     static let defaults = NSUserDefaults.standardUserDefaults()
-    weak var readerCenter: FolioReaderCenter!
-    weak var readerContainer: FolioReaderContainer!
-    weak var readerAudioPlayer: FolioReaderAudioPlayer?
+    public weak var delegate: FolioReaderDelegate?
+    public weak var readerCenter: FolioReaderCenter!
+    public weak var readerContainer: FolioReaderContainer!
+    public weak var readerAudioPlayer: FolioReaderAudioPlayer?
     
     private override init() {
         let isMigrated = FolioReader.defaults.boolForKey(kMigratedToRealm)
@@ -149,7 +167,7 @@ public class FolioReader : NSObject {
      Present a Folio Reader for a Parent View Controller.
      */
     public class func presentReader(parentViewController parentViewController: UIViewController, withEpubPath epubPath: String, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated: Bool = true) {
-        let reader = FolioReaderContainer(config: config, epubPath: epubPath, removeEpub: shouldRemoveEpub)
+        let reader = FolioReaderContainer(withConfig: config, epubPath: epubPath, removeEpub: shouldRemoveEpub)
         FolioReader.sharedInstance.readerContainer = reader
         parentViewController.presentViewController(reader, animated: animated, completion: nil)
     }
@@ -196,6 +214,7 @@ public class FolioReader : NSObject {
         FolioReader.isReaderReady = false
         FolioReader.sharedInstance.readerAudioPlayer?.stop(immediate: true)
         FolioReader.defaults.setInteger(0, forKey: kCurrentTOCMenu)
+        FolioReader.sharedInstance.delegate?.folioReaderDidClosed?()
     }
 }
 
@@ -207,11 +226,32 @@ func isNight<T> (f: T, _ l: T) -> T {
 
 // MARK: - Scroll Direction Functions
 
-func isDirection<T> (vertical: T, _ horizontal: T, _ horizontalContentVertical: T) -> T {
+/**
+ Simplify attibution of values based on direction, basically is to avoid too much usage of `switch`,
+ `if` and `else` statements to check. So basically this is like a shorthand version of the `switch` verification.
+ 
+ For example:
+ ```
+ let pageOffsetPoint = isDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0), CGPoint(x: 0, y: pageOffset))
+ ```
+ 
+ As usually the `vertical` direction and `horizontalContentVertical` has similar statements you can basically hide the last
+ value and it will assume the value from `vertical` as fallback.
+ ```
+ let pageOffsetPoint = isDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0))
+ ```
+ 
+ - parameter vertical:                  Value for `vertical` direction
+ - parameter horizontal:                Value for `horizontal` direction
+ - parameter horizontalContentVertical: Value for `horizontalWithVerticalContent` direction, if nil will fallback to `vertical` value
+ 
+ - returns: The right value based on direction.
+ */
+func isDirection<T> (vertical: T, _ horizontal: T, _ horizontalContentVertical: T? = nil) -> T {
 	switch readerConfig.scrollDirection {
 	case .vertical: return vertical
 	case .horizontal: return horizontal
-	case .horizontalWithVerticalContent: return horizontalContentVertical
+	case .horizontalWithVerticalContent: return horizontalContentVertical ?? vertical
 	}
 }
 
@@ -558,7 +598,7 @@ internal extension UIImage {
      - parameter color: The input color
      - returns: Returns a colored image
      */
-    class func imageWithColor(color: UIColor?) -> UIImage! {
+    class func imageWithColor(color: UIColor?) -> UIImage {
         let rect = CGRectMake(0.0, 0.0, 1.0, 1.0)
         UIGraphicsBeginImageContextWithOptions(rect.size, false, 0)
         let context = UIGraphicsGetCurrentContext()
@@ -574,6 +614,34 @@ internal extension UIImage {
         UIGraphicsEndImageContext()
         
         return image
+    }
+    
+    /**
+     Generates a image with a `CALayer`
+     
+     - parameter layer: The input `CALayer`
+     - returns: Return a rendered image
+     */
+    class func imageWithLayer(layer: CALayer) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(layer.bounds.size, layer.opaque, 0.0)
+        layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return img
+    }
+    
+    /**
+     Generates a image from a `UIView`
+     
+     - parameter view: The input `UIView`
+     - returns: Return a rendered image
+     */
+    class func imageWithView(view: UIView) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.opaque, 0.0)
+        view.drawViewHierarchyInRect(view.bounds, afterScreenUpdates: true)
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return img
     }
 }
 
@@ -644,15 +712,37 @@ internal extension UINavigationBar {
 
 extension UINavigationController {
     
-    override public func preferredStatusBarStyle() -> UIStatusBarStyle {
-        if let vc = visibleViewController {
-            return vc.preferredStatusBarStyle()
-        }
-        return .Default
+    public override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        guard let viewController = visibleViewController else { return .Default }
+        return viewController.preferredStatusBarStyle()
+    }
+    
+    public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        guard let viewController = visibleViewController else { return .Portrait }
+        return viewController.supportedInterfaceOrientations()
+    }
+    
+    public override func shouldAutorotate() -> Bool {
+        guard let viewController = visibleViewController else { return false }
+        return viewController.shouldAutorotate()
     }
 }
 
-internal extension Array {
+/**
+ This fixes iOS 9 crash
+ http://stackoverflow.com/a/32010520/517707
+ */
+extension UIAlertController {
+    public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return .Portrait
+    }
+    
+    public override func shouldAutorotate() -> Bool {
+        return false
+    }
+}
+
+extension Array {
     
     /**
      Return index if is safe, if not return nil

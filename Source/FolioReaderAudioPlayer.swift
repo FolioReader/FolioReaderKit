@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 import MediaPlayer
 
-class FolioReaderAudioPlayer: NSObject {
+public class FolioReaderAudioPlayer: NSObject {
     var isTextToSpeech = false
     var synthesizer: AVSpeechSynthesizer!
     var playing = false
@@ -503,11 +503,11 @@ class FolioReaderAudioPlayer: NSObject {
 // MARK: AVSpeechSynthesizerDelegate
 
 extension FolioReaderAudioPlayer: AVSpeechSynthesizerDelegate {
-    func speechSynthesizer(synthesizer: AVSpeechSynthesizer, didCancelSpeechUtterance utterance: AVSpeechUtterance) {
+    public func speechSynthesizer(synthesizer: AVSpeechSynthesizer, didCancelSpeechUtterance utterance: AVSpeechUtterance) {
         completionHandler()
     }
     
-    func speechSynthesizer(synthesizer: AVSpeechSynthesizer, didFinishSpeechUtterance utterance: AVSpeechUtterance) {
+    public func speechSynthesizer(synthesizer: AVSpeechSynthesizer, didFinishSpeechUtterance utterance: AVSpeechUtterance) {
         if isPlaying() {
             readCurrentSentence()
         }
@@ -517,7 +517,7 @@ extension FolioReaderAudioPlayer: AVSpeechSynthesizerDelegate {
 // MARK: AVAudioPlayerDelegate
 
 extension FolioReaderAudioPlayer: AVAudioPlayerDelegate {
-    func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
+    public func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
         _playFragment(nextAudioFragment())
     }
 }
