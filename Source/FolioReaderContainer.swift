@@ -189,45 +189,7 @@ public class FolioReaderContainer: UIViewController {
         return isNight(.LightContent, .Default)
     }
 
-	// MARK: - Helpers
-
-	private static func initSetup() {
-
-		// Init with empty book
-		book = FRBook()
-
-		// Register custom fonts
-		FontBlaster.blast(NSBundle.frameworkBundle())
-
-		// Register initial defaults
-		FolioReader.defaults.registerDefaults([
-			kCurrentFontFamily: 0,
-			kNightMode: false,
-			kCurrentFontSize: 2,
-			kCurrentAudioRate: 1,
-			kCurrentHighlightStyle: 0,
-			kCurrentTOCMenu: 0,
-			kCurrentMediaOverlayStyle: MediaOverlayStyle.Default.rawValue,
-			kCurrentScrollDirection: FolioReaderScrollDirection.vertical.rawValue
-			])
-
-		readerConfig.canChangeScrollDirection = isDirection(readerConfig.canChangeScrollDirection, readerConfig.canChangeScrollDirection, false)
-	}
-
-	// MARK: - Public 
-
-	/*
-	Set the `FolioReaderConfig` and epubPath.
-
-	- parameter config:     A instance of `FolioReaderConfig`
-	- parameter path:       The ePub path on system
-	- parameter removeEpub: Should delete the original file after unzip? Default to `true` so the ePub will be unziped only once.
-	*/
-	public class func setupConfig(config: FolioReaderConfig, epubPath path: String, removeEpub: Bool = true) {
-		readerConfig = config
-		epubPath = path
-		shouldRemoveEpub = removeEpub
-	}
+	// MARK: - Public
 
 	public func readerCenter() -> FolioReaderCenter {
 		return self.centerViewController
