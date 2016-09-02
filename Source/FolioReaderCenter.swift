@@ -334,6 +334,7 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
         cell.pageNumber = indexPath.row+1
         cell.webView.scrollView.delegate = self
         cell.webView.setupScrollDirection()
+        cell.webView.frame = cell.webViewFrame()
         cell.delegate = self
         cell.backgroundColor = UIColor.clearColor()
         

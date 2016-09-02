@@ -78,30 +78,30 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     }
     
     func webViewFrame() -> CGRect {
+		guard readerConfig.hideBars == false else {
+            return bounds
+        }
 
-		guard readerConfig.hideBars == false else { return bounds }
-
+        let statusbarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
+        let navBarHeight = FolioReader.sharedInstance.readerCenter.navigationController?.navigationBar.frame.size.height
+        let navTotal = readerConfig.shouldHideNavigationOnTap ? 0 : statusbarHeight + navBarHeight!
 		let paddingTop: CGFloat = 20
         let paddingBottom: CGFloat = 30
 
-		guard readerConfig.shouldHideNavigationOnTap else {
-			let statusbarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
-			let navBarHeight = FolioReader.sharedInstance.readerCenter.navigationController?.navigationBar.frame.size.height
-			let navTotal = statusbarHeight + navBarHeight!
-			let newFrame = CGRect(
-				x: bounds.origin.x,
-				y: isDirection(bounds.origin.y + navTotal, bounds.origin.y + navTotal + paddingTop, bounds.origin.y + navTotal + paddingTop),
-				width: bounds.width,
-				height: isDirection(bounds.height - navTotal, bounds.height - navTotal - paddingTop - paddingBottom, bounds.height - navTotal - paddingTop - paddingBottom))
-			return newFrame
-		}
-
-        let newFrame = CGRect(
+        return CGRect(
             x: bounds.origin.x,
-            y: isDirection(bounds.origin.y, bounds.origin.y + paddingTop, bounds.origin.y + paddingTop),
+            y: isDirection(
+                bounds.origin.y + navTotal,
+                bounds.origin.y + navTotal + paddingTop,
+                bounds.origin.y + navTotal
+            ),
             width: bounds.width,
-            height: isDirection(bounds.height, bounds.height - paddingTop - paddingBottom, bounds.height - paddingTop - paddingBottom))
-        return newFrame
+            height: isDirection(
+                bounds.height - navTotal,
+                bounds.height - navTotal - paddingTop - paddingBottom,
+                bounds.height - navTotal
+            )
+        )
     }
     
     func loadHTMLString(string: String!, baseURL: NSURL!) {
@@ -651,20 +651,19 @@ extension UIWebView {
     // MARK: WebView direction config
     
     func setupScrollDirection() {
-        if readerConfig.scrollDirection == .horizontal {
+        switch readerConfig.scrollDirection {
+        case .vertical, .horizontalWithVerticalContent:
+            scrollView.pagingEnabled = false
+            paginationMode = .Unpaginated
+            scrollView.bounces = true
+            break
+        case .horizontal:
             scrollView.pagingEnabled = true
             paginationMode = .LeftToRight
             paginationBreakingMode = .Page
             scrollView.bounces = false
-        } else if readerConfig.scrollDirection == .vertical {
-            scrollView.pagingEnabled = false
-            paginationMode = .Unpaginated
-            scrollView.bounces = true
-		} else {
-			// swipe paragraphs horizontal, read content vertical  
-			scrollView.bounces = true
-			self.scrollView.showsVerticalScrollIndicator = true
-		}
+            break
+        }
     }
 }
 
