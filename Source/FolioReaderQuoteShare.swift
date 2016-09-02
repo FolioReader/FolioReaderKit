@@ -92,11 +92,11 @@ class FolioReaderQuoteShare: UIViewController {
         filterImage.addSubview(titleLabel)
         
         // Attributed author
-        var attrs = [NSFontAttributeName: UIFont(name: "Lato-Italic", size: 15)!]
-        var attributedString = NSMutableAttributedString(string:"\(readerConfig.localizedShareBy) ", attributes: attrs)
+        let attrs = [NSFontAttributeName: UIFont(name: "Lato-Italic", size: 15)!]
+        let attributedString = NSMutableAttributedString(string:"\(readerConfig.localizedShareBy) ", attributes: attrs)
         
-        var attrs1 = [NSFontAttributeName: UIFont(name: "Lato-Regular", size: 15)!]
-        var boldString = NSMutableAttributedString(string: authorName, attributes:attrs1)
+        let attrs1 = [NSFontAttributeName: UIFont(name: "Lato-Regular", size: 15)!]
+        let boldString = NSMutableAttributedString(string: authorName, attributes:attrs1)
         attributedString.appendAttributedString(boldString)
         
         authorLabel = UILabel()
@@ -278,15 +278,15 @@ class FolioReaderQuoteShare: UIViewController {
     
     // MARK: Status Bar
     
-    public override func preferredStatusBarStyle() -> UIStatusBarStyle {
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return isNight(.LightContent, .Default)
     }
     
-    public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
         return .Portrait
     }
     
-    public override func shouldAutorotate() -> Bool {
+    override func shouldAutorotate() -> Bool {
         return false
     }
 }

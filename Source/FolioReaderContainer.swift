@@ -33,7 +33,7 @@ public class FolioReaderContainer: UIViewController {
      
      - returns: `self`, initialized using the `FolioReaderConfig`.
      */
-    public init(config config: FolioReaderConfig, epubPath path: String?, removeEpub: Bool = true) {
+    public init(withConfig config: FolioReaderConfig, epubPath path: String?, removeEpub: Bool = true) {
         readerConfig = config
         epubPath = path
         shouldRemoveEpub = removeEpub
