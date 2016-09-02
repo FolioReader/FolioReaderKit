@@ -90,17 +90,9 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
 
         return CGRect(
             x: bounds.origin.x,
-            y: isDirection(
-                bounds.origin.y + navTotal,
-                bounds.origin.y + navTotal + paddingTop,
-                bounds.origin.y + navTotal
-            ),
+            y: isDirection(bounds.origin.y + navTotal, bounds.origin.y + navTotal + paddingTop),
             width: bounds.width,
-            height: isDirection(
-                bounds.height - navTotal,
-                bounds.height - navTotal - paddingTop - paddingBottom,
-                bounds.height - navTotal
-            )
+            height: isDirection(bounds.height - navTotal, bounds.height - navTotal - paddingTop - paddingBottom)
         )
     }
     
@@ -301,7 +293,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
      - parameter animated: Enable or not scrolling animation
      */
     func scrollPageToOffset(offset: CGFloat, animated: Bool) {
-		let pageOffsetPoint = isDirection(CGPoint(x: 0, y: offset), CGPoint(x: offset, y: 0), CGPoint(x: 0, y: offset))
+		let pageOffsetPoint = isDirection(CGPoint(x: 0, y: offset), CGPoint(x: offset, y: 0))
 		webView.scrollView.setContentOffset(pageOffsetPoint, animated: animated)
 	}
     
