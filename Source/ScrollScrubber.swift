@@ -154,7 +154,9 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        guard readerConfig.scrollDirection == .vertical else { return }
+        guard readerConfig.scrollDirection == .vertical || readerConfig.scrollDirection == .horizontalWithVerticalContent else {
+            return
+        }
         
         if visible && usingSlider == false {
             setSliderVal()
