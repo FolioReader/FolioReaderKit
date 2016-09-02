@@ -104,7 +104,6 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
         // Loading indicator
         let style: UIActivityIndicatorViewStyle = isNight(.White, .Gray)
         loadingView = UIActivityIndicatorView(activityIndicatorStyle: style)
-        loadingView.center = view.center
         loadingView.hidesWhenStopped = true
         loadingView.startAnimating()
         view.addSubview(loadingView)
@@ -121,21 +120,11 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
 	override public func viewDidLayoutSubviews() {
 		super.viewDidLayoutSubviews()
 
-		screenBounds = self.view.frame
+		screenBounds = view.frame
+        loadingView.center = view.center
 
 		setPageSize(UIApplication.sharedApplication().statusBarOrientation)
-
-		self.updateSubviewFrames()
-
-		if (self.loadingView == nil) {
-			// Loading indicator
-			let style: UIActivityIndicatorViewStyle = isNight(.White, .Gray)
-			loadingView = UIActivityIndicatorView(activityIndicatorStyle: style)
-			loadingView.center = view.center
-			loadingView.hidesWhenStopped = true
-			loadingView.startAnimating()
-			view.addSubview(loadingView)
-		}
+		updateSubviewFrames()
 	}
 
 	// MARK: Layout
