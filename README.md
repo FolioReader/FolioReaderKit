@@ -2,6 +2,40 @@
 ![FolioReader logo](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/folioreader.png)
 FolioReaderKit is an ePub reader and parser framework for iOS written in Swift.
 
+## Features
+
+- [x] ePub 2 and ePub 3 support
+- [x] Custom Fonts
+- [x] Custom Text Size
+- [x] Text Highlighting
+- [x] List / Edit / Delete Highlights
+- [x] Themes / Day mode / Night mode
+- [x] Handle Internal and External Links
+- [x] Portrait / Landscape
+- [x] Reading Time Left / Pages left
+- [x] In-App Dictionary
+- [x] Media Overlays (Sync text rendering with audio playback)
+- [x] TTS - Text to Speech Support
+- [x] Parse epub cover image
+- [x] RTL Support
+- [x] Vertical or/and Horizontal scrolling **<sup>NEW</sup>**
+- [x] Share Custom Image Quotes **<sup>NEW</sup>**
+- [ ] PDF support
+- [ ] Book Search
+- [ ] Add Notes to a Highlight
+
+## Demo
+##### Custom Fonts :smirk:
+![Custom fonts](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/custom-fonts.gif)
+##### Day and Night Mode :sunglasses:
+![Day night mode](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/day-night.gif)
+##### Text Highlighting :heart_eyes:
+![Highlight](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/highlight.gif)
+##### Reading Time Left :open_mouth:
+![Time left](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/time-left.mov.gif)
+##### Media Overlays 😭
+![Time left](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/media-overlays.gif)
+
 ## Installation
 
 
@@ -119,40 +153,6 @@ class StoryboardFolioReaderContrainer: FolioReaderContainer {
 }
 ```
 Go to your storyboard file, choose or create the view controller that should present the epub reader. In the identity inspector set StoryboardFolioReaderContrainer as class.
-
-## Features
-
-- [x] ePub 2 and ePub 3 support
-- [x] Custom Fonts
-- [x] Custom Text Size
-- [x] Text Highlighting
-- [x] List / Edit / Delete Highlights
-- [x] Themes / Day mode / Night mode
-- [x] Handle Internal and External Links
-- [x] Portrait / Landscape
-- [x] Reading Time Left / Pages left
-- [x] In-App Dictionary
-- [x] Media Overlays (Sync text rendering with audio playback)
-- [x] TTS - Text to Speech Support
-- [x] Parse epub cover image
-- [x] RTL Support
-- [x] Vertical or/and Horizontal scrolling **<sup>NEW</sup>**
-- [x] Share Custom Image Quotes **<sup>NEW</sup>**
-- [ ] PDF support
-- [ ] Book Search
-- [ ] Add Notes to a Highlight
-
-## Demo
-##### Custom Fonts :smirk:
-![Custom fonts](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/custom-fonts.gif)
-##### Day and Night Mode :sunglasses:
-![Day night mode](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/day-night.gif)
-##### Text Highlighting :heart_eyes:
-![Highlight](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/highlight.gif)
-##### Reading Time Left :open_mouth:
-![Time left](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/time-left.mov.gif)
-##### Media Overlays 😭
-![Time left](https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/media-overlays.gif)
 
 ## Documentation
 For now the best documentation is the sample project. I ~~will write a better~~ am working to improve the code documentation, this is the current progress: [![CocoaPods](https://img.shields.io/cocoapods/metrics/doc-percent/FolioReaderKit.svg?maxAge=2592000)](http://cocoadocs.org/docsets/FolioReaderKit)
