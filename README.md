@@ -135,8 +135,9 @@ Go to your storyboard file, choose or create the view controller that should pre
 - [x] Media Overlays (Sync text rendering with audio playback)
 - [x] TTS - Text to Speech Support
 - [x] Parse epub cover image
-- [x] Vertical or/and Horizontal scrolling
 - [x] RTL Support
+- [x] Vertical or/and Horizontal scrolling **<sup>NEW</sup>**
+- [x] Share Custom Image Quotes **<sup>NEW</sup>**
 - [ ] PDF support
 - [ ] Book Search
 - [ ] Add Notes to a Highlight
