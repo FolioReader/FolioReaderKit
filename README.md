@@ -107,15 +107,15 @@ To get started, here is a simple example how to use the integrated view controll
 import FolioReaderKit
 
 class StoryboardFolioReaderContrainer: FolioReaderContainer {
-	required init?(coder aDecoder: NSCoder) {
-		super.init(coder: aDecoder)
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
         
-        	let config = FolioReaderConfig()
-        	config.scrollDirection = .horizontalWithVerticalContent
+        let config = FolioReaderConfig()
+        config.scrollDirection = .horizontalWithVerticalContent
         
-        	guard let bookPath = NSBundle.mainBundle().pathForResource("The Silver Chair", ofType: "epub") else { return }
-        	setupConfig(config, epubPath: bookPath)
-	}
+        guard let bookPath = NSBundle.mainBundle().pathForResource("The Silver Chair", ofType: "epub") else { return }
+        setupConfig(config, epubPath: bookPath)
+    }
 }
 ```
 Go to your storyboard file, choose or create the view controller that should present the epub reader. In the identity inspector set StoryboardFolioReaderContrainer as class.
