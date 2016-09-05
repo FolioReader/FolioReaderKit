@@ -27,7 +27,7 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
     var pages: [String]!
     var totalPages: Int!
     var tempFragment: String?
-    var currentPage: FolioReaderPage?
+	public private(set) var currentPage: FolioReaderPage?
     var animator: ZFModalTransitionAnimator!
     var pageIndicatorView: FolioReaderPageIndicator?
 	var pageIndicatorHeight: CGFloat = 20
@@ -780,10 +780,6 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
 				})
 			})
 		}
-	}
-
-	public func getCurrentPage() -> FolioReaderPage? {
-		return self.currentPage
 	}
     
     // MARK: - Audio Playing
