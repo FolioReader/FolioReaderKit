@@ -188,11 +188,4 @@ public class FolioReaderContainer: UIViewController {
     override public func preferredStatusBarStyle() -> UIStatusBarStyle {
         return isNight(.LightContent, .Default)
     }
-
-	// MARK: - Public
-
-	public func readerCenter() -> FolioReaderCenter {
-		return self.centerViewController
-	}
-
 }
