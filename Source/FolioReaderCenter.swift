@@ -764,6 +764,13 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
 
 	// MARK: Public page methods
 
+	/**
+	Changes the current page of the reader.
+	
+	- parameter page: The target page index. Note: The page index starts at 1 (and not 0).
+	- parameter animated: En-/Disables the animation of the page change.
+	- parameter completion: A Closure which is called if the page change is completed.
+	*/
 	public func changePageWith(page page: Int, animated: Bool = false, completion: (() -> Void)? = nil) {
 		if page > 0 && page-1 < totalPages {
 			let indexPath = NSIndexPath(forRow: page-1, inSection: 0)
