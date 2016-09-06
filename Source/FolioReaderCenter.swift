@@ -27,7 +27,7 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
     var pages: [String]!
     var totalPages: Int!
     var tempFragment: String?
-    var currentPage: FolioReaderPage?
+	public private(set) var currentPage: FolioReaderPage?
     var animator: ZFModalTransitionAnimator!
     var pageIndicatorView: FolioReaderPageIndicator?
 	var pageIndicatorHeight: CGFloat = 20
@@ -613,17 +613,6 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
         )
     }
     
-    func changePageWith(page page: Int, animated: Bool = false, completion: (() -> Void)? = nil) {
-        if page > 0 && page-1 < totalPages {
-            let indexPath = NSIndexPath(forRow: page-1, inSection: 0)
-            changePageWith(indexPath: indexPath, animated: animated, completion: { () -> Void in
-                self.updateCurrentPage({ () -> Void in
-                    completion?()
-                })
-            })
-        }
-    }
-    
     func changePageWith(page page: Int, andFragment fragment: String, animated: Bool = false, completion: (() -> Void)? = nil) {
         if currentPageNumber == page {
             if let currentPage = currentPage where fragment != "" {
@@ -640,7 +629,7 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
         }
     }
     
-    func changePageWith(href href: String, animated: Bool = false, completion: (() -> Void)? = nil) {
+	func changePageWith(href href: String, animated: Bool = false, completion: (() -> Void)? = nil) {
         let item = findPageByHref(href)
         let indexPath = NSIndexPath(forRow: item, inSection: 0)
         changePageWith(indexPath: indexPath, animated: animated, completion: { () -> Void in
@@ -681,7 +670,7 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
             completion?()
         }
     }
-    
+
     func indexPathIsValid(indexPath: NSIndexPath) -> Bool {
         let section = indexPath.section
         let row = indexPath.row
@@ -772,6 +761,26 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
         }
         return nil
     }
+
+	// MARK: Public page methods
+
+	/**
+	Changes the current page of the reader.
+	
+	- parameter page: The target page index. Note: The page index starts at 1 (and not 0).
+	- parameter animated: En-/Disables the animation of the page change.
+	- parameter completion: A Closure which is called if the page change is completed.
+	*/
+	public func changePageWith(page page: Int, animated: Bool = false, completion: (() -> Void)? = nil) {
+		if page > 0 && page-1 < totalPages {
+			let indexPath = NSIndexPath(forRow: page-1, inSection: 0)
+			changePageWith(indexPath: indexPath, animated: animated, completion: { () -> Void in
+				self.updateCurrentPage({ () -> Void in
+					completion?()
+				})
+			})
+		}
+	}
     
     // MARK: - Audio Playing
 

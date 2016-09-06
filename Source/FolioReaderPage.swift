@@ -20,7 +20,7 @@ protocol FolioReaderPageDelegate: class {
     func pageDidLoad(page: FolioReaderPage)
 }
 
-class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate {
+public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate {
     
     weak var delegate: FolioReaderPageDelegate?
     var pageNumber: Int!
@@ -31,7 +31,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     
     // MARK: - View life cicle
     
-    override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.clearColor()
         
@@ -62,7 +62,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         webView.addGestureRecognizer(tapGestureRecognizer)
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("storyboards are incompatible with truth and beauty")
     }
     
@@ -70,7 +70,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
-    override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
         
         webView.setupScrollDirection()
@@ -127,7 +127,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     
     // MARK: - UIWebView Delegate
     
-    func webViewDidFinishLoad(webView: UIWebView) {
+    public func webViewDidFinishLoad(webView: UIWebView) {
         refreshPageMode()
         
         if readerConfig.enableTTS && !book.hasAudio() {
@@ -152,7 +152,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         delegate?.pageDidLoad(self)
     }
     
-    func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+    public func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         
         guard let url = request.URL else { return false }
         
@@ -241,7 +241,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     
     // MARK: Gesture recognizer
     
-    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    public func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         
         if gestureRecognizer.view is UIWebView {
             if otherGestureRecognizer is UILongPressGestureRecognizer {
@@ -255,7 +255,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         return false
     }
     
-    func handleTapGesture(recognizer: UITapGestureRecognizer) {
+    public func handleTapGesture(recognizer: UITapGestureRecognizer) {
 //        webView.setMenuVisible(false)
         
         if FolioReader.sharedInstance.readerCenter.navigationController!.navigationBarHidden {
@@ -283,82 +283,84 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
         // Reset menu
         menuIsVisible = false
     }
-    
-    // MARK: - Scroll and positioning
-    
-    /**
-     Scrolls the page to a given offset
-     
-     - parameter offset:   The offset to scroll
-     - parameter animated: Enable or not scrolling animation
-     */
-    func scrollPageToOffset(offset: CGFloat, animated: Bool) {
-		let pageOffsetPoint = isDirection(CGPoint(x: 0, y: offset), CGPoint(x: offset, y: 0))
+
+	// MARK: - Public scroll postion setter
+
+	/**
+	Scrolls the page to a given offset
+
+	- parameter offset:   The offset to scroll
+	- parameter animated: Enable or not scrolling animation
+	*/
+	public func scrollPageToOffset(offset: CGFloat, animated: Bool) {
+        let pageOffsetPoint = isDirection(CGPoint(x: 0, y: offset), CGPoint(x: offset, y: 0))
 		webView.scrollView.setContentOffset(pageOffsetPoint, animated: animated)
 	}
-    
-    /**
-     Scrolls the page to bottom
-     */
-    func scrollPageToBottom() {
-        let bottomOffset = isDirection(
-            CGPointMake(0, webView.scrollView.contentSize.height - webView.scrollView.bounds.height),
-            CGPointMake(webView.scrollView.contentSize.width - webView.scrollView.bounds.width, 0),
-            CGPointMake(webView.scrollView.contentSize.width - webView.scrollView.bounds.width, 0)
-        )
-        
-        if bottomOffset.forDirection() >= 0 {
-            dispatch_async(dispatch_get_main_queue(), {
-                self.webView.scrollView.setContentOffset(bottomOffset, animated: false)
-            })
-        }
-    }
-    
-    /**
-     Handdle #anchors in html, get the offset and scroll to it
-     
-     - parameter anchor:                The #anchor
-     - parameter avoidBeginningAnchors: Sometimes the anchor is on the beggining of the text, there is not need to scroll
-     - parameter animated:              Enable or not scrolling animation
-     */
-    func handleAnchor(anchor: String,  avoidBeginningAnchors: Bool, animated: Bool) {
-        if !anchor.isEmpty {
-            let offset = getAnchorOffset(anchor)
-            
-            if readerConfig.scrollDirection == .vertical {
-                let isBeginning = offset < frame.forDirection()/2
-                
-                if !avoidBeginningAnchors {
-                    scrollPageToOffset(offset, animated: animated)
-                } else if avoidBeginningAnchors && !isBeginning {
-                    scrollPageToOffset(offset, animated: animated)
-                }
-            } else {
-                scrollPageToOffset(offset, animated: animated)
-            }
-        }
-    }
-    
-    /**
-     Get the #anchor offset in the page
-     
-     - parameter anchor: The #anchor id
-     - returns: The element offset ready to scroll
-     */
-    func getAnchorOffset(anchor: String) -> CGFloat {
-        let horizontal = readerConfig.scrollDirection == .horizontal
-        if let strOffset = webView.js("getAnchorOffset('\(anchor)', \(horizontal.description))") {
-            return CGFloat((strOffset as NSString).floatValue)
-        }
-        
-        return CGFloat(0)
-    }
-    
+
+	/**
+	Scrolls the page to bottom
+	*/
+	public func scrollPageToBottom() {
+		let bottomOffset = isDirection(
+			CGPointMake(0, webView.scrollView.contentSize.height - webView.scrollView.bounds.height),
+			CGPointMake(webView.scrollView.contentSize.width - webView.scrollView.bounds.width, 0),
+			CGPointMake(webView.scrollView.contentSize.width - webView.scrollView.bounds.width, 0)
+		)
+
+		if bottomOffset.forDirection() >= 0 {
+			dispatch_async(dispatch_get_main_queue(), {
+				self.webView.scrollView.setContentOffset(bottomOffset, animated: false)
+			})
+		}
+	}
+
+	/**
+	Handdle #anchors in html, get the offset and scroll to it
+
+	- parameter anchor:                The #anchor
+	- parameter avoidBeginningAnchors: Sometimes the anchor is on the beggining of the text, there is not need to scroll
+	- parameter animated:              Enable or not scrolling animation
+	*/
+	public func handleAnchor(anchor: String,  avoidBeginningAnchors: Bool, animated: Bool) {
+		if !anchor.isEmpty {
+			let offset = getAnchorOffset(anchor)
+
+			if readerConfig.scrollDirection == .vertical {
+				let isBeginning = offset < frame.forDirection()/2
+
+				if !avoidBeginningAnchors {
+					scrollPageToOffset(offset, animated: animated)
+				} else if avoidBeginningAnchors && !isBeginning {
+					scrollPageToOffset(offset, animated: animated)
+				}
+			} else {
+				scrollPageToOffset(offset, animated: animated)
+			}
+		}
+	}
+
+	// MARK: Helper
+
+	/**
+	Get the #anchor offset in the page
+
+	- parameter anchor: The #anchor id
+	- returns: The element offset ready to scroll
+	*/
+	func getAnchorOffset(anchor: String) -> CGFloat {
+		let horizontal = readerConfig.scrollDirection == .horizontal
+		if let strOffset = webView.js("getAnchorOffset('\(anchor)', \(horizontal.description))") {
+			return CGFloat((strOffset as NSString).floatValue)
+		}
+
+		return CGFloat(0)
+	}
+
     // MARK: Mark ID
-    
+
     /**
      Audio Mark ID - marks an element with an ID with the given class and scrolls to it
-     
+
      - parameter ID: The ID
      */
     func audioMarkID(ID: String) {
@@ -368,7 +370,7 @@ class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecogni
     
     // MARK: UIMenu visibility
     
-    override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
+    override public func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
         if UIMenuController.sharedMenuController().menuItems?.count == 0 {
             webView.isColors = false
             webView.createMenu(options: false)
