@@ -152,7 +152,6 @@ var callHighlightURL = function(elm) {
     window.location = URLBase + encodeURIComponent(currentHighlightRect);
 }
 
-
 // Reading time
 function getReadingTime() {
     var text = document.body.innerText;
@@ -579,4 +578,22 @@ function wrappingSentencesWithinPTags(){
     }
     
     guessSenetences();
+}
+
+// Class based onClick listener
+
+function addClassBasedOnClickListener(schemeName, className, parameterName) {
+	// Get all elements with the given className
+	var elements = document.getElementsByClassName(className);
+	for (elementIndex = 0; elementIndex < elements.length; elementIndex++) {
+		var element = elements[elementIndex];
+		// Get the content from the given parameterName
+		var parameterContent = element.getAttribute(parameterName);
+		// Add the on click logic
+		element.setAttribute("onclick", "onClassBasedListenerClick(\"" + schemeName + "\", \"" + parameterContent + "\");");
+	}
+}
+
+var onClassBasedListenerClick = function(schemeName, parameterContent) {
+	window.location = schemeName + "://" + encodeURIComponent(parameterContent);
 }
