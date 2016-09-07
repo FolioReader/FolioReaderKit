@@ -49,7 +49,7 @@ Eg. A ClassBasedOnCLickListener with the className "quote" and parameterName "id
 */
 public struct ClassBasedOnCLickListener {
 
-	/// The name of the URL scheme which should be used. Note: Make sure that the given `String` is valid as scheme.
+	/// The name of the URL scheme which should be used. Note: Make sure that the given `String` is a valid as scheme name.
 	public var schemeName			: String
 
 	/// The HTML class name to which the listener should be added.
