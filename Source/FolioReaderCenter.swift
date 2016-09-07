@@ -76,7 +76,7 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = background
         collectionView.decelerationRate = UIScrollViewDecelerationRateFast
-		enableScrollBetweenChapers(scrollEnabled: true)
+		enableScrollBetweenChapters(scrollEnabled: true)
         view.addSubview(collectionView)
         
         // Register cell classes
@@ -135,7 +135,7 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
 
 	- parameter scrollEnabled: `Bool` which enables or disables the scrolling between `FolioReaderPage`s.
 	*/
-	public func enableScrollBetweenChapers(scrollEnabled scrollEnabled: Bool) {
+	public func enableScrollBetweenChapters(scrollEnabled scrollEnabled: Bool) {
 		self.collectionView.scrollEnabled = scrollEnabled
 	}
 
