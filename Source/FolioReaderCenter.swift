@@ -76,6 +76,7 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = background
         collectionView.decelerationRate = UIScrollViewDecelerationRateFast
+		enableScrollBetweenChapters(scrollEnabled: true)
         view.addSubview(collectionView)
         
         // Register cell classes
@@ -128,6 +129,15 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
 	}
 
 	// MARK: Layout
+
+	/**
+	Enable or disable the scrolling between chapters (`FolioReaderPage`s). If this is enabled it's only possible to read the current chapter. If another chapter should be displayed is has to be triggered programmatically with `changePageWith`.
+
+	- parameter scrollEnabled: `Bool` which enables or disables the scrolling between `FolioReaderPage`s.
+	*/
+	public func enableScrollBetweenChapters(scrollEnabled scrollEnabled: Bool) {
+		self.collectionView.scrollEnabled = scrollEnabled
+	}
 
 	private func updateSubviewFrames() {
 		self.pageIndicatorView?.frame = self.frameForPageIndicatorView()
