@@ -39,15 +39,15 @@ public enum FolioReaderScrollDirection: Int {
     }
 }
 
-// MARK: - ClassBasedOnCLickListener
+// MARK: - ClassBasedOnClickListener
 
 /**
-A `ClassBasedOnCLickListener` takes a closure which is performed if a given html `class` is clicked. The closure will reveice the content of the specified parameter.
+A `ClassBasedOnClickListener` takes a closure which is performed if a given html `class` is clicked. The closure will reveice the content of the specified parameter.
 
-Eg. A ClassBasedOnCLickListener with the className "quote" and parameterName "id" with the given epub html content "<section class="quote" id="12345">" would call the given closure on a click on this section with the String "12345" as parameter.
+Eg. A ClassBasedOnClickListener with the className "quote" and parameterName "id" with the given epub html content "<section class="quote" id="12345">" would call the given closure on a click on this section with the String "12345" as parameter.
 
 */
-public struct ClassBasedOnCLickListener {
+public struct ClassBasedOnClickListener {
 
 	/// The name of the URL scheme which should be used. Note: Make sure that the given `String` is a valid as scheme name.
 	public var schemeName			: String
@@ -61,7 +61,7 @@ public struct ClassBasedOnCLickListener {
 	/// The closure which will be called if the specified class was clicked.
 	public var onClickAction		: ((parameterContent: String?) -> Void)
 
-	/// Initializes a `ClassBasedOnCLickListener` instance. Append it to the `classBasedOnClickListeners` property from the `FolioReaderConfig` to receive on click events.
+	/// Initializes a `ClassBasedOnClickListener` instance. Append it to the `classBasedOnClickListeners` property from the `FolioReaderConfig` to receive on click events.
 	public init(schemeName: String, className: String, parameterName: String, onClickAction: ((parameterContent: String?) -> Void)) {
 		self.schemeName = schemeName.lowercaseString
 		self.className = className
@@ -77,15 +77,15 @@ public struct ClassBasedOnCLickListener {
  */
 public class FolioReaderConfig: NSObject {
 
-	// MARK: ClassBasedOnCLickListener
+	// MARK: ClassBasedOnClickListener
 
 	/**
-	Array of `ClassBasedOnCLickListener` objects. A `ClassBasedOnCLickListener` takes a closure which is performed if a given html `class` is clicked. The closure will reveice the content of the specified parameter.
+	Array of `ClassBasedOnClickListener` objects. A `ClassBasedOnClickListener` takes a closure which is performed if a given html `class` is clicked. The closure will reveice the content of the specified parameter.
 	
-	Eg. A ClassBasedOnCLickListener with the className "quote" and parameterName "id" with the given epub html content "<section class="quote" id="12345">" would call the given closure on a click on this section with the String "12345" as parameter.
+	Eg. A ClassBasedOnClickListener with the className "quote" and parameterName "id" with the given epub html content "<section class="quote" id="12345">" would call the given closure on a click on this section with the String "12345" as parameter.
 	
 	*/
-	public var classBasedOnClickListeners = [ClassBasedOnCLickListener]()
+	public var classBasedOnClickListeners = [ClassBasedOnClickListener]()
 
     // MARK: Colors
     
