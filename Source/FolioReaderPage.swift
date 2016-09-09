@@ -11,7 +11,8 @@ import SafariServices
 import UIMenuItem_CXAImageSupport
 import JSQWebViewController
 
-protocol FolioReaderPageDelegate: class {
+/// Protocol which is used from `FolioReaderPage`s.
+public protocol FolioReaderPageDelegate: class {
     /**
      Notify that page did loaded
      
