@@ -152,7 +152,7 @@ public class FolioReaderAudioPlayer: NSObject {
 
     func play() {
         if book.hasAudio() {
-            guard let currentPage = FolioReader.sharedInstance.readerCenter.currentPage else { return }
+            guard let currentPage = FolioReader.sharedInstance.readerCenter?.currentPage else { return }
             currentPage.webView.js("playAudio()")
         } else {
             readCurrentSentence()
@@ -212,7 +212,7 @@ public class FolioReaderAudioPlayer: NSObject {
     func playPrevChapter() {
         stopPlayerTimer()
         // Wait for "currentPage" to update, then request to play audio
-        FolioReader.sharedInstance.readerCenter.changePageToPrevious {
+        FolioReader.sharedInstance.readerCenter?.changePageToPrevious {
             if self.isPlaying() {
                 self.play()
             } else {
@@ -224,7 +224,7 @@ public class FolioReaderAudioPlayer: NSObject {
     func playNextChapter() {
         stopPlayerTimer()
         // Wait for "currentPage" to update, then request to play audio
-        FolioReader.sharedInstance.readerCenter.changePageToNext {
+        FolioReader.sharedInstance.readerCenter?.changePageToNext {
             if self.isPlaying() {
                 self.play()
             }
@@ -293,7 +293,7 @@ public class FolioReaderAudioPlayer: NSObject {
         // get the fragment ID so we can "mark" it in the webview
         let textParts = textFragment!.componentsSeparatedByString("#")
         let fragmentID = textParts[1];
-        FolioReader.sharedInstance.readerCenter.audioMark(href: currentHref, fragmentID: fragmentID)
+        FolioReader.sharedInstance.readerCenter?.audioMark(href: currentHref, fragmentID: fragmentID)
 
         return true
     }
@@ -353,18 +353,23 @@ public class FolioReaderAudioPlayer: NSObject {
     // MARK: TTS Sentence
     
     func speakSentence() {
-        guard let currentPage = FolioReader.sharedInstance.readerCenter.currentPage else { return }
+		guard let
+			_readerCenter = FolioReader.sharedInstance.readerCenter,
+			currentPage = _readerCenter.currentPage else {
+				return
+		}
+
         let sentence = currentPage.webView.js("getSentenceWithIndex('\(book.playbackActiveClass())')")
         
         if sentence != nil {
-            let chapter = FolioReader.sharedInstance.readerCenter.getCurrentChapter()
+            let chapter = _readerCenter.getCurrentChapter()
             let href = chapter != nil ? chapter!.href : "";
             playText(href, text: sentence!)
         } else {
-            if FolioReader.sharedInstance.readerCenter.isLastPage() {
+            if _readerCenter.isLastPage() {
                 stop()
             } else {
-                FolioReader.sharedInstance.readerCenter.changePageToNext()
+                _readerCenter.changePageToNext()
             }
         }
     }
@@ -378,7 +383,7 @@ public class FolioReaderAudioPlayer: NSObject {
         } else {
             if synthesizer.speaking {
                 stopSynthesizer(immediate: false, completion: {
-                    if let currentPage = FolioReader.sharedInstance.readerCenter.currentPage {
+                    if let currentPage = FolioReader.sharedInstance.readerCenter?.currentPage {
                         currentPage.webView.js("resetCurrentSentenceIndex()")
                     }
                     self.speakSentence()
@@ -463,7 +468,7 @@ public class FolioReaderAudioPlayer: NSObject {
      the `currentPage` in ReaderCenter may not have updated just yet
      */
     func getCurrentChapterName() -> String? {
-        guard let chapter = FolioReader.sharedInstance.readerCenter.getCurrentChapter() else {
+        guard let chapter = FolioReader.sharedInstance.readerCenter?.getCurrentChapter() else {
             return nil
         }
         

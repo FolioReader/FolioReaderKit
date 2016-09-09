@@ -8,6 +8,65 @@
 
 import UIKit
 
+public enum FolioReaderFont: Int {
+	case Andada = 0
+	case Lato
+	case Lora
+	case Raleway
+
+	public static func folioReaderFont(fontName fontName: String) -> FolioReaderFont? {
+		var font: FolioReaderFont?
+		switch fontName {
+		case "andada"		: font = .Andada
+		case "lato"			: font = .Lato
+		case "lora"			: font = .Lora
+		case "raleway"		: font = .Raleway
+		default 			: break
+		}
+		return font
+	}
+
+	public var cssIdentifier: String {
+		switch self {
+		case .Andada	: return "andada"
+		case .Lato		: return "lato"
+		case .Lora		: return "lora"
+		case .Raleway	: return "raleway"
+		}
+	}
+}
+
+public enum FolioReaderFontSize: Int {
+	case XS = 0
+	case S
+	case M
+	case L
+	case XL
+
+	public static func folioReaderFontSize(fontSizeStringRepresentation fontSizeStringRepresentation: String) -> FolioReaderFontSize? {
+		var fontSize: FolioReaderFontSize?
+		switch fontSizeStringRepresentation {
+		case "textSizeOne"		: fontSize = .XS
+		case "textSizeTwo"		: fontSize = .S
+		case "textSizeThree"	: fontSize = .M
+		case "textSizeFour"		: fontSize = .L
+		case "textSizeFive"		: fontSize = .XL
+		default 				: break
+		}
+		return fontSize
+	}
+
+	public var cssIdentifier: String {
+		switch self {
+		case .XS	: return "textSizeOne"
+		case .S		: return "textSizeTwo"
+		case .M		: return "textSizeThree"
+		case .L		: return "textSizeFour"
+		case .XL	: return "textSizeFive"
+		}
+	}
+}
+
 class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRecognizerDelegate {
     
     var menuView: UIView!
@@ -99,7 +158,8 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
         fontName.segments[1].titleFont = UIFont(name: "Lato-Regular", size: 18)!
         fontName.segments[2].titleFont = UIFont(name: "Lora-Regular", size: 18)!
         fontName.segments[3].titleFont = UIFont(name: "Raleway-Regular", size: 18)!
-        fontName.selectSegmentAtIndex(FolioReader.currentFontName)
+
+		fontName.selectSegmentAtIndex(FolioReader.currentFont.rawValue)
         menuView.addSubview(fontName)
         
         // Separator 2
@@ -122,7 +182,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
         slider.backgroundColor = UIColor.clearColor()
         slider.tintColor = readerConfig.nightModeSeparatorColor
         slider.minimumValue = 0
-        slider.value = CGFloat(FolioReader.currentFontSize)
+        slider.value = CGFloat(FolioReader.currentFontSize.rawValue)
         slider.addTarget(self, action: #selector(FolioReaderFontsMenu.sliderValueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         // Force remove fill color
@@ -181,66 +241,24 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
     // MARK: - SMSegmentView delegate
     
     func segmentView(segmentView: SMSegmentView, didSelectSegmentAtIndex index: Int) {
-        guard let currentPage = FolioReader.sharedInstance.readerCenter.currentPage else { return }
+        guard let currentPage = FolioReader.sharedInstance.readerCenter?.currentPage else { return }
         
         if segmentView.tag == 1 {
 
-            FolioReader.nightMode = Bool(index)
+			FolioReader.nightMode = Bool(index == 1)
+
+			UIView.animateWithDuration(0.6, animations: {
+				self.menuView.backgroundColor = (FolioReader.nightMode ?readerConfig.nightModeBackground : UIColor.whiteColor())
+			})
+
+		} else if segmentView.tag == 2 {
+
+			FolioReader.currentFont = FolioReaderFont(rawValue: index)!
+
+        }  else if segmentView.tag == 3 {
+
+			guard FolioReader.currentScrollDirection != index else { return }
             
-            let readerCenter = FolioReader.sharedInstance.readerCenter
-            
-            switch index {
-            case 0:
-                currentPage.webView.js("nightMode(false)")
-                UIView.animateWithDuration(0.6, animations: {
-                    self.menuView.backgroundColor = UIColor.whiteColor()
-                    readerCenter.collectionView.backgroundColor = UIColor.whiteColor()
-                    readerCenter.configureNavBar()
-                    readerCenter.scrollScrubber?.updateColors()
-                })
-                break
-            case 1:
-                currentPage.webView.js("nightMode(true)")
-                UIView.animateWithDuration(0.6, animations: {
-                    self.menuView.backgroundColor = readerConfig.nightModeMenuBackground
-                    readerCenter.collectionView.backgroundColor = readerConfig.nightModeBackground
-                    readerCenter.configureNavBar()
-                    readerCenter.scrollScrubber?.updateColors()
-                })
-                break
-            default:
-                break
-            }
-            
-            NSNotificationCenter.defaultCenter().postNotificationName("needRefreshPageMode", object: nil)
-        }
-        
-        if segmentView.tag == 2 {
-            switch index {
-            case 0:
-                currentPage.webView.js("setFontName('andada')")
-                break
-            case 1:
-                currentPage.webView.js("setFontName('lato')")
-                break
-            case 2:
-                currentPage.webView.js("setFontName('lora')")
-                break
-            case 3:
-                currentPage.webView.js("setFontName('raleway')")
-                break
-            default:
-                break
-            }
-            
-            FolioReader.currentFontName = index
-        }
-        
-        if segmentView.tag == 3 {
-            guard FolioReader.currentScrollDirection != index else { return }
-            
-            let direction = FolioReaderScrollDirection(rawValue: index) ?? .vertical
-            FolioReader.sharedInstance.readerCenter.setScrollDirection(direction)
             FolioReader.currentScrollDirection = index
         }
     }
@@ -248,30 +266,12 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
     // MARK: - Font slider changed
     
     func sliderValueChanged(sender: HADiscreteSlider) {
-        guard let currentPage = FolioReader.sharedInstance.readerCenter.currentPage else { return }
+        guard let currentPage = FolioReader.sharedInstance.readerCenter?.currentPage else { return }
         let index = Int(sender.value)
-        
-        switch index {
-        case 0:
-            currentPage.webView.js("setFontSize('textSizeOne')")
-            break
-        case 1:
-            currentPage.webView.js("setFontSize('textSizeTwo')")
-            break
-        case 2:
-            currentPage.webView.js("setFontSize('textSizeThree')")
-            break
-        case 3:
-            currentPage.webView.js("setFontSize('textSizeFour')")
-            break
-        case 4:
-            currentPage.webView.js("setFontSize('textSizeFive')")
-            break
-        default:
-            break
-        }
-        
-        FolioReader.currentFontSize = index
+
+		if let _fontSize = FolioReaderFontSize(rawValue: index) {
+			FolioReader.currentFontSize = _fontSize
+		}
     }
     
     // MARK: - Gestures
@@ -280,7 +280,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
         dismiss()
         
         if readerConfig.shouldHideNavigationOnTap == false {
-            FolioReader.sharedInstance.readerCenter.showBars()
+            FolioReader.sharedInstance.readerCenter?.showBars()
         }
     }
     

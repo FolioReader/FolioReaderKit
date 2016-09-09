@@ -74,7 +74,7 @@ public class FolioReader: NSObject {
     public static let sharedInstance = FolioReader()
     static let defaults = NSUserDefaults.standardUserDefaults()
     public weak var delegate: FolioReaderDelegate?
-    public weak var readerCenter: FolioReaderCenter!
+    public weak var readerCenter: FolioReaderCenter?
     public weak var readerContainer: FolioReaderContainer!
     public weak var readerAudioPlayer: FolioReaderAudioPlayer?
     
@@ -97,29 +97,48 @@ public class FolioReader: NSObject {
     }
     
     /// Check if current theme is Night mode
-    static var nightMode: Bool {
+    public static var nightMode: Bool {
         get { return FolioReader.defaults.boolForKey(kNightMode) }
         set (value) {
             FolioReader.defaults.setBool(value, forKey: kNightMode)
+			FolioReader.defaults.synchronize()
+
+			if let _readerCenter = FolioReader.sharedInstance.readerCenter {
+				UIView.animateWithDuration(0.6, animations: {
+					_readerCenter.currentPage?.webView.js("nightMode(\(nightMode))")
+					_readerCenter.pageIndicatorView?.reloadColors()
+					_readerCenter.configureNavBar()
+					_readerCenter.scrollScrubber?.updateColors()
+					_readerCenter.collectionView.backgroundColor = (nightMode ? readerConfig.nightModeBackground : UIColor.whiteColor())
+					}, completion: { (finished: Bool) in
+						NSNotificationCenter.defaultCenter().postNotificationName("needRefreshPageMode", object: nil)
+					})
+			}
         }
     }
-    
+
     /// Check current font name
-    static var currentFontName: Int {
-        get { return FolioReader.defaults.valueForKey(kCurrentFontFamily) as! Int }
-        set (value) {
-            FolioReader.defaults.setValue(value, forKey: kCurrentFontFamily)
+    public static var currentFont: FolioReaderFont {
+		get { return FolioReaderFont(rawValue: FolioReader.defaults.valueForKey(kCurrentFontFamily) as! Int)! }
+        set (font) {
+            FolioReader.defaults.setValue(font.rawValue, forKey: kCurrentFontFamily)
+
+			FolioReader.sharedInstance.readerCenter?.currentPage?.webView.js("setFontName('\(font.cssIdentifier)')")
         }
     }
     
     /// Check current font size
-    static var currentFontSize: Int {
-        get { return FolioReader.defaults.valueForKey(kCurrentFontSize) as! Int }
+    public static var currentFontSize: FolioReaderFontSize {
+		get { return FolioReaderFontSize(rawValue: FolioReader.defaults.valueForKey(kCurrentFontSize) as! Int)! }
         set (value) {
-            FolioReader.defaults.setValue(value, forKey: kCurrentFontSize)
+            FolioReader.defaults.setValue(value.rawValue, forKey: kCurrentFontSize)
+
+			if let _currentPage = FolioReader.sharedInstance.readerCenter?.currentPage {
+				_currentPage.webView.js("setFontSize('\(currentFontSize.cssIdentifier)')")
+			}
         }
     }
-    
+
     /// Check current audio rate, the speed of speech voice
     static var currentAudioRate: Int {
         get { return FolioReader.defaults.valueForKey(kCurrentAudioRate) as! Int }
@@ -145,13 +164,18 @@ public class FolioReader: NSObject {
     }
     
     /// Check the current scroll direction
-    static var currentScrollDirection: Int {
+    public static var currentScrollDirection: Int {
         get { return FolioReader.defaults.valueForKey(kCurrentScrollDirection) as! Int }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentScrollDirection)
+
+			if let _readerCenter = FolioReader.sharedInstance.readerCenter  {
+				let direction = FolioReaderScrollDirection(rawValue: currentScrollDirection) ?? .vertical
+				_readerCenter.setScrollDirection(direction)
+			}
         }
     }
-    
+
     // MARK: - Get Cover Image
     
     /**
@@ -194,7 +218,7 @@ public class FolioReader: NSObject {
     public class func saveReaderState() {
         guard FolioReader.isReaderOpen else { return }
         
-        if let currentPage = FolioReader.sharedInstance.readerCenter.currentPage {
+        if let currentPage = FolioReader.sharedInstance.readerCenter?.currentPage {
             let position = [
                 "pageNumber": currentPageNumber,
                 "pageOffsetX": currentPage.webView.scrollView.contentOffset.x,
