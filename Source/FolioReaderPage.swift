@@ -24,8 +24,9 @@ public protocol FolioReaderPageDelegate: class {
 public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate {
     
     weak var delegate: FolioReaderPageDelegate?
-    var pageNumber: Int!
-    var webView: UIWebView!
+	/// The index of the current page. Note: The index start at 1!
+	public var pageNumber: Int!
+	var webView: UIWebView!
     private var colorView: UIView!
     private var shouldShowBar = true
     private var menuIsVisible = false
