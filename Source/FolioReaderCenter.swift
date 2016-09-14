@@ -21,6 +21,9 @@ var isScrolling = false
 
 public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
 
+	/// This delegate receives the events from the current `FolioReaderPage`s delegate.
+	public weak var pageDelegate: FolioReaderPageDelegate?
+
     var collectionView: UICollectionView!
     let collectionViewLayout = UICollectionViewFlowLayout()
     var loadingView: UIActivityIndicatorView!
@@ -1093,7 +1096,7 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
 
 extension FolioReaderCenter: FolioReaderPageDelegate {
     
-    func pageDidLoad(page: FolioReaderPage) {
+    public func pageDidLoad(page: FolioReaderPage) {
         
         if let position = FolioReader.defaults.valueForKey(kBookId) as? NSDictionary {
             let pageNumber = position["pageNumber"]! as! Int
@@ -1125,6 +1128,8 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
 			let offsetPoint = self.currentWebViewScrollPositions[page.pageNumber - 1] {
 				page.webView.scrollView.setContentOffset(offsetPoint, animated: false)
 		}
+
+		self.pageDelegate?.pageDidLoad(page)
     }
 }
 
