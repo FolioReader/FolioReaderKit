@@ -145,7 +145,8 @@ var getRectForSelectedText = function(elm) {
 // Method that call that a hightlight was clicked
 // with URL scheme and rect informations
 var callHighlightURL = function(elm) {
-    var URLBase = "highlight://";
+	event.stopPropagation();
+	var URLBase = "highlight://";
     var currentHighlightRect = getRectForSelectedText(elm);
     thisHighlight = elm;
     
@@ -595,5 +596,6 @@ function addClassBasedOnClickListener(schemeName, className, parameterName) {
 }
 
 var onClassBasedListenerClick = function(schemeName, parameterContent) {
+	event.stopPropagation();
 	window.location = schemeName + "://" + encodeURIComponent(parameterContent);
 }
