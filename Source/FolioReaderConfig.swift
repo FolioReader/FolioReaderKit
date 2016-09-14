@@ -130,6 +130,7 @@ public class FolioReaderConfig: NSObject {
     public var localizedShareAllExcerptsFrom = NSLocalizedString("All excerpts from", comment: "")
     public var localizedShareBy = NSLocalizedString("by", comment: "")
     public var localizedCancel = NSLocalizedString("Cancel", comment: "")
+    public var localizedShare = NSLocalizedString("Share", comment: "")
     public var localizedChooseExisting = NSLocalizedString("Choose existing", comment: "")
     public var localizedTakePhoto = NSLocalizedString("Take Photo", comment: "")
     public var localizedShareImageQuote = NSLocalizedString("Share image quote", comment: "")
