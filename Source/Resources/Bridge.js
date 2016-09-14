@@ -591,11 +591,10 @@ function addClassBasedOnClickListener(schemeName, className, parameterName) {
 		// Get the content from the given parameterName
 		var parameterContent = element.getAttribute(parameterName);
 		// Add the on click logic
-		element.setAttribute("onclick", "onClassBasedListenerClick(\"" + schemeName + "\", \"" + parameterContent + "\");");
+		element.setAttribute("onclick", "onClassBasedListenerClick(\"" + schemeName + "\", \"" + encodeURIComponent(parameterContent) + "\");");
 	}
 }
 
 var onClassBasedListenerClick = function(schemeName, parameterContent) {
-	event.stopPropagation();
-	window.location = schemeName + "://" + encodeURIComponent(parameterContent);
+	window.location = schemeName + "://" + parameterContent;
 }
