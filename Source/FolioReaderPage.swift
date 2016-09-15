@@ -130,6 +130,10 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
     // MARK: - UIWebView Delegate
     
     public func webViewDidFinishLoad(webView: UIWebView) {
+
+		// Add the custom class based onClick listener
+		self.setupClassBasedOnClickListeners()
+
         refreshPageMode()
         
         if readerConfig.enableTTS && !book.hasAudio() {
@@ -233,11 +237,28 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
                 FolioReader.sharedInstance.readerCenter.presentViewController(nav, animated: true, completion: nil)
             }
             return false
-        } else if UIApplication.sharedApplication().canOpenURL(url) {
-            UIApplication.sharedApplication().openURL(url)
-            return false
-        }
-        
+		} else {
+			// Check if the url is a custom class based onClick listerner
+			var isClassBasedOnClickListenerScheme = false
+			for listener in readerConfig.classBasedOnClickListeners {
+				if url.scheme == listener.schemeName {
+					let parameterContentString = (request.URL?.absoluteString.stringByReplacingOccurrencesOfString("\(url.scheme)://", withString: "").stringByRemovingPercentEncoding)
+					listener.onClickAction(parameterContent: parameterContentString)
+					isClassBasedOnClickListenerScheme = true
+				}
+			}
+
+			if isClassBasedOnClickListenerScheme == false {
+				// Try to open the url with the system if it wasn't a custom class based click listener
+				if UIApplication.sharedApplication().canOpenURL(url) {
+					UIApplication.sharedApplication().openURL(url)
+					return false
+				}
+			} else {
+				return false
+			}
+		}
+
         return true
     }
     
@@ -393,6 +414,15 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
             colorView.frame = CGRectZero
         }
     }
+
+	// MARK: - Class based click listener
+
+	private func setupClassBasedOnClickListeners() {
+
+		for listener in readerConfig.classBasedOnClickListeners {
+			self.webView.js("addClassBasedOnClickListener(\"\(listener.schemeName)\", \"\(listener.querySelector)\", \"\(listener.attributeName)\", \"\(listener.selectAll)\")");
+		}
+	}
 }
 
 // MARK: - WebView Highlight and share implementation
