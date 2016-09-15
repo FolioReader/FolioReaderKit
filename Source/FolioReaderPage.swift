@@ -11,7 +11,8 @@ import SafariServices
 import UIMenuItem_CXAImageSupport
 import JSQWebViewController
 
-protocol FolioReaderPageDelegate: class {
+/// Protocol which is used from `FolioReaderPage`s.
+public protocol FolioReaderPageDelegate: class {
     /**
      Notify that page did loaded
      
@@ -23,8 +24,9 @@ protocol FolioReaderPageDelegate: class {
 public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate {
     
     weak var delegate: FolioReaderPageDelegate?
-    var pageNumber: Int!
-    var webView: UIWebView!
+	/// The index of the current page. Note: The index start at 1!
+	public var pageNumber: Int!
+	var webView: UIWebView!
     private var colorView: UIView!
     private var shouldShowBar = true
     private var menuIsVisible = false
@@ -418,7 +420,7 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
 	private func setupClassBasedOnClickListeners() {
 
 		for listener in readerConfig.classBasedOnClickListeners {
-			self.webView.js("addClassBasedOnClickListener(\"\(listener.schemeName)\", \"\(listener.className)\", \"\(listener.parameterName)\")");
+			self.webView.js("addClassBasedOnClickListener(\"\(listener.schemeName)\", \"\(listener.querySelector)\", \"\(listener.attributeName)\", \"\(listener.selectAll)\")");
 		}
 	}
 }
