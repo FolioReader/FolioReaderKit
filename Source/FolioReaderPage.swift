@@ -420,7 +420,7 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
 	private func setupClassBasedOnClickListeners() {
 
 		for listener in readerConfig.classBasedOnClickListeners {
-			self.webView.js("addClassBasedOnClickListener(\"\(listener.schemeName)\", \"\(listener.className)\", \"\(listener.parameterName)\")");
+			self.webView.js("addClassBasedOnClickListener(\"\(listener.schemeName)\", \"\(listener.querySelector)\", \"\(listener.attributeName)\", \"\(listener.selectAll)\")");
 		}
 	}
 }

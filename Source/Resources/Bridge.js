@@ -583,16 +583,26 @@ function wrappingSentencesWithinPTags(){
 
 // Class based onClick listener
 
-function addClassBasedOnClickListener(schemeName, className, parameterName) {
-	// Get all elements with the given className
-	var elements = document.getElementsByClassName(className);
-	for (elementIndex = 0; elementIndex < elements.length; elementIndex++) {
-		var element = elements[elementIndex];
-		// Get the content from the given parameterName
-		var parameterContent = element.getAttribute(parameterName);
-		// Add the on click logic
-		element.setAttribute("onclick", "onClassBasedListenerClick(\"" + schemeName + "\", \"" + encodeURIComponent(parameterContent) + "\");");
+function addClassBasedOnClickListener(schemeName, querySelector, attributeName, selectAll) {
+	if (selectAll) {
+		// Get all elements with the given query selector
+		var elements = document.querySelectorAll(querySelector);
+		for (elementIndex = 0; elementIndex < elements.length; elementIndex++) {
+			var element = elements[elementIndex];
+			addClassBasedOnClickListenerToElement(element, schemeName, attributeName);
+		}
+	} else {
+		// Get the first element with the given query selector
+		var element = document.querySelector(querySelector);
+		addClassBasedOnClickListenerToElement(element, schemeName, attributeName);
 	}
+}
+
+function addClassBasedOnClickListenerToElement(element, schemeName, attributeName) {
+	// Get the content from the given attribute name
+	var attributeContent = element.getAttribute(attributeName);
+	// Add the on click logic
+	element.setAttribute("onclick", "onClassBasedListenerClick(\"" + schemeName + "\", \"" + encodeURIComponent(attributeContent) + "\");");
 }
 
 var onClassBasedListenerClick = function(schemeName, parameterContent) {
