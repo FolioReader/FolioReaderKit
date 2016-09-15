@@ -103,13 +103,13 @@ public class FolioReader: NSObject {
             FolioReader.defaults.setBool(value, forKey: kNightMode)
 			FolioReader.defaults.synchronize()
 
-			if let _readerCenter = FolioReader.sharedInstance.readerCenter {
+			if let readerCenter = FolioReader.sharedInstance.readerCenter {
 				UIView.animateWithDuration(0.6, animations: {
-					_readerCenter.currentPage?.webView.js("nightMode(\(nightMode))")
-					_readerCenter.pageIndicatorView?.reloadColors()
-					_readerCenter.configureNavBar()
-					_readerCenter.scrollScrubber?.updateColors()
-					_readerCenter.collectionView.backgroundColor = (nightMode ? readerConfig.nightModeBackground : UIColor.whiteColor())
+					readerCenter.currentPage?.webView.js("nightMode(\(nightMode))")
+					readerCenter.pageIndicatorView?.reloadColors()
+					readerCenter.configureNavBar()
+					readerCenter.scrollScrubber?.reloadColors()
+					readerCenter.collectionView.backgroundColor = (nightMode ? readerConfig.nightModeBackground : UIColor.whiteColor())
 					}, completion: { (finished: Bool) in
 						NSNotificationCenter.defaultCenter().postNotificationName("needRefreshPageMode", object: nil)
 					})

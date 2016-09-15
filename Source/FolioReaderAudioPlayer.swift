@@ -354,22 +354,22 @@ public class FolioReaderAudioPlayer: NSObject {
     
     func speakSentence() {
 		guard let
-			_readerCenter = FolioReader.sharedInstance.readerCenter,
-			currentPage = _readerCenter.currentPage else {
+			readerCenter = FolioReader.sharedInstance.readerCenter,
+			currentPage = readerCenter.currentPage else {
 				return
 		}
 
         let sentence = currentPage.webView.js("getSentenceWithIndex('\(book.playbackActiveClass())')")
         
         if sentence != nil {
-            let chapter = _readerCenter.getCurrentChapter()
+            let chapter = readerCenter.getCurrentChapter()
             let href = chapter != nil ? chapter!.href : "";
             playText(href, text: sentence!)
         } else {
-            if _readerCenter.isLastPage() {
+            if readerCenter.isLastPage() {
                 stop()
             } else {
-                _readerCenter.changePageToNext()
+                readerCenter.changePageToNext()
             }
         }
     }
