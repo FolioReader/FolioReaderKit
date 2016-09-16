@@ -242,8 +242,8 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
 			var isClassBasedOnClickListenerScheme = false
 			for listener in readerConfig.classBasedOnClickListeners {
 				if url.scheme == listener.schemeName {
-					let parameterContentString = (request.URL?.absoluteString.stringByReplacingOccurrencesOfString("\(url.scheme)://", withString: "").stringByRemovingPercentEncoding)
-					listener.onClickAction(parameterContent: parameterContentString)
+					let attributeContentString = (request.URL?.absoluteString.stringByReplacingOccurrencesOfString("\(url.scheme)://", withString: "").stringByRemovingPercentEncoding)
+					listener.onClickAction(attributeContent: attributeContentString)
 					isClassBasedOnClickListenerScheme = true
 				}
 			}
