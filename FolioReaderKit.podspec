@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "FolioReaderKit"
-  s.version          = "0.8.6"
+  s.version          = "0.9.1"
   s.summary          = "A Swift ePub reader and parser framework for iOS."
   s.description  = <<-DESC
                    Written in Swift.
@@ -31,12 +31,12 @@ Pod::Spec.new do |s|
 
   s.libraries  = "z"
   s.frameworks = 'CoreData'
-  s.dependency 'SSZipArchive'
-  s.dependency 'UIMenuItem-CXAImageSupport'
-  s.dependency 'ZFDragableModalTransition'
-  s.dependency 'AEXML'
-  s.dependency 'FontBlaster'
-  s.dependency 'JSQWebViewController'
-  s.dependency 'RealmSwift'
+  s.dependency 'SSZipArchive', '~> 1.3'
+  s.dependency 'UIMenuItem-CXAImageSupport', '~> 0.0'
+  s.dependency 'ZFDragableModalTransition', '~> 0.6'
+  s.dependency 'AEXML', '~> 3.0'
+  s.dependency 'FontBlaster', '~> 2.1'
+  s.dependency 'JSQWebViewController', '~> 3.0'
+  s.dependency 'RealmSwift', '~> 1.0'
   # s.dependency 'SMSegmentView'
 end
