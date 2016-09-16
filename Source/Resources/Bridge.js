@@ -605,6 +605,6 @@ function addClassBasedOnClickListenerToElement(element, schemeName, attributeNam
 	element.setAttribute("onclick", "onClassBasedListenerClick(\"" + schemeName + "\", \"" + encodeURIComponent(attributeContent) + "\");");
 }
 
-var onClassBasedListenerClick = function(schemeName, parameterContent) {
-	window.location = schemeName + "://" + parameterContent;
+var onClassBasedListenerClick = function(schemeName, attributeContent) {
+	window.location = schemeName + "://" + attributeContent;
 }
