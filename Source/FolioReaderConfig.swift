@@ -62,7 +62,7 @@ public struct ClassBasedOnClickListener {
 	public var selectAll			: Bool
 
 	/// The closure which will be called if the specified class was clicked.
-	public var onClickAction		: ((parameterContent: String?) -> Void)
+	public var onClickAction		: ((attributeContent: String?) -> Void)
 
 	/// Initializes a `ClassBasedOnClickListener` instance. Append it to the `classBasedOnClickListeners` property from the `FolioReaderConfig` to receive on click events. The default `selectAll` value is `true`.
 	public init(schemeName: String, querySelector: String, attributeName: String, selectAll: Bool = true, onClickAction: ((attributeContent: String?) -> Void)) {
