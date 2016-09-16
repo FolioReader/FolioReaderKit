@@ -51,7 +51,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
 
 		self.frame = frame
 
-		updateColors()
+		reloadColors()
         
         // less obtrusive knob and fixes jump: http://stackoverflow.com/a/22301039/484780
         let thumbImg = UIImage(readerImageNamed: "knob")
@@ -66,7 +66,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
         slider.addTarget(self, action: #selector(ScrollScrubber.sliderTouchUp(_:)), forControlEvents: .TouchUpOutside)
     }
     
-    func updateColors() {
+    func reloadColors() {
         slider.minimumTrackTintColor = readerConfig.tintColor
         slider.maximumTrackTintColor = isNight(readerConfig.nightModeSeparatorColor, readerConfig.menuSeparatorColor)
     }

@@ -125,7 +125,7 @@ class FolioReaderHighlightList: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let highlight = highlights[indexPath.row]
 
-        FolioReader.sharedInstance.readerCenter.changePageWith(page: highlight.page, andFragment: highlight.highlightId)
+        FolioReader.sharedInstance.readerCenter?.changePageWith(page: highlight.page, andFragment: highlight.highlightId)
         dismiss()
     }
     

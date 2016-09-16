@@ -59,10 +59,10 @@ public class FolioReaderContainer: UIViewController {
         
         // Register custom fonts
         FontBlaster.blast(NSBundle.frameworkBundle())
-        
+
         // Register initial defaults
         FolioReader.defaults.registerDefaults([
-            kCurrentFontFamily: 0,
+            kCurrentFontFamily: FolioReaderFont.Andada.rawValue,
             kNightMode: false,
             kCurrentFontSize: 2,
             kCurrentAudioRate: 1,

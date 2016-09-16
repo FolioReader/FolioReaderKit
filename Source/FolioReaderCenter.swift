@@ -358,25 +358,7 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
         html = html?.stringByReplacingOccurrencesOfString("</head>", withString: toInject)
         
         // Font class name
-        var classes = ""
-        let currentFontName = FolioReader.currentFontName
-        switch currentFontName {
-        case 0:
-            classes = "andada"
-            break
-        case 1:
-            classes = "lato"
-            break
-        case 2:
-            classes = "lora"
-            break
-        case 3:
-            classes = "raleway"
-            break
-        default:
-            break
-        }
-        
+        var classes = FolioReader.currentFont.cssIdentifier
         classes += " "+FolioReader.currentMediaOverlayStyle.className()
         
         // Night mode
@@ -385,26 +367,7 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
         }
         
         // Font Size
-        let currentFontSize = FolioReader.currentFontSize
-        switch currentFontSize {
-        case 0:
-            classes += " textSizeOne"
-            break
-        case 1:
-            classes += " textSizeTwo"
-            break
-        case 2:
-            classes += " textSizeThree"
-            break
-        case 3:
-            classes += " textSizeFour"
-            break
-        case 4:
-            classes += " textSizeFive"
-            break
-        default:
-            break
-        }
+        classes += " \(FolioReader.currentFontSize.cssIdentifier)"
         
         html = html?.stringByReplacingOccurrencesOfString("<html ", withString: "<html class=\"\(classes)\"")
         

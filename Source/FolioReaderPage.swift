@@ -85,8 +85,8 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
         }
 
         let statusbarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
-        let navBarHeight = FolioReader.sharedInstance.readerCenter.navigationController?.navigationBar.frame.size.height
-        let navTotal = readerConfig.shouldHideNavigationOnTap ? 0 : statusbarHeight + navBarHeight!
+        let navBarHeight = FolioReader.sharedInstance.readerCenter?.navigationController?.navigationBar.frame.size.height ?? CGFloat(0)
+        let navTotal = readerConfig.shouldHideNavigationOnTap ? 0 : statusbarHeight + navBarHeight
 		let paddingTop: CGFloat = 20
         let paddingBottom: CGFloat = 30
 
@@ -178,7 +178,7 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
 
             let decoded = url.absoluteString.stringByRemovingPercentEncoding as String!
             let playID = decoded.substringFromIndex(decoded.startIndex.advancedBy(13))
-            let chapter = FolioReader.sharedInstance.readerCenter.getCurrentChapter()
+            let chapter = FolioReader.sharedInstance.readerCenter?.getCurrentChapter()
             let href = chapter != nil ? chapter!.href : "";
             FolioReader.sharedInstance.readerAudioPlayer?.playAudio(href, fragmentID: playID)
 
@@ -199,7 +199,7 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
                 }
                 
                 let href = splitedPath[1].stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString: "/"))
-                let hrefPage = FolioReader.sharedInstance.readerCenter.findPageByHref(href)+1
+                let hrefPage = (FolioReader.sharedInstance.readerCenter?.findPageByHref(href) ?? 0) + 1
                 
                 if hrefPage == pageNumber {
                     // Handle internal #anchor
@@ -208,7 +208,7 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
                         return false
                     }
                 } else {
-                    FolioReader.sharedInstance.readerCenter.changePageWith(href: href, animated: true)
+                    FolioReader.sharedInstance.readerCenter?.changePageWith(href: href, animated: true)
                 }
                 
                 return false
@@ -229,12 +229,12 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
             if #available(iOS 9.0, *) {
                 let safariVC = SFSafariViewController(URL: request.URL!)
                 safariVC.view.tintColor = readerConfig.tintColor
-                FolioReader.sharedInstance.readerCenter.presentViewController(safariVC, animated: true, completion: nil)
+                FolioReader.sharedInstance.readerCenter?.presentViewController(safariVC, animated: true, completion: nil)
             } else {
                 let webViewController = WebViewController(url: request.URL!)
                 let nav = UINavigationController(rootViewController: webViewController)
                 nav.view.tintColor = readerConfig.tintColor
-                FolioReader.sharedInstance.readerCenter.presentViewController(nav, animated: true, completion: nil)
+                FolioReader.sharedInstance.readerCenter?.presentViewController(nav, animated: true, completion: nil)
             }
             return false
 		} else {
@@ -281,7 +281,7 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
     public func handleTapGesture(recognizer: UITapGestureRecognizer) {
 //        webView.setMenuVisible(false)
         
-        if FolioReader.sharedInstance.readerCenter.navigationController!.navigationBarHidden {
+		if	let _navigationController = FolioReader.sharedInstance.readerCenter?.navigationController where _navigationController.navigationBarHidden {
             let menuIsVisibleRef = menuIsVisible
             
             let selected = webView.js("getSelectedText()")
@@ -294,13 +294,13 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
                 dispatch_after(dispatchTime, dispatch_get_main_queue(), {
                     
                     if self.shouldShowBar && !menuIsVisibleRef {
-                        FolioReader.sharedInstance.readerCenter.toggleBars()
+                        FolioReader.sharedInstance.readerCenter?.toggleBars()
                     }
                     self.shouldShowBar = true
                 })
             }
         } else if readerConfig.shouldHideNavigationOnTap == true {
-            FolioReader.sharedInstance.readerCenter.hideBars()
+            FolioReader.sharedInstance.readerCenter?.hideBars()
         }
         
         // Reset menu
@@ -387,7 +387,7 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
      - parameter ID: The ID
      */
     func audioMarkID(ID: String) {
-        guard let currentPage = FolioReader.sharedInstance.readerCenter.currentPage else { return }
+        guard let currentPage = FolioReader.sharedInstance.readerCenter?.currentPage else { return }
         currentPage.webView.js("audioMarkID('\(book.playbackActiveClass())','\(ID)')")
     }
     
@@ -494,11 +494,11 @@ extension UIWebView {
         let shareImage = UIAlertAction(title: readerConfig.localizedShareImageQuote, style: .Default, handler: { (action) -> Void in
             if self.isShare {
                 if let textToShare = self.js("getHighlightContent()") {
-                    FolioReader.sharedInstance.readerCenter.presentQuoteShare(textToShare)
+                    FolioReader.sharedInstance.readerCenter?.presentQuoteShare(textToShare)
                 }
             } else {
                 if let textToShare = self.js("getSelectedText()") {
-                    FolioReader.sharedInstance.readerCenter.presentQuoteShare(textToShare)
+                    FolioReader.sharedInstance.readerCenter?.presentQuoteShare(textToShare)
                     self.userInteractionEnabled = false
                     self.userInteractionEnabled = true
                 }
@@ -509,11 +509,11 @@ extension UIWebView {
         let shareText = UIAlertAction(title: readerConfig.localizedShareTextQuote, style: .Default) { (action) -> Void in
             if self.isShare {
                 if let textToShare = self.js("getHighlightContent()") {
-                    FolioReader.sharedInstance.readerCenter.shareHighlight(textToShare, rect: sender.menuFrame)
+                    FolioReader.sharedInstance.readerCenter?.shareHighlight(textToShare, rect: sender.menuFrame)
                 }
             } else {
                 if let textToShare = self.js("getSelectedText()") {
-                    FolioReader.sharedInstance.readerCenter.shareHighlight(textToShare, rect: sender.menuFrame)
+                    FolioReader.sharedInstance.readerCenter?.shareHighlight(textToShare, rect: sender.menuFrame)
                 }
             }
             self.setMenuVisible(false)
@@ -525,7 +525,7 @@ extension UIWebView {
         alertController.addAction(shareText)
         alertController.addAction(cancel)
         
-        FolioReader.sharedInstance.readerCenter.presentViewController(alertController, animated: true, completion: nil)
+        FolioReader.sharedInstance.readerCenter?.presentViewController(alertController, animated: true, completion: nil)
     }
     
     func colors(sender: UIMenuController?) {

@@ -56,17 +56,39 @@ class FolioReaderPageIndicator: UIView {
         
         if updateShadow {
             layer.shadowPath = UIBezierPath(rect: bounds).CGPath
-            
-            // Update colors
-            let color = isNight(readerConfig.nightModeBackground, UIColor.whiteColor())
-            backgroundColor = color
-            layer.shadowColor = color.CGColor
-            
-            minutesLabel.textColor = isNight(UIColor(white: 5, alpha: 0.3), UIColor(white: 0, alpha: 0.6))
-            pagesLabel.textColor = isNight(UIColor(white: 5, alpha: 0.6), UIColor(white: 0, alpha: 0.9))
+			reloadColors()
         }
     }
-    
+
+	func reloadColors() {
+		let color = isNight(readerConfig.nightModeBackground, UIColor.whiteColor())
+		backgroundColor = color
+
+		// Animate the shadow color change
+		let animation = CABasicAnimation(keyPath: "shadowColor")
+		let currentColor = UIColor(CGColor: layer.shadowColor!)
+		animation.fromValue = currentColor.CGColor
+		animation.toValue = color.CGColor
+		animation.fillMode = kCAFillModeForwards
+		animation.removedOnCompletion = false
+		animation.duration = 0.6
+		animation.delegate = self
+		animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+		layer.addAnimation(animation, forKey: "shadowColor")
+
+		minutesLabel.textColor = isNight(UIColor(white: 5, alpha: 0.3), UIColor(white: 0, alpha: 0.6))
+		pagesLabel.textColor = isNight(UIColor(white: 5, alpha: 0.6), UIColor(white: 0, alpha: 0.9))
+	}
+
+	override func animationDidStop(anim: CAAnimation, finished flag: Bool) {
+		// Set the shadow color to the final value of the animation is done
+		print("animationDidStop animation: \(anim)")
+		if let _keyPath = anim.valueForKeyPath("keyPath") as? String where _keyPath == "shadowColor" {
+			let color = isNight(readerConfig.nightModeBackground, UIColor.whiteColor())
+			layer.shadowColor = color.CGColor
+		}
+	}
+
     private func reloadViewWithPage(page: Int) {
         let pagesRemaining = FolioReader.needsRTLChange ? totalPages-(totalPages-page+1) : totalPages-page
         
