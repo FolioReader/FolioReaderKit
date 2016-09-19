@@ -5,7 +5,7 @@ PODS:
     - FontBlaster (~> 2.1)
     - JSQWebViewController (~> 3.0)
     - RealmSwift (~> 1.0)
-    - SSZipArchive (~> 1.5)
+    - SSZipArchive (= 1.5)
     - UIMenuItem-CXAImageSupport (~> 0.0)
     - ZFDragableModalTransition (~> 0.6)
   - FontBlaster (2.1.4)
@@ -32,7 +32,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AEXML: 716fb0a8decba4a3517324a71fee3685b30233d2
-  FolioReaderKit: 19f9b3119e3c459ed57b2f65549aa211f56c6188
+  FolioReaderKit: c0b082531ad0daa1e8be02a73f76f7879cd5aa03
   FontBlaster: b780f709b8f705638d0c80a1ecdfb23b3077d0a6
   JSQWebViewController: eaa6bd68d9e1426ae25ade99c9bbde4c6cdd4120
   Nimble: 97a0a4cae5124c117115634b2d055d8c97d0af19
