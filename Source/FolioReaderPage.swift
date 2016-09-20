@@ -12,13 +12,23 @@ import UIMenuItem_CXAImageSupport
 import JSQWebViewController
 
 /// Protocol which is used from `FolioReaderPage`s.
-public protocol FolioReaderPageDelegate: class {
+@objc public protocol FolioReaderPageDelegate: class {
     /**
      Notify that page did loaded
      
      - parameter page: The loaded page
      */
     func pageDidLoad(page: FolioReaderPage)
+
+	/**
+	Passes and returns the HTML content as `String`. Implement this method if you want to modify the HTML content of a `FolioReaderPage`.
+	
+	- parameter page: The current `FolioReaderPage`
+	- parameter htmlContent: The current HTML content as `String`
+	
+	- returns: The adjusted HTML content as `String`. This is the content which will be loaded into the given `FolioReaderPage`
+	*/
+	optional func htmlContentForPage(page: FolioReaderPage, htmlContent: String) -> String
 }
 
 public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate {
@@ -98,35 +108,45 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
         )
     }
     
-    func loadHTMLString(string: String!, baseURL: NSURL!) {
-        
-        var html = (string as NSString)
-        
-        // Restore highlights
-        let highlights = Highlight.allByBookId((kBookId as NSString).stringByDeletingPathExtension, andPage: pageNumber)
-        
-        if highlights.count > 0 {
-            for item in highlights {
-                let style = HighlightStyle.classForStyle(item.type)
-                let tag = "<highlight id=\"\(item.highlightId)\" onclick=\"callHighlightURL(this);\" class=\"\(style)\">\(item.content)</highlight>"
-                var locator = item.contentPre + item.content + item.contentPost
-                locator = Highlight.removeSentenceSpam(locator) /// Fix for Highlights
-                let range: NSRange = html.rangeOfString(locator, options: .LiteralSearch)
-                
-                if range.location != NSNotFound {
-                    let newRange = NSRange(location: range.location + item.contentPre.characters.count, length: item.content.characters.count)
-                    html = html.stringByReplacingCharactersInRange(newRange, withString: tag)
-                }
-                else {
-                    print("highlight range not found")
-                }
-            }
-        }
-        
+    func loadHTMLString(htmlContent: String!, baseURL: NSURL!) {
+		// Insert the stored highlights to the HTML
+		var tempHtmlContent = htmlContentWithInsertHighlights(htmlContent)
+		// Let the delegate adjust the html string
+		if let modifiedHtmlContent = self.delegate?.htmlContentForPage?(self, htmlContent: tempHtmlContent) {
+			tempHtmlContent = modifiedHtmlContent
+		}
+        // Load the html into the webview
         webView.alpha = 0
-        webView.loadHTMLString(html as String, baseURL: baseURL)
+        webView.loadHTMLString(tempHtmlContent, baseURL: baseURL)
     }
-    
+
+	// MARK: - Highlights
+
+	private func htmlContentWithInsertHighlights(htmlContent: String) -> String {
+		var tempHtmlContent = htmlContent as NSString
+		// Restore highlights
+		let highlights = Highlight.allByBookId((kBookId as NSString).stringByDeletingPathExtension, andPage: pageNumber)
+
+		if highlights.count > 0 {
+			for item in highlights {
+				let style = HighlightStyle.classForStyle(item.type)
+				let tag = "<highlight id=\"\(item.highlightId)\" onclick=\"callHighlightURL(this);\" class=\"\(style)\">\(item.content)</highlight>"
+				var locator = item.contentPre + item.content + item.contentPost
+				locator = Highlight.removeSentenceSpam(locator) /// Fix for Highlights
+				let range: NSRange = tempHtmlContent.rangeOfString(locator, options: .LiteralSearch)
+
+				if range.location != NSNotFound {
+					let newRange = NSRange(location: range.location + item.contentPre.characters.count, length: item.content.characters.count)
+					tempHtmlContent = tempHtmlContent.stringByReplacingCharactersInRange(newRange, withString: tag)
+				}
+				else {
+					print("highlight range not found")
+				}
+			}
+		}
+		return tempHtmlContent as String
+	}
+
     // MARK: - UIWebView Delegate
     
     public func webViewDidFinishLoad(webView: UIWebView) {

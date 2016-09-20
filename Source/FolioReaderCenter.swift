@@ -1094,12 +1094,21 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
 
 		self.pageDelegate?.pageDidLoad(page)
     }
+
+	public func htmlContentForPage(page: FolioReaderPage, htmlContent: String) -> String {
+		// Pass the event to the `pageDelegate` property
+		var tempHtmlContent = htmlContent
+		if let modifiedHtmlContent = pageDelegate?.htmlContentForPage?(page, htmlContent: htmlContent) {
+			tempHtmlContent = modifiedHtmlContent
+		}
+		return tempHtmlContent
+	}
 }
 
 // MARK: FolioReaderChapterListDelegate
 
 extension FolioReaderCenter: FolioReaderChapterListDelegate {
-    
+
     func chapterList(chapterList: FolioReaderChapterList, didSelectRowAtIndexPath indexPath: NSIndexPath, withTocReference reference: FRTocReference) {
         let item = findPageByResource(reference)
         
