@@ -12,23 +12,13 @@ import UIMenuItem_CXAImageSupport
 import JSQWebViewController
 
 /// Protocol which is used from `FolioReaderPage`s.
-@objc public protocol FolioReaderPageDelegate: class {
+protocol FolioReaderPageDelegate: class {
     /**
      Notify that page did loaded
      
      - parameter page: The loaded page
      */
     func pageDidLoad(page: FolioReaderPage)
-
-	/**
-	Passes and returns the HTML content as `String`. Implement this method if you want to modify the HTML content of a `FolioReaderPage`.
-	
-	- parameter page: The current `FolioReaderPage`
-	- parameter htmlContent: The current HTML content as `String`
-	
-	- returns: The adjusted HTML content as `String`. This is the content which will be loaded into the given `FolioReaderPage`
-	*/
-	optional func htmlContentForPage(page: FolioReaderPage, htmlContent: String) -> String
 }
 
 public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate {
@@ -111,10 +101,6 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
     func loadHTMLString(htmlContent: String!, baseURL: NSURL!) {
 		// Insert the stored highlights to the HTML
 		var tempHtmlContent = htmlContentWithInsertHighlights(htmlContent)
-		// Let the delegate adjust the html string
-		if let modifiedHtmlContent = self.delegate?.htmlContentForPage?(self, htmlContent: tempHtmlContent) {
-			tempHtmlContent = modifiedHtmlContent
-		}
         // Load the html into the webview
         webView.alpha = 0
         webView.loadHTMLString(tempHtmlContent, baseURL: baseURL)
