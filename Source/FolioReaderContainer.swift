@@ -124,17 +124,9 @@ public class FolioReaderContainer: UIViewController {
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
             
-            var isDir: ObjCBool = false
-            let fileManager = NSFileManager.defaultManager()
-            
-            if fileManager.fileExistsAtPath(self.epubPath, isDirectory:&isDir) {
-                if isDir {
-                    book = FREpubParser().readEpub(filePath: self.epubPath)
-                }
-                
-                book = FREpubParser().readEpub(epubPath: self.epubPath, removeEpub: self.shouldRemoveEpub)
+            if let parsedBook = FREpubParser().readEpub(epubPath: self.epubPath, removeEpub: self.shouldRemoveEpub) {
+                book = parsedBook
             } else {
-                print("Epub file does not exist.")
                 self.errorOnLoad = true
             }
             

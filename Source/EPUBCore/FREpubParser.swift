@@ -26,14 +26,12 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
      Returns an UIImage.
      */
     func parseCoverImage(epubPath: String) -> UIImage? {
-        let book = readEpub(epubPath: epubPath, removeEpub: false)
-        
-        // Read the cover image
-        if let coverImage = book.coverImage {
-            return UIImage(contentsOfFile: coverImage.fullHref)
+        guard let book = readEpub(epubPath: epubPath, removeEpub: false),
+            let coverImage = book.coverImage else {
+                return nil
         }
         
-        return nil
+        return UIImage(contentsOfFile: coverImage.fullHref)
     }
     
     /**
@@ -41,31 +39,36 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
      Returns a FRBook.
     */
     
-    func readEpub(epubPath withEpubPath: String, removeEpub: Bool = true) -> FRBook {
+    func readEpub(epubPath withEpubPath: String, removeEpub: Bool = true) -> FRBook? {
         epubPathToRemove = withEpubPath
         shouldRemoveEpub = removeEpub
         
-        // Unzip   
+        var isDir: ObjCBool = false
+        let fileManager = NSFileManager.defaultManager()
         let bookName = (withEpubPath as NSString).lastPathComponent
         bookBasePath = (kApplicationDocumentsDirectory as NSString).stringByAppendingPathComponent(bookName)
-        SSZipArchive.unzipFileAtPath(withEpubPath, toDestination: bookBasePath, delegate: self)
+        
+        guard fileManager.fileExistsAtPath(withEpubPath) else {
+            print("Epub file does not exist.")
+            return nil
+        }
+        
+        // Unzip if necessary
+        var needsUnzip = false
+        if fileManager.fileExistsAtPath(bookBasePath, isDirectory:&isDir) {
+            if !isDir { needsUnzip = true }
+        } else {
+            needsUnzip = true
+        }
+        
+        if needsUnzip {
+            SSZipArchive.unzipFileAtPath(withEpubPath, toDestination: bookBasePath, delegate: self)
+        }
         
         // Skip from backup this folder
         addSkipBackupAttributeToItemAtURL(NSURL(fileURLWithPath: bookBasePath, isDirectory: true))
         
         kBookId = bookName
-        readContainer()
-        readOpf()
-        return book
-    }
-    
-    /**
-     Read an unziped epub file.
-     Returns a FRBook.
-    */
-    func readEpub(filePath withFilePath: String) -> FRBook {
-        bookBasePath = withFilePath
-        kBookId = (withFilePath as NSString).lastPathComponent
         readContainer()
         readOpf()
         return book
