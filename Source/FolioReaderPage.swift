@@ -241,10 +241,19 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
 			// Check if the url is a custom class based onClick listerner
 			var isClassBasedOnClickListenerScheme = false
 			for listener in readerConfig.classBasedOnClickListeners {
-				if url.scheme == listener.schemeName {
-					let attributeContentString = (request.URL?.absoluteString.stringByReplacingOccurrencesOfString("\(url.scheme)://", withString: "").stringByRemovingPercentEncoding)
-					listener.onClickAction(attributeContent: attributeContentString)
-					isClassBasedOnClickListenerScheme = true
+				if
+					url.scheme == listener.schemeName,
+					let absoluteURLString = request.URL?.absoluteString,
+					range = absoluteURLString.rangeOfString("/clientX=") {
+						let baseURL = absoluteURLString.substringToIndex(range.startIndex)
+						let positionString = absoluteURLString.substringFromIndex(range.startIndex)
+						if let point = getEventTouchPoint(fromPositionParameterString: positionString) {
+							let attributeContentString = (baseURL.stringByReplacingOccurrencesOfString("\(url.scheme)://", withString: "").stringByRemovingPercentEncoding)
+							// Call the on click action block
+							listener.onClickAction(attributeContent: attributeContentString, touchPointRelativeToWebView: point)
+							// Mark the scheme as class based click listener scheme
+							isClassBasedOnClickListenerScheme = true
+						}
 				}
 			}
 
@@ -261,6 +270,22 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
 
         return true
     }
+
+	private func getEventTouchPoint(fromPositionParameterString positionParameterString: String) -> CGPoint? {
+		// Remove the parameter names: "/clientX=188&clientY=292" -> "188&292"
+		var positionParameterString = positionParameterString.stringByReplacingOccurrencesOfString("/clientX=", withString: "")
+		positionParameterString = positionParameterString.stringByReplacingOccurrencesOfString("clientY=", withString: "")
+		// Separate both position values into an array: "188&292" -> [188],[292]
+		let positionStringValues = positionParameterString.componentsSeparatedByString("&")
+		// Multiply the raw positions with the screen scale and return them as CGPoint
+		if
+			positionStringValues.count == 2,
+			let xPos = Int(positionStringValues[0]),
+			yPos = Int(positionStringValues[1]) {
+				return CGPoint(x: xPos, y: yPos)
+		}
+		return nil
+	}
     
     // MARK: Gesture recognizer
     
