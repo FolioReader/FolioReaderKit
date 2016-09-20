@@ -8,6 +8,8 @@
 
 import UIKit
 
+// MARK: - FolioReaderScrollDirection
+
 /**
  Defines the Reader scrolling direction
  */
@@ -37,12 +39,58 @@ public enum FolioReaderScrollDirection: Int {
     }
 }
 
+// MARK: - ClassBasedOnClickListener
+
+/**
+A `ClassBasedOnClickListener` takes a closure which is performed if a given html `class` is clicked. The closure will reveice the content of the specified parameter.
+
+Eg. A ClassBasedOnClickListener with the className "quote" and parameterName "id" with the given epub html content "<section class="quote" id="12345">" would call the given closure on a click on this section with the String "12345" as parameter.
+
+*/
+public struct ClassBasedOnClickListener {
+
+	/// The name of the URL scheme which should be used. Note: Make sure that the given `String` is a valid as scheme name.
+	public var schemeName			: String
+
+	/// The query selector for the elements which the listener should be added to. See https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector for further information about query selectors.
+	public var querySelector		: String
+
+	/// The name of the attribute whose content should be passed to the `onClickAction` action.
+	public var attributeName		: String
+
+	/// Whether the listener should be added to all found elements or only to the first one. See https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll for further information. The default value is `true`.
+	public var selectAll			: Bool
+
+	/// The closure which will be called if the specified class was clicked.
+	public var onClickAction		: ((attributeContent: String?) -> Void)
+
+	/// Initializes a `ClassBasedOnClickListener` instance. Append it to the `classBasedOnClickListeners` property from the `FolioReaderConfig` to receive on click events. The default `selectAll` value is `true`.
+	public init(schemeName: String, querySelector: String, attributeName: String, selectAll: Bool = true, onClickAction: ((attributeContent: String?) -> Void)) {
+		self.schemeName = schemeName.lowercaseString
+		self.querySelector = querySelector
+		self.attributeName = attributeName
+		self.selectAll = selectAll
+		self.onClickAction = onClickAction
+	}
+}
+
+// MARK: - FolioReaderConfig
 
 /**
  Defines the Reader custom configuration
  */
 public class FolioReaderConfig: NSObject {
-    
+
+	// MARK: ClassBasedOnClickListener
+
+	/**
+	Array of `ClassBasedOnClickListener` objects. A `ClassBasedOnClickListener` takes a closure which is performed if a given html `class` is clicked. The closure will reveice the content of the specified parameter.
+	
+	Eg. A ClassBasedOnClickListener with the className "quote" and parameterName "id" with the given epub html content "<section class="quote" id="12345">" would call the given closure on a click on this section with the String "12345" as parameter.
+	
+	*/
+	public var classBasedOnClickListeners = [ClassBasedOnClickListener]()
+
     // MARK: Colors
     
     /// Base header custom TintColor
@@ -130,6 +178,7 @@ public class FolioReaderConfig: NSObject {
     public var localizedShareAllExcerptsFrom = NSLocalizedString("All excerpts from", comment: "")
     public var localizedShareBy = NSLocalizedString("by", comment: "")
     public var localizedCancel = NSLocalizedString("Cancel", comment: "")
+    public var localizedShare = NSLocalizedString("Share", comment: "")
     public var localizedChooseExisting = NSLocalizedString("Choose existing", comment: "")
     public var localizedTakePhoto = NSLocalizedString("Take Photo", comment: "")
     public var localizedShareImageQuote = NSLocalizedString("Share image quote", comment: "")

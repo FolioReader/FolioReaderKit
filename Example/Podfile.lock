@@ -1,48 +1,48 @@
 PODS:
   - AEXML (3.0.0)
-  - FolioReaderKit (0.8.6):
-    - AEXML
-    - FontBlaster
-    - JSQWebViewController
-    - RealmSwift
-    - SSZipArchive
-    - UIMenuItem-CXAImageSupport
-    - ZFDragableModalTransition
+  - FolioReaderKit (0.9.2):
+    - AEXML (= 3.0)
+    - FontBlaster (= 2.1.4)
+    - JSQWebViewController (~> 3.0)
+    - RealmSwift (~> 1.0)
+    - SSZipArchive (= 1.5)
+    - UIMenuItem-CXAImageSupport (~> 0.0)
+    - ZFDragableModalTransition (~> 0.6)
   - FontBlaster (2.1.4)
   - JSQWebViewController (3.0.0)
   - Nimble (4.1.0)
   - Quick (0.9.2)
-  - Realm (1.0.1):
-    - Realm/Headers (= 1.0.1)
-  - Realm/Headers (1.0.1)
-  - RealmSwift (1.0.1):
-    - Realm (= 1.0.1)
-  - SSZipArchive (1.3)
+  - Realm (1.0.2):
+    - Realm/Headers (= 1.0.2)
+  - Realm/Headers (1.0.2)
+  - RealmSwift (1.0.2):
+    - Realm (= 1.0.2)
+  - SSZipArchive (1.5)
   - UIMenuItem-CXAImageSupport (0.0.1)
   - ZFDragableModalTransition (0.6)
 
 DEPENDENCIES:
   - FolioReaderKit (from `../`)
   - Nimble
-  - Quick
+  - Quick (= 0.9.2)
 
 EXTERNAL SOURCES:
   FolioReaderKit:
-    :path: ../
+    :path: "../"
 
 SPEC CHECKSUMS:
   AEXML: 716fb0a8decba4a3517324a71fee3685b30233d2
-  FolioReaderKit: e0c89ecec9bd253363e842210a3e10fe43af2923
+  FolioReaderKit: 0d8e44d7ed0ed4bfd9724dae7ef049b1fb5a4552
   FontBlaster: b780f709b8f705638d0c80a1ecdfb23b3077d0a6
   JSQWebViewController: eaa6bd68d9e1426ae25ade99c9bbde4c6cdd4120
   Nimble: 97a0a4cae5124c117115634b2d055d8c97d0af19
   Quick: 18d057bc66451eedd5d1c8dc99ba2a5db6e60226
-  Realm: 2e15e39d35b08abb529e212ed5d8af107b5236c8
-  RealmSwift: d73ea2af08c3676dbdd5e4b669651a0f492162a4
-  SSZipArchive: 5525196ee195b473dcc4a0d4d2cba98bfa3eb1c1
+  Realm: 9d5c46a4d7d27958530a8dfc58f63a99e5c2cba3
+  RealmSwift: 82f3ac5e24530143dddfde2033acc0d308f27d96
+  SSZipArchive: 29daace2bccb90a47de2837744da397728ff9207
   UIMenuItem-CXAImageSupport: 2945e2af4487414caad801ed8ff6ac8db274e986
   ZFDragableModalTransition: 0d294eaaba6edfcb9839595de765f9ca06a4b524
 
-PODFILE CHECKSUM: 4e2bdc3d5df531d3cd0f70bd1071cee2d4bbb240
+PODFILE CHECKSUM: 019ed1399429245758bdf9b0c090c4b685a25030
 
 COCOAPODS: 1.0.1

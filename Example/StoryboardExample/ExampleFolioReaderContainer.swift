@@ -16,7 +16,16 @@ class ExampleFolioReaderContainer: FolioReaderContainer {
         
         let config = FolioReaderConfig()
         config.scrollDirection = .horizontalWithVerticalContent
-        
+		config.shouldHideNavigationOnTap = false
+
+		// Print the chapter ID if one was clicked
+		// A chapter in "The Silver Chair" looks like this "<section class="chapter" title="Chapter I" epub:type="chapter" id="id70364673704880">"
+		// To knwo if a user tapped on a chapter we can listen to events on the class "chapter" and receive the id value
+		let listener = ClassBasedOnClickListener(schemeName: "chaptertapped", querySelector: ".chapter", attributeName: "id", onClickAction: { (attributeContent: String?) in
+			print("chapter with id: " + (attributeContent ?? "-") + " clicked")
+		})
+		config.classBasedOnClickListeners.append(listener)
+
         guard let bookPath = NSBundle.mainBundle().pathForResource("The Silver Chair", ofType: "epub") else { return }
         setupConfig(config, epubPath: bookPath)
 	}

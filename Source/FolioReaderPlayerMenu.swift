@@ -255,7 +255,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
         }
         
         // update the current page style
-        if let currentPage = FolioReader.sharedInstance.readerCenter.currentPage {
+        if let currentPage = FolioReader.sharedInstance.readerCenter?.currentPage {
             currentPage.webView.js("setMediaOverlayStyle(\"\(FolioReader.currentMediaOverlayStyle.className())\")")
         }
     }
@@ -264,7 +264,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
         dismiss()
 
         if readerConfig.shouldHideNavigationOnTap == false {
-            FolioReader.sharedInstance.readerCenter.showBars()
+            FolioReader.sharedInstance.readerCenter?.showBars()
         }
     }
 

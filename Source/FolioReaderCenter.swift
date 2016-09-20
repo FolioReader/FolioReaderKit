@@ -21,6 +21,9 @@ var isScrolling = false
 
 public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
 
+	/// This delegate receives the events from the current `FolioReaderPage`s delegate.
+	public weak var pageDelegate: FolioReaderPageDelegate?
+
     var collectionView: UICollectionView!
     let collectionViewLayout = UICollectionViewFlowLayout()
     var loadingView: UIActivityIndicatorView!
@@ -355,25 +358,7 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
         html = html?.stringByReplacingOccurrencesOfString("</head>", withString: toInject)
         
         // Font class name
-        var classes = ""
-        let currentFontName = FolioReader.currentFontName
-        switch currentFontName {
-        case 0:
-            classes = "andada"
-            break
-        case 1:
-            classes = "lato"
-            break
-        case 2:
-            classes = "lora"
-            break
-        case 3:
-            classes = "raleway"
-            break
-        default:
-            break
-        }
-        
+        var classes = FolioReader.currentFont.cssIdentifier
         classes += " "+FolioReader.currentMediaOverlayStyle.className()
         
         // Night mode
@@ -382,26 +367,7 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
         }
         
         // Font Size
-        let currentFontSize = FolioReader.currentFontSize
-        switch currentFontSize {
-        case 0:
-            classes += " textSizeOne"
-            break
-        case 1:
-            classes += " textSizeTwo"
-            break
-        case 2:
-            classes += " textSizeThree"
-            break
-        case 3:
-            classes += " textSizeFour"
-            break
-        case 4:
-            classes += " textSizeFive"
-            break
-        default:
-            break
-        }
+        classes += " \(FolioReader.currentFontSize.cssIdentifier)"
         
         html = html?.stringByReplacingOccurrencesOfString("<html ", withString: "<html class=\"\(classes)\"")
         
@@ -1093,7 +1059,7 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
 
 extension FolioReaderCenter: FolioReaderPageDelegate {
     
-    func pageDidLoad(page: FolioReaderPage) {
+    public func pageDidLoad(page: FolioReaderPage) {
         
         if let position = FolioReader.defaults.valueForKey(kBookId) as? NSDictionary {
             let pageNumber = position["pageNumber"]! as! Int
@@ -1125,6 +1091,8 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
 			let offsetPoint = self.currentWebViewScrollPositions[page.pageNumber - 1] {
 				page.webView.scrollView.setContentOffset(offsetPoint, animated: false)
 		}
+
+		self.pageDelegate?.pageDidLoad(page)
     }
 }
 
