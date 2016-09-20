@@ -166,7 +166,7 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
             
             shouldShowBar = false
             
-            let decoded = url.absoluteString.stringByRemovingPercentEncoding as String!
+            let decoded = url.absoluteString!.stringByRemovingPercentEncoding as String!
             let rect = CGRectFromString(decoded.substringFromIndex(decoded.startIndex.advancedBy(12)))
             
             webView.createMenu(options: true)
@@ -176,7 +176,7 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
             return false
         } else if url.scheme == "play-audio" {
 
-            let decoded = url.absoluteString.stringByRemovingPercentEncoding as String!
+            let decoded = url.absoluteString!.stringByRemovingPercentEncoding as String!
             let playID = decoded.substringFromIndex(decoded.startIndex.advancedBy(13))
             let chapter = FolioReader.sharedInstance.readerCenter?.getCurrentChapter()
             let href = chapter != nil ? chapter!.href : "";
@@ -224,7 +224,7 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
         } else if url.scheme == "mailto" {
             print("Email")
             return true
-        } else if url.absoluteString != "about:blank" && url.scheme.containsString("http") && navigationType == .LinkClicked {
+        } else if url.absoluteString != "about:blank" && url.scheme!.containsString("http") && navigationType == .LinkClicked {
             
             if #available(iOS 9.0, *) {
                 let safariVC = SFSafariViewController(URL: request.URL!)
@@ -242,7 +242,7 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
 			var isClassBasedOnClickListenerScheme = false
 			for listener in readerConfig.classBasedOnClickListeners {
 				if url.scheme == listener.schemeName {
-					let attributeContentString = (request.URL?.absoluteString.stringByReplacingOccurrencesOfString("\(url.scheme)://", withString: "").stringByRemovingPercentEncoding)
+					let attributeContentString = (request.URL?.absoluteString!.stringByReplacingOccurrencesOfString("\(url.scheme)://", withString: "").stringByRemovingPercentEncoding)
 					listener.onClickAction(attributeContent: attributeContentString)
 					isClassBasedOnClickListenerScheme = true
 				}
@@ -477,7 +477,7 @@ extension UIWebView {
             || (action == #selector(UIWebView.define(_:)) && isOneWord)
             || (action == #selector(UIWebView.play(_:)) && (book.hasAudio() || readerConfig.enableTTS))
             || (action == #selector(UIWebView.share(_:)) && readerConfig.allowSharing)
-            || (action == #selector(NSObject.copy(_:)) && readerConfig.allowSharing) {
+            || (action == #selector(UIWebView.copy(_:)) && readerConfig.allowSharing) {
                 return true
             }
             return false

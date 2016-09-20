@@ -236,9 +236,9 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
                 let tocData = try NSData(contentsOfFile: tocPath, options: .DataReadingMappedAlways)
                 let xmlDoc = try AEXMLDocument(xmlData: tocData)
                 
-                if let nav = xmlDoc.root["body"]["nav"].first, itemsList = nav["ol"]["li"].all {
+                if let nav = xmlDoc.root["body"]["nav"].first, let itemsList = nav["ol"]["li"].all {
                     tocItems = itemsList
-                } else if let nav = findNavTag(xmlDoc.root["body"]), itemsList = nav["ol"]["li"].all {
+                } else if let nav = findNavTag(xmlDoc.root["body"]), let itemsList = nav["ol"]["li"].all {
                     tocItems = itemsList
                 }
             }

@@ -35,7 +35,6 @@ Pod::Spec.new do |s|
   s.dependency 'UIMenuItem-CXAImageSupport', '~> 0.0'
   s.dependency 'ZFDragableModalTransition', '~> 0.6'
   s.dependency 'AEXML', '3.0'
-  s.dependency 'FontBlaster', '2.1.4'
   s.dependency 'JSQWebViewController', '~> 3.0'
   s.dependency 'RealmSwift', '~> 1.0'
   # s.dependency 'SMSegmentView'

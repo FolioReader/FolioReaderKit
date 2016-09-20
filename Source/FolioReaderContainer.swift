@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FontBlaster
 
 var readerConfig: FolioReaderConfig!
 var book: FRBook!
