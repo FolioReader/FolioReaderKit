@@ -11,7 +11,7 @@ PODS:
   - FontBlaster (2.1.4)
   - JSQWebViewController (3.0.0)
   - Nimble (4.1.0)
-  - Quick (0.9.3)
+  - Quick (0.9.2)
   - Realm (1.0.2):
     - Realm/Headers (= 1.0.2)
   - Realm/Headers (1.0.2)
@@ -24,7 +24,7 @@ PODS:
 DEPENDENCIES:
   - FolioReaderKit (from `../`)
   - Nimble
-  - Quick
+  - Quick (= 0.9.2)
 
 EXTERNAL SOURCES:
   FolioReaderKit:
@@ -36,13 +36,13 @@ SPEC CHECKSUMS:
   FontBlaster: b780f709b8f705638d0c80a1ecdfb23b3077d0a6
   JSQWebViewController: eaa6bd68d9e1426ae25ade99c9bbde4c6cdd4120
   Nimble: 97a0a4cae5124c117115634b2d055d8c97d0af19
-  Quick: 13a2a2b19a5d8e3ed4fd0c36ee46597fd77ebf71
+  Quick: 18d057bc66451eedd5d1c8dc99ba2a5db6e60226
   Realm: 9d5c46a4d7d27958530a8dfc58f63a99e5c2cba3
   RealmSwift: 82f3ac5e24530143dddfde2033acc0d308f27d96
   SSZipArchive: 29daace2bccb90a47de2837744da397728ff9207
   UIMenuItem-CXAImageSupport: 2945e2af4487414caad801ed8ff6ac8db274e986
   ZFDragableModalTransition: 0d294eaaba6edfcb9839595de765f9ca06a4b524
 
-PODFILE CHECKSUM: 4e2bdc3d5df531d3cd0f70bd1071cee2d4bbb240
+PODFILE CHECKSUM: 019ed1399429245758bdf9b0c090c4b685a25030
 
 COCOAPODS: 1.0.1
