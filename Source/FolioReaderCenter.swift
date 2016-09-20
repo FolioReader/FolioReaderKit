@@ -26,7 +26,7 @@ var isScrolling = false
 
 	- parameter page: The appeared page
 	*/
-	func pageDidAppear(page: FolioReaderPage)
+	optional func pageDidAppear(page: FolioReaderPage)
 
 	/**
 	Passes and returns the HTML content as `String`. Implement this method if you want to modify the HTML content of a `FolioReaderPage`.
@@ -558,7 +558,7 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
         }
 
 		if let currentPage = currentPage {
-			self.delegate?.pageDidAppear(currentPage)
+			self.delegate?.pageDidAppear?(currentPage)
 		}
 
         completion?()
