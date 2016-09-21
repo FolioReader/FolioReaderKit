@@ -425,7 +425,11 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
     // MARK: UIMenu visibility
     
     override public func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
-        if UIMenuController.sharedMenuController().menuItems?.count == 0 {
+		guard readerConfig.useReaderMenuController else {
+			return false
+		}
+
+		if UIMenuController.sharedMenuController().menuItems?.count == 0 {
             webView.isColors = false
             webView.createMenu(options: false)
         }
@@ -478,7 +482,10 @@ extension UIWebView {
     }
     
     public override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
-        
+		guard readerConfig.useReaderMenuController else {
+			return false
+		}
+
         if(readerConfig == nil){
             return super.canPerformAction(action, withSender: sender)
         }
@@ -656,7 +663,11 @@ extension UIWebView {
     // MARK: - Create and show menu
     
     func createMenu(options options: Bool) {
-        isShare = options
+		guard readerConfig.useReaderMenuController else {
+			return
+		}
+
+		isShare = options
         
         let colors = UIImage(readerImageNamed: "colors-marker")
         let share = UIImage(readerImageNamed: "share-marker")
@@ -685,7 +696,11 @@ extension UIWebView {
     }
     
     func setMenuVisible(menuVisible: Bool, animated: Bool = true, andRect rect: CGRect = CGRectZero) {
-        if !menuVisible && isShare || !menuVisible && isColors {
+		guard readerConfig.useReaderMenuController else {
+			return
+		}
+
+		if !menuVisible && isShare || !menuVisible && isColors {
             isColors = false
             isShare = false
         }
