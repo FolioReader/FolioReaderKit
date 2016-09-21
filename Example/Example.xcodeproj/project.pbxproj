@@ -307,8 +307,8 @@
 			projectRoot = "";
 			targets = (
 				1A42C2881C0E3882000F2137 /* Example */,
-				CA10C1301C572A4B0049165D /* FolioReaderTests */,
 				D12066621D65FABD006E1D18 /* StoryboardExample */,
+				CA10C1301C572A4B0049165D /* FolioReaderTests */,
 			);
 		};
 /* End PBXProject section */
@@ -797,7 +797,7 @@
 				INFOPLIST_FILE = StoryboardExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.panajotis.maroungas.StoryboardExample;
+				PRODUCT_BUNDLE_IDENTIFIER = com.folioreader.StoryboardExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -811,7 +811,7 @@
 				INFOPLIST_FILE = StoryboardExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.panajotis.maroungas.StoryboardExample;
+				PRODUCT_BUNDLE_IDENTIFIER = com.folioreader.StoryboardExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
