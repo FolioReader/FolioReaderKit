@@ -606,5 +606,8 @@ function addClassBasedOnClickListenerToElement(element, schemeName, attributeNam
 }
 
 var onClassBasedListenerClick = function(schemeName, attributeContent) {
-	window.location = schemeName + "://" + attributeContent;
+	// Create parameters containing the click position inside the web view.
+	var positionParameterString = "/clientX=" + event.clientX + "&clientY=" + event.clientY;
+	// Set the custom link URL to the event
+	window.location = schemeName + "://" + attributeContent + positionParameterString;
 }

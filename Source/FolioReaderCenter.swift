@@ -18,11 +18,31 @@ var nextPageNumber: Int!
 var pageScrollDirection = ScrollDirection()
 var isScrolling = false
 
+/// Protocol which is used from `FolioReaderCenter`s.
+@objc public protocol FolioReaderCenterDelegate: class {
+
+	/**
+	Notifies that a page appeared. This is triggered is a page is chosen and displayed.
+
+	- parameter page: The appeared page
+	*/
+	optional func pageDidAppear(page: FolioReaderPage)
+
+	/**
+	Passes and returns the HTML content as `String`. Implement this method if you want to modify the HTML content of a `FolioReaderPage`.
+
+	- parameter page: The `FolioReaderPage`
+	- parameter htmlContent: The current HTML content as `String`
+
+	- returns: The adjusted HTML content as `String`. This is the content which will be loaded into the given `FolioReaderPage`
+	*/
+	optional func htmlContentForPage(page: FolioReaderPage, htmlContent: String) -> String
+}
 
 public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
 
 	/// This delegate receives the events from the current `FolioReaderPage`s delegate.
-	public weak var pageDelegate: FolioReaderPageDelegate?
+	public weak var delegate: FolioReaderCenterDelegate?
 
     var collectionView: UICollectionView!
     let collectionViewLayout = UICollectionViewFlowLayout()
@@ -344,38 +364,44 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
         
         // Configure the cell
         let resource = book.spine.spineReferences[indexPath.row].resource
-        var html = try? String(contentsOfFile: resource.fullHref, encoding: NSUTF8StringEncoding)
-        let mediaOverlayStyleColors = "\"\(readerConfig.mediaOverlayColor.hexString(false))\", \"\(readerConfig.mediaOverlayColor.highlightColor().hexString(false))\""
+		if var html = try? String(contentsOfFile: resource.fullHref, encoding: NSUTF8StringEncoding) {
+			let mediaOverlayStyleColors = "\"\(readerConfig.mediaOverlayColor.hexString(false))\", \"\(readerConfig.mediaOverlayColor.highlightColor().hexString(false))\""
 
-        // Inject CSS
-        let jsFilePath = NSBundle.frameworkBundle().pathForResource("Bridge", ofType: "js")
-        let cssFilePath = NSBundle.frameworkBundle().pathForResource("Style", ofType: "css")
-        let cssTag = "<link rel=\"stylesheet\" type=\"text/css\" href=\"\(cssFilePath!)\">"
-        let jsTag = "<script type=\"text/javascript\" src=\"\(jsFilePath!)\"></script>" +
-                    "<script type=\"text/javascript\">setMediaOverlayStyleColors(\(mediaOverlayStyleColors))</script>"
-        
-        let toInject = "\n\(cssTag)\n\(jsTag)\n</head>"
-        html = html?.stringByReplacingOccurrencesOfString("</head>", withString: toInject)
-        
-        // Font class name
-        var classes = FolioReader.currentFont.cssIdentifier
-        classes += " "+FolioReader.currentMediaOverlayStyle.className()
-        
-        // Night mode
-        if FolioReader.nightMode {
-            classes += " nightMode"
-        }
-        
-        // Font Size
-        classes += " \(FolioReader.currentFontSize.cssIdentifier)"
-        
-        html = html?.stringByReplacingOccurrencesOfString("<html ", withString: "<html class=\"\(classes)\"")
-        
-        cell.loadHTMLString(html, baseURL: NSURL(fileURLWithPath: (resource.fullHref as NSString).stringByDeletingLastPathComponent))
-        
+			// Inject CSS
+			let jsFilePath = NSBundle.frameworkBundle().pathForResource("Bridge", ofType: "js")
+			let cssFilePath = NSBundle.frameworkBundle().pathForResource("Style", ofType: "css")
+			let cssTag = "<link rel=\"stylesheet\" type=\"text/css\" href=\"\(cssFilePath!)\">"
+			let jsTag = "<script type=\"text/javascript\" src=\"\(jsFilePath!)\"></script>" +
+				"<script type=\"text/javascript\">setMediaOverlayStyleColors(\(mediaOverlayStyleColors))</script>"
+
+			let toInject = "\n\(cssTag)\n\(jsTag)\n</head>"
+			html = html.stringByReplacingOccurrencesOfString("</head>", withString: toInject)
+
+			// Font class name
+			var classes = FolioReader.currentFont.cssIdentifier
+			classes += " "+FolioReader.currentMediaOverlayStyle.className()
+
+			// Night mode
+			if FolioReader.nightMode {
+				classes += " nightMode"
+			}
+
+			// Font Size
+			classes += " \(FolioReader.currentFontSize.cssIdentifier)"
+
+			html = html.stringByReplacingOccurrencesOfString("<html ", withString: "<html class=\"\(classes)\"")
+
+			// Let the delegate adjust the html string
+			if let modifiedHtmlContent = self.delegate?.htmlContentForPage?(cell, htmlContent: html) {
+				html = modifiedHtmlContent
+			}
+
+			cell.loadHTMLString(html, baseURL: NSURL(fileURLWithPath: (resource.fullHref as NSString).stringByDeletingLastPathComponent))
+		}
+
         return cell
     }
-    
+
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         return CGSizeMake(collectionView.frame.width, collectionView.frame.height)
     }
@@ -503,10 +529,8 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
             currentPageNumber = page.pageNumber
         } else {
             let currentIndexPath = getCurrentIndexPath()
-            if currentIndexPath != NSIndexPath(forRow: 0, inSection: 0) {
-                currentPage = collectionView.cellForItemAtIndexPath(currentIndexPath) as? FolioReaderPage
-            }
-            
+			currentPage = collectionView.cellForItemAtIndexPath(currentIndexPath) as? FolioReaderPage
+
             previousPageNumber = currentIndexPath.row
             currentPageNumber = currentIndexPath.row+1
         }
@@ -532,7 +556,11 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
             }
             pagesForCurrentPage(page)
         }
-        
+
+		if let currentPage = currentPage {
+			self.delegate?.pageDidAppear?(currentPage)
+		}
+
         completion?()
     }
     
@@ -1091,15 +1119,13 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
 			let offsetPoint = self.currentWebViewScrollPositions[page.pageNumber - 1] {
 				page.webView.scrollView.setContentOffset(offsetPoint, animated: false)
 		}
-
-		self.pageDelegate?.pageDidLoad(page)
     }
 }
 
 // MARK: FolioReaderChapterListDelegate
 
 extension FolioReaderCenter: FolioReaderChapterListDelegate {
-    
+
     func chapterList(chapterList: FolioReaderChapterList, didSelectRowAtIndexPath indexPath: NSIndexPath, withTocReference reference: FRTocReference) {
         let item = findPageByResource(reference)
         

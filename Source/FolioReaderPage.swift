@@ -12,7 +12,7 @@ import UIMenuItem_CXAImageSupport
 import JSQWebViewController
 
 /// Protocol which is used from `FolioReaderPage`s.
-public protocol FolioReaderPageDelegate: class {
+protocol FolioReaderPageDelegate: class {
     /**
      Notify that page did loaded
      
@@ -98,35 +98,41 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
         )
     }
     
-    func loadHTMLString(string: String!, baseURL: NSURL!) {
-        
-        var html = (string as NSString)
-        
-        // Restore highlights
-        let highlights = Highlight.allByBookId((kBookId as NSString).stringByDeletingPathExtension, andPage: pageNumber)
-        
-        if highlights.count > 0 {
-            for item in highlights {
-                let style = HighlightStyle.classForStyle(item.type)
-                let tag = "<highlight id=\"\(item.highlightId)\" onclick=\"callHighlightURL(this);\" class=\"\(style)\">\(item.content)</highlight>"
-                var locator = item.contentPre + item.content + item.contentPost
-                locator = Highlight.removeSentenceSpam(locator) /// Fix for Highlights
-                let range: NSRange = html.rangeOfString(locator, options: .LiteralSearch)
-                
-                if range.location != NSNotFound {
-                    let newRange = NSRange(location: range.location + item.contentPre.characters.count, length: item.content.characters.count)
-                    html = html.stringByReplacingCharactersInRange(newRange, withString: tag)
-                }
-                else {
-                    print("highlight range not found")
-                }
-            }
-        }
-        
+    func loadHTMLString(htmlContent: String!, baseURL: NSURL!) {
+		// Insert the stored highlights to the HTML
+		var tempHtmlContent = htmlContentWithInsertHighlights(htmlContent)
+        // Load the html into the webview
         webView.alpha = 0
-        webView.loadHTMLString(html as String, baseURL: baseURL)
+        webView.loadHTMLString(tempHtmlContent, baseURL: baseURL)
     }
-    
+
+	// MARK: - Highlights
+
+	private func htmlContentWithInsertHighlights(htmlContent: String) -> String {
+		var tempHtmlContent = htmlContent as NSString
+		// Restore highlights
+		let highlights = Highlight.allByBookId((kBookId as NSString).stringByDeletingPathExtension, andPage: pageNumber)
+
+		if highlights.count > 0 {
+			for item in highlights {
+				let style = HighlightStyle.classForStyle(item.type)
+				let tag = "<highlight id=\"\(item.highlightId)\" onclick=\"callHighlightURL(this);\" class=\"\(style)\">\(item.content)</highlight>"
+				var locator = item.contentPre + item.content + item.contentPost
+				locator = Highlight.removeSentenceSpam(locator) /// Fix for Highlights
+				let range: NSRange = tempHtmlContent.rangeOfString(locator, options: .LiteralSearch)
+
+				if range.location != NSNotFound {
+					let newRange = NSRange(location: range.location + item.contentPre.characters.count, length: item.content.characters.count)
+					tempHtmlContent = tempHtmlContent.stringByReplacingCharactersInRange(newRange, withString: tag)
+				}
+				else {
+					print("highlight range not found")
+				}
+			}
+		}
+		return tempHtmlContent as String
+	}
+
     // MARK: - UIWebView Delegate
     
     public func webViewDidFinishLoad(webView: UIWebView) {
@@ -241,10 +247,19 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
 			// Check if the url is a custom class based onClick listerner
 			var isClassBasedOnClickListenerScheme = false
 			for listener in readerConfig.classBasedOnClickListeners {
-				if url.scheme == listener.schemeName {
-					let attributeContentString = (request.URL?.absoluteString!.stringByReplacingOccurrencesOfString("\(url.scheme)://", withString: "").stringByRemovingPercentEncoding)
-					listener.onClickAction(attributeContent: attributeContentString)
-					isClassBasedOnClickListenerScheme = true
+
+				if url.scheme == listener.schemeName,
+                    let absoluteURLString = request.URL?.absoluteString,
+                    let range = absoluteURLString.rangeOfString("/clientX=") {
+                    let baseURL = absoluteURLString.substringToIndex(range.startIndex)
+                    let positionString = absoluteURLString.substringFromIndex(range.startIndex)
+                    if let point = getEventTouchPoint(fromPositionParameterString: positionString) {
+                        let attributeContentString = (baseURL.stringByReplacingOccurrencesOfString("\(url.scheme)://", withString: "").stringByRemovingPercentEncoding)
+                        // Call the on click action block
+                        listener.onClickAction(attributeContent: attributeContentString, touchPointRelativeToWebView: point)
+                        // Mark the scheme as class based click listener scheme
+                        isClassBasedOnClickListenerScheme = true
+                    }
 				}
 			}
 
@@ -261,6 +276,22 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
 
         return true
     }
+
+	private func getEventTouchPoint(fromPositionParameterString positionParameterString: String) -> CGPoint? {
+		// Remove the parameter names: "/clientX=188&clientY=292" -> "188&292"
+		var positionParameterString = positionParameterString.stringByReplacingOccurrencesOfString("/clientX=", withString: "")
+		positionParameterString = positionParameterString.stringByReplacingOccurrencesOfString("clientY=", withString: "")
+		// Separate both position values into an array: "188&292" -> [188],[292]
+		let positionStringValues = positionParameterString.componentsSeparatedByString("&")
+		// Multiply the raw positions with the screen scale and return them as CGPoint
+		if
+			positionStringValues.count == 2,
+			let xPos = Int(positionStringValues[0]),
+			yPos = Int(positionStringValues[1]) {
+				return CGPoint(x: xPos, y: yPos)
+		}
+		return nil
+	}
     
     // MARK: Gesture recognizer
     
