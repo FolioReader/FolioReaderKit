@@ -454,6 +454,17 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
 			self.webView.js("addClassBasedOnClickListener(\"\(listener.schemeName)\", \"\(listener.querySelector)\", \"\(listener.attributeName)\", \"\(listener.selectAll)\")");
 		}
 	}
+
+	// MARK: - Public Java Script injection
+
+	/** 
+	Runs a JavaScript script and returns it result. The result of running the JavaScript script passed in the script parameter, or nil if the script fails.
+
+	- returns: The result of running the JavaScript script passed in the script parameter, or nil if the script fails.
+	*/
+	public func performJavaScript(javaScriptCode: String) -> String? {
+		return webView.js(javaScriptCode)
+	}
 }
 
 // MARK: - UIMenuItem extension

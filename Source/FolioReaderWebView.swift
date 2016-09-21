@@ -11,8 +11,9 @@ import UIKit
 class FolioReaderWebView: UIWebView {
 
 	var isColors = false
-
 	var isShare = false
+
+	// MARK: - UIMenuController
 
 	public override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
 
@@ -55,6 +56,8 @@ class FolioReaderWebView: UIWebView {
 	public override func canBecomeFirstResponder() -> Bool {
 		return true
 	}
+
+	// MARK: - UIMenuController - Actions
 
 	func share(sender: UIMenuController) {
 		let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
@@ -158,9 +161,6 @@ class FolioReaderWebView: UIWebView {
 		userInteractionEnabled = true
 	}
 
-
-	// MARK: - Set highlight styles
-
 	func setYellow(sender: UIMenuController?) {
 		changeHighlightStyle(sender, style: .Yellow)
 	}
@@ -235,6 +235,8 @@ class FolioReaderWebView: UIWebView {
 
 		UIMenuController.sharedMenuController().setMenuVisible(menuVisible, animated: animated)
 	}
+
+	// MARK: - Java Script Bridge
 
 	func js(script: String) -> String? {
 		let callback = self.stringByEvaluatingJavaScriptFromString(script)
