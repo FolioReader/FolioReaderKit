@@ -136,6 +136,9 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
     // MARK: - UIWebView Delegate
     
     public func webViewDidFinishLoad(webView: UIWebView) {
+		guard let webView = webView as? FolioReaderWebView else {
+			return
+		}
 
 		// Add the custom class based onClick listener
 		self.setupClassBasedOnClickListeners()
@@ -143,7 +146,7 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
         refreshPageMode()
         
         if readerConfig.enableTTS && !book.hasAudio() {
-            (webView as? FolioReaderWebView)?.js("wrappingSentencesWithinPTags()")
+            webView.js("wrappingSentencesWithinPTags()")
             
             if let audioPlayer = FolioReader.sharedInstance.readerAudioPlayer where audioPlayer.isPlaying() {
                 audioPlayer.readCurrentSentence()
@@ -157,7 +160,7 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
         }
         
         UIView.animateWithDuration(0.2, animations: {webView.alpha = 1}) { finished in
-            (webView as? FolioReaderWebView)?.isColors = false
+            webView.isColors = false
             self.webView.createMenu(options: false)
         }
 
@@ -165,7 +168,10 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
     }
     
     public func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-        
+		guard let webView = webView as? FolioReaderWebView else {
+			return true
+		}
+
         guard let url = request.URL else { return false }
         
         if url.scheme == "highlight" {
@@ -175,8 +181,8 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
             let decoded = url.absoluteString.stringByRemovingPercentEncoding as String!
             let rect = CGRectFromString(decoded.substringFromIndex(decoded.startIndex.advancedBy(12)))
             
-            (webView as? FolioReaderWebView)?.createMenu(options: true)
-            (webView as? FolioReaderWebView)?.setMenuVisible(true, andRect: rect)
+            webView.createMenu(options: true)
+            webView.setMenuVisible(true, andRect: rect)
             menuIsVisible = true
             
             return false
