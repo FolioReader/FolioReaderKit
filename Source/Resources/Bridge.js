@@ -606,6 +606,10 @@ function addClassBasedOnClickListenerToElement(element, schemeName, attributeNam
 }
 
 var onClassBasedListenerClick = function(schemeName, attributeContent) {
+	// Prevent the browser from performing the default on click behavior
+	event.preventDefault();
+	// Don't pass the click event to other elemtents
+	event.stopPropagation();
 	// Create parameters containing the click position inside the web view.
 	var positionParameterString = "/clientX=" + event.clientX + "&clientY=" + event.clientY;
 	// Set the custom link URL to the event
