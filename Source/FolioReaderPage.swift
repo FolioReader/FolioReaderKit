@@ -692,10 +692,6 @@ extension UIWebView {
     }
     
     func setMenuVisible(menuVisible: Bool, animated: Bool = true, andRect rect: CGRect = CGRectZero) {
-		guard readerConfig.useReaderMenuController else {
-			return
-		}
-
 		if !menuVisible && isShare || !menuVisible && isColors {
             isColors = false
             isShare = false
