@@ -12,13 +12,21 @@ import UIMenuItem_CXAImageSupport
 import JSQWebViewController
 
 /// Protocol which is used from `FolioReaderPage`s.
-protocol FolioReaderPageDelegate: class {
-    /**
-     Notify that page did loaded
-     
-     - parameter page: The loaded page
-     */
-    func pageDidLoad(page: FolioReaderPage)
+@objc public protocol FolioReaderPageDelegate: class {
+
+	/**
+	Notify that the page will be loaded. Note: The webview content itself is already loaded at this moment. But some java script operations like the adding of class based on click listeners will happen right after this method. If you want to perform custom java script before this happens this method is the right choice. If you want to modify the html content (and not run java script) you have to use `htmlContentForPage()` from the `FolioReaderCenterDelegate`.
+
+	- parameter page: The loaded page
+	*/
+	optional func pageWillLoad(page: FolioReaderPage)
+
+	/**
+	Notifies that page did load. A page load doesn't mean that this page is displayed right away, use `pageDidAppear` to get informed about the appearance of a page.
+
+	- parameter page: The loaded page
+	*/
+	optional func pageDidLoad(page: FolioReaderPage)
 }
 
 public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate {
@@ -137,6 +145,8 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
     
     public func webViewDidFinishLoad(webView: UIWebView) {
 
+		delegate?.pageWillLoad?(self)
+
 		// Add the custom class based onClick listener
 		self.setupClassBasedOnClickListeners()
 
@@ -161,7 +171,7 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
             self.webView.createMenu(options: false)
         }
 
-        delegate?.pageDidLoad(self)
+        delegate?.pageDidLoad?(self)
     }
     
     public func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
