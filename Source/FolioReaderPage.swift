@@ -425,10 +425,6 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
     // MARK: UIMenu visibility
     
     override public func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
-		guard readerConfig.useReaderMenuController else {
-			return false
-		}
-
 		if UIMenuController.sharedMenuController().menuItems?.count == 0 {
             webView.isColors = false
             webView.createMenu(options: false)
