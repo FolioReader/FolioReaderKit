@@ -22,6 +22,13 @@ var isScrolling = false
 @objc public protocol FolioReaderCenterDelegate: class {
 
 	/**
+	Notifies that page did load. A page load doesn't mean that this page is displayed right away, use `pageDidAppear` to get informed about the appearance of a page.
+
+	- parameter page: The loaded page
+	*/
+	optional func pageDidLoad(page: FolioReaderPage)
+
+	/**
 	Notifies that a page appeared. This is triggered is a page is chosen and displayed.
 
 	- parameter page: The appeared page
@@ -1119,6 +1126,9 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
 			let offsetPoint = self.currentWebViewScrollPositions[page.pageNumber - 1] {
 				page.webView.scrollView.setContentOffset(offsetPoint, animated: false)
 		}
+
+		// Pass the event to the reader center delegate
+		delegate?.pageDidLoad?(page)
     }
 }
 
