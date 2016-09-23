@@ -31,12 +31,12 @@ extension Highlight {
             realm.deleteAll()
             for oldHighlight in highlights! {
                 let newHighlight = Highlight()
-                newHighlight.bookId = oldHighlight.valueForKey("bookId") as! String
-                newHighlight.content = oldHighlight.valueForKey("content") as! String
-                newHighlight.contentPost = oldHighlight.valueForKey("contentPost") as! String
-                newHighlight.contentPre = oldHighlight.valueForKey("contentPre") as! String
-                newHighlight.date = oldHighlight.valueForKey("date") as! NSDate
-                newHighlight.highlightId = oldHighlight.valueForKey("highlightId") as! String
+                newHighlight.bookId = oldHighlight.valueForKey("bookId") as? String
+                newHighlight.content = oldHighlight.valueForKey("content") as? String
+                newHighlight.contentPost = oldHighlight.valueForKey("contentPost") as? String
+                newHighlight.contentPre = oldHighlight.valueForKey("contentPre") as? String
+                newHighlight.date = oldHighlight.valueForKey("date") as? NSDate
+                newHighlight.highlightId = oldHighlight.valueForKey("highlightId") as? String
                 newHighlight.page = oldHighlight.valueForKey("page") as! Int
                 newHighlight.type = oldHighlight.valueForKey("type") as! Int
                 
