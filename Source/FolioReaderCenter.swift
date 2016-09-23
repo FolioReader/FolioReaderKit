@@ -22,13 +22,6 @@ var isScrolling = false
 @objc public protocol FolioReaderCenterDelegate: class {
 
 	/**
-	Notifies that page did load. A page load doesn't mean that this page is displayed right away, use `pageDidAppear` to get informed about the appearance of a page.
-
-	- parameter page: The loaded page
-	*/
-	optional func pageDidLoad(page: FolioReaderPage)
-
-	/**
 	Notifies that a page appeared. This is triggered is a page is chosen and displayed.
 
 	- parameter page: The appeared page
@@ -50,6 +43,7 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
 
 	/// This delegate receives the events from the current `FolioReaderPage`s delegate.
 	public weak var delegate: FolioReaderCenterDelegate?
+	public weak var pageDelegate: FolioReaderPageDelegate?
 
     var collectionView: UICollectionView!
     let collectionViewLayout = UICollectionViewFlowLayout()
@@ -1127,9 +1121,14 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
 				page.webView.scrollView.setContentOffset(offsetPoint, animated: false)
 		}
 
-		// Pass the event to the reader center delegate
-		delegate?.pageDidLoad?(page)
+		// Pass the event to the centers `pageDelegate`
+		pageDelegate?.pageDidLoad?(page)
     }
+
+	public func pageWillLoad(page: FolioReaderPage) {
+		// Pass the event to the centers `pageDelegate`
+		pageDelegate?.pageWillLoad?(page)
+	}
 }
 
 // MARK: FolioReaderChapterListDelegate
