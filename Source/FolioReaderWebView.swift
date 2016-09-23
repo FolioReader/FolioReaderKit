@@ -193,7 +193,7 @@ public class FolioReaderWebView: UIWebView {
 	// MARK: - Create and show menu
 
 	func createMenu(options options: Bool) {
-		guard readerConfig.useReaderMenuController == false else {
+		guard readerConfig.useReaderMenuController else {
 			return
 		}
 
