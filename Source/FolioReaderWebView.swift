@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FolioReaderWebView: UIWebView {
+public class FolioReaderWebView: UIWebView {
 
 	var isColors = false
 	var isShare = false
@@ -17,7 +17,7 @@ class FolioReaderWebView: UIWebView {
 
 	public override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
 
-		if(readerConfig == nil){
+		if(readerConfig == nil || readerConfig.useReaderMenuController == false) {
 			return super.canPerformAction(action, withSender: sender)
 		}
 
@@ -193,6 +193,10 @@ class FolioReaderWebView: UIWebView {
 	// MARK: - Create and show menu
 
 	func createMenu(options options: Bool) {
+		guard readerConfig.useReaderMenuController == false else {
+			return
+		}
+
 		isShare = options
 
 		let colors = UIImage(readerImageNamed: "colors-marker")
