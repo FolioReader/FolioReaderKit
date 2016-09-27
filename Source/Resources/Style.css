@@ -42,6 +42,10 @@ body {
     overflow: hidden !important;
 }
 
+* {
+    page-break-before: initial !important; /* Reset page breaks to default */
+}
+
 /* Custom padding for tablets */
 @media only screen and (min-device-width: 768px){
     body {
