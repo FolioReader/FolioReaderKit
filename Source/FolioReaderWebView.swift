@@ -12,39 +12,23 @@ class FolioReaderWebView: UIWebView {
 
 	var isColors = false
 	var isShare = false
+    var isOneWord = false
 
 	// MARK: - UIMenuController
 
 	public override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
-
-		if(readerConfig == nil){
+		guard readerConfig != nil else {
 			return super.canPerformAction(action, withSender: sender)
 		}
-
-		// menu on existing highlight
+        
 		if isShare {
-			if action == #selector(colors(_:)) || (action == #selector(share(_:)) && readerConfig.allowSharing) || action == #selector(remove(_:)) {
-				return true
-			}
 			return false
-
-			// menu for selecting highlight color
 		} else if isColors {
-			if action == #selector(setYellow(_:)) || action == #selector(setGreen(_:)) || action == #selector(setBlue(_:)) || action == #selector(setPink(_:)) || action == #selector(setUnderline(_:)) {
-				return true
-			}
 			return false
-
-			// default menu
 		} else {
-			var isOneWord = false
-			if let result = js("getSelectedText()") where result.componentsSeparatedByString(" ").count == 1 {
-				isOneWord = true
-			}
-
 			if action == #selector(highlight(_:))
 				|| (action == #selector(define(_:)) && isOneWord)
-				|| (action == #selector(play(_:)) && (book.hasAudio() || readerConfig.enableTTS))
+                || (action == #selector(play(_:)) && (book.hasAudio() || readerConfig.enableTTS))
 				|| (action == #selector(share(_:)) && readerConfig.allowSharing)
 				|| (action == #selector(NSObject.copy(_:)) && readerConfig.allowSharing) {
 				return true
@@ -204,21 +188,61 @@ class FolioReaderWebView: UIWebView {
 		let pink = UIImage(readerImageNamed: "pink-marker")
 		let underline = UIImage(readerImageNamed: "underline-marker")
 
+        let menuController = UIMenuController.sharedMenuController()
+        
 		let highlightItem = UIMenuItem(title: readerConfig.localizedHighlightMenu, action: #selector(highlight(_:)))
 		let playAudioItem = UIMenuItem(title: readerConfig.localizedPlayMenu, action: #selector(play(_:)))
 		let defineItem = UIMenuItem(title: readerConfig.localizedDefineMenu, action: #selector(define(_:)))
-		let colorsItem = UIMenuItem(title: "C", image: colors!, action: #selector(self.colors(_:)))
-		let shareItem = UIMenuItem(title: "S", image: share!, action: #selector(self.share(_:)))
-		let removeItem = UIMenuItem(title: "R", image: remove!, action: #selector(self.remove(_:)))
-		let yellowItem = UIMenuItem(title: "Y", image: yellow!, action: #selector(setYellow(_:)))
-		let greenItem = UIMenuItem(title: "G", image: green!, action: #selector(setGreen(_:)))
-		let blueItem = UIMenuItem(title: "B", image: blue!, action: #selector(setBlue(_:)))
-		let pinkItem = UIMenuItem(title: "P", image: pink!, action: #selector(setPink(_:)))
-		let underlineItem = UIMenuItem(title: "U", image: underline!, action: #selector(setUnderline(_:)))
-
-		let menuItems = [playAudioItem, highlightItem, defineItem, colorsItem, removeItem, yellowItem, greenItem, blueItem, pinkItem, underlineItem, shareItem]
-
-		UIMenuController.sharedMenuController().menuItems = menuItems
+        let colorsItem = UIMenuItem(title: "C", image: colors) { [weak self] _ in
+            self?.colors(menuController)
+        }
+        let shareItem = UIMenuItem(title: "S", image: share) { [weak self] _ in
+            self?.share(menuController)
+        }
+        let removeItem = UIMenuItem(title: "R", image: remove) { [weak self] _ in
+            self?.remove(menuController)
+        }
+        let yellowItem = UIMenuItem(title: "Y", image: yellow) { [weak self] _ in
+            self?.setYellow(menuController)
+        }
+        let greenItem = UIMenuItem(title: "G", image: green) { [weak self] _ in
+            self?.setGreen(menuController)
+        }
+        let blueItem = UIMenuItem(title: "B", image: blue) { [weak self] _ in
+            self?.setBlue(menuController)
+        }
+        let pinkItem = UIMenuItem(title: "P", image: pink) { [weak self] _ in
+            self?.setPink(menuController)
+        }
+        let underlineItem = UIMenuItem(title: "U", image: underline) { [weak self] _ in
+            self?.setUnderline(menuController)
+        }
+        
+        var menuItems = [shareItem]
+        
+        // menu on existing highlight
+        if isShare {
+            menuItems = [colorsItem, removeItem]
+            if readerConfig.allowSharing {
+                menuItems.append(shareItem)
+            }
+        } else if isColors {
+            // menu for selecting highlight color
+            menuItems = [yellowItem, greenItem, blueItem, pinkItem, underlineItem]
+        } else {
+            // default menu
+            menuItems = [highlightItem, defineItem, shareItem]
+            
+            if book.hasAudio() || readerConfig.enableTTS {
+                menuItems.insert(playAudioItem, atIndex: 0)
+            }
+            
+            if !readerConfig.allowSharing {
+                menuItems.removeLast()
+            }
+        }
+        
+        menuController.menuItems = menuItems
 	}
 
 	func setMenuVisible(menuVisible: Bool, animated: Bool = true, andRect rect: CGRect = CGRectZero) {
