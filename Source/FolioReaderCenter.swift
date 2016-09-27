@@ -43,6 +43,7 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
 
 	/// This delegate receives the events from the current `FolioReaderPage`s delegate.
 	public weak var delegate: FolioReaderCenterDelegate?
+	public weak var pageDelegate: FolioReaderPageDelegate?
 
     var collectionView: UICollectionView!
     let collectionViewLayout = UICollectionViewFlowLayout()
@@ -1119,7 +1120,15 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
 			let offsetPoint = self.currentWebViewScrollPositions[page.pageNumber - 1] {
 				page.webView.scrollView.setContentOffset(offsetPoint, animated: false)
 		}
+
+		// Pass the event to the centers `pageDelegate`
+		pageDelegate?.pageDidLoad?(page)
     }
+
+	public func pageWillLoad(page: FolioReaderPage) {
+		// Pass the event to the centers `pageDelegate`
+		pageDelegate?.pageWillLoad?(page)
+	}
 }
 
 // MARK: FolioReaderChapterListDelegate
