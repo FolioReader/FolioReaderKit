@@ -32,7 +32,7 @@ Pod::Spec.new do |s|
   s.libraries  = "z"
   s.frameworks = 'CoreData'
   s.dependency 'SSZipArchive', '1.5'
-  s.dependency 'UIMenuItem-CXAImageSupport', '~> 0.0'
+  s.dependency 'MenuItemKit', '1.1.3'
   s.dependency 'ZFDragableModalTransition', '~> 0.6'
   s.dependency 'AEXML', '3.0'
   s.dependency 'FontBlaster', '2.1.4'

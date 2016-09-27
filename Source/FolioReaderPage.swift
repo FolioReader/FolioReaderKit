@@ -8,7 +8,7 @@
 
 import UIKit
 import SafariServices
-import UIMenuItem_CXAImageSupport
+import MenuItemKit
 import JSQWebViewController
 
 /// Protocol which is used from `FolioReaderPage`s.
@@ -445,6 +445,16 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
             webView.isColors = false
             webView.createMenu(options: false)
         }
+        
+        if !webView.isShare && !webView.isColors {
+            if let result = webView.js("getSelectedText()") where result.componentsSeparatedByString(" ").count == 1 {
+                webView.isOneWord = true
+                webView.createMenu(options: false)
+            } else {
+                webView.isOneWord = false
+            }
+        }
+        
         return super.canPerformAction(action, withSender: sender)
     }
     
@@ -481,20 +491,4 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
 	public func performJavaScript(javaScriptCode: String) -> String? {
 		return webView.js(javaScriptCode)
 	}
-}
-
-// MARK: - UIMenuItem extension
-
-extension UIMenuItem {
-    convenience init(title: String, image: UIImage, action: Selector) {
-      #if COCOAPODS
-        self.init(title: title, action: action)
-        self.cxa_initWithTitle(title, action: action, image: image, hidesShadow: true)
-      #else
-        let settings = CXAMenuItemSettings()
-        settings.image = image
-        settings.shadowDisabled = true
-        self.init(title: title, action: action, settings: settings)
-      #endif
-    }
 }
