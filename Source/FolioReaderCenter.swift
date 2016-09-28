@@ -103,6 +103,10 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
 		enableScrollBetweenChapters(scrollEnabled: true)
         view.addSubview(collectionView)
         
+        if #available(iOS 10.0, *) {
+            collectionView.prefetchingEnabled = false
+        }
+        
         // Register cell classes
         collectionView!.registerClass(FolioReaderPage.self, forCellWithReuseIdentifier: reuseIdentifier)
         

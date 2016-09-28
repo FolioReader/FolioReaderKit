@@ -164,7 +164,10 @@ public class FolioReaderConfig: NSObject {
    
     /// Localizes Content title
     public var localizedContentsTitle = NSLocalizedString("Contents", comment: "")
- 
+
+	/// Use the readers `UIMenuController` which enables the highlighting etc. The default is `true`. If set to false it's possible to modify the shared `UIMenuController` for yourself. Note: This doesn't disable the text selection in the web view.
+	public var useReaderMenuController = true
+	
     /// Localizes Highlight date format. This is a `dateFormat` from `NSDateFormatter`, so be careful 🤔
     public var localizedHighlightsDateFormat = "MMM dd, YYYY | HH:mm"
     public var localizedHighlightMenu = NSLocalizedString("Highlight", comment: "")

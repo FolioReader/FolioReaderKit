@@ -21,7 +21,7 @@ PODS:
 
 DEPENDENCIES:
   - FolioReaderKit (from `../`)
-  - Nimble
+  - Nimble (~> 4.1.0)
   - Quick (= 0.9.2)
 
 EXTERNAL SOURCES:
@@ -40,6 +40,6 @@ SPEC CHECKSUMS:
   SSZipArchive: 29daace2bccb90a47de2837744da397728ff9207
   ZFDragableModalTransition: 0d294eaaba6edfcb9839595de765f9ca06a4b524
 
-PODFILE CHECKSUM: 2084e898fe18713ba33a9b26753d36d93d892bd8
+PODFILE CHECKSUM: 55962a6106e53da04861e4602fc98856987b97b3
 
 COCOAPODS: 1.0.1
