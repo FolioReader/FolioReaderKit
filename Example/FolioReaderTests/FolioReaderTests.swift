@@ -17,7 +17,7 @@ class FolioReaderTests: QuickSpec {
             var subject: FREpubParser!
 
             beforeEach {
-                let path = NSBundle(forClass: self.dynamicType).pathForResource("The Silver Chair", ofType: "epub")!
+                let path = Bundle(for: type(of: self)).path(forResource: "The Silver Chair", ofType: "epub")!
                 subject = FREpubParser()
                 subject.readEpub(epubPath: path)
             }

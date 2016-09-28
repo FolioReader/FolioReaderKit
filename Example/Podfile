@@ -30,7 +30,7 @@ post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
       # Force add version
-      config.build_settings['SWIFT_VERSION'] = '2.3'
+      config.build_settings['SWIFT_VERSION'] = '3.0'
       
       # ensure testability is set https://github.com/CocoaPods/CocoaPods/issues/4505
       if config.name == 'Debug'

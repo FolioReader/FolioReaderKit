@@ -9,28 +9,28 @@
 import UIKit
 
 enum ComponentStyle: Int {
-    case IOS
-    case Rectangular
-    case Rounded
-    case Invisible
-    case Image
+    case ios
+    case rectangular
+    case rounded
+    case invisible
+    case image
 }
 
 let iOSThumbShadowRadius: CGFloat = 4.0
-let iosThumbShadowOffset = CGSizeMake(0, 3)
+let iosThumbShadowOffset = CGSize(width: 0, height: 3)
 
 class HADiscreteSlider : UIControl {
 
-    func ticksDistanceChanged(ticksDistance: CGFloat, sender: AnyObject) { }
-    func valueChanged(value: CGFloat) { }
+    func ticksDistanceChanged(_ ticksDistance: CGFloat, sender: AnyObject) { }
+    func valueChanged(_ value: CGFloat) { }
     
     // MARK: properties
     
-    var tickStyle: ComponentStyle =  ComponentStyle.Rectangular {
+    var tickStyle: ComponentStyle =  ComponentStyle.rectangular {
         didSet { self.layoutTrack() }
     }
     
-    var tickSize: CGSize = CGSizeMake(1.0, 4.0) {
+    var tickSize: CGSize = CGSize(width: 1.0, height: 4.0) {
         willSet (value) {
             self.tickSize.width = max(0, value.width)
             self.tickSize.height = max(0, value.height)
@@ -57,7 +57,7 @@ class HADiscreteSlider : UIControl {
         didSet { self.layoutTrack() }
     }
     
-    var trackStyle: ComponentStyle = ComponentStyle.IOS {
+    var trackStyle: ComponentStyle = ComponentStyle.ios {
         didSet { self.layoutTrack() }
     }
     
@@ -72,11 +72,11 @@ class HADiscreteSlider : UIControl {
         didSet { self.layoutTrack() }
     }
     
-    var thumbStyle: ComponentStyle = ComponentStyle.IOS {
+    var thumbStyle: ComponentStyle = ComponentStyle.ios {
         didSet { self.layoutTrack() }
     }
     
-    var thumbSize: CGSize = CGSizeMake(10.0, 10.0) {
+    var thumbSize: CGSize = CGSize(width: 10.0, height: 10.0) {
         willSet (value) {
             self.thumbSize.width = max(1, value.width)
             self.thumbSize.height = max(1, value.height)
@@ -94,7 +94,7 @@ class HADiscreteSlider : UIControl {
             // Associate image to layer
             if let imageName = value {
                 let image: UIImage = UIImage(named: imageName)!
-                self.thumbLayer!.contents = image.CGImage
+                self.thumbLayer!.contents = image.cgImage
             }
             self.layoutTrack()
         }
@@ -154,35 +154,35 @@ class HADiscreteSlider : UIControl {
 	    fatalError("init(coder:) has not been implemented")
 	}
 	
-	override func drawRect(rect: CGRect) {
+	override func draw(_ rect: CGRect) {
 		self.drawTrack()
 		self.drawThumb()
 	}
 	
 	func sendActionsForControlEvents() {
-        self.sendActionsForControlEvents(UIControlEvents.ValueChanged)
+        self.sendActions(for: UIControlEvents.valueChanged)
 	}
 	
 	// MARK: HADiscreteSlider
     
 	func initProperties() {
-		self.thumbColor = UIColor.lightGrayColor()
-		self.thumbShadowOffset = CGSizeZero
+		self.thumbColor = UIColor.lightGray
+		self.thumbShadowOffset = CGSize.zero
 		_intMinimumValue = -5
 		_intValue = 0
 		self.thumbAbscisse = 0.0
-		self.trackRectangle = CGRectZero
+		self.trackRectangle = CGRect.zero
 		// In case we need a colored track, initialize it now
 		// There may be a more elegant way to do this than with a CALayer,
 		// but then again CALayer brings free animation and will animate along the thumb
 		self.colorTrackLayer = CALayer()
-		self.colorTrackLayer!.backgroundColor = UIColor(hue: 211.0/360.0, saturation: 1, brightness: 1, alpha: 1).CGColor
+		self.colorTrackLayer!.backgroundColor = UIColor(hue: 211.0/360.0, saturation: 1, brightness: 1, alpha: 1).cgColor
 		self.colorTrackLayer!.cornerRadius = 2.0
 		self.layer.addSublayer(self.colorTrackLayer!)
 		// The thumb is its own CALayer, which brings in free animation
 		self.thumbLayer = CALayer()
 		self.layer.addSublayer(self.thumbLayer!)
-		self.multipleTouchEnabled = false
+		self.isMultipleTouchEnabled = false
 		self.layoutTrack()
 	}
 	
@@ -190,64 +190,64 @@ class HADiscreteSlider : UIControl {
 		let ctx = UIGraphicsGetCurrentContext()
 		// Track
 		switch self.trackStyle {
-        case .Rectangular:
-            CGContextAddRect(ctx!, self.trackRectangle)
+        case .rectangular:
+            ctx!.addRect(self.trackRectangle)
         break
-        case .Image:
+        case .image:
         
             // Draw image if exists
             if let imageName = self.trackImage {
                 let image = UIImage(named:imageName)!
-                let centered = CGRectMake((self.frame.size.width/2)-(image.size.width/2), (self.frame.size.height/2)-(image.size.height/2), image.size.width, image.size.height)
-                    CGContextDrawImage(ctx!, centered, image.CGImage!)
+                let centered = CGRect(x: (self.frame.size.width/2)-(image.size.width/2), y: (self.frame.size.height/2)-(image.size.height/2), width: image.size.width, height: image.size.height)
+                    ctx!.draw(image.cgImage!, in: centered)
             }
             break
         
-        case .Invisible, .Rounded, .IOS:
+        case .invisible, .rounded, .ios:
             let path: UIBezierPath = UIBezierPath(roundedRect: self.trackRectangle, cornerRadius: self.trackRectangle.size.height/2)
-            CGContextAddPath(ctx!, path.CGPath)
+            ctx!.addPath(path.cgPath)
             break
 		}
         
 		// Ticks
-		if .IOS != self.tickStyle {
+		if .ios != self.tickStyle {
             for originValue in self.ticksAbscisses {
                 let originPoint = originValue
-                let rectangle = CGRectMake(originPoint.x-(self.tickSize.width/2), originPoint.y-(self.tickSize.height/2), self.tickSize.width, self.tickSize.height)
+                let rectangle = CGRect(x: originPoint.x-(self.tickSize.width/2), y: originPoint.y-(self.tickSize.height/2), width: self.tickSize.width, height: self.tickSize.height)
                 switch self.tickStyle {
-                case .Rounded:
+                case .rounded:
                     let path = UIBezierPath(roundedRect: rectangle, cornerRadius: rectangle.size.height/2)
-                    CGContextAddPath(ctx!, path.CGPath)
+                    ctx!.addPath(path.cgPath)
                     break
-                case .Rectangular:
-                    CGContextAddRect(ctx!, rectangle)
+                case .rectangular:
+                    ctx!.addRect(rectangle)
                     break
-                case .Image:
+                case .image:
                     // Draw image if exists
                     
                     if let imageName = self.tickImage {
                         let image = UIImage(named: imageName)!
-                        let centered = CGRectMake(rectangle.origin.x+(rectangle.size.width/2)-(image.size.width/2), rectangle.origin.y+(rectangle.size.height/2)-(image.size.height/2), image.size.width, image.size.height)
-                            CGContextDrawImage(ctx!, centered, image.CGImage!)
+                        let centered = CGRect(x: rectangle.origin.x+(rectangle.size.width/2)-(image.size.width/2), y: rectangle.origin.y+(rectangle.size.height/2)-(image.size.height/2), width: image.size.width, height: image.size.height)
+                            ctx!.draw(image.cgImage!, in: centered)
                     }
                     break
                 
-                case .Invisible: break
-                case .IOS: break
+                case .invisible: break
+                case .ios: break
                 }
             }
 		}
         
 		// iOS UISlider aka .IOS does not have ticks
-		CGContextSetFillColorWithColor(ctx!, self.tintColor.CGColor)
-		CGContextFillPath(ctx!)
+		ctx!.setFillColor(self.tintColor.cgColor)
+		ctx!.fillPath()
 		// For colored track, we overlay a CALayer, which will animate along with the cursor
-		if .IOS == self.trackStyle {
+		if .ios == self.trackStyle {
 			var frame = self.trackRectangle
-			frame.size.width = self.thumbAbscisse!-CGRectGetMinX(self.trackRectangle)
-			self.colorTrackLayer!.frame = frame
+			frame?.size.width = self.thumbAbscisse!-self.trackRectangle.minX
+			self.colorTrackLayer!.frame = frame!
 		} else {
-			self.colorTrackLayer!.frame = CGRectZero
+			self.colorTrackLayer!.frame = CGRect.zero
 		}
 	}
 	
@@ -257,46 +257,46 @@ class HADiscreteSlider : UIControl {
 			let thumbSizeForStyle = self.thumbSizeIncludingShadow()
 			let thumbWidth = thumbSizeForStyle.width
 			let thumbHeight = thumbSizeForStyle.height
-			let rectangle = CGRectMake(self.thumbAbscisse!-(thumbWidth/2), (self.frame.size.height-thumbHeight)/2, thumbWidth, thumbHeight)
-			let shadowRadius = ((self.thumbStyle == .IOS) ? iOSThumbShadowRadius : self.thumbShadowRadius)
-			let shadowOffset = ((self.thumbStyle == .IOS) ? iosThumbShadowOffset : self.thumbShadowOffset)
+			let rectangle = CGRect(x: self.thumbAbscisse!-(thumbWidth/2), y: (self.frame.size.height-thumbHeight)/2, width: thumbWidth, height: thumbHeight)
+			let shadowRadius = ((self.thumbStyle == .ios) ? iOSThumbShadowRadius : self.thumbShadowRadius)
+			let shadowOffset = ((self.thumbStyle == .ios) ? iosThumbShadowOffset : self.thumbShadowOffset)
 			// Ignore offset if there is no shadow
-			self.thumbLayer!.frame = ((shadowRadius != 0.0) ? CGRectInset(rectangle, shadowRadius+shadowOffset!.width, shadowRadius+shadowOffset!.height) : CGRectInset(rectangle, shadowRadius, shadowRadius))
+			self.thumbLayer!.frame = ((shadowRadius != 0.0) ? rectangle.insetBy(dx: shadowRadius+shadowOffset!.width, dy: shadowRadius+shadowOffset!.height) : rectangle.insetBy(dx: shadowRadius, dy: shadowRadius))
 			switch self.thumbStyle {
-            case .Rounded:
+            case .rounded:
                 // A rounded thumb is circular
-                self.thumbLayer!.backgroundColor = self.thumbColor!.CGColor
-                self.thumbLayer!.borderColor = UIColor.clearColor().CGColor
+                self.thumbLayer!.backgroundColor = self.thumbColor!.cgColor
+                self.thumbLayer!.borderColor = UIColor.clear.cgColor
                 self.thumbLayer!.borderWidth = 0.0
                 self.thumbLayer!.cornerRadius = self.thumbLayer!.frame.size.width/2
                 self.thumbLayer!.allowsEdgeAntialiasing = true
                 break
 				
-            case .Image:
+            case .image:
                 // image is set using layer.contents
-                self.thumbLayer!.backgroundColor = UIColor.clearColor().CGColor
-                self.thumbLayer!.borderColor = UIColor.clearColor().CGColor
+                self.thumbLayer!.backgroundColor = UIColor.clear.cgColor
+                self.thumbLayer!.borderColor = UIColor.clear.cgColor
                 self.thumbLayer!.borderWidth = 0.0
                 self.thumbLayer!.cornerRadius = 0.0
                 self.thumbLayer!.allowsEdgeAntialiasing = false
                 break
 				
-            case .Rectangular:
-                self.thumbLayer!.backgroundColor = self.thumbColor!.CGColor
-				self.thumbLayer!.borderColor = UIColor.clearColor().CGColor
+            case .rectangular:
+                self.thumbLayer!.backgroundColor = self.thumbColor!.cgColor
+				self.thumbLayer!.borderColor = UIColor.clear.cgColor
 				self.thumbLayer!.borderWidth = 0.0
 				self.thumbLayer!.cornerRadius = 0.0
 				self.thumbLayer!.allowsEdgeAntialiasing = false
 				break
                 
-            case .Invisible:
-				self.thumbLayer!.backgroundColor = UIColor.clearColor().CGColor
+            case .invisible:
+				self.thumbLayer!.backgroundColor = UIColor.clear.cgColor
 				self.thumbLayer!.cornerRadius = 0.0
 				break
                 
-            case .IOS:
-                self.thumbLayer!.backgroundColor = UIColor.whiteColor().CGColor
-                self.thumbLayer!.borderColor = UIColor(hue: 0, saturation: 0, brightness: 0.8, alpha: 1).CGColor
+            case .ios:
+                self.thumbLayer!.backgroundColor = UIColor.white.cgColor
+                self.thumbLayer!.borderColor = UIColor(hue: 0, saturation: 0, brightness: 0.8, alpha: 1).cgColor
                 self.thumbLayer!.borderWidth = 0.5
                 self.thumbLayer!.cornerRadius = self.thumbLayer!.frame.size.width/2
                 self.thumbLayer!.allowsEdgeAntialiasing = true
@@ -308,12 +308,12 @@ class HADiscreteSlider : UIControl {
 			if shadowRadius != 0.0 {
 				self.thumbLayer!.shadowOffset = shadowOffset!
 				self.thumbLayer!.shadowRadius = shadowRadius
-				self.thumbLayer!.shadowColor = UIColor.blackColor().CGColor
+				self.thumbLayer!.shadowColor = UIColor.black.cgColor
 				self.thumbLayer!.shadowOpacity = 0.15
 			} else {
 				self.thumbLayer!.shadowRadius = 0.0
-				self.thumbLayer!.shadowOffset = CGSizeZero
-				self.thumbLayer!.shadowColor = UIColor.clearColor().CGColor
+				self.thumbLayer!.shadowOffset = CGSize.zero
+				self.thumbLayer!.shadowColor = UIColor.clear.cgColor
 				self.thumbLayer!.shadowOpacity = 0.0
 			}
 		}
@@ -325,15 +325,15 @@ class HADiscreteSlider : UIControl {
 		let thumbWidth = self.thumbSizeIncludingShadow().width
 		
         // Calculate the track ticks positions
-		let trackHeight = ((.IOS == self.trackStyle) ? 2.0 : self.trackThickness)
-		var trackSize = CGSizeMake(self.frame.size.width-thumbWidth, trackHeight)
-		if .Image == self.trackStyle {
+		let trackHeight = ((.ios == self.trackStyle) ? 2.0 : self.trackThickness)
+		var trackSize = CGSize(width: self.frame.size.width-thumbWidth, height: trackHeight)
+		if .image == self.trackStyle {
 			if let imageName = self.trackImage {
 				let image = UIImage(named: imageName)!
                 trackSize.width = image.size.width-thumbWidth
 			}
 		}
-		self.trackRectangle = CGRectMake((self.frame.size.width-trackSize.width)/2, (self.frame.size.height-trackSize.height)/2, trackSize.width, trackSize.height)
+		self.trackRectangle = CGRect(x: (self.frame.size.width-trackSize.width)/2, y: (self.frame.size.height-trackSize.height)/2, width: trackSize.width, height: trackSize.height)
 		let trackY = self.frame.size.height/2
 		
         self.ticksAbscisses.removeAll()
@@ -360,58 +360,54 @@ class HADiscreteSlider : UIControl {
 	
 	func thumbSizeIncludingShadow() -> CGSize {
 		switch self.thumbStyle {
-        case .Invisible: break
-        case .Rectangular: break
-        case .Rounded:
-            return ((self.thumbShadowRadius != 0.0) ? CGSizeMake(self.thumbSize.width+(self.thumbShadowRadius*2)+(self.thumbShadowOffset!.width*2), self.thumbSize.height+(self.thumbShadowRadius*2)+(self.thumbShadowOffset!.height*2)) : self.thumbSize)
-        case .IOS:
-            return CGSizeMake(33.0+(iOSThumbShadowRadius*2)+(iosThumbShadowOffset.width*2), 33.0+(iOSThumbShadowRadius*2)+(iosThumbShadowOffset.height*2))
-        case .Image:
+        case .invisible: break
+        case .rectangular: break
+        case .rounded:
+            return ((self.thumbShadowRadius != 0.0) ? CGSize(width: self.thumbSize.width+(self.thumbShadowRadius*2)+(self.thumbShadowOffset!.width*2), height: self.thumbSize.height+(self.thumbShadowRadius*2)+(self.thumbShadowOffset!.height*2)) : self.thumbSize)
+        case .ios:
+            return CGSize(width: 33.0+(iOSThumbShadowRadius*2)+(iosThumbShadowOffset.width*2), height: 33.0+(iOSThumbShadowRadius*2)+(iosThumbShadowOffset.height*2))
+        case .image:
             if let imageName = self.thumbImage {
                 return UIImage(named: imageName)!.size
             }
 		}
-        return CGSizeMake(33.0, 33.0)
+        return CGSize(width: 33.0, height: 33.0)
 	}
 	
 	// MARK: Touches
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 		self.touchDown(touches, duration: 0.1)
 	}
 	
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
 		self.touchDown(touches, duration: 0.0)
 	}
 	
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.touchUp(touches)
 	}
 	
-    override func touchesCancelled(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.touchUp(touches)
 	}
 	
-	func touchDown(touches: NSSet, duration: NSTimeInterval) {
-		let touch = touches.anyObject()
-		if nil != touch {
-			let location = touch!.locationInView(touch!.view)
-			self.moveThumbTo(location.x, duration: duration)
-		}
+	func touchDown(_ touches: Set<UITouch>, duration: TimeInterval) {
+        guard let touch = touches.first else { return }
+        let location = touch.location(in: touch.view)
+        self.moveThumbTo(location.x, duration: duration)
 	}
 	
-	func touchUp(touches: NSSet) {
-		let touch = touches.anyObject()
-		if nil != touch {
-			let location = touch!.locationInView(touch!.view)
-			let tick = self.pickTickFromSliderPosition(location.x)
-			self.moveThumbToTick(tick)
-		}
+	func touchUp(_ touches: Set<UITouch>) {
+        guard let touch = touches.first else { return }
+        let location = touch.location(in: touch.view)
+        let tick = self.pickTickFromSliderPosition(location.x)
+        self.moveThumbToTick(tick)
 	}
 	
 	// MARK: Notifications
     
-	func moveThumbToTick(tick: Int) {
+	func moveThumbToTick(_ tick: Int) {
 		let intValue = Int(self.minimumValue)+(tick * Int(self.incrementValue))
 		if intValue != _intValue {
 			_intValue = intValue
@@ -421,9 +417,9 @@ class HADiscreteSlider : UIControl {
 		self.setNeedsDisplay()
 	}
 	
-	func moveThumbTo(abscisse: CGFloat, duration: CFTimeInterval) {
-		let leftMost = CGRectGetMinX(self.trackRectangle)
-		let rightMost = CGRectGetMaxX(self.trackRectangle)
+	func moveThumbTo(_ abscisse: CGFloat, duration: CFTimeInterval) {
+		let leftMost = self.trackRectangle.minX
+		let rightMost = self.trackRectangle.maxX
 		self.thumbAbscisse = max(leftMost, min(abscisse, rightMost))
 		CATransaction.setAnimationDuration(duration)
 		let tick = self.pickTickFromSliderPosition(self.thumbAbscisse!)
@@ -435,9 +431,9 @@ class HADiscreteSlider : UIControl {
 		self.setNeedsDisplay()
 	}
 	
-	func pickTickFromSliderPosition(abscisse: CGFloat) -> Int {
-		let leftMost = CGRectGetMinX(self.trackRectangle)
-		let rightMost = CGRectGetMaxX(self.trackRectangle)
+	func pickTickFromSliderPosition(_ abscisse: CGFloat) -> Int {
+		let leftMost = self.trackRectangle.minX
+		let rightMost = self.trackRectangle.maxX
 		let clampedAbscisse = max(leftMost, min(abscisse, rightMost))
 		let ratio = Double(clampedAbscisse-leftMost) / Double(rightMost-leftMost)
 		let segments = Double(max(1, self.tickCount-1))

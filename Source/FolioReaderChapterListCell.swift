@@ -14,7 +14,7 @@ class FolioReaderChapterListCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        indexLabel.lineBreakMode = .ByWordWrapping
+        indexLabel.lineBreakMode = .byWordWrapping
         indexLabel.numberOfLines = 0
         indexLabel.translatesAutoresizingMaskIntoConstraints = false
         indexLabel.font = UIFont(name: "Avenir-Light", size: 17)
@@ -25,11 +25,11 @@ class FolioReaderChapterListCell: UITableViewCell {
         var constraints = [NSLayoutConstraint]()
         let views = ["label": self.indexLabel]
         
-        NSLayoutConstraint.constraintsWithVisualFormat("H:|-15-[label]-15-|", options: [], metrics: nil, views: views).forEach {
+        NSLayoutConstraint.constraints(withVisualFormat: "H:|-15-[label]-15-|", options: [], metrics: nil, views: views).forEach {
             constraints.append($0 as NSLayoutConstraint)
         }
         
-        NSLayoutConstraint.constraintsWithVisualFormat("V:|-16-[label]-16-|", options: [], metrics: nil, views: views).forEach {
+        NSLayoutConstraint.constraints(withVisualFormat: "V:|-16-[label]-16-|", options: [], metrics: nil, views: views).forEach {
             constraints.append($0 as NSLayoutConstraint)
         }
         

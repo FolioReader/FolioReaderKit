@@ -7,19 +7,20 @@
 //
 
 import UIKit
+import FontBlaster
 
 var readerConfig: FolioReaderConfig!
 var book: FRBook!
 
 /// Reader container
-public class FolioReaderContainer: UIViewController {
+open class FolioReaderContainer: UIViewController {
     var centerNavigationController: UINavigationController!
 	var centerViewController: FolioReaderCenter!
     var audioPlayer: FolioReaderAudioPlayer!
     var shouldHideStatusBar = true
     var shouldRemoveEpub = true
     var epubPath: String!
-    private var errorOnLoad = false
+    fileprivate var errorOnLoad = false
 
     // MARK: - Init
     
@@ -33,7 +34,7 @@ public class FolioReaderContainer: UIViewController {
      - returns: `self`, initialized using the `FolioReaderConfig`.
      */
     public init(withConfig config: FolioReaderConfig, epubPath path: String, removeEpub: Bool = true) {
-        super.init(nibName: nil, bundle: NSBundle.frameworkBundle())
+        super.init(nibName: nil, bundle: Bundle.frameworkBundle())
         
         readerConfig = config
         epubPath = path
@@ -51,23 +52,23 @@ public class FolioReaderContainer: UIViewController {
     /**
      Common Initialization
      */
-    private func initialization() {
+    fileprivate func initialization() {
         FolioReader.sharedInstance.readerContainer = self
         
         book = FRBook()
         
         // Register custom fonts
-        FontBlaster.blast(NSBundle.frameworkBundle())
+        FontBlaster.blast(bundle: Bundle.frameworkBundle())
 
         // Register initial defaults
-        FolioReader.defaults.registerDefaults([
-            kCurrentFontFamily: FolioReaderFont.Andada.rawValue,
+        FolioReader.defaults.register(defaults: [
+            kCurrentFontFamily: FolioReaderFont.andada.rawValue,
             kNightMode: false,
             kCurrentFontSize: 2,
             kCurrentAudioRate: 1,
             kCurrentHighlightStyle: 0,
             kCurrentTOCMenu: 0,
-            kCurrentMediaOverlayStyle: MediaOverlayStyle.Default.rawValue,
+            kCurrentMediaOverlayStyle: MediaOverlayStyle.default.rawValue,
             kCurrentScrollDirection: FolioReaderScrollDirection.vertical.rawValue
             ])
     }
@@ -79,7 +80,7 @@ public class FolioReaderContainer: UIViewController {
      - parameter path:       The ePub path on system
      - parameter removeEpub: Should delete the original file after unzip? Default to `true` so the ePub will be unziped only once.
      */
-    public func setupConfig(config: FolioReaderConfig, epubPath path: String, removeEpub: Bool = true) {
+    open func setupConfig(_ config: FolioReaderConfig, epubPath path: String, removeEpub: Bool = true) {
         readerConfig = config
         epubPath = path
         shouldRemoveEpub = removeEpub
@@ -87,7 +88,7 @@ public class FolioReaderContainer: UIViewController {
     
     // MARK: - View life cicle
     
-    override public func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         
         readerConfig.canChangeScrollDirection = isDirection(readerConfig.canChangeScrollDirection, readerConfig.canChangeScrollDirection, false)
@@ -107,11 +108,11 @@ public class FolioReaderContainer: UIViewController {
         centerNavigationController.setNavigationBarHidden(readerConfig.shouldHideNavigationOnTap, animated: false)
         view.addSubview(centerNavigationController.view)
         addChildViewController(centerNavigationController)
-        centerNavigationController.didMoveToParentViewController(self)
+        centerNavigationController.didMove(toParentViewController: self)
 
 		if (readerConfig.hideBars == true) {
 			readerConfig.shouldHideNavigationOnTap = false
-			self.navigationController?.navigationBar.hidden = true
+			self.navigationController?.navigationBar.isHidden = true
 			self.centerViewController.pageIndicatorHeight = 0
 		}
 
@@ -122,7 +123,7 @@ public class FolioReaderContainer: UIViewController {
             return
         }
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
+        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.high).async(execute: { () -> Void in
             
             if let parsedBook = FREpubParser().readEpub(epubPath: self.epubPath, removeEpub: self.shouldRemoveEpub) {
                 book = parsedBook
@@ -135,7 +136,7 @@ public class FolioReaderContainer: UIViewController {
             FolioReader.isReaderOpen = true
             
             // Reload data
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 
                 // Add audio player if needed
                 if book.hasAudio() || readerConfig.enableTTS {
@@ -150,7 +151,7 @@ public class FolioReaderContainer: UIViewController {
         })
     }
     
-    override public func viewDidAppear(animated: Bool) {
+    override open func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         if errorOnLoad {
@@ -168,15 +169,15 @@ public class FolioReaderContainer: UIViewController {
     
     // MARK: - Status Bar
     
-    override public func prefersStatusBarHidden() -> Bool {
+    override open var prefersStatusBarHidden : Bool {
         return readerConfig.shouldHideNavigationOnTap == false ? false : shouldHideStatusBar
     }
     
-    override public func preferredStatusBarUpdateAnimation() -> UIStatusBarAnimation {
-        return UIStatusBarAnimation.Slide
+    override open var preferredStatusBarUpdateAnimation : UIStatusBarAnimation {
+        return UIStatusBarAnimation.slide
     }
     
-    override public func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return isNight(.LightContent, .Default)
+    override open var preferredStatusBarStyle : UIStatusBarStyle {
+        return isNight(.lightContent, .default)
     }
 }

@@ -22,13 +22,13 @@ class FRSpine: NSObject {
     var pageProgressionDirection: String?
     var spineReferences = [Spine]()
     var isRtl: Bool {
-        if let pageProgressionDirection = pageProgressionDirection where pageProgressionDirection == "rtl" {
+        if let pageProgressionDirection = pageProgressionDirection , pageProgressionDirection == "rtl" {
             return true
         }
         return false
     }
 
-    func nextChapter(href: String) -> FRResource? {
+    func nextChapter(_ href: String) -> FRResource? {
         var found = false;
 
         for item in spineReferences {

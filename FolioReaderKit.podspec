@@ -32,10 +32,11 @@ Pod::Spec.new do |s|
   s.libraries  = "z"
   s.frameworks = 'CoreData'
   s.dependency 'SSZipArchive', '1.5'
-  s.dependency 'MenuItemKit', '1.1.3'
+  s.dependency 'MenuItemKit', '2.0'
   s.dependency 'ZFDragableModalTransition', '~> 0.6'
-  s.dependency 'AEXML', '3.0'
-  s.dependency 'JSQWebViewController', '~> 3.0'
+  s.dependency 'AEXML', '4.0'
+  s.dependency 'FontBlaster', '3.0.0'
+  s.dependency 'JSQWebViewController', '~> 5.0'
   s.dependency 'RealmSwift', '~> 1.0'
   # s.dependency 'SMSegmentView'
 end

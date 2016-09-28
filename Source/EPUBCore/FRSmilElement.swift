@@ -38,7 +38,7 @@ class FRSmilElement: NSObject {
     */
     func getType() -> [String]! {
         let type = getAttribute("epub:type", defaultVal: "")
-        return type.componentsSeparatedByString(" ")
+        return type!.components(separatedBy: " ")
     }
 
     /**
@@ -49,15 +49,15 @@ class FRSmilElement: NSObject {
          epub:type="bodymatter chapter"
          isType("bodymatter") -> true
     */
-    func isType(aType:String) -> Bool {
+    func isType(_ aType:String) -> Bool {
         return getType().contains(aType)
     }
 
-    func getAttribute(name: String, defaultVal: String!) -> String! {
+    func getAttribute(_ name: String, defaultVal: String!) -> String! {
         return attributes[name] != nil ? attributes[name] : defaultVal;
     }
 
-    func getAttribute(name: String ) -> String! {
+    func getAttribute(_ name: String ) -> String! {
         return getAttribute(name, defaultVal: nil)
     }
 
@@ -76,7 +76,7 @@ class FRSmilElement: NSObject {
         return childWithName("video")
     }
 
-    func childWithName(name:String) -> FRSmilElement! {
+    func childWithName(_ name:String) -> FRSmilElement! {
         for el in children {
             if( el.name == name ){
                 return el
@@ -85,7 +85,7 @@ class FRSmilElement: NSObject {
         return nil;
     }
 
-    func childrenWithNames(name:[String]) -> [FRSmilElement]! {
+    func childrenWithNames(_ name:[String]) -> [FRSmilElement]! {
         var matched = [FRSmilElement]()
         for el in children {
             if( name.contains(el.name) ){
@@ -95,7 +95,7 @@ class FRSmilElement: NSObject {
         return matched;
     }
 
-    func childrenWithName(name:String) -> [FRSmilElement]! {
+    func childrenWithName(_ name:String) -> [FRSmilElement]! {
         return childrenWithNames([name])
     }
 
@@ -103,11 +103,11 @@ class FRSmilElement: NSObject {
 
     func clipBegin() -> Double {
         let val = audioElement().getAttribute("clipBegin", defaultVal: "")
-        return val.clockTimeToSeconds()
+        return val!.clockTimeToSeconds()
     }
 
     func clipEnd() -> Double {
         let val = audioElement().getAttribute("clipEnd", defaultVal: "")
-        return val.clockTimeToSeconds()
+        return val!.clockTimeToSeconds()
     }
 }

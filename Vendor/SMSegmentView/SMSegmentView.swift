@@ -27,13 +27,13 @@ let keySegmentTitleFont = "TitleFont"
 
 
 enum SegmentOrganiseMode: Int {
-    case SegmentOrganiseHorizontal = 0
-    case SegmentOrganiseVertical
+    case segmentOrganiseHorizontal = 0
+    case segmentOrganiseVertical
 }
 
 
 protocol SMSegmentViewDelegate: class {
-    func segmentView(segmentView: SMSegmentView, didSelectSegmentAtIndex index: Int)
+    func segmentView(_ segmentView: SMSegmentView, didSelectSegmentAtIndex index: Int)
 }
 
 class SMSegmentView: UIView, SMSegmentDelegate {
@@ -42,7 +42,7 @@ class SMSegmentView: UIView, SMSegmentDelegate {
     var indexOfSelectedSegment = NSNotFound
     var numberOfSegments = 0
     
-    var organiseMode: SegmentOrganiseMode = SegmentOrganiseMode.SegmentOrganiseHorizontal {
+    var organiseMode: SegmentOrganiseMode = SegmentOrganiseMode.segmentOrganiseHorizontal {
         didSet {
             self.setNeedsDisplay()
         }
@@ -57,7 +57,7 @@ class SMSegmentView: UIView, SMSegmentDelegate {
     }
     
     // Segment Separator
-    var separatorColour: UIColor = UIColor.lightGrayColor() {
+    var separatorColour: UIColor = UIColor.lightGray {
         didSet {
             self.setNeedsDisplay()
         }
@@ -72,14 +72,14 @@ class SMSegmentView: UIView, SMSegmentDelegate {
     }
     
     // Segment Colour
-    var segmentOnSelectionColour: UIColor = UIColor.darkGrayColor() {
+    var segmentOnSelectionColour: UIColor = UIColor.darkGray {
         didSet {
             for segment in self.segments {
                 segment.onSelectionColour = self.segmentOnSelectionColour
             }
         }
     }
-    var segmentOffSelectionColour: UIColor = UIColor.whiteColor() {
+    var segmentOffSelectionColour: UIColor = UIColor.white {
         didSet {
             for segment in self.segments {
                 segment.offSelectionColour = self.segmentOffSelectionColour
@@ -88,21 +88,21 @@ class SMSegmentView: UIView, SMSegmentDelegate {
     }
     
     // Segment Title Text Colour & Font
-    var segmentOnSelectionTextColour: UIColor = UIColor.whiteColor() {
+    var segmentOnSelectionTextColour: UIColor = UIColor.white {
         didSet {
             for segment in self.segments {
                 segment.onSelectionTextColour = self.segmentOnSelectionTextColour
             }
         }
     }
-    var segmentOffSelectionTextColour: UIColor = UIColor.darkGrayColor() {
+    var segmentOffSelectionTextColour: UIColor = UIColor.darkGray {
         didSet {
             for segment in self.segments {
                 segment.offSelectionTextColour = self.segmentOffSelectionTextColour
             }
         }
     }
-    var segmentTitleFont: UIFont = UIFont.systemFontOfSize(17.0) {
+    var segmentTitleFont: UIFont = UIFont.systemFont(ofSize: 17.0) {
         didSet {
             for segment in self.segments {
                 segment.titleFont = self.segmentTitleFont
@@ -124,7 +124,7 @@ class SMSegmentView: UIView, SMSegmentDelegate {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = UIColor.clearColor()
+        self.backgroundColor = UIColor.clear
         self.layer.masksToBounds = true
     }
     
@@ -140,43 +140,43 @@ class SMSegmentView: UIView, SMSegmentDelegate {
             self.segmentOnSelectionColour = onSelectionColour
         }
         else {
-            self.segmentOnSelectionColour = UIColor.darkGrayColor()
+            self.segmentOnSelectionColour = UIColor.darkGray
         }
         
         if let offSelectionColour = segmentProperties?[keySegmentOffSelectionColour] as? UIColor {
             self.segmentOffSelectionColour = offSelectionColour
         }
         else {
-            self.segmentOffSelectionColour = UIColor.whiteColor()
+            self.segmentOffSelectionColour = UIColor.white
         }
         
         if let onSelectionTextColour = segmentProperties?[keySegmentOnSelectionTextColour] as? UIColor {
             self.segmentOnSelectionTextColour = onSelectionTextColour
         }
         else {
-            self.segmentOnSelectionTextColour = UIColor.whiteColor()
+            self.segmentOnSelectionTextColour = UIColor.white
         }
         
         if let offSelectionTextColour = segmentProperties?[keySegmentOffSelectionTextColour] as? UIColor {
             self.segmentOffSelectionTextColour = offSelectionTextColour
         }
         else {
-            self.segmentOffSelectionTextColour = UIColor.darkGrayColor()
+            self.segmentOffSelectionTextColour = UIColor.darkGray
         }
         
         if let titleFont = segmentProperties?[keySegmentTitleFont] as? UIFont {
             self.segmentTitleFont = titleFont
         }
         else {
-            self.segmentTitleFont = UIFont.systemFontOfSize(17.0)
+            self.segmentTitleFont = UIFont.systemFont(ofSize: 17.0)
         }
         
         super.init(frame: frame)
-        self.backgroundColor = UIColor.clearColor()
+        self.backgroundColor = UIColor.clear
         self.layer.masksToBounds = true
     }
     
-    func addSegmentWithTitle(title: String?, onSelectionImage: UIImage?, offSelectionImage: UIImage?) {
+    func addSegmentWithTitle(_ title: String?, onSelectionImage: UIImage?, offSelectionImage: UIImage?) {
         
         let segment = SMSegment(separatorWidth: self.separatorWidth, verticalMargin: self.segmentVerticalMargin, onSelectionColour: self.segmentOnSelectionColour, offSelectionColour: self.segmentOffSelectionColour, onSelectionTextColour: self.segmentOnSelectionTextColour, offSelectionTextColour: self.segmentOffSelectionTextColour, titleFont: self.segmentTitleFont)
         segment.index = self.segments.count
@@ -200,7 +200,7 @@ class SMSegmentView: UIView, SMSegmentDelegate {
         
         let count = self.segments.count
         if count > 1 {
-            if self.organiseMode == SegmentOrganiseMode.SegmentOrganiseHorizontal {
+            if self.organiseMode == SegmentOrganiseMode.segmentOrganiseHorizontal {
                 let segmentWidth = (self.frame.size.width - self.separatorWidth*CGFloat(count-1)) / CGFloat(count)
                 var originX: CGFloat = 0.0
                 for segment in self.segments {
@@ -225,7 +225,7 @@ class SMSegmentView: UIView, SMSegmentDelegate {
     }
     
     // MARK: SMSegment Delegate
-    func selectSegment(segment: SMSegment) {
+    func selectSegment(_ segment: SMSegment) {
         if self.indexOfSelectedSegment != NSNotFound {
             let previousSelectedSegment = self.segments[self.indexOfSelectedSegment]
             previousSelectedSegment.setSelected(false)
@@ -236,7 +236,7 @@ class SMSegmentView: UIView, SMSegmentDelegate {
     }
     
     // MARK: Actions
-    func selectSegmentAtIndex(index: Int) {
+    func selectSegmentAtIndex(_ index: Int) {
         assert(index >= 0 && index < self.segments.count, "Index at \(index) is out of bounds")
         self.selectSegment(self.segments[index])
     }
@@ -250,22 +250,22 @@ class SMSegmentView: UIView, SMSegmentDelegate {
     }
     
     // MARK: Drawing Segment Separators
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
         self.drawSeparatorWithContext(context!)
     }
     
-    func drawSeparatorWithContext(context: CGContextRef) {
-        CGContextSaveGState(context)
+    func drawSeparatorWithContext(_ context: CGContext) {
+        context.saveGState()
         
         if self.segments.count > 1 {
-            let path = CGPathCreateMutable()
+            let path = CGMutablePath()
             
-            if self.organiseMode == SegmentOrganiseMode.SegmentOrganiseHorizontal {
+            if self.organiseMode == SegmentOrganiseMode.segmentOrganiseHorizontal {
                 var originX: CGFloat = self.segments[0].frame.size.width + self.separatorWidth/2.0
                 for index in 1..<self.segments.count {
-                    CGPathMoveToPoint(path, nil, originX, 0.0)
-                    CGPathAddLineToPoint(path, nil, originX, self.frame.size.height)
+                    path.move(to: CGPoint(x: originX, y: 0.0))
+                    path.addLine(to: CGPoint(x: originX, y: frame.size.height))
                     
                     originX += self.segments[index].frame.width + self.separatorWidth
                 }
@@ -273,19 +273,19 @@ class SMSegmentView: UIView, SMSegmentDelegate {
             else {
                 var originY: CGFloat = self.segments[0].frame.size.height + self.separatorWidth/2.0
                 for index in 1..<self.segments.count {
-                    CGPathMoveToPoint(path, nil, 0.0, originY)
-                    CGPathAddLineToPoint(path, nil, self.frame.size.width, originY)
+                    path.move(to: CGPoint(x: 0.0, y: originY))
+                    path.addLine(to: CGPoint(x: frame.size.width, y: originY))
                     
                     originY += self.segments[index].frame.height + self.separatorWidth
                 }
             }
             
-            CGContextAddPath(context, path)
-            CGContextSetStrokeColorWithColor(context, self.separatorColour.CGColor)
-            CGContextSetLineWidth(context, self.separatorWidth)
-            CGContextDrawPath(context, CGPathDrawingMode.Stroke)
+            context.addPath(path)
+            context.setStrokeColor(self.separatorColour.cgColor)
+            context.setLineWidth(self.separatorWidth)
+            context.drawPath(using: CGPathDrawingMode.stroke)
         }
         
-        CGContextRestoreGState(context)
+        context.restoreGState()
     }
 }

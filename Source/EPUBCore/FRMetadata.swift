@@ -103,29 +103,29 @@ class FRMetadata: NSObject {
      - parameter id: The ID
      - returns: The unique identifier of a book
      */
-    func findIdentifierById(id: String?) -> String? {
+    func findIdentifierById(_ id: String?) -> String? {
         guard let id = id else { return nil }
         
         for identifier in identifiers {
-            if let identifierId = identifier.id where identifierId == id {
+            if let identifierId = identifier.id , identifierId == id {
                 return identifier.value
             }
         }
         return nil
     }
     
-    func findMetaByName(name: String) -> String? {
+    func findMetaByName(_ name: String) -> String? {
         guard !name.isEmpty else { return nil }
         
         for meta in metaAttributes {
-            if let metaName = meta.name where metaName == name {
+            if let metaName = meta.name , metaName == name {
                 return meta.content
             }
         }
         return nil
     }
 
-    func findMetaByProperty(property: String, refinedBy: String?) -> String? {
+    func findMetaByProperty(_ property: String, refinedBy: String?) -> String? {
         guard !property.isEmpty else { return nil }
 
         for meta in metaAttributes {
@@ -141,7 +141,7 @@ class FRMetadata: NSObject {
         return nil
     }
 
-    func findMetaByProperty(property: String) -> String? {
+    func findMetaByProperty(_ property: String) -> String? {
         return findMetaByProperty(property, refinedBy: nil);
     }
 
