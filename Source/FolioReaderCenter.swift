@@ -1080,6 +1080,11 @@ public class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICo
     func presentQuoteShare(string: String) {
         let quoteShare = FolioReaderQuoteShare(initWithText: string)
         let nav = UINavigationController(rootViewController: quoteShare)
+        
+        if isPad {
+            nav.modalPresentationStyle = .FormSheet
+        }
+        
         presentViewController(nav, animated: true, completion: nil)
     }
 }

@@ -51,7 +51,10 @@ class FolioReaderQuoteShare: UIViewController {
         navigationItem.rightBarButtonItem = share
         
         //
-        let screenBounds = UIScreen.mainScreen().bounds
+        if isPad {
+            preferredContentSize = CGSize(width: 400, height: 600)
+        }
+        let screenBounds = isPad ? preferredContentSize : UIScreen.mainScreen().bounds.size
         
         filterImage = UIView(frame: CGRect(x: 0, y: 0, width: screenBounds.width, height: screenBounds.width))
         filterImage.backgroundColor = readerConfig.menuSeparatorColor
@@ -146,15 +149,18 @@ class FolioReaderQuoteShare: UIViewController {
         view.backgroundColor = background
         
         // CollectionView
-        let collectionFrame = CGRect(x: 0, y: imageView.frame.height+15, width: screenBounds.width, height: itemSize)
+        let collectionFrame = CGRect(x: 0, y: filterImage.frame.height+15, width: screenBounds.width, height: itemSize)
         collectionView = UICollectionView(frame: collectionFrame, collectionViewLayout: collectionViewLayout)
-        collectionView.autoresizingMask = [.FlexibleWidth]
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = background
         collectionView.decelerationRate = UIScrollViewDecelerationRateFast
         view.addSubview(collectionView)
+        
+        if isPhone {
+            collectionView.autoresizingMask = [.FlexibleWidth]
+        }
         
         // Register cell classes
         collectionView!.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
