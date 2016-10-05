@@ -80,6 +80,11 @@ public class FolioReaderWebView: UIWebView {
 		alertController.addAction(shareText)
 		alertController.addAction(cancel)
 
+        if let alert = alertController.popoverPresentationController {
+            alert.sourceView = FolioReader.sharedInstance.readerCenter?.currentPage
+            alert.sourceRect = sender.menuFrame
+        }
+        
 		FolioReader.sharedInstance.readerCenter?.presentViewController(alertController, animated: true, completion: nil)
 	}
 
