@@ -53,7 +53,7 @@ open class FolioReaderContainer: UIViewController {
      Common Initialization
      */
     fileprivate func initialization() {
-        FolioReader.sharedInstance.readerContainer = self
+        FolioReader.shared.readerContainer = self
         
         book = FRBook()
         
@@ -102,7 +102,7 @@ open class FolioReaderContainer: UIViewController {
 		readerConfig.shouldHideNavigationOnTap = ((readerConfig.hideBars == true) ? true : readerConfig.shouldHideNavigationOnTap)
 
         centerViewController = FolioReaderCenter()
-        FolioReader.sharedInstance.readerCenter = centerViewController
+        FolioReader.shared.readerCenter = centerViewController
         
         centerNavigationController = UINavigationController(rootViewController: centerViewController)
         centerNavigationController.setNavigationBarHidden(readerConfig.shouldHideNavigationOnTap, animated: false)
@@ -146,7 +146,7 @@ open class FolioReaderContainer: UIViewController {
                 self.centerViewController.reloadData()
                 
                 FolioReader.isReaderReady = true
-                FolioReader.sharedInstance.delegate?.folioReader?(FolioReader.sharedInstance, didFinishedLoading: book)
+                FolioReader.shared.delegate?.folioReader?(FolioReader.shared, didFinishedLoading: book)
             })
         })
     }
@@ -164,7 +164,7 @@ open class FolioReaderContainer: UIViewController {
      */
     func addAudioPlayer() {
         audioPlayer = FolioReaderAudioPlayer()
-        FolioReader.sharedInstance.readerAudioPlayer = audioPlayer;
+        FolioReader.shared.readerAudioPlayer = audioPlayer;
     }
     
     // MARK: - Status Bar

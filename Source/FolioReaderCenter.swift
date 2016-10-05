@@ -325,10 +325,10 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         if readerConfig.shouldHideNavigationOnTap == false { return }
 
         let shouldHide = true
-        FolioReader.sharedInstance.readerContainer.shouldHideStatusBar = shouldHide
+        FolioReader.shared.readerContainer.shouldHideStatusBar = shouldHide
         
         UIView.animate(withDuration: 0.25, animations: {
-            FolioReader.sharedInstance.readerContainer.setNeedsStatusBarAppearanceUpdate()
+            FolioReader.shared.readerContainer.setNeedsStatusBarAppearanceUpdate()
             
             // Show minutes indicator
 //            self.pageIndicatorView.minutesLabel.alpha = 0
@@ -340,10 +340,10 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         configureNavBar()
         
         let shouldHide = false
-        FolioReader.sharedInstance.readerContainer.shouldHideStatusBar = shouldHide
+        FolioReader.shared.readerContainer.shouldHideStatusBar = shouldHide
         
         UIView.animate(withDuration: 0.25, animations: {
-            FolioReader.sharedInstance.readerContainer.setNeedsStatusBarAppearanceUpdate()
+            FolioReader.shared.readerContainer.setNeedsStatusBarAppearanceUpdate()
         })
         navigationController?.setNavigationBarHidden(shouldHide, animated: true)
     }
@@ -354,10 +354,10 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         let shouldHide = !navigationController!.isNavigationBarHidden
         if !shouldHide { configureNavBar() }
         
-        FolioReader.sharedInstance.readerContainer.shouldHideStatusBar = shouldHide
+        FolioReader.shared.readerContainer.shouldHideStatusBar = shouldHide
         
         UIView.animate(withDuration: 0.25, animations: {
-            FolioReader.sharedInstance.readerContainer.setNeedsStatusBarAppearanceUpdate()
+            FolioReader.shared.readerContainer.setNeedsStatusBarAppearanceUpdate()
             
             // Show minutes indicator
 //            self.pageIndicatorView.minutesLabel.alpha = shouldHide ? 0 : 1

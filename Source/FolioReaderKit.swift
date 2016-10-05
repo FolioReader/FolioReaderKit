@@ -71,7 +71,7 @@ enum MediaOverlayStyle: Int {
  Main Library class with some useful constants and methods
  */
 open class FolioReader: NSObject {
-    open static let sharedInstance = FolioReader()
+    open static let shared = FolioReader()
     static let defaults = UserDefaults.standard
     open weak var delegate: FolioReaderDelegate?
     open weak var readerCenter: FolioReaderCenter?
@@ -103,7 +103,7 @@ open class FolioReader: NSObject {
             FolioReader.defaults.set(value, forKey: kNightMode)
 			FolioReader.defaults.synchronize()
 
-			if let readerCenter = FolioReader.sharedInstance.readerCenter {
+			if let readerCenter = FolioReader.shared.readerCenter {
 				UIView.animate(withDuration: 0.6, animations: {
 					readerCenter.currentPage?.webView.js("nightMode(\(nightMode))")
 					readerCenter.pageIndicatorView?.reloadColors()
@@ -123,7 +123,7 @@ open class FolioReader: NSObject {
         set (font) {
             FolioReader.defaults.setValue(font.rawValue, forKey: kCurrentFontFamily)
 
-			FolioReader.sharedInstance.readerCenter?.currentPage?.webView.js("setFontName('\(font.cssIdentifier)')")
+			FolioReader.shared.readerCenter?.currentPage?.webView.js("setFontName('\(font.cssIdentifier)')")
         }
     }
     
@@ -133,7 +133,7 @@ open class FolioReader: NSObject {
         set (value) {
             FolioReader.defaults.setValue(value.rawValue, forKey: kCurrentFontSize)
 
-			if let _currentPage = FolioReader.sharedInstance.readerCenter?.currentPage {
+			if let _currentPage = FolioReader.shared.readerCenter?.currentPage {
 				_currentPage.webView.js("setFontSize('\(currentFontSize.cssIdentifier)')")
 			}
         }
@@ -169,7 +169,7 @@ open class FolioReader: NSObject {
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentScrollDirection)
 
-			if let _readerCenter = FolioReader.sharedInstance.readerCenter  {
+			if let _readerCenter = FolioReader.shared.readerCenter  {
 				let direction = FolioReaderScrollDirection(rawValue: currentScrollDirection) ?? .vertical
 				_readerCenter.setScrollDirection(direction)
 			}
@@ -192,7 +192,7 @@ open class FolioReader: NSObject {
      */
     open class func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated: Bool = true) {
         let reader = FolioReaderContainer(withConfig: config, epubPath: epubPath, removeEpub: shouldRemoveEpub)
-        FolioReader.sharedInstance.readerContainer = reader
+        FolioReader.shared.readerContainer = reader
         parentViewController.present(reader, animated: animated, completion: nil)
     }
     
@@ -218,7 +218,7 @@ open class FolioReader: NSObject {
     open class func saveReaderState() {
         guard FolioReader.isReaderOpen else { return }
         
-        if let currentPage = FolioReader.sharedInstance.readerCenter?.currentPage {
+        if let currentPage = FolioReader.shared.readerCenter?.currentPage {
             let position = [
                 "pageNumber": currentPageNumber,
                 "pageOffsetX": currentPage.webView.scrollView.contentOffset.x,
@@ -236,9 +236,9 @@ open class FolioReader: NSObject {
         FolioReader.saveReaderState()
         FolioReader.isReaderOpen = false
         FolioReader.isReaderReady = false
-        FolioReader.sharedInstance.readerAudioPlayer?.stop(immediate: true)
+        FolioReader.shared.readerAudioPlayer?.stop(immediate: true)
         FolioReader.defaults.set(0, forKey: kCurrentTOCMenu)
-        FolioReader.sharedInstance.delegate?.folioReaderDidClosed?()
+        FolioReader.shared.delegate?.folioReaderDidClosed?()
     }
 }
 

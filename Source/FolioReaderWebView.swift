@@ -49,11 +49,11 @@ open class FolioReaderWebView: UIWebView {
 		let shareImage = UIAlertAction(title: readerConfig.localizedShareImageQuote, style: .default, handler: { (action) -> Void in
 			if self.isShare {
 				if let textToShare = self.js("getHighlightContent()") {
-					FolioReader.sharedInstance.readerCenter?.presentQuoteShare(textToShare)
+					FolioReader.shared.readerCenter?.presentQuoteShare(textToShare)
 				}
 			} else {
 				if let textToShare = self.js("getSelectedText()") {
-					FolioReader.sharedInstance.readerCenter?.presentQuoteShare(textToShare)
+					FolioReader.shared.readerCenter?.presentQuoteShare(textToShare)
 					self.isUserInteractionEnabled = false
 					self.isUserInteractionEnabled = true
 				}
@@ -64,11 +64,11 @@ open class FolioReaderWebView: UIWebView {
 		let shareText = UIAlertAction(title: readerConfig.localizedShareTextQuote, style: .default) { (action) -> Void in
 			if self.isShare {
 				if let textToShare = self.js("getHighlightContent()") {
-					FolioReader.sharedInstance.readerCenter?.shareHighlight(textToShare, rect: sender.menuFrame)
+					FolioReader.shared.readerCenter?.shareHighlight(textToShare, rect: sender.menuFrame)
 				}
 			} else {
 				if let textToShare = self.js("getSelectedText()") {
-					FolioReader.sharedInstance.readerCenter?.shareHighlight(textToShare, rect: sender.menuFrame)
+					FolioReader.shared.readerCenter?.shareHighlight(textToShare, rect: sender.menuFrame)
 				}
 			}
 			self.setMenuVisible(false)
@@ -81,11 +81,11 @@ open class FolioReaderWebView: UIWebView {
 		alertController.addAction(cancel)
 
         if let alert = alertController.popoverPresentationController {
-            alert.sourceView = FolioReader.sharedInstance.readerCenter?.currentPage
+            alert.sourceView = FolioReader.shared.readerCenter?.currentPage
             alert.sourceRect = sender.menuFrame
         }
         
-		FolioReader.sharedInstance.readerCenter?.present(alertController, animated: true, completion: nil)
+		FolioReader.shared.readerCenter?.present(alertController, animated: true, completion: nil)
 	}
 
 	func colors(_ sender: UIMenuController?) {
@@ -138,11 +138,11 @@ open class FolioReaderWebView: UIWebView {
 
 		let vc = UIReferenceLibraryViewController(term: selectedText! )
 		vc.view.tintColor = readerConfig.tintColor
-		FolioReader.sharedInstance.readerContainer.show(vc, sender: nil)
+		FolioReader.shared.readerContainer.show(vc, sender: nil)
 	}
 
 	func play(_ sender: UIMenuController?) {
-		FolioReader.sharedInstance.readerAudioPlayer?.play()
+		FolioReader.shared.readerAudioPlayer?.play()
 
 		// Force remove text selection
 		// @NOTE: this doesn't seem to always work

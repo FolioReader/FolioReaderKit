@@ -82,7 +82,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
         playPauseBtn.addTarget(self, action: #selector(FolioReaderPlayerMenu.togglePlay(_:)), for: .touchUpInside)
         menuView.addSubview(playPauseBtn)
         
-        if let audioPlayer = FolioReader.sharedInstance.readerAudioPlayer , audioPlayer.isPlaying() {
+        if let audioPlayer = FolioReader.shared.readerAudioPlayer , audioPlayer.isPlaying() {
             playPauseBtn.isSelected = true
         }
         
@@ -222,23 +222,23 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
     func segmentView(_ segmentView: SMSegmentView, didSelectSegmentAtIndex index: Int) {
         guard viewDidAppear else { return }
 
-        if let audioPlayer = FolioReader.sharedInstance.readerAudioPlayer , segmentView.tag == 2 {
+        if let audioPlayer = FolioReader.shared.readerAudioPlayer , segmentView.tag == 2 {
             audioPlayer.setRate(index)
             FolioReader.currentAudioRate = index
         }
     }
 
     func prevChapter(_ sender: UIButton!) {
-        FolioReader.sharedInstance.readerAudioPlayer?.playPrevChapter()
+        FolioReader.shared.readerAudioPlayer?.playPrevChapter()
     }
     
     func nextChapter(_ sender: UIButton!) {
-        FolioReader.sharedInstance.readerAudioPlayer?.playNextChapter()
+        FolioReader.shared.readerAudioPlayer?.playNextChapter()
     }
     
     func togglePlay(_ sender: UIButton!) {
         sender.isSelected = sender.isSelected != true
-        FolioReader.sharedInstance.readerAudioPlayer?.togglePlay()
+        FolioReader.shared.readerAudioPlayer?.togglePlay()
         closeView()
     }
     
@@ -255,7 +255,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
         }
         
         // update the current page style
-        if let currentPage = FolioReader.sharedInstance.readerCenter?.currentPage {
+        if let currentPage = FolioReader.shared.readerCenter?.currentPage {
             currentPage.webView.js("setMediaOverlayStyle(\"\(FolioReader.currentMediaOverlayStyle.className())\")")
         }
     }
@@ -264,7 +264,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
         dismiss()
 
         if readerConfig.shouldHideNavigationOnTap == false {
-            FolioReader.sharedInstance.readerCenter?.showBars()
+            FolioReader.shared.readerCenter?.showBars()
         }
     }
 
