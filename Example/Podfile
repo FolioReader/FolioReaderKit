@@ -25,10 +25,14 @@ target 'FolioReaderTests' do
   testing_pods
 end
 
-# ensure testability is set https://github.com/CocoaPods/CocoaPods/issues/4505
+
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
+      # Force add version
+      config.build_settings['SWIFT_VERSION'] = '2.3'
+      
+      # ensure testability is set https://github.com/CocoaPods/CocoaPods/issues/4505
       if config.name == 'Debug'
         config.build_settings['ENABLE_TESTABILITY'] = 'YES'
       end

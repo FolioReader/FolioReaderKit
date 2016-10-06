@@ -188,7 +188,7 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
             
             shouldShowBar = false
             
-            let decoded = url.absoluteString.stringByRemovingPercentEncoding as String!
+            let decoded = url.absoluteString!.stringByRemovingPercentEncoding as String!
             let rect = CGRectFromString(decoded.substringFromIndex(decoded.startIndex.advancedBy(12)))
             
             webView.createMenu(options: true)
@@ -198,7 +198,7 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
             return false
         } else if url.scheme == "play-audio" {
 
-            let decoded = url.absoluteString.stringByRemovingPercentEncoding as String!
+            let decoded = url.absoluteString!.stringByRemovingPercentEncoding as String!
             let playID = decoded.substringFromIndex(decoded.startIndex.advancedBy(13))
             let chapter = FolioReader.sharedInstance.readerCenter?.getCurrentChapter()
             let href = chapter != nil ? chapter!.href : "";
@@ -246,7 +246,7 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
         } else if url.scheme == "mailto" {
             print("Email")
             return true
-        } else if url.absoluteString != "about:blank" && url.scheme.containsString("http") && navigationType == .LinkClicked {
+        } else if url.absoluteString != "about:blank" && url.scheme!.containsString("http") && navigationType == .LinkClicked {
             
             if #available(iOS 9.0, *) {
                 let safariVC = SFSafariViewController(URL: request.URL!)
@@ -263,19 +263,19 @@ public class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGesture
 			// Check if the url is a custom class based onClick listerner
 			var isClassBasedOnClickListenerScheme = false
 			for listener in readerConfig.classBasedOnClickListeners {
-				if
-					url.scheme == listener.schemeName,
-					let absoluteURLString = request.URL?.absoluteString,
-					range = absoluteURLString.rangeOfString("/clientX=") {
-						let baseURL = absoluteURLString.substringToIndex(range.startIndex)
-						let positionString = absoluteURLString.substringFromIndex(range.startIndex)
-						if let point = getEventTouchPoint(fromPositionParameterString: positionString) {
-							let attributeContentString = (baseURL.stringByReplacingOccurrencesOfString("\(url.scheme)://", withString: "").stringByRemovingPercentEncoding)
-							// Call the on click action block
-							listener.onClickAction(attributeContent: attributeContentString, touchPointRelativeToWebView: point)
-							// Mark the scheme as class based click listener scheme
-							isClassBasedOnClickListenerScheme = true
-						}
+
+				if url.scheme == listener.schemeName,
+                    let absoluteURLString = request.URL?.absoluteString,
+                    let range = absoluteURLString.rangeOfString("/clientX=") {
+                    let baseURL = absoluteURLString.substringToIndex(range.startIndex)
+                    let positionString = absoluteURLString.substringFromIndex(range.startIndex)
+                    if let point = getEventTouchPoint(fromPositionParameterString: positionString) {
+                        let attributeContentString = (baseURL.stringByReplacingOccurrencesOfString("\(url.scheme)://", withString: "").stringByRemovingPercentEncoding)
+                        // Call the on click action block
+                        listener.onClickAction(attributeContent: attributeContentString, touchPointRelativeToWebView: point)
+                        // Mark the scheme as class based click listener scheme
+                        isClassBasedOnClickListenerScheme = true
+                    }
 				}
 			}
 

@@ -80,14 +80,6 @@ class FolioReaderPageIndicator: UIView {
 		pagesLabel.textColor = isNight(UIColor(white: 5, alpha: 0.6), UIColor(white: 0, alpha: 0.9))
 	}
 
-	override func animationDidStop(anim: CAAnimation, finished flag: Bool) {
-		// Set the shadow color to the final value of the animation is done
-		if let _keyPath = anim.valueForKeyPath("keyPath") as? String where _keyPath == "shadowColor" {
-			let color = isNight(readerConfig.nightModeBackground, UIColor.whiteColor())
-			layer.shadowColor = color.CGColor
-		}
-	}
-
     private func reloadViewWithPage(page: Int) {
         let pagesRemaining = FolioReader.needsRTLChange ? totalPages-(totalPages-page+1) : totalPages-page
         
@@ -108,5 +100,15 @@ class FolioReaderPageIndicator: UIView {
         }
         
         reloadView(updateShadow: false)
+    }
+}
+
+extension FolioReaderPageIndicator: CAAnimationDelegate {
+    func animationDidStop(anim: CAAnimation, finished flag: Bool) {
+        // Set the shadow color to the final value of the animation is done
+        if let keyPath = anim.valueForKeyPath("keyPath") as? String where keyPath == "shadowColor" {
+            let color = isNight(readerConfig.nightModeBackground, UIColor.whiteColor())
+            layer.shadowColor = color.CGColor
+        }
     }
 }

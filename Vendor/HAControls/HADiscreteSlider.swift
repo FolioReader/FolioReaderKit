@@ -191,7 +191,7 @@ class HADiscreteSlider : UIControl {
 		// Track
 		switch self.trackStyle {
         case .Rectangular:
-            CGContextAddRect(ctx, self.trackRectangle)
+            CGContextAddRect(ctx!, self.trackRectangle)
         break
         case .Image:
         
@@ -199,13 +199,13 @@ class HADiscreteSlider : UIControl {
             if let imageName = self.trackImage {
                 let image = UIImage(named:imageName)!
                 let centered = CGRectMake((self.frame.size.width/2)-(image.size.width/2), (self.frame.size.height/2)-(image.size.height/2), image.size.width, image.size.height)
-                    CGContextDrawImage(ctx, centered, image.CGImage)
+                    CGContextDrawImage(ctx!, centered, image.CGImage!)
             }
             break
         
         case .Invisible, .Rounded, .IOS:
             let path: UIBezierPath = UIBezierPath(roundedRect: self.trackRectangle, cornerRadius: self.trackRectangle.size.height/2)
-            CGContextAddPath(ctx, path.CGPath)
+            CGContextAddPath(ctx!, path.CGPath)
             break
 		}
         
@@ -217,10 +217,10 @@ class HADiscreteSlider : UIControl {
                 switch self.tickStyle {
                 case .Rounded:
                     let path = UIBezierPath(roundedRect: rectangle, cornerRadius: rectangle.size.height/2)
-                    CGContextAddPath(ctx, path.CGPath)
+                    CGContextAddPath(ctx!, path.CGPath)
                     break
                 case .Rectangular:
-                    CGContextAddRect(ctx, rectangle)
+                    CGContextAddRect(ctx!, rectangle)
                     break
                 case .Image:
                     // Draw image if exists
@@ -228,7 +228,7 @@ class HADiscreteSlider : UIControl {
                     if let imageName = self.tickImage {
                         let image = UIImage(named: imageName)!
                         let centered = CGRectMake(rectangle.origin.x+(rectangle.size.width/2)-(image.size.width/2), rectangle.origin.y+(rectangle.size.height/2)-(image.size.height/2), image.size.width, image.size.height)
-                            CGContextDrawImage(ctx, centered, image.CGImage)
+                            CGContextDrawImage(ctx!, centered, image.CGImage!)
                     }
                     break
                 
@@ -239,8 +239,8 @@ class HADiscreteSlider : UIControl {
 		}
         
 		// iOS UISlider aka .IOS does not have ticks
-		CGContextSetFillColorWithColor(ctx, self.tintColor.CGColor)
-		CGContextFillPath(ctx)
+		CGContextSetFillColorWithColor(ctx!, self.tintColor.CGColor)
+		CGContextFillPath(ctx!)
 		// For colored track, we overlay a CALayer, which will animate along with the cursor
 		if .IOS == self.trackStyle {
 			var frame = self.trackRectangle
@@ -388,8 +388,8 @@ class HADiscreteSlider : UIControl {
         self.touchUp(touches)
 	}
 	
-    override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
-        self.touchUp(touches!)
+    override func touchesCancelled(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        self.touchUp(touches)
 	}
 	
 	func touchDown(touches: NSSet, duration: NSTimeInterval) {

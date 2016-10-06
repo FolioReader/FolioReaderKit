@@ -179,7 +179,7 @@ public class FolioReader: NSObject {
     // MARK: - Get Cover Image
     
     /**
-     Read Cover Image and Return an IUImage
+     Read Cover Image and Return an `UIImage`
      */
     public class func getCoverImage(epubPath: String) -> UIImage? {
         return FREpubParser().parseCoverImage(epubPath)
@@ -606,11 +606,11 @@ internal extension UIImage {
         CGContextSetBlendMode(context, CGBlendMode.Normal)
         
         let rect = CGRectMake(0, 0, self.size.width, self.size.height) as CGRect
-        CGContextClipToMask(context, rect, self.CGImage)
+        CGContextClipToMask(context, rect, self.CGImage!)
         tintColor.setFill()
         CGContextFillRect(context, rect)
         
-        let newImage = UIGraphicsGetImageFromCurrentImageContext() as UIImage
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()! as UIImage
         UIGraphicsEndImageContext()
         
         return newImage
@@ -633,11 +633,11 @@ internal extension UIImage {
             UIColor.whiteColor().setFill()
         }
         
-        CGContextFillRect(context, rect)
+        CGContextFillRect(context!, rect)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        return image
+        return image!
     }
     
     /**
@@ -651,7 +651,7 @@ internal extension UIImage {
         layer.renderInContext(UIGraphicsGetCurrentContext()!)
         let img = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        return img
+        return img!
     }
     
     /**
@@ -665,7 +665,7 @@ internal extension UIImage {
         view.drawViewHierarchyInRect(view.bounds, afterScreenUpdates: true)
         let img = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        return img
+        return img!
     }
 }
 

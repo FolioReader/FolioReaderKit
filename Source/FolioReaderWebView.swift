@@ -30,7 +30,7 @@ public class FolioReaderWebView: UIWebView {
 				|| (action == #selector(define(_:)) && isOneWord)
                 || (action == #selector(play(_:)) && (book.hasAudio() || readerConfig.enableTTS))
 				|| (action == #selector(share(_:)) && readerConfig.allowSharing)
-				|| (action == #selector(NSObject.copy(_:)) && readerConfig.allowSharing) {
+				|| (action == #selector(copy(_:)) && readerConfig.allowSharing) {
 				return true
 			}
 			return false
