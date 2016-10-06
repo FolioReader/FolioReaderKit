@@ -25,7 +25,6 @@ internal var kCurrentMediaOverlayStyle = "com.folioreader.kMediaOverlayStyle"
 internal var kCurrentScrollDirection = "com.folioreader.kCurrentScrollDirection"
 internal let kNightMode = "com.folioreader.kNightMode"
 internal let kCurrentTOCMenu = "com.folioreader.kCurrentTOCMenu"
-internal let kMigratedToRealm = "com.folioreader.kMigratedToRealm"
 internal let kHighlightRange = 30
 internal var kBookId: String!
 
@@ -78,12 +77,7 @@ open class FolioReader: NSObject {
     open weak var readerContainer: FolioReaderContainer!
     open weak var readerAudioPlayer: FolioReaderAudioPlayer?
     
-    fileprivate override init() {
-        let isMigrated = FolioReader.defaults.bool(forKey: kMigratedToRealm)
-        if !isMigrated {
-            Highlight.migrateUserDataToRealm()
-        }
-    }
+    fileprivate override init() {}
     
     /// Check if reader is open
     static var isReaderOpen = false
