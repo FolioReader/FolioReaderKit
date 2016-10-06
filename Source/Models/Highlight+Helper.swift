@@ -13,48 +13,48 @@ import RealmSwift
  HighlightStyle type, default is .Yellow.
  */
 public enum HighlightStyle: Int {
-    case Yellow
-    case Green
-    case Blue
-    case Pink
-    case Underline
+    case yellow
+    case green
+    case blue
+    case pink
+    case underline
     
-    public init () { self = .Yellow }
+    public init () { self = .yellow }
     
     /**
      Return HighlightStyle for CSS class.
      */
-    public static func styleForClass(className: String) -> HighlightStyle {
+    public static func styleForClass(_ className: String) -> HighlightStyle {
         switch className {
         case "highlight-yellow":
-            return .Yellow
+            return .yellow
         case "highlight-green":
-            return .Green
+            return .green
         case "highlight-blue":
-            return .Blue
+            return .blue
         case "highlight-pink":
-            return .Pink
+            return .pink
         case "highlight-underline":
-            return .Underline
+            return .underline
         default:
-            return .Yellow
+            return .yellow
         }
     }
     
     /**
      Return CSS class for HighlightStyle.
      */
-    public static func classForStyle(style: Int) -> String {
+    public static func classForStyle(_ style: Int) -> String {
         switch style {
-        case HighlightStyle.Yellow.rawValue:
+        case HighlightStyle.yellow.rawValue:
             return "highlight-yellow"
-        case HighlightStyle.Green.rawValue:
+        case HighlightStyle.green.rawValue:
             return "highlight-green"
-        case HighlightStyle.Blue.rawValue:
+        case HighlightStyle.blue.rawValue:
             return "highlight-blue"
-        case HighlightStyle.Pink.rawValue:
+        case HighlightStyle.pink.rawValue:
             return "highlight-pink"
-        case HighlightStyle.Underline.rawValue:
+        case HighlightStyle.underline.rawValue:
             return "highlight-underline"
         default:
             return "highlight-yellow"
@@ -64,17 +64,17 @@ public enum HighlightStyle: Int {
     /**
      Return CSS class for HighlightStyle.
      */
-    public static func colorForStyle(style: Int, nightMode: Bool = false) -> UIColor {
+    public static func colorForStyle(_ style: Int, nightMode: Bool = false) -> UIColor {
         switch style {
-        case HighlightStyle.Yellow.rawValue:
+        case HighlightStyle.yellow.rawValue:
             return UIColor(red: 255/255, green: 235/255, blue: 107/255, alpha: nightMode ? 0.9 : 1)
-        case HighlightStyle.Green.rawValue:
+        case HighlightStyle.green.rawValue:
             return UIColor(red: 192/255, green: 237/255, blue: 114/255, alpha: nightMode ? 0.9 : 1)
-        case HighlightStyle.Blue.rawValue:
+        case HighlightStyle.blue.rawValue:
             return UIColor(red: 173/255, green: 216/255, blue: 255/255, alpha: nightMode ? 0.9 : 1)
-        case HighlightStyle.Pink.rawValue:
+        case HighlightStyle.pink.rawValue:
             return UIColor(red: 255/255, green: 176/255, blue: 202/255, alpha: nightMode ? 0.9 : 1)
-        case HighlightStyle.Underline.rawValue:
+        case HighlightStyle.underline.rawValue:
             return UIColor(red: 240/255, green: 40/255, blue: 20/255, alpha: nightMode ? 0.6 : 1)
         default:
             return UIColor(red: 255/255, green: 235/255, blue: 107/255, alpha: nightMode ? 0.9 : 1)
@@ -83,7 +83,7 @@ public enum HighlightStyle: Int {
 }
 
 /// Completion block
-public typealias Completion = (error: NSError?) -> ()
+public typealias Completion = (_ error: NSError?) -> ()
 
 extension Highlight {
     
@@ -92,16 +92,16 @@ extension Highlight {
      
      - parameter completion: Completion block
      */
-    public func persist(completion: Completion? = nil) {
+    public func persist(_ completion: Completion? = nil) {
         do {
             let realm = try! Realm()
             realm.beginWrite()
             realm.add(self, update: true)
             try realm.commitWrite()
-            completion?(error: nil)
+            completion?(nil)
         } catch let error as NSError {
             print("Error on persist highlight: \(error)")
-            completion?(error: error)
+            completion?(error)
         }
     }
     
@@ -124,7 +124,7 @@ extension Highlight {
      
      - parameter highlightId: The ID to be removed
      */
-    public static func removeById(highlightId: String) {
+    public static func removeById(_ highlightId: String) {
         var highlight: Highlight?
         let predicate = NSPredicate(format:"highlightId = %@", highlightId)
         
@@ -140,7 +140,7 @@ extension Highlight {
      - parameter highlightId: The ID to be removed
      - parameter type:        The `HighlightStyle`
      */
-    public static func updateById(highlightId: String, type: HighlightStyle) {
+    public static func updateById(_ highlightId: String, type: HighlightStyle) {
         var highlight: Highlight?
         let predicate = NSPredicate(format:"highlightId = %@", highlightId)
         do {
@@ -165,7 +165,7 @@ extension Highlight {
      
      - returns: Return a list of Highlights
      */
-    public static func allByBookId(bookId: String, andPage page: NSNumber? = nil) -> [Highlight] {
+    public static func allByBookId(_ bookId: String, andPage page: NSNumber? = nil) -> [Highlight] {
         var highlights: [Highlight]?
         let predicate = (page != nil) ? NSPredicate(format: "bookId = %@ && page = %@", bookId, page!) : NSPredicate(format: "bookId = %@", bookId)
         let realm = try! Realm()
@@ -190,45 +190,45 @@ extension Highlight {
     /**
      Match a highlight on string.
      */
-    public static func matchHighlight(text: String!, andId id: String, startOffset: String, endOffset: String) -> Highlight? {
+    public static func matchHighlight(_ text: String!, andId id: String, startOffset: String, endOffset: String) -> Highlight? {
         let pattern = "<highlight id=\"\(id)\" onclick=\".*?\" class=\"(.*?)\">((.|\\s)*?)</highlight>"
         let regex = try! NSRegularExpression(pattern: pattern, options: [])
-        let matches = regex.matchesInString(text, options: [], range: NSRange(location: 0, length: text.utf16.count))
+        let matches = regex.matches(in: text, options: [], range: NSRange(location: 0, length: text.utf16.count))
         let str = (text as NSString)
         
         let mapped = matches.map { (match) -> Highlight in
-            var contentPre = str.substringWithRange(NSRange(location: match.range.location-kHighlightRange, length: kHighlightRange))
-            var contentPost = str.substringWithRange(NSRange(location: match.range.location + match.range.length, length: kHighlightRange))
+            var contentPre = str.substring(with: NSRange(location: match.range.location-kHighlightRange, length: kHighlightRange))
+            var contentPost = str.substring(with: NSRange(location: match.range.location + match.range.length, length: kHighlightRange))
             
             // Normalize string before save
             
-            if contentPre.rangeOfString(">") != nil {
+            if contentPre.range(of: ">") != nil {
                 let regex = try! NSRegularExpression(pattern: "((?=[^>]*$)(.|\\s)*$)", options: [])
-                let searchString = regex.firstMatchInString(contentPre, options: .ReportProgress, range: NSRange(location: 0, length: contentPre.characters.count))
+                let searchString = regex.firstMatch(in: contentPre, options: .reportProgress, range: NSRange(location: 0, length: contentPre.characters.count))
                 
                 if searchString!.range.location != NSNotFound {
-                    contentPre = (contentPre as NSString).substringWithRange(searchString!.range)
+                    contentPre = (contentPre as NSString).substring(with: searchString!.range)
                 }
             }
             
-            if contentPost.rangeOfString("<") != nil {
+            if contentPost.range(of: "<") != nil {
                 let regex = try! NSRegularExpression(pattern: "^((.|\\s)*?)(?=<)", options: [])
-                let searchString = regex.firstMatchInString(contentPost, options: .ReportProgress, range: NSRange(location: 0, length: contentPost.characters.count))
+                let searchString = regex.firstMatch(in: contentPost, options: .reportProgress, range: NSRange(location: 0, length: contentPost.characters.count))
                 
                 if searchString!.range.location != NSNotFound {
-                    contentPost = (contentPost as NSString).substringWithRange(searchString!.range)
+                    contentPost = (contentPost as NSString).substring(with: searchString!.range)
                 }
             }
             
             let highlight = Highlight()
             highlight.highlightId = id
-            highlight.type = HighlightStyle.styleForClass(str.substringWithRange(match.rangeAtIndex(1))).rawValue
-            highlight.date = NSDate()
-            highlight.content = Highlight.removeSentenceSpam(str.substringWithRange(match.rangeAtIndex(2)))
+            highlight.type = HighlightStyle.styleForClass(str.substring(with: match.rangeAt(1))).rawValue
+            highlight.date = Foundation.Date()
+            highlight.content = Highlight.removeSentenceSpam(str.substring(with: match.rangeAt(2)))
             highlight.contentPre = Highlight.removeSentenceSpam(contentPre)
             highlight.contentPost = Highlight.removeSentenceSpam(contentPost)
             highlight.page = currentPageNumber
-            highlight.bookId = (kBookId as NSString).stringByDeletingPathExtension
+            highlight.bookId = (kBookId as NSString).deletingPathExtension
             highlight.startOffset = Int(startOffset) ?? -1
             highlight.endOffset = Int(endOffset) ?? -1
 
@@ -243,8 +243,8 @@ extension Highlight {
      - parameter highlightId: The ID to be removed
      - returns: The removed id
      */
-    public static func removeFromHTMLById(highlightId: String) -> String? {
-        guard let currentPage = FolioReader.sharedInstance.readerCenter?.currentPage else { return nil }
+    public static func removeFromHTMLById(_ highlightId: String) -> String? {
+        guard let currentPage = FolioReader.shared.readerCenter?.currentPage else { return nil }
         
         if let removedId = currentPage.webView.js("removeHighlightById('\(highlightId)')") {
             return removedId
@@ -261,18 +261,18 @@ extension Highlight {
      - parameter text: Text to analise
      - returns: Striped text
      */
-    public static func removeSentenceSpam(text: String) -> String {
+    public static func removeSentenceSpam(_ text: String) -> String {
         
         // Remove from text
-        func removeFrom(text: String, withPattern pattern: String) -> String {
+        func removeFrom(_ text: String, withPattern pattern: String) -> String {
             var locator = text
             let regex = try! NSRegularExpression(pattern: pattern, options: [])
-            let matches = regex.matchesInString(locator, options: [], range: NSRange(location: 0, length: locator.utf16.count))
+            let matches = regex.matches(in: locator, options: [], range: NSRange(location: 0, length: locator.utf16.count))
             let str = (locator as NSString)
             
             var newLocator = ""
             for match in matches {
-                newLocator += str.substringWithRange(match.rangeAtIndex(1))
+                newLocator += str.substring(with: match.rangeAt(1))
             }
             
             if matches.count > 0 && !newLocator.isEmpty {

@@ -19,7 +19,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        self.view.backgroundColor = UIColor.clearColor()
+        self.view.backgroundColor = UIColor.clear
 
         // Tap gesture
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(FolioReaderPlayerMenu.tapGesture))
@@ -28,15 +28,15 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
         view.addGestureRecognizer(tapGesture)
 
         // Menu view
-        menuView = UIView(frame: CGRectMake(0, view.frame.height-165, view.frame.width, view.frame.height))
-        menuView.backgroundColor = isNight(readerConfig.nightModeMenuBackground, UIColor.whiteColor())
-        menuView.autoresizingMask = .FlexibleWidth
-        menuView.layer.shadowColor = UIColor.blackColor().CGColor
+        menuView = UIView(frame: CGRect(x: 0, y: view.frame.height-165, width: view.frame.width, height: view.frame.height))
+        menuView.backgroundColor = isNight(readerConfig.nightModeMenuBackground, UIColor.white)
+        menuView.autoresizingMask = .flexibleWidth
+        menuView.layer.shadowColor = UIColor.black.cgColor
         menuView.layer.shadowOffset = CGSize(width: 0, height: 0)
         menuView.layer.shadowOpacity = 0.3
         menuView.layer.shadowRadius = 6
-        menuView.layer.shadowPath = UIBezierPath(rect: menuView.bounds).CGPath
-        menuView.layer.rasterizationScale = UIScreen.mainScreen().scale
+        menuView.layer.shadowPath = UIBezierPath(rect: menuView.bounds).cgPath
+        menuView.layer.rasterizationScale = UIScreen.main.scale
         menuView.layer.shouldRasterize = true
         view.addSubview(menuView)
         
@@ -57,58 +57,58 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
         let pause = UIImage(readerImageNamed: "pause-icon")
         let prev = UIImage(readerImageNamed: "prev-icon")
         let next = UIImage(readerImageNamed: "next-icon")
-        let playSelected = play!.imageTintColor(selectedColor).imageWithRenderingMode(.AlwaysOriginal)
-        let pauseSelected = pause!.imageTintColor(selectedColor).imageWithRenderingMode(.AlwaysOriginal)
+        let playSelected = play!.imageTintColor(selectedColor).withRenderingMode(.alwaysOriginal)
+        let pauseSelected = pause!.imageTintColor(selectedColor).withRenderingMode(.alwaysOriginal)
         
-        let prevNormal = prev!.imageTintColor(normalColor).imageWithRenderingMode(.AlwaysOriginal)
-        let nextNormal = next!.imageTintColor(normalColor).imageWithRenderingMode(.AlwaysOriginal)
-        let prevSelected = prev!.imageTintColor(selectedColor).imageWithRenderingMode(.AlwaysOriginal)
-        let nextSelected = next!.imageTintColor(selectedColor).imageWithRenderingMode(.AlwaysOriginal)
+        let prevNormal = prev!.imageTintColor(normalColor).withRenderingMode(.alwaysOriginal)
+        let nextNormal = next!.imageTintColor(normalColor).withRenderingMode(.alwaysOriginal)
+        let prevSelected = prev!.imageTintColor(selectedColor).withRenderingMode(.alwaysOriginal)
+        let nextSelected = next!.imageTintColor(selectedColor).withRenderingMode(.alwaysOriginal)
         
         // prev button
         let prevBtn = UIButton(frame: CGRect(x: gutterX + padX, y: 0, width: size, height: size))
-        prevBtn.setImage(prevNormal, forState: .Normal)
-        prevBtn.setImage(prevSelected, forState: .Selected)
-        prevBtn.addTarget(self, action: #selector(FolioReaderPlayerMenu.prevChapter(_:)), forControlEvents: .TouchUpInside)
+        prevBtn.setImage(prevNormal, for: UIControlState())
+        prevBtn.setImage(prevSelected, for: .selected)
+        prevBtn.addTarget(self, action: #selector(FolioReaderPlayerMenu.prevChapter(_:)), for: .touchUpInside)
         menuView.addSubview(prevBtn)
         
         // play / pause button
         let playPauseBtn = UIButton(frame: CGRect(x: Int(prevBtn.frame.origin.x) + padX + size, y: 0, width: size, height: size))
-        playPauseBtn.setTitleColor(selectedColor, forState: .Normal)
-        playPauseBtn.setTitleColor(selectedColor, forState: .Selected)
-        playPauseBtn.setImage(playSelected, forState: .Normal)
-        playPauseBtn.setImage(pauseSelected, forState: .Selected)
+        playPauseBtn.setTitleColor(selectedColor, for: UIControlState())
+        playPauseBtn.setTitleColor(selectedColor, for: .selected)
+        playPauseBtn.setImage(playSelected, for: UIControlState())
+        playPauseBtn.setImage(pauseSelected, for: .selected)
         playPauseBtn.titleLabel!.font = UIFont(name: "Avenir", size: 22)!
-        playPauseBtn.addTarget(self, action: #selector(FolioReaderPlayerMenu.togglePlay(_:)), forControlEvents: .TouchUpInside)
+        playPauseBtn.addTarget(self, action: #selector(FolioReaderPlayerMenu.togglePlay(_:)), for: .touchUpInside)
         menuView.addSubview(playPauseBtn)
         
-        if let audioPlayer = FolioReader.sharedInstance.readerAudioPlayer where audioPlayer.isPlaying() {
-            playPauseBtn.selected = true
+        if let audioPlayer = FolioReader.shared.readerAudioPlayer , audioPlayer.isPlaying() {
+            playPauseBtn.isSelected = true
         }
         
         // next button
         let nextBtn = UIButton(frame: CGRect(x: Int(playPauseBtn.frame.origin.x) + padX + size, y: 0, width: size, height: size))
-        nextBtn.setImage(nextNormal, forState: .Normal)
-        nextBtn.setImage(nextSelected, forState: .Selected)
-        nextBtn.addTarget(self, action: #selector(FolioReaderPlayerMenu.nextChapter(_:)), forControlEvents: .TouchUpInside)
+        nextBtn.setImage(nextNormal, for: UIControlState())
+        nextBtn.setImage(nextSelected, for: .selected)
+        nextBtn.addTarget(self, action: #selector(FolioReaderPlayerMenu.nextChapter(_:)), for: .touchUpInside)
         menuView.addSubview(nextBtn)
         
 
         // Separator
-        let line = UIView(frame: CGRectMake(0, playPauseBtn.frame.height+playPauseBtn.frame.origin.y, view.frame.width, 1))
+        let line = UIView(frame: CGRect(x: 0, y: playPauseBtn.frame.height+playPauseBtn.frame.origin.y, width: view.frame.width, height: 1))
         line.backgroundColor = readerConfig.nightModeSeparatorColor
         menuView.addSubview(line)
 
         // audio playback rate adjust
         let playbackRate = SMSegmentView(frame: CGRect(x: 15, y: line.frame.height+line.frame.origin.y, width: view.frame.width-30, height: 55),
-            separatorColour: UIColor.clearColor(),
+            separatorColour: UIColor.clear,
             separatorWidth: 0,
             segmentProperties:  [
-                keySegmentOnSelectionColour: UIColor.clearColor(),
-                keySegmentOffSelectionColour: UIColor.clearColor(),
+                keySegmentOnSelectionColour: UIColor.clear,
+                keySegmentOffSelectionColour: UIColor.clear,
                 keySegmentOnSelectionTextColour: selectedColor,
                 keySegmentOffSelectionTextColour: normalColor,
-                keyContentVerticalMargin: 17
+                keyContentVerticalMargin: 17 as AnyObject
             ])
         playbackRate.delegate = self
         playbackRate.tag = 2
@@ -122,74 +122,74 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
         
         
         // Separator
-        let line2 = UIView(frame: CGRectMake(0, playbackRate.frame.height+playbackRate.frame.origin.y, view.frame.width, 1))
+        let line2 = UIView(frame: CGRect(x: 0, y: playbackRate.frame.height+playbackRate.frame.origin.y, width: view.frame.width, height: 1))
         line2.backgroundColor = readerConfig.nightModeSeparatorColor
         menuView.addSubview(line2)
         
         
         // Media overlay highlight styles
-        let style0 = UIButton(frame: CGRectMake(0, line2.frame.height+line2.frame.origin.y, view.frame.width/3, 55))
-        style0.titleLabel!.textAlignment = .Center
+        let style0 = UIButton(frame: CGRect(x: 0, y: line2.frame.height+line2.frame.origin.y, width: view.frame.width/3, height: 55))
+        style0.titleLabel!.textAlignment = .center
         style0.titleLabel!.font = UIFont(name: "Avenir-Light", size: 17)
-        style0.setTitleColor(isNight(readerConfig.nightModeMenuBackground, UIColor.whiteColor()), forState: .Normal)
-        style0.setTitleColor(isNight(readerConfig.nightModeMenuBackground, UIColor.whiteColor()), forState: .Selected)
-        style0.setTitle(readerConfig.localizedPlayerMenuStyle, forState: .Normal)
+        style0.setTitleColor(isNight(readerConfig.nightModeMenuBackground, UIColor.white), for: UIControlState())
+        style0.setTitleColor(isNight(readerConfig.nightModeMenuBackground, UIColor.white), for: .selected)
+        style0.setTitle(readerConfig.localizedPlayerMenuStyle, for: UIControlState())
         menuView.addSubview(style0);
         style0.titleLabel?.sizeToFit()
         let style0Bgd = UIView(frame: style0.titleLabel!.frame)
-        style0Bgd.center = CGPointMake(style0.frame.size.width  / 2, style0.frame.size.height / 2);
+        style0Bgd.center = CGPoint(x: style0.frame.size.width  / 2, y: style0.frame.size.height / 2);
         style0Bgd.frame.size.width += 8
         style0Bgd.frame.origin.x -= 4
         style0Bgd.backgroundColor = normalColor;
         style0Bgd.layer.cornerRadius = 3.0;
-        style0Bgd.userInteractionEnabled = false
+        style0Bgd.isUserInteractionEnabled = false
         style0.insertSubview(style0Bgd, belowSubview: style0.titleLabel!)
         
-        let style1 = UIButton(frame: CGRectMake(view.frame.width/3, line2.frame.height+line2.frame.origin.y, view.frame.width/3, 55))
-        style1.titleLabel!.textAlignment = .Center
+        let style1 = UIButton(frame: CGRect(x: view.frame.width/3, y: line2.frame.height+line2.frame.origin.y, width: view.frame.width/3, height: 55))
+        style1.titleLabel!.textAlignment = .center
         style1.titleLabel!.font = UIFont(name: "Avenir-Light", size: 17)
-        style1.setTitleColor(normalColor, forState: .Normal)
+        style1.setTitleColor(normalColor, for: UIControlState())
         style1.setAttributedTitle(NSAttributedString(string: "Style", attributes: [
             NSForegroundColorAttributeName: normalColor,
-            NSUnderlineStyleAttributeName: NSUnderlineStyle.PatternDot.rawValue|NSUnderlineStyle.StyleSingle.rawValue,
+            NSUnderlineStyleAttributeName: NSUnderlineStyle.patternDot.rawValue|NSUnderlineStyle.styleSingle.rawValue,
             NSUnderlineColorAttributeName: normalColor
-        ]), forState: .Normal)
+        ]), for: UIControlState())
         style1.setAttributedTitle(NSAttributedString(string: readerConfig.localizedPlayerMenuStyle, attributes: [
-            NSForegroundColorAttributeName: isNight(UIColor.whiteColor(), UIColor.blackColor()),
-            NSUnderlineStyleAttributeName: NSUnderlineStyle.PatternDot.rawValue|NSUnderlineStyle.StyleSingle.rawValue,
+            NSForegroundColorAttributeName: isNight(UIColor.white, UIColor.black),
+            NSUnderlineStyleAttributeName: NSUnderlineStyle.patternDot.rawValue|NSUnderlineStyle.styleSingle.rawValue,
             NSUnderlineColorAttributeName: selectedColor
-            ]), forState: .Selected)
+            ]), for: .selected)
         menuView.addSubview(style1);
         
-        let style2 = UIButton(frame: CGRectMake(view.frame.width/1.5, line2.frame.height+line2.frame.origin.y, view.frame.width/3, 55))
-        style2.titleLabel!.textAlignment = .Center
+        let style2 = UIButton(frame: CGRect(x: view.frame.width/1.5, y: line2.frame.height+line2.frame.origin.y, width: view.frame.width/3, height: 55))
+        style2.titleLabel!.textAlignment = .center
         style2.titleLabel!.font = UIFont(name: "Avenir-Light", size: 17)
-        style2.setTitleColor(normalColor, forState: .Normal)
-        style2.setTitleColor(selectedColor, forState: .Selected)
-        style2.setTitle(readerConfig.localizedPlayerMenuStyle, forState: .Normal)
+        style2.setTitleColor(normalColor, for: UIControlState())
+        style2.setTitleColor(selectedColor, for: .selected)
+        style2.setTitle(readerConfig.localizedPlayerMenuStyle, for: UIControlState())
         menuView.addSubview(style2);
         
         // add line dividers between style buttons
-        let style1line = UIView(frame: CGRectMake(style1.frame.origin.x, style1.frame.origin.y, 1, style1.frame.height))
+        let style1line = UIView(frame: CGRect(x: style1.frame.origin.x, y: style1.frame.origin.y, width: 1, height: style1.frame.height))
         style1line.backgroundColor = readerConfig.nightModeSeparatorColor
         menuView.addSubview(style1line)
-        let style2line = UIView(frame: CGRectMake(style2.frame.origin.x, style2.frame.origin.y, 1, style2.frame.height))
+        let style2line = UIView(frame: CGRect(x: style2.frame.origin.x, y: style2.frame.origin.y, width: 1, height: style2.frame.height))
         style2line.backgroundColor = readerConfig.nightModeSeparatorColor
         menuView.addSubview(style2line)
         
         // select the current style
-        style0.selected = (FolioReader.currentMediaOverlayStyle == .Default)
-        style1.selected = (FolioReader.currentMediaOverlayStyle == .Underline)
-        style2.selected = (FolioReader.currentMediaOverlayStyle == .TextColor)
-        if style0.selected { style0Bgd.backgroundColor = selectedColor }
+        style0.isSelected = (FolioReader.currentMediaOverlayStyle == .default)
+        style1.isSelected = (FolioReader.currentMediaOverlayStyle == .underline)
+        style2.isSelected = (FolioReader.currentMediaOverlayStyle == .textColor)
+        if style0.isSelected { style0Bgd.backgroundColor = selectedColor }
         
         // hook up button actions
-        style0.tag = MediaOverlayStyle.Default.rawValue
-        style1.tag = MediaOverlayStyle.Underline.rawValue
-        style2.tag = MediaOverlayStyle.TextColor.rawValue
-        style0.addTarget(self, action: #selector(FolioReaderPlayerMenu.changeStyle(_:)), forControlEvents: .TouchUpInside)
-        style1.addTarget(self, action: #selector(FolioReaderPlayerMenu.changeStyle(_:)), forControlEvents: .TouchUpInside)
-        style2.addTarget(self, action: #selector(FolioReaderPlayerMenu.changeStyle(_:)), forControlEvents: .TouchUpInside)
+        style0.tag = MediaOverlayStyle.default.rawValue
+        style1.tag = MediaOverlayStyle.underline.rawValue
+        style2.tag = MediaOverlayStyle.textColor.rawValue
+        style0.addTarget(self, action: #selector(FolioReaderPlayerMenu.changeStyle(_:)), for: .touchUpInside)
+        style1.addTarget(self, action: #selector(FolioReaderPlayerMenu.changeStyle(_:)), for: .touchUpInside)
+        style2.addTarget(self, action: #selector(FolioReaderPlayerMenu.changeStyle(_:)), for: .touchUpInside)
         
         // store ref to buttons
         styleOptionBtns.append(style0)
@@ -198,11 +198,11 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
     }
     
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         viewDidAppear = true
     }
 
-    override func viewDidDisappear(animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         viewDidAppear = false
     }
 
@@ -213,49 +213,49 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
 
     // MARK: - Status Bar
 
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return readerConfig.shouldHideNavigationOnTap == true
     }
 
     // MARK: - SMSegmentView delegate
 
-    func segmentView(segmentView: SMSegmentView, didSelectSegmentAtIndex index: Int) {
+    func segmentView(_ segmentView: SMSegmentView, didSelectSegmentAtIndex index: Int) {
         guard viewDidAppear else { return }
 
-        if let audioPlayer = FolioReader.sharedInstance.readerAudioPlayer where segmentView.tag == 2 {
+        if let audioPlayer = FolioReader.shared.readerAudioPlayer , segmentView.tag == 2 {
             audioPlayer.setRate(index)
             FolioReader.currentAudioRate = index
         }
     }
 
-    func prevChapter(sender: UIButton!) {
-        FolioReader.sharedInstance.readerAudioPlayer?.playPrevChapter()
+    func prevChapter(_ sender: UIButton!) {
+        FolioReader.shared.readerAudioPlayer?.playPrevChapter()
     }
     
-    func nextChapter(sender: UIButton!) {
-        FolioReader.sharedInstance.readerAudioPlayer?.playNextChapter()
+    func nextChapter(_ sender: UIButton!) {
+        FolioReader.shared.readerAudioPlayer?.playNextChapter()
     }
     
-    func togglePlay(sender: UIButton!) {
-        sender.selected = sender.selected != true
-        FolioReader.sharedInstance.readerAudioPlayer?.togglePlay()
+    func togglePlay(_ sender: UIButton!) {
+        sender.isSelected = sender.isSelected != true
+        FolioReader.shared.readerAudioPlayer?.togglePlay()
         closeView()
     }
     
-    func changeStyle(sender: UIButton!) {
+    func changeStyle(_ sender: UIButton!) {
         FolioReader.currentMediaOverlayStyle = MediaOverlayStyle(rawValue: sender.tag)!
         
         // select the proper style button
         for btn in styleOptionBtns {
-            btn.selected = btn == sender
+            btn.isSelected = btn == sender
             
-            if btn.tag == MediaOverlayStyle.Default.rawValue {
-                btn.subviews.first?.backgroundColor = btn.selected ? readerConfig.tintColor : UIColor(white: 0.5, alpha: 0.7)
+            if btn.tag == MediaOverlayStyle.default.rawValue {
+                btn.subviews.first?.backgroundColor = btn.isSelected ? readerConfig.tintColor : UIColor(white: 0.5, alpha: 0.7)
             }
         }
         
         // update the current page style
-        if let currentPage = FolioReader.sharedInstance.readerCenter?.currentPage {
+        if let currentPage = FolioReader.shared.readerCenter?.currentPage {
             currentPage.webView.js("setMediaOverlayStyle(\"\(FolioReader.currentMediaOverlayStyle.className())\")")
         }
     }
@@ -264,7 +264,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
         dismiss()
 
         if readerConfig.shouldHideNavigationOnTap == false {
-            FolioReader.sharedInstance.readerCenter?.showBars()
+            FolioReader.shared.readerCenter?.showBars()
         }
     }
 
@@ -275,7 +275,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
     }
 
 
-    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         if gestureRecognizer is UITapGestureRecognizer && touch.view == view {
             return true
         }

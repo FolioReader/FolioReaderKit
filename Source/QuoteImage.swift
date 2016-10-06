@@ -27,7 +27,7 @@ public struct QuoteImage {
      
      - returns: A newly initialized `QuoteImage` object.
      */
-    public init(withImage image: UIImage, alpha: CGFloat = 1, textColor: UIColor = UIColor.whiteColor(), backgroundColor: UIColor = UIColor.whiteColor()) {
+    public init(withImage image: UIImage, alpha: CGFloat = 1, textColor: UIColor = UIColor.white, backgroundColor: UIColor = UIColor.white) {
         self.image = image
         self.alpha = alpha
         self.textColor = textColor
@@ -44,8 +44,8 @@ public struct QuoteImage {
      
      - returns: A newly initialized `QuoteImage` object.
      */
-    public init(withGradient gradient: CAGradientLayer, alpha: CGFloat = 1, textColor: UIColor = UIColor.whiteColor(), backgroundColor: UIColor = UIColor.whiteColor()) {
-        let screenBounds = UIScreen.mainScreen().bounds
+    public init(withGradient gradient: CAGradientLayer, alpha: CGFloat = 1, textColor: UIColor = UIColor.white, backgroundColor: UIColor = UIColor.white) {
+        let screenBounds = UIScreen.main.bounds
         gradient.frame = CGRect(x: 0, y: 0, width: screenBounds.width, height: screenBounds.width)
         self.image = UIImage.imageWithLayer(gradient)
         self.alpha = alpha
@@ -63,7 +63,7 @@ public struct QuoteImage {
      
      - returns: A newly initialized `QuoteImage` object.
      */
-    public init(withColor color: UIColor, alpha: CGFloat = 1, textColor: UIColor = UIColor.whiteColor(), backgroundColor: UIColor = UIColor.whiteColor()) {
+    public init(withColor color: UIColor, alpha: CGFloat = 1, textColor: UIColor = UIColor.white, backgroundColor: UIColor = UIColor.white) {
         self.image = UIImage.imageWithColor(color)
         self.alpha = alpha
         self.textColor = textColor

@@ -31,10 +31,10 @@ public enum FolioReaderScrollDirection: Int {
      */
     func collectionViewScrollDirection() -> UICollectionViewScrollDirection {
         switch self {
-        case vertical:
-            return .Vertical
-        case horizontal, horizontalWithVerticalContent:
-            return .Horizontal
+        case .vertical:
+            return .vertical
+        case .horizontal, .horizontalWithVerticalContent:
+            return .horizontal
         }
     }
 }
@@ -62,7 +62,7 @@ public struct ClassBasedOnClickListener {
 	public var selectAll			: Bool
 
 	/// The closure which will be called if the specified class was clicked. `attributeContent` contains the string content of the specified attribute and `touchPointRelativeToWebView` reprsents the touch point relative to the web view.
-	public var onClickAction		: ((attributeContent: String?, touchPointRelativeToWebView: CGPoint) -> Void)
+	public var onClickAction		: ((_ attributeContent: String?, _ touchPointRelativeToWebView: CGPoint) -> Void)
 
 	/// Initializes a `ClassBasedOnClickListener` instance. Append it to the `classBasedOnClickListeners` property from the `FolioReaderConfig` to receive on click events. The default `selectAll` value is `true`.
 	/**
@@ -74,8 +74,8 @@ public struct ClassBasedOnClickListener {
 	- parameter selectAll: Whether the listener should be added to all found elements or only to the first one. See https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll for further information. The default value is `true`.
 	- parameter onClickAction: The closure which will be called if the specified class was clicked. `attributeContent` contains the string content of the specified attribute and `touchPointRelativeToWebView` reprsents the touch point relative to the web view.
 	*/
-	public init(schemeName: String, querySelector: String, attributeName: String, selectAll: Bool = true, onClickAction: ((attributeContent: String?, touchPointRelativeToWebView: CGPoint) -> Void)) {
-		self.schemeName = schemeName.lowercaseString
+	public init(schemeName: String, querySelector: String, attributeName: String, selectAll: Bool = true, onClickAction: @escaping ((_ attributeContent: String?, _ touchPointRelativeToWebView: CGPoint) -> Void)) {
+		self.schemeName = schemeName.lowercased()
 		self.querySelector = querySelector
 		self.attributeName = attributeName
 		self.selectAll = selectAll
@@ -88,7 +88,7 @@ public struct ClassBasedOnClickListener {
 /**
  Defines the Reader custom configuration
  */
-public class FolioReaderConfig: NSObject {
+open class FolioReaderConfig: NSObject {
 
 	// MARK: ClassBasedOnClickListener
 
@@ -98,101 +98,101 @@ public class FolioReaderConfig: NSObject {
 	Eg. A ClassBasedOnClickListener with the className "quote" and parameterName "id" with the given epub html content "<section class="quote" id="12345">" would call the given closure on a click on this section with the String "12345" as parameter.
 	
 	*/
-	public var classBasedOnClickListeners = [ClassBasedOnClickListener]()
+	open var classBasedOnClickListeners = [ClassBasedOnClickListener]()
 
     // MARK: Colors
     
     /// Base header custom TintColor
-    public var tintColor = UIColor(rgba: "#6ACC50")
+    open var tintColor = UIColor(rgba: "#6ACC50")
     
     /// Menu background color
-    public var menuBackgroundColor = UIColor.whiteColor()
+    open var menuBackgroundColor = UIColor.white
     
     /// Menu separator Color
-    public var menuSeparatorColor = UIColor(rgba: "#D7D7D7")
+    open var menuSeparatorColor = UIColor(rgba: "#D7D7D7")
     
     /// Menu text color
-    public var menuTextColor = UIColor(rgba: "#767676")
+    open var menuTextColor = UIColor(rgba: "#767676")
     
     /// Night mode background color
-    public var nightModeBackground = UIColor(rgba: "#131313")
+    open var nightModeBackground = UIColor(rgba: "#131313")
     
     /// Night mode menu background color
-    public var nightModeMenuBackground = UIColor(rgba: "#1E1E1E")
+    open var nightModeMenuBackground = UIColor(rgba: "#1E1E1E")
     
     /// Night mode separator color
-    public var nightModeSeparatorColor = UIColor(white: 0.5, alpha: 0.2)
+    open var nightModeSeparatorColor = UIColor(white: 0.5, alpha: 0.2)
     
     /// Media overlay or TTS selection color
-    public lazy var mediaOverlayColor: UIColor! = self.tintColor
+    open lazy var mediaOverlayColor: UIColor! = self.tintColor
     
     // MARK: Custom actions
     
 	/// hide the navigation bar and the bottom status view 
-	public var hideBars = false
+	open var hideBars = false
 
     /// If `canChangeScrollDirection` is `true` it will be overrided by user's option.
-    public var scrollDirection: FolioReaderScrollDirection = .vertical
+    open var scrollDirection: FolioReaderScrollDirection = .vertical
     
     /// Enable or disable hability to user change scroll direction on menu.
-    public var canChangeScrollDirection = true
+    open var canChangeScrollDirection = true
     
     /// Should hide navigation bar on user tap
-    public var shouldHideNavigationOnTap = true
+    open var shouldHideNavigationOnTap = true
     
     /// Allow sharing option, if `false` will hide all sharing icons and options
-    public var allowSharing = true
+    open var allowSharing = true
     
     /// Enable TTS (Text To Speech)
-    public var enableTTS = true
+    open var enableTTS = true
     
     // MARK: Quote image share
     
     /// Custom Quote logo
-    public var quoteCustomLogoImage = UIImage(readerImageNamed: "icon-logo")
+    open var quoteCustomLogoImage = UIImage(readerImageNamed: "icon-logo")
     
     /// Add custom backgrounds and font colors to Quote Images
-    public var quoteCustomBackgrounds = [QuoteImage]()
+    open var quoteCustomBackgrounds = [QuoteImage]()
     
     /// Enable or disable default Quote Image backgrounds
-    public var quotePreserveDefaultBackgrounds = true
+    open var quotePreserveDefaultBackgrounds = true
     
     // MARK: Localized strings
     
     /// Localizes Highlight title
-    public var localizedHighlightsTitle = NSLocalizedString("Highlights", comment: "")
+    open var localizedHighlightsTitle = NSLocalizedString("Highlights", comment: "")
    
     /// Localizes Content title
-    public var localizedContentsTitle = NSLocalizedString("Contents", comment: "")
+    open var localizedContentsTitle = NSLocalizedString("Contents", comment: "")
 
 	/// Use the readers `UIMenuController` which enables the highlighting etc. The default is `true`. If set to false it's possible to modify the shared `UIMenuController` for yourself. Note: This doesn't disable the text selection in the web view.
-	public var useReaderMenuController = true
+	open var useReaderMenuController = true
 	
     /// Localizes Highlight date format. This is a `dateFormat` from `NSDateFormatter`, so be careful 🤔
-    public var localizedHighlightsDateFormat = "MMM dd, YYYY | HH:mm"
-    public var localizedHighlightMenu = NSLocalizedString("Highlight", comment: "")
-    public var localizedDefineMenu = NSLocalizedString("Define", comment: "")
-    public var localizedPlayMenu = NSLocalizedString("Play", comment: "")
-    public var localizedPauseMenu = NSLocalizedString("Pause", comment: "")
-    public var localizedFontMenuNight = NSLocalizedString("Night", comment: "")
-    public var localizedPlayerMenuStyle = NSLocalizedString("Style", comment: "")
-    public var localizedFontMenuDay = NSLocalizedString("Day", comment: "")
-    public var localizedLayoutHorizontal = NSLocalizedString("Horizontal", comment: "")
-    public var localizedLayoutVertical = NSLocalizedString("Vertical", comment: "")
-    public var localizedReaderOnePageLeft = NSLocalizedString("1 page left", comment: "")
-    public var localizedReaderManyPagesLeft = NSLocalizedString("pages left", comment: "")
-    public var localizedReaderManyMinutes = NSLocalizedString("minutes", comment: "")
-    public var localizedReaderOneMinute = NSLocalizedString("1 minute", comment: "")
-    public var localizedReaderLessThanOneMinute = NSLocalizedString("Less than a minute", comment: "")
-    public var localizedShareWebLink: NSURL? = nil
-    public var localizedShareChapterSubject = NSLocalizedString("Check out this chapter from", comment: "")
-    public var localizedShareHighlightSubject = NSLocalizedString("Notes from", comment: "")
-    public var localizedShareAllExcerptsFrom = NSLocalizedString("All excerpts from", comment: "")
-    public var localizedShareBy = NSLocalizedString("by", comment: "")
-    public var localizedCancel = NSLocalizedString("Cancel", comment: "")
-    public var localizedShare = NSLocalizedString("Share", comment: "")
-    public var localizedChooseExisting = NSLocalizedString("Choose existing", comment: "")
-    public var localizedTakePhoto = NSLocalizedString("Take Photo", comment: "")
-    public var localizedShareImageQuote = NSLocalizedString("Share image quote", comment: "")
-    public var localizedShareTextQuote = NSLocalizedString("Share text quote", comment: "")
+    open var localizedHighlightsDateFormat = "MMM dd, YYYY | HH:mm"
+    open var localizedHighlightMenu = NSLocalizedString("Highlight", comment: "")
+    open var localizedDefineMenu = NSLocalizedString("Define", comment: "")
+    open var localizedPlayMenu = NSLocalizedString("Play", comment: "")
+    open var localizedPauseMenu = NSLocalizedString("Pause", comment: "")
+    open var localizedFontMenuNight = NSLocalizedString("Night", comment: "")
+    open var localizedPlayerMenuStyle = NSLocalizedString("Style", comment: "")
+    open var localizedFontMenuDay = NSLocalizedString("Day", comment: "")
+    open var localizedLayoutHorizontal = NSLocalizedString("Horizontal", comment: "")
+    open var localizedLayoutVertical = NSLocalizedString("Vertical", comment: "")
+    open var localizedReaderOnePageLeft = NSLocalizedString("1 page left", comment: "")
+    open var localizedReaderManyPagesLeft = NSLocalizedString("pages left", comment: "")
+    open var localizedReaderManyMinutes = NSLocalizedString("minutes", comment: "")
+    open var localizedReaderOneMinute = NSLocalizedString("1 minute", comment: "")
+    open var localizedReaderLessThanOneMinute = NSLocalizedString("Less than a minute", comment: "")
+    open var localizedShareWebLink: URL? = nil
+    open var localizedShareChapterSubject = NSLocalizedString("Check out this chapter from", comment: "")
+    open var localizedShareHighlightSubject = NSLocalizedString("Notes from", comment: "")
+    open var localizedShareAllExcerptsFrom = NSLocalizedString("All excerpts from", comment: "")
+    open var localizedShareBy = NSLocalizedString("by", comment: "")
+    open var localizedCancel = NSLocalizedString("Cancel", comment: "")
+    open var localizedShare = NSLocalizedString("Share", comment: "")
+    open var localizedChooseExisting = NSLocalizedString("Choose existing", comment: "")
+    open var localizedTakePhoto = NSLocalizedString("Take Photo", comment: "")
+    open var localizedShareImageQuote = NSLocalizedString("Share image quote", comment: "")
+    open var localizedShareTextQuote = NSLocalizedString("Share text quote", comment: "")
 }

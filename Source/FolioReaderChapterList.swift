@@ -13,7 +13,7 @@ protocol FolioReaderChapterListDelegate: class {
     /**
      Notifies when the user selected some item on menu.
     */
-    func chapterList(chapterList: FolioReaderChapterList, didSelectRowAtIndexPath indexPath: NSIndexPath, withTocReference reference: FRTocReference)
+    func chapterList(_ chapterList: FolioReaderChapterList, didSelectRowAtIndexPath indexPath: IndexPath, withTocReference reference: FRTocReference)
     
     /**
      Notifies when chapter list did totally dismissed.
@@ -29,8 +29,8 @@ class FolioReaderChapterList: UITableViewController {
         super.viewDidLoad()
         
         // Register cell classes
-        tableView.registerClass(FolioReaderChapterListCell.self, forCellReuseIdentifier: reuseIdentifier)
-        tableView.separatorInset = UIEdgeInsetsZero
+        tableView.register(FolioReaderChapterListCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.separatorInset = UIEdgeInsets.zero
         tableView.backgroundColor = isNight(readerConfig.nightModeMenuBackground, readerConfig.menuBackgroundColor)
         tableView.separatorColor = isNight(readerConfig.nightModeSeparatorColor, readerConfig.menuSeparatorColor)
         
@@ -43,21 +43,21 @@ class FolioReaderChapterList: UITableViewController {
     
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tocItems.count
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) as! FolioReaderChapterListCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! FolioReaderChapterListCell
         
-        let tocReference = tocItems[indexPath.row]
+        let tocReference = tocItems[(indexPath as NSIndexPath).row]
         let isSection = tocReference.children.count > 0
         
-        cell.indexLabel.text = tocReference.title.stringByTrimmingCharactersInSet(.whitespaceCharacterSet())
+        cell.indexLabel.text = tocReference.title.trimmingCharacters(in: .whitespacesAndNewlines)
 
         // Add audio duration for Media Ovelay
         if let resource = tocReference.resource {
@@ -70,25 +70,25 @@ class FolioReaderChapterList: UITableViewController {
         }
 
         // Mark current reading chapter
-        if let currentPageNumber = currentPageNumber, reference = book.spine.spineReferences[safe: currentPageNumber-1] where tocReference.resource != nil {
+        if let currentPageNumber = currentPageNumber, let reference = book.spine.spineReferences[safe: currentPageNumber-1] , tocReference.resource != nil {
             let resource = reference.resource
             cell.indexLabel.textColor = tocReference.resource == resource ? readerConfig.tintColor : readerConfig.menuTextColor
         }
         
-        cell.layoutMargins = UIEdgeInsetsZero
+        cell.layoutMargins = UIEdgeInsets.zero
         cell.preservesSuperviewLayoutMargins = false
-        cell.contentView.backgroundColor = isSection ? UIColor(white: 0.7, alpha: 0.1) : UIColor.clearColor()
-        cell.backgroundColor = UIColor.clearColor()
+        cell.contentView.backgroundColor = isSection ? UIColor(white: 0.7, alpha: 0.1) : UIColor.clear
+        cell.backgroundColor = UIColor.clear
         return cell
     }
     
     // MARK: - Table view delegate
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let tocReference = tocItems[indexPath.row]
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let tocReference = tocItems[(indexPath as NSIndexPath).row]
         delegate?.chapterList(self, didSelectRowAtIndexPath: indexPath, withTocReference: tocReference)
         
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
         dismiss { 
             self.delegate?.chapterList(didDismissedChapterList: self)
         }

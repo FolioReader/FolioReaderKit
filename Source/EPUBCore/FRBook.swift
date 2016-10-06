@@ -9,7 +9,7 @@
 
 import UIKit
 
-public class FRBook: NSObject {
+open class FRBook: NSObject {
     var resources = FRResources()
     var metadata = FRMetadata()
     var spine = FRSpine()
@@ -38,19 +38,23 @@ public class FRBook: NSObject {
     }
     
     // @NOTE: should "#" be automatically prefixed with the ID?
-    func durationFor(ID: String) -> String? {
+    func durationFor(_ ID: String) -> String? {
         return metadata.findMetaByProperty("media:duration", refinedBy: ID)
     }
     
     
-    func activeClass() -> String! {
-        let className = metadata.findMetaByProperty("media:active-class");
-        return className ?? "epub-media-overlay-active";
+    func activeClass() -> String {
+        guard let className = metadata.findMetaByProperty("media:active-class") else {
+            return "epub-media-overlay-active"
+        }
+        return className
     }
     
-    func playbackActiveClass() -> String! {
-        let className = metadata.findMetaByProperty("media:playback-active-class");
-        return className ?? "epub-media-overlay-playing";
+    func playbackActiveClass() -> String {
+        guard let className = metadata.findMetaByProperty("media:playback-active-class") else {
+            return "epub-media-overlay-playing"
+        }
+        return className
     }
     
     
@@ -59,7 +63,7 @@ public class FRBook: NSObject {
     /**
      Get Smil File from a resource (if it has a media-overlay)
     */
-    func smilFileForResource(resource: FRResource!) -> FRSmilFile! {
+    func smilFileForResource(_ resource: FRResource!) -> FRSmilFile! {
         if( resource == nil || resource.mediaOverlay == nil ){
             return nil
         }
@@ -71,11 +75,11 @@ public class FRBook: NSObject {
         return smils.findByHref( smilResource!.href )
     }
     
-    func smilFileForHref(href: String) -> FRSmilFile! {
+    func smilFileForHref(_ href: String) -> FRSmilFile! {
         return smilFileForResource(resources.findByHref(href))
     }
     
-    func smilFileForId(ID: String) -> FRSmilFile! {
+    func smilFileForId(_ ID: String) -> FRSmilFile! {
         return smilFileForResource(resources.findById(ID))
     }
     

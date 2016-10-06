@@ -25,11 +25,11 @@ class ViewController: UIViewController {
         setCover(bookTwo, index: 1)
     }
 
-    @IBAction func didOpen(sender: AnyObject) {
+    @IBAction func didOpen(_ sender: AnyObject) {
         openEpub(sender.tag);
     }
     
-    func openEpub(sampleNum: Int) {
+    func openEpub(_ sampleNum: Int) {
         let config = FolioReaderConfig()
         config.shouldHideNavigationOnTap = sampleNum == 1 ? true : false
         config.scrollDirection = sampleNum == 1 ? .horizontal : .vertical
@@ -45,23 +45,23 @@ class ViewController: UIViewController {
 //        config.menuBackgroundColor = UIColor.lightGrayColor()
         
         // Custom sharing quote background
-        let customImageQuote = QuoteImage(withImage: UIImage(named: "demo-bg")!, alpha: 0.6, backgroundColor: UIColor.blackColor())
+        let customImageQuote = QuoteImage(withImage: UIImage(named: "demo-bg")!, alpha: 0.6, backgroundColor: UIColor.black)
         let customQuote = QuoteImage(withColor: UIColor(red:0.30, green:0.26, blue:0.20, alpha:1.0), alpha: 1.0, textColor: UIColor(red:0.86, green:0.73, blue:0.70, alpha:1.0))
         
         config.quoteCustomBackgrounds = [customImageQuote, customQuote]
         
         // Epub file
         let epubName = epubSampleFiles[sampleNum-1];
-        let bookPath = NSBundle.mainBundle().pathForResource(epubName, ofType: "epub")
+        let bookPath = Bundle.main.path(forResource: epubName, ofType: "epub")
         FolioReader.presentReader(parentViewController: self, withEpubPath: bookPath!, andConfig: config, shouldRemoveEpub: false)
     }
 
-    func setCover(button: UIButton, index: Int) {
+    func setCover(_ button: UIButton, index: Int) {
         let epubName = epubSampleFiles[index];
-        let bookPath = NSBundle.mainBundle().pathForResource(epubName, ofType: "epub")
+        let bookPath = Bundle.main.path(forResource: epubName, ofType: "epub")
         
         if let image = FolioReader.getCoverImage(bookPath!) {
-            button.setBackgroundImage(image, forState: .Normal)
+            button.setBackgroundImage(image, for: .normal)
         }
     }
 }

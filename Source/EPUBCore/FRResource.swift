@@ -18,9 +18,9 @@ class FRResource: NSObject {
 
     func basePath() -> String! {
         if href == nil || href.isEmpty { return nil }
-        var paths = fullHref.componentsSeparatedByString("/")
+        var paths = fullHref.components(separatedBy: "/")
         paths.removeLast()
-        return paths.joinWithSeparator("/")
+        return paths.joined(separator: "/")
     }
 }
 

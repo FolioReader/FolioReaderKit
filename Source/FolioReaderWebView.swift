@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class FolioReaderWebView: UIWebView {
+open class FolioReaderWebView: UIWebView {
 
 	var isColors = false
 	var isShare = false
@@ -16,7 +16,7 @@ public class FolioReaderWebView: UIWebView {
 
 	// MARK: - UIMenuController
 
-	public override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
+	open override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		guard readerConfig != nil && readerConfig.useReaderMenuController == true else {
 			return super.canPerformAction(action, withSender: sender)
 		}
@@ -37,84 +37,84 @@ public class FolioReaderWebView: UIWebView {
 		}
 	}
 
-	public override func canBecomeFirstResponder() -> Bool {
+	open override var canBecomeFirstResponder : Bool {
 		return true
 	}
 
 	// MARK: - UIMenuController - Actions
 
-	func share(sender: UIMenuController) {
-		let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+	func share(_ sender: UIMenuController) {
+		let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
-		let shareImage = UIAlertAction(title: readerConfig.localizedShareImageQuote, style: .Default, handler: { (action) -> Void in
+		let shareImage = UIAlertAction(title: readerConfig.localizedShareImageQuote, style: .default, handler: { (action) -> Void in
 			if self.isShare {
 				if let textToShare = self.js("getHighlightContent()") {
-					FolioReader.sharedInstance.readerCenter?.presentQuoteShare(textToShare)
+					FolioReader.shared.readerCenter?.presentQuoteShare(textToShare)
 				}
 			} else {
 				if let textToShare = self.js("getSelectedText()") {
-					FolioReader.sharedInstance.readerCenter?.presentQuoteShare(textToShare)
-					self.userInteractionEnabled = false
-					self.userInteractionEnabled = true
+					FolioReader.shared.readerCenter?.presentQuoteShare(textToShare)
+					self.isUserInteractionEnabled = false
+					self.isUserInteractionEnabled = true
 				}
 			}
 			self.setMenuVisible(false)
 		})
 
-		let shareText = UIAlertAction(title: readerConfig.localizedShareTextQuote, style: .Default) { (action) -> Void in
+		let shareText = UIAlertAction(title: readerConfig.localizedShareTextQuote, style: .default) { (action) -> Void in
 			if self.isShare {
 				if let textToShare = self.js("getHighlightContent()") {
-					FolioReader.sharedInstance.readerCenter?.shareHighlight(textToShare, rect: sender.menuFrame)
+					FolioReader.shared.readerCenter?.shareHighlight(textToShare, rect: sender.menuFrame)
 				}
 			} else {
 				if let textToShare = self.js("getSelectedText()") {
-					FolioReader.sharedInstance.readerCenter?.shareHighlight(textToShare, rect: sender.menuFrame)
+					FolioReader.shared.readerCenter?.shareHighlight(textToShare, rect: sender.menuFrame)
 				}
 			}
 			self.setMenuVisible(false)
 		}
 
-		let cancel = UIAlertAction(title: readerConfig.localizedCancel, style: .Cancel, handler: nil)
+		let cancel = UIAlertAction(title: readerConfig.localizedCancel, style: .cancel, handler: nil)
 
 		alertController.addAction(shareImage)
 		alertController.addAction(shareText)
 		alertController.addAction(cancel)
 
         if let alert = alertController.popoverPresentationController {
-            alert.sourceView = FolioReader.sharedInstance.readerCenter?.currentPage
+            alert.sourceView = FolioReader.shared.readerCenter?.currentPage
             alert.sourceRect = sender.menuFrame
         }
         
-		FolioReader.sharedInstance.readerCenter?.presentViewController(alertController, animated: true, completion: nil)
+		FolioReader.shared.readerCenter?.present(alertController, animated: true, completion: nil)
 	}
 
-	func colors(sender: UIMenuController?) {
+	func colors(_ sender: UIMenuController?) {
 		isColors = true
 		createMenu(options: false)
 		setMenuVisible(true)
 	}
 
-	func remove(sender: UIMenuController?) {
+	func remove(_ sender: UIMenuController?) {
 		if let removedId = js("removeThisHighlight()") {
 			Highlight.removeById(removedId)
 		}
 		setMenuVisible(false)
 	}
 
-	func highlight(sender: UIMenuController?) {
+	func highlight(_ sender: UIMenuController?) {
 		let highlightAndReturn = js("highlightString('\(HighlightStyle.classForStyle(FolioReader.currentHighlightStyle))')")
-		let jsonData = highlightAndReturn?.dataUsingEncoding(NSUTF8StringEncoding)
+		let jsonData = highlightAndReturn?.data(using: String.Encoding.utf8)
 
 		do {
-			let json = try NSJSONSerialization.JSONObjectWithData(jsonData!, options: []) as! NSArray
+			let json = try JSONSerialization.jsonObject(with: jsonData!, options: []) as! NSArray
 			let dic = json.firstObject as! [String: String]
 			let rect = CGRectFromString(dic["rect"]!)
 			let startOffset = dic["startOffset"]!
 			let endOffset = dic["endOffset"]!
 
 			// Force remove text selection
-			userInteractionEnabled = false
-			userInteractionEnabled = true
+			isUserInteractionEnabled = false
+			isUserInteractionEnabled = true
 
 			createMenu(options: true)
 			setMenuVisible(true, andRect: rect)
@@ -129,48 +129,48 @@ public class FolioReaderWebView: UIWebView {
 		}
 	}
 
-	func define(sender: UIMenuController?) {
+	func define(_ sender: UIMenuController?) {
 		let selectedText = js("getSelectedText()")
 
 		setMenuVisible(false)
-		userInteractionEnabled = false
-		userInteractionEnabled = true
+		isUserInteractionEnabled = false
+		isUserInteractionEnabled = true
 
 		let vc = UIReferenceLibraryViewController(term: selectedText! )
 		vc.view.tintColor = readerConfig.tintColor
-		FolioReader.sharedInstance.readerContainer.showViewController(vc, sender: nil)
+		FolioReader.shared.readerContainer.show(vc, sender: nil)
 	}
 
-	func play(sender: UIMenuController?) {
-		FolioReader.sharedInstance.readerAudioPlayer?.play()
+	func play(_ sender: UIMenuController?) {
+		FolioReader.shared.readerAudioPlayer?.play()
 
 		// Force remove text selection
 		// @NOTE: this doesn't seem to always work
-		userInteractionEnabled = false
-		userInteractionEnabled = true
+		isUserInteractionEnabled = false
+		isUserInteractionEnabled = true
 	}
 
-	func setYellow(sender: UIMenuController?) {
-		changeHighlightStyle(sender, style: .Yellow)
+	func setYellow(_ sender: UIMenuController?) {
+		changeHighlightStyle(sender, style: .yellow)
 	}
 
-	func setGreen(sender: UIMenuController?) {
-		changeHighlightStyle(sender, style: .Green)
+	func setGreen(_ sender: UIMenuController?) {
+		changeHighlightStyle(sender, style: .green)
 	}
 
-	func setBlue(sender: UIMenuController?) {
-		changeHighlightStyle(sender, style: .Blue)
+	func setBlue(_ sender: UIMenuController?) {
+		changeHighlightStyle(sender, style: .blue)
 	}
 
-	func setPink(sender: UIMenuController?) {
-		changeHighlightStyle(sender, style: .Pink)
+	func setPink(_ sender: UIMenuController?) {
+		changeHighlightStyle(sender, style: .pink)
 	}
 
-	func setUnderline(sender: UIMenuController?) {
-		changeHighlightStyle(sender, style: .Underline)
+	func setUnderline(_ sender: UIMenuController?) {
+		changeHighlightStyle(sender, style: .underline)
 	}
 
-	func changeHighlightStyle(sender: UIMenuController?, style: HighlightStyle) {
+	func changeHighlightStyle(_ sender: UIMenuController?, style: HighlightStyle) {
 		FolioReader.currentHighlightStyle = style.rawValue
 
 		if let updateId = js("setHighlightStyle('\(HighlightStyle.classForStyle(style.rawValue))')") {
@@ -181,7 +181,7 @@ public class FolioReaderWebView: UIWebView {
 
 	// MARK: - Create and show menu
 
-	func createMenu(options options: Bool) {
+	func createMenu(options: Bool) {
 		guard readerConfig.useReaderMenuController else {
 			return
 		}
@@ -197,7 +197,7 @@ public class FolioReaderWebView: UIWebView {
 		let pink = UIImage(readerImageNamed: "pink-marker")
 		let underline = UIImage(readerImageNamed: "underline-marker")
 
-        let menuController = UIMenuController.sharedMenuController()
+        let menuController = UIMenuController.shared
         
 		let highlightItem = UIMenuItem(title: readerConfig.localizedHighlightMenu, action: #selector(highlight(_:)))
 		let playAudioItem = UIMenuItem(title: readerConfig.localizedPlayMenu, action: #selector(play(_:)))
@@ -243,7 +243,7 @@ public class FolioReaderWebView: UIWebView {
             menuItems = [highlightItem, defineItem, shareItem]
             
             if book.hasAudio() || readerConfig.enableTTS {
-                menuItems.insert(playAudioItem, atIndex: 0)
+                menuItems.insert(playAudioItem, at: 0)
             }
             
             if !readerConfig.allowSharing {
@@ -254,25 +254,25 @@ public class FolioReaderWebView: UIWebView {
         menuController.menuItems = menuItems
 	}
 
-	func setMenuVisible(menuVisible: Bool, animated: Bool = true, andRect rect: CGRect = CGRectZero) {
+	func setMenuVisible(_ menuVisible: Bool, animated: Bool = true, andRect rect: CGRect = CGRect.zero) {
 		if !menuVisible && isShare || !menuVisible && isColors {
 			isColors = false
 			isShare = false
 		}
 
 		if menuVisible  {
-			if !CGRectEqualToRect(rect, CGRectZero) {
-				UIMenuController.sharedMenuController().setTargetRect(rect, inView: self)
+			if !rect.equalTo(CGRect.zero) {
+				UIMenuController.shared.setTargetRect(rect, in: self)
 			}
 		}
 
-		UIMenuController.sharedMenuController().setMenuVisible(menuVisible, animated: animated)
+		UIMenuController.shared.setMenuVisible(menuVisible, animated: animated)
 	}
 
 	// MARK: - Java Script Bridge
 
-	func js(script: String) -> String? {
-		let callback = self.stringByEvaluatingJavaScriptFromString(script)
+	func js(_ script: String) -> String? {
+		let callback = self.stringByEvaluatingJavaScript(from: script)
 		if callback!.isEmpty { return nil }
 		return callback
 	}
@@ -282,14 +282,14 @@ public class FolioReaderWebView: UIWebView {
 	func setupScrollDirection() {
 		switch readerConfig.scrollDirection {
 		case .vertical, .horizontalWithVerticalContent:
-			scrollView.pagingEnabled = false
-			paginationMode = .Unpaginated
+			scrollView.isPagingEnabled = false
+			paginationMode = .unpaginated
 			scrollView.bounces = true
 			break
 		case .horizontal:
-			scrollView.pagingEnabled = true
-			paginationMode = .LeftToRight
-			paginationBreakingMode = .Page
+			scrollView.isPagingEnabled = true
+			paginationMode = .leftToRight
+			paginationBreakingMode = .page
 			scrollView.bounces = false
 			break
 		}

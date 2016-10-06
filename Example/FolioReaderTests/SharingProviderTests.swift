@@ -30,7 +30,7 @@ class SharingProviderTests: QuickSpec {
                 }
 
                 it("returns text for a mail activity") {
-                    let itemForActivityType = subject.activityViewController(activityViewController, itemForActivityType: UIActivityTypeMail) as? String
+                    let itemForActivityType = subject.activityViewController(activityViewController, itemForActivityType: UIActivityType.mail) as? String
                     expect(itemForActivityType).to(equal(subject.text))
                 }
             }
@@ -41,7 +41,7 @@ class SharingProviderTests: QuickSpec {
                 }
 
                 it("returns HTML for a mail activity") {
-                    let itemForActivityType = subject.activityViewController(activityViewController, itemForActivityType: UIActivityTypeMail) as? String
+                    let itemForActivityType = subject.activityViewController(activityViewController, itemForActivityType: UIActivityType.mail) as? String
                     expect(itemForActivityType).to(equal(subject.html))
                 }
             }
