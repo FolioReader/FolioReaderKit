@@ -1,5 +1,36 @@
 # Change Log
 
+## [0.9.3](https://github.com/FolioReader/FolioReaderKit/tree/0.9.3) (2016-10-05)
+[Full Changelog](https://github.com/FolioReader/FolioReaderKit/compare/0.9.2...0.9.3)
+
+**Implemented enhancements:**
+
+- Extend flexibility. Use folio reader kit with vc which frame's is smaller than the screen size. [\#119](https://github.com/FolioReader/FolioReaderKit/issues/119)
+- Replace UIMenuItem-CXAImageSupport for MenuItemKit [\#41](https://github.com/FolioReader/FolioReaderKit/issues/41)
+- Provide a config which disables the readers `UIMenuController` [\#154](https://github.com/FolioReader/FolioReaderKit/pull/154) ([tschob](https://github.com/tschob))
+
+**Fixed bugs:**
+
+- UIMenuItem White Color [\#158](https://github.com/FolioReader/FolioReaderKit/issues/158)
+- Page content disappear sometimes [\#152](https://github.com/FolioReader/FolioReaderKit/issues/152)
+- Crash on SSZipArchive [\#83](https://github.com/FolioReader/FolioReaderKit/issues/83)
+
+**Closed issues:**
+
+- Scroll to a specific page and specific page number [\#130](https://github.com/FolioReader/FolioReaderKit/issues/130)
+- Build on XCode 8  [\#129](https://github.com/FolioReader/FolioReaderKit/issues/129)
+
+**Merged pull requests:**
+
+- 🎉 Fix and closes issue \#158 and \#41 [\#159](https://github.com/FolioReader/FolioReaderKit/pull/159) ([hebertialmeida](https://github.com/hebertialmeida))
+- Prevent the default click behavior and the passing to other elements … [\#157](https://github.com/FolioReader/FolioReaderKit/pull/157) ([tschob](https://github.com/tschob))
+- Add `pageWillLoad\(\)` delegate method [\#156](https://github.com/FolioReader/FolioReaderKit/pull/156) ([tschob](https://github.com/tschob))
+-  Provide a way to perform java script code in a readers page from external code [\#155](https://github.com/FolioReader/FolioReaderKit/pull/155) ([tschob](https://github.com/tschob))
+- Add `pageDidLoad\(\)` method to the reader center delegate [\#153](https://github.com/FolioReader/FolioReaderKit/pull/153) ([tschob](https://github.com/tschob))
+- Prevent to always unzip the ePub, performance improvement 📈 [\#151](https://github.com/FolioReader/FolioReaderKit/pull/151) ([hebertialmeida](https://github.com/hebertialmeida))
+- Feature/html content adjustments [\#150](https://github.com/FolioReader/FolioReaderKit/pull/150) ([tschob](https://github.com/tschob))
+- Provide touch point for class based on click listeners - improves Issue/132 [\#149](https://github.com/FolioReader/FolioReaderKit/pull/149) ([tschob](https://github.com/tschob))
+
 ## [0.9.2](https://github.com/FolioReader/FolioReaderKit/tree/0.9.2) (2016-09-20)
 [Full Changelog](https://github.com/FolioReader/FolioReaderKit/compare/0.9.1...0.9.2)
 
