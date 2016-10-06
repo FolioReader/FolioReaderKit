@@ -8,8 +8,8 @@ def shared_pods
 end
 
 def testing_pods
-  pod 'Quick', '0.9.2'
-  pod 'Nimble', '~> 4.1.0' 
+  pod 'Quick', '0.10.0'
+  pod 'Nimble', '~> 5.0.0' 
 end
 
 target 'Example' do
@@ -23,19 +23,4 @@ end
 target 'FolioReaderTests' do
   shared_pods
   testing_pods
-end
-
-
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    target.build_configurations.each do |config|
-      # Force add version
-      config.build_settings['SWIFT_VERSION'] = '3.0'
-      
-      # ensure testability is set https://github.com/CocoaPods/CocoaPods/issues/4505
-      if config.name == 'Debug'
-        config.build_settings['ENABLE_TESTABILITY'] = 'YES'
-      end
-    end
-  end
 end
