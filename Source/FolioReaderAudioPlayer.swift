@@ -238,7 +238,7 @@ open class FolioReaderAudioPlayer: NSObject {
      Once an audio fragment begins playing, the audio clip will continue playing until the player timer detects
      the audio is out of the fragment timeframe.
     */
-    fileprivate func _playFragment(_ smil: FRSmilElement!) -> Bool {
+    @discardableResult fileprivate func _playFragment(_ smil: FRSmilElement!) -> Bool {
 
         if smil == nil {
             print("no more parallel audio to play")

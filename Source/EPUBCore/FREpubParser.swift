@@ -261,7 +261,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
      - parameter element: A `AEXMLElement`, usually the `<body>`
      - returns: If found the `<nav>` `AEXMLElement`
      */
-    func findNavTag(_ element: AEXMLElement) -> AEXMLElement? {
+    @discardableResult func findNavTag(_ element: AEXMLElement) -> AEXMLElement? {
         for element in element.children {
             if let nav = element["nav"].first {
                 return nav
@@ -433,7 +433,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     /**
      Add skip to backup file.
     */
-    fileprivate func addSkipBackupAttributeToItemAtURL(_ URL: Foundation.URL) -> Bool {
+    @discardableResult fileprivate func addSkipBackupAttributeToItemAtURL(_ URL: Foundation.URL) -> Bool {
         assert(FileManager.default.fileExists(atPath: URL.path))
         
         do {
