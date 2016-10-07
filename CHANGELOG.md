@@ -2,7 +2,14 @@
 
 ## [Unreleased](https://github.com/FolioReader/FolioReaderKit/tree/HEAD)
 
-[Full Changelog](https://github.com/FolioReader/FolioReaderKit/compare/0.9.4...HEAD)
+[Full Changelog](https://github.com/FolioReader/FolioReaderKit/compare/1.0.0...HEAD)
+
+**Fixed bugs:**
+
+- Unable to integrate using carthage  [\#98](https://github.com/FolioReader/FolioReaderKit/issues/98)
+
+## [1.0.0](https://github.com/FolioReader/FolioReaderKit/tree/1.0.0) (2016-10-07)
+[Full Changelog](https://github.com/FolioReader/FolioReaderKit/compare/0.9.4...1.0.0)
 
 **Closed issues:**
 
