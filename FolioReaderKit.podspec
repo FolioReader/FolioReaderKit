@@ -26,7 +26,6 @@ Pod::Spec.new do |s|
     'Source/Resources/*.xcassets',
     'Source/Resources/Fonts/**/*.{otf,ttf}'
   ]
-  s.preserve_paths = 'Source/**/*.xcdatamodeld'
   s.public_header_files = 'Source/*.h'
 
   s.libraries  = "z"
