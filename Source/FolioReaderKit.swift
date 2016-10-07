@@ -99,7 +99,7 @@ open class FolioReader: NSObject {
 
 			if let readerCenter = FolioReader.shared.readerCenter {
 				UIView.animate(withDuration: 0.6, animations: {
-					readerCenter.currentPage?.webView.js("nightMode(\(nightMode))")
+					_ = readerCenter.currentPage?.webView.js("nightMode(\(nightMode))")
 					readerCenter.pageIndicatorView?.reloadColors()
 					readerCenter.configureNavBar()
 					readerCenter.scrollScrubber?.reloadColors()
@@ -116,8 +116,7 @@ open class FolioReader: NSObject {
 		get { return FolioReaderFont(rawValue: FolioReader.defaults.value(forKey: kCurrentFontFamily) as! Int)! }
         set (font) {
             FolioReader.defaults.setValue(font.rawValue, forKey: kCurrentFontFamily)
-
-			FolioReader.shared.readerCenter?.currentPage?.webView.js("setFontName('\(font.cssIdentifier)')")
+			_ = FolioReader.shared.readerCenter?.currentPage?.webView.js("setFontName('\(font.cssIdentifier)')")
         }
     }
     
