@@ -37,10 +37,6 @@ open class FolioReaderWebView: UIWebView {
 		}
 	}
 
-	open override var canBecomeFirstResponder : Bool {
-		return true
-	}
-
 	// MARK: - UIMenuController - Actions
 
 	func share(_ sender: UIMenuController) {

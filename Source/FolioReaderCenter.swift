@@ -547,7 +547,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         }
     }
     
-    func updateCurrentPage(_ page: FolioReaderPage!, completion: (() -> Void)? = nil) {
+    func updateCurrentPage(_ page: FolioReaderPage? = nil, completion: (() -> Void)? = nil) {
         if let page = page {
             currentPage = page
             previousPageNumber = page.pageNumber-1
@@ -568,23 +568,21 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 //        } else { title = ""}
         
         // Set pages
-        if let page = currentPage {
-            page.webView.becomeFirstResponder()
-            
-            scrollScrubber?.setSliderVal()
-            
-            if let readingTime = page.webView.js("getReadingTime()") {
-                pageIndicatorView?.totalMinutes = Int(readingTime)!
-                
-            } else {
-                pageIndicatorView?.totalMinutes = 0
-            }
-            pagesForCurrentPage(page)
+        guard let currentPage = currentPage else {
+            completion?()
+            return
         }
+        
+        scrollScrubber?.setSliderVal()
+        
+        if let readingTime = currentPage.webView.js("getReadingTime()") {
+            pageIndicatorView?.totalMinutes = Int(readingTime)!
+        } else {
+            pageIndicatorView?.totalMinutes = 0
+        }
+        pagesForCurrentPage(currentPage)
 
-		if let currentPage = currentPage {
-			self.delegate?.pageDidAppear?(currentPage)
-		}
+        delegate?.pageDidAppear?(currentPage)
 
         completion?()
     }
