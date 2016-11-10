@@ -234,7 +234,14 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
         layoutDirection.tag = 3
         layoutDirection.addSegmentWithTitle(readerConfig.localizedLayoutVertical, onSelectionImage: verticalSelected, offSelectionImage: verticalNormal)
         layoutDirection.addSegmentWithTitle(readerConfig.localizedLayoutHorizontal, onSelectionImage: horizontalSelected, offSelectionImage: horizontalNormal)
-        layoutDirection.selectSegmentAtIndex(Int(FolioReader.currentScrollDirection))
+
+        var scrollDirection = FolioReaderScrollDirection(rawValue: FolioReader.currentScrollDirection)
+
+        if scrollDirection == .defaultVertical && readerConfig.scrollDirection != .defaultVertical {
+            scrollDirection = readerConfig.scrollDirection
+        }
+
+        layoutDirection.selectSegmentAtIndex(scrollDirection?.rawValue ?? 0)
         menuView.addSubview(layoutDirection)
     }
     
