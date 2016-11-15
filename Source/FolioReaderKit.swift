@@ -178,6 +178,16 @@ open class FolioReader: NSObject {
         return FREpubParser().parseCoverImage(epubPath)
     }
 
+
+    // MARK: - Get Title
+    open class func getTitle(_ epubPath: String) -> String? {
+        return FREpubParser().parseTitle(epubPath)
+    }
+
+    open class func getAuthorName(_ epubPath: String) -> String? {
+        return FREpubParser().parseAuthorName(epubPath)
+    }
+
     // MARK: - Present Folio Reader
     
     /**

@@ -31,6 +31,24 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         }
         return UIImage(contentsOfFile: coverImage.fullHref)
     }
+
+    func parseTitle(_ epubPath: String) -> String? {
+
+        guard let book = readEpub(epubPath: epubPath, removeEpub: false), let title = book.title() else {
+            return nil
+        }
+        return title
+    }
+
+    func parseAuthorName(_ epubPath: String) -> String? {
+        guard let book = readEpub(epubPath: epubPath, removeEpub: false), let authorName = book.authorName() else {
+        return nil
+        }
+        return authorName
+    }
+
+
+
     
     /**
      Unzip, delete and read an epub file.
