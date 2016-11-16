@@ -1,6 +1,32 @@
 # Change Log
 
-## [0.9.3](https://github.com/FolioReader/FolioReaderKit/tree/0.9.3) (2016-10-05)
+## [Unreleased](https://github.com/FolioReader/FolioReaderKit/tree/HEAD)
+
+[Full Changelog](https://github.com/FolioReader/FolioReaderKit/compare/1.0.0...HEAD)
+
+**Fixed bugs:**
+
+- Unable to integrate using carthage  [\#98](https://github.com/FolioReader/FolioReaderKit/issues/98)
+
+## [1.0.0](https://github.com/FolioReader/FolioReaderKit/tree/1.0.0) (2016-10-07)
+[Full Changelog](https://github.com/FolioReader/FolioReaderKit/compare/0.9.4...1.0.0)
+
+**Closed issues:**
+
+- Swift 3 migration [\#148](https://github.com/FolioReader/FolioReaderKit/issues/148)
+
+**Merged pull requests:**
+
+- Swift3 [\#162](https://github.com/FolioReader/FolioReaderKit/pull/162) ([hebertialmeida](https://github.com/hebertialmeida))
+
+## [0.9.4](https://github.com/FolioReader/FolioReaderKit/tree/0.9.4) (2016-10-06)
+[Full Changelog](https://github.com/FolioReader/FolioReaderKit/compare/0.9.3...0.9.4)
+
+**Merged pull requests:**
+
+- Swift23 [\#161](https://github.com/FolioReader/FolioReaderKit/pull/161) ([hebertialmeida](https://github.com/hebertialmeida))
+
+## [0.9.3](https://github.com/FolioReader/FolioReaderKit/tree/0.9.3) (2016-10-06)
 [Full Changelog](https://github.com/FolioReader/FolioReaderKit/compare/0.9.2...0.9.3)
 
 **Implemented enhancements:**

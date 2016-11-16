@@ -92,7 +92,7 @@ Then, follow the steps as described in Carthage's [README](https://github.com/Ca
 ## Requirements
 
 - iOS 8.0+
-- Xcode 7.3+
+- Xcode 8+
 
 ## Basic Usage
 

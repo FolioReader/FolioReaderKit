@@ -37,10 +37,6 @@ open class FolioReaderWebView: UIWebView {
 		}
 	}
 
-	open override var canBecomeFirstResponder : Bool {
-		return true
-	}
-
 	// MARK: - UIMenuController - Actions
 
 	func share(_ sender: UIMenuController) {
@@ -271,7 +267,7 @@ open class FolioReaderWebView: UIWebView {
 
 	// MARK: - Java Script Bridge
 
-	func js(_ script: String) -> String? {
+	@discardableResult func js(_ script: String) -> String? {
 		let callback = self.stringByEvaluatingJavaScript(from: script)
 		if callback!.isEmpty { return nil }
 		return callback

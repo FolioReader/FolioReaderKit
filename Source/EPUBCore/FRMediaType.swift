@@ -87,7 +87,7 @@ class FRMediaType: NSObject {
      
      - returns: A know mediatype or create a new one.
      */
-    static func mediaTypeByName(_ name: String, fileName: String) -> MediaType {
+    static func mediaTypeByName(_ name: String, fileName: String?) -> MediaType {
         for mediatype in mediatypes {
             if mediatype.name == name {
                 return mediatype

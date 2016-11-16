@@ -26,7 +26,7 @@ class ExampleFolioReaderContainer: FolioReaderContainer {
 		})
 		config.classBasedOnClickListeners.append(listener)
 
-        guard let bookPath = NSBundle.mainBundle().pathForResource("The Silver Chair", ofType: "epub") else { return }
+        guard let bookPath = Bundle.main.path(forResource: "The Silver Chair", ofType: "epub") else { return }
         setupConfig(config, epubPath: bookPath)
 	}
 }

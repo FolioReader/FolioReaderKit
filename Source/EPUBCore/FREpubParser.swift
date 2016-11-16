@@ -31,6 +31,24 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         }
         return UIImage(contentsOfFile: coverImage.fullHref)
     }
+
+    func parseTitle(_ epubPath: String) -> String? {
+
+        guard let book = readEpub(epubPath: epubPath, removeEpub: false), let title = book.title() else {
+            return nil
+        }
+        return title
+    }
+
+    func parseAuthorName(_ epubPath: String) -> String? {
+        guard let book = readEpub(epubPath: epubPath, removeEpub: false), let authorName = book.authorName() else {
+        return nil
+        }
+        return authorName
+    }
+
+
+
     
     /**
      Unzip, delete and read an epub file.
@@ -261,7 +279,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
      - parameter element: A `AEXMLElement`, usually the `<body>`
      - returns: If found the `<nav>` `AEXMLElement`
      */
-    func findNavTag(_ element: AEXMLElement) -> AEXMLElement? {
+    @discardableResult func findNavTag(_ element: AEXMLElement) -> AEXMLElement? {
         for element in element.children {
             if let nav = element["nav"].first {
                 return nav
@@ -433,7 +451,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     /**
      Add skip to backup file.
     */
-    fileprivate func addSkipBackupAttributeToItemAtURL(_ URL: Foundation.URL) -> Bool {
+    @discardableResult fileprivate func addSkipBackupAttributeToItemAtURL(_ URL: Foundation.URL) -> Bool {
         assert(FileManager.default.fileExists(atPath: URL.path))
         
         do {

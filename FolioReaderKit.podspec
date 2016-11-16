@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "FolioReaderKit"
-  s.version          = "0.9.4"
+  s.version          = "1.0.0"
   s.summary          = "A Swift ePub reader and parser framework for iOS."
   s.description  = <<-DESC
                    Written in Swift.
@@ -22,15 +22,13 @@ Pod::Spec.new do |s|
     'Vendor/**/*.swift',
   ]
   s.resources = [
-    'Source/**/*.{js,css,xcdatamodeld}',
+    'Source/**/*.{js,css}',
     'Source/Resources/*.xcassets',
     'Source/Resources/Fonts/**/*.{otf,ttf}'
   ]
-  s.preserve_paths = 'Source/**/*.xcdatamodeld'
   s.public_header_files = 'Source/*.h'
 
   s.libraries  = "z"
-  s.frameworks = 'CoreData'
   s.dependency 'SSZipArchive', '1.5'
   s.dependency 'MenuItemKit', '2.0'
   s.dependency 'ZFDragableModalTransition', '~> 0.6'
@@ -38,5 +36,4 @@ Pod::Spec.new do |s|
   s.dependency 'FontBlaster', '3.0.0'
   s.dependency 'JSQWebViewController', '~> 5.0'
   s.dependency 'RealmSwift', '~> 1.0'
-  # s.dependency 'SMSegmentView'
 end

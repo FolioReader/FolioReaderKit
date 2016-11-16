@@ -123,8 +123,7 @@ open class FolioReaderContainer: UIViewController {
             return
         }
         
-        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.high).async(execute: { () -> Void in
-            
+        DispatchQueue.global(qos: .userInitiated).async {
             if let parsedBook = FREpubParser().readEpub(epubPath: self.epubPath, removeEpub: self.shouldRemoveEpub) {
                 book = parsedBook
             } else {
@@ -148,7 +147,7 @@ open class FolioReaderContainer: UIViewController {
                 FolioReader.isReaderReady = true
                 FolioReader.shared.delegate?.folioReader?(FolioReader.shared, didFinishedLoading: book)
             })
-        })
+        }
     }
     
     override open func viewDidAppear(_ animated: Bool) {

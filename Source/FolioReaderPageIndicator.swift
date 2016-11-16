@@ -76,8 +76,8 @@ class FolioReaderPageIndicator: UIView {
 		animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
 		layer.add(animation, forKey: "shadowColor")
 
-		minutesLabel.textColor = isNight(UIColor(white: 5, alpha: 0.3), UIColor(white: 0, alpha: 0.6))
-		pagesLabel.textColor = isNight(UIColor(white: 5, alpha: 0.6), UIColor(white: 0, alpha: 0.9))
+		minutesLabel.textColor = isNight(UIColor(white: 1, alpha: 0.3), UIColor(white: 0, alpha: 0.6))
+		pagesLabel.textColor = isNight(UIColor(white: 1, alpha: 0.6), UIColor(white: 0, alpha: 0.9))
 	}
 
     fileprivate func reloadViewWithPage(_ page: Int) {

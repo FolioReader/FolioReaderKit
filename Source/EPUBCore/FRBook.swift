@@ -30,6 +30,10 @@ open class FRBook: NSObject {
         return metadata.titles.first
     }
 
+    func authorName() -> String? {
+        return metadata.creators.first?.name
+    }
+
     // MARK: - Media Overlay Metadata
     // http://www.idpf.org/epub/301/spec/epub-mediaoverlays.html#sec-package-metadata
 

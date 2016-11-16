@@ -89,15 +89,42 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 	fileprivate var currentWebViewScrollPositions = [Int: CGPoint]()
 	fileprivate var currentOrientation: UIInterfaceOrientation?
     
+    // MARK: - Init
+    
+    init() {
+        super.init(nibName: nil, bundle: Bundle.frameworkBundle())
+        initialization()
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        initialization()
+    }
+    
+    /**
+     Common Initialization
+     */
+    fileprivate func initialization() {
+        
+        if (readerConfig.hideBars == true) {
+            self.pageIndicatorHeight = 0
+        }
+        
+        totalPages = book.spine.spineReferences.count
+        
+        // Loading indicator
+        let style: UIActivityIndicatorViewStyle = isNight(.white, .gray)
+        loadingView = UIActivityIndicatorView(activityIndicatorStyle: style)
+        loadingView.hidesWhenStopped = true
+        loadingView.startAnimating()
+        view.addSubview(loadingView)
+    }
+    
     // MARK: - View life cicle
     
     override open func viewDidLoad() {
         super.viewDidLoad()
-
-        if (readerConfig.hideBars == true) {
-			self.pageIndicatorHeight = 0
-        }
-
+        
         screenBounds = self.view.frame
         setPageSize(UIApplication.shared.statusBarOrientation)
         
@@ -130,8 +157,6 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         // Register cell classes
         collectionView!.register(FolioReaderPage.self, forCellWithReuseIdentifier: reuseIdentifier)
         
-        totalPages = book.spine.spineReferences.count
-        
         // Configure navigation bar and layout
         automaticallyAdjustsScrollViewInsets = false
         extendedLayoutIncludesOpaqueBars = true
@@ -139,23 +164,15 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
 		// Page indicator view
 		pageIndicatorView = FolioReaderPageIndicator(frame: self.frameForPageIndicatorView())
-		if let _pageIndicatorView = pageIndicatorView {
-			view.addSubview(_pageIndicatorView)
+		if let pageIndicatorView = pageIndicatorView {
+			view.addSubview(pageIndicatorView)
 		}
 
 		scrollScrubber = ScrollScrubber(frame: self.frameForScrollScrubber())
 		scrollScrubber?.delegate = self
-
-		if let _scrollScruber = scrollScrubber {
-			view.addSubview(_scrollScruber.slider)
+		if let scrollScrubber = scrollScrubber {
+			view.addSubview(scrollScrubber.slider)
 		}
-        
-        // Loading indicator
-        let style: UIActivityIndicatorViewStyle = isNight(.white, .gray)
-        loadingView = UIActivityIndicatorView(activityIndicatorStyle: style)
-        loadingView.hidesWhenStopped = true
-        loadingView.startAnimating()
-        view.addSubview(loadingView)
     }
     
     override open func viewWillAppear(_ animated: Bool) {
@@ -456,14 +473,14 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 			UIView.animate(withDuration: duration, animations: {
 
 				// Adjust page indicator view
-				if let _pageIndicatorFrame = pageIndicatorFrame {
-					self.pageIndicatorView?.frame = _pageIndicatorFrame
+				if let pageIndicatorFrame = pageIndicatorFrame {
+					self.pageIndicatorView?.frame = pageIndicatorFrame
 					self.pageIndicatorView?.reloadView(updateShadow: true)
 				}
 
 				// Adjust scroll scrubber slider
-				if let _scrollScrubberFrame = scrollScrubberFrame {
-					self.scrollScrubber?.slider.frame = _scrollScrubberFrame
+				if let scrollScrubberFrame = scrollScrubberFrame {
+					self.scrollScrubber?.slider.frame = scrollScrubberFrame
 				}
 
 				// Adjust collectionView
@@ -547,7 +564,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         }
     }
     
-    func updateCurrentPage(_ page: FolioReaderPage!, completion: (() -> Void)? = nil) {
+    func updateCurrentPage(_ page: FolioReaderPage? = nil, completion: (() -> Void)? = nil) {
         if let page = page {
             currentPage = page
             previousPageNumber = page.pageNumber-1
@@ -568,23 +585,21 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 //        } else { title = ""}
         
         // Set pages
-        if let page = currentPage {
-            page.webView.becomeFirstResponder()
-            
-            scrollScrubber?.setSliderVal()
-            
-            if let readingTime = page.webView.js("getReadingTime()") {
-                pageIndicatorView?.totalMinutes = Int(readingTime)!
-                
-            } else {
-                pageIndicatorView?.totalMinutes = 0
-            }
-            pagesForCurrentPage(page)
+        guard let currentPage = currentPage else {
+            completion?()
+            return
         }
+        
+        scrollScrubber?.setSliderVal()
+        
+        if let readingTime = currentPage.webView.js("getReadingTime()") {
+            pageIndicatorView?.totalMinutes = Int(readingTime)!
+        } else {
+            pageIndicatorView?.totalMinutes = 0
+        }
+        pagesForCurrentPage(currentPage)
 
-		if let currentPage = currentPage {
-			self.delegate?.pageDidAppear?(currentPage)
-		}
+        delegate?.pageDidAppear?(currentPage)
 
         completion?()
     }

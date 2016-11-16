@@ -129,9 +129,8 @@ extension Highlight {
         let predicate = NSPredicate(format:"highlightId = %@", highlightId)
         
         let realm = try! Realm()
-        highlight = realm.objects(Highlight).filter(predicate).toArray(Highlight).first
+        highlight = realm.objects(Highlight.self).filter(predicate).toArray(Highlight.self).first
         highlight?.remove()
-            
     }
     
     /**
@@ -145,7 +144,7 @@ extension Highlight {
         let predicate = NSPredicate(format:"highlightId = %@", highlightId)
         do {
             let realm = try! Realm()
-            highlight = realm.objects(Highlight).filter(predicate).toArray(Highlight).first
+            highlight = realm.objects(Highlight.self).filter(predicate).toArray(Highlight.self).first
             realm.beginWrite()
             
             highlight?.type = type.hashValue
@@ -169,7 +168,7 @@ extension Highlight {
         var highlights: [Highlight]?
         let predicate = (page != nil) ? NSPredicate(format: "bookId = %@ && page = %@", bookId, page!) : NSPredicate(format: "bookId = %@", bookId)
         let realm = try! Realm()
-        highlights = realm.objects(Highlight).filter(predicate).toArray(Highlight) ?? [Highlight]()
+        highlights = realm.objects(Highlight.self).filter(predicate).toArray(Highlight.self)
         return highlights!
     }
     
@@ -181,7 +180,7 @@ extension Highlight {
     public static func all() -> [Highlight] {
         var highlights: [Highlight]?
         let realm = try! Realm()
-        highlights = realm.objects(Highlight).toArray(Highlight) ?? [Highlight]()
+        highlights = realm.objects(Highlight.self).toArray(Highlight.self)
         return highlights!
     }
     
@@ -243,7 +242,7 @@ extension Highlight {
      - parameter highlightId: The ID to be removed
      - returns: The removed id
      */
-    public static func removeFromHTMLById(_ highlightId: String) -> String? {
+    @discardableResult public static func removeFromHTMLById(_ highlightId: String) -> String? {
         guard let currentPage = FolioReader.shared.readerCenter?.currentPage else { return nil }
         
         if let removedId = currentPage.webView.js("removeHighlightById('\(highlightId)')") {

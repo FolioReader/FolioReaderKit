@@ -25,7 +25,6 @@ internal var kCurrentMediaOverlayStyle = "com.folioreader.kMediaOverlayStyle"
 internal var kCurrentScrollDirection = "com.folioreader.kCurrentScrollDirection"
 internal let kNightMode = "com.folioreader.kNightMode"
 internal let kCurrentTOCMenu = "com.folioreader.kCurrentTOCMenu"
-internal let kMigratedToRealm = "com.folioreader.kMigratedToRealm"
 internal let kHighlightRange = 30
 internal var kBookId: String!
 
@@ -78,12 +77,7 @@ open class FolioReader: NSObject {
     open weak var readerContainer: FolioReaderContainer!
     open weak var readerAudioPlayer: FolioReaderAudioPlayer?
     
-    fileprivate override init() {
-        let isMigrated = FolioReader.defaults.bool(forKey: kMigratedToRealm)
-        if !isMigrated {
-            Highlight.migrateUserDataToRealm()
-        }
-    }
+    fileprivate override init() {}
     
     /// Check if reader is open
     static var isReaderOpen = false
@@ -105,7 +99,7 @@ open class FolioReader: NSObject {
 
 			if let readerCenter = FolioReader.shared.readerCenter {
 				UIView.animate(withDuration: 0.6, animations: {
-					readerCenter.currentPage?.webView.js("nightMode(\(nightMode))")
+					_ = readerCenter.currentPage?.webView.js("nightMode(\(nightMode))")
 					readerCenter.pageIndicatorView?.reloadColors()
 					readerCenter.configureNavBar()
 					readerCenter.scrollScrubber?.reloadColors()
@@ -122,8 +116,7 @@ open class FolioReader: NSObject {
 		get { return FolioReaderFont(rawValue: FolioReader.defaults.value(forKey: kCurrentFontFamily) as! Int)! }
         set (font) {
             FolioReader.defaults.setValue(font.rawValue, forKey: kCurrentFontFamily)
-
-			FolioReader.shared.readerCenter?.currentPage?.webView.js("setFontName('\(font.cssIdentifier)')")
+			_ = FolioReader.shared.readerCenter?.currentPage?.webView.js("setFontName('\(font.cssIdentifier)')")
         }
     }
     
@@ -183,6 +176,16 @@ open class FolioReader: NSObject {
      */
     open class func getCoverImage(_ epubPath: String) -> UIImage? {
         return FREpubParser().parseCoverImage(epubPath)
+    }
+
+
+    // MARK: - Get Title
+    open class func getTitle(_ epubPath: String) -> String? {
+        return FREpubParser().parseTitle(epubPath)
+    }
+
+    open class func getAuthorName(_ epubPath: String) -> String? {
+        return FREpubParser().parseAuthorName(epubPath)
     }
 
     // MARK: - Present Folio Reader
