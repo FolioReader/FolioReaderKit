@@ -36,15 +36,22 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
      Unzip, delete and read an epub file.
      Returns a FRBook.
     */
-    func readEpub(epubPath withEpubPath: String, removeEpub: Bool = true) -> FRBook? {
+    func readEpub(epubPath withEpubPath: String, removeEpub: Bool = true, unzipPath: String? = nil) -> FRBook? {
         epubPathToRemove = withEpubPath
         shouldRemoveEpub = removeEpub
-        
+
         var isDir: ObjCBool = false
         let fileManager = FileManager.default
         let bookName = (withEpubPath as NSString).lastPathComponent
-        bookBasePath = (kApplicationDocumentsDirectory as NSString).appendingPathComponent(bookName)
-        
+
+        if let bookUnzipPath = FolioReader.shared.unzipPath, fileManager.fileExists(atPath: bookUnzipPath) {
+            bookBasePath = bookUnzipPath
+        } else {
+            bookBasePath = kApplicationDocumentsDirectory
+        }
+
+        bookBasePath = (bookBasePath as NSString).appendingPathComponent(bookName)
+
         guard fileManager.fileExists(atPath: withEpubPath) else {
             print("Epub file does not exist.")
             return nil

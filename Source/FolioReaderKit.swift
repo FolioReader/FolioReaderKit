@@ -71,6 +71,7 @@ enum MediaOverlayStyle: Int {
  */
 open class FolioReader: NSObject {
     open static let shared = FolioReader()
+    open var unzipPath: String?
     static let defaults = UserDefaults.standard
     open weak var delegate: FolioReaderDelegate?
     open weak var readerCenter: FolioReaderCenter?
