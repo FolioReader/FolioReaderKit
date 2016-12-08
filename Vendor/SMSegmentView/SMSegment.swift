@@ -104,6 +104,7 @@ class SMSegment: UIView {
             }
             if self.isSelected == true {
                 self.imageView.image = self.onSelectionImage
+                self.imageView.contentMode = .center
             }
         }
     }
@@ -114,6 +115,7 @@ class SMSegment: UIView {
             }
             if self.isSelected == false {
                 self.imageView.image = self.offSelectionImage
+                self.imageView.contentMode = .center
             }
         }
     }
