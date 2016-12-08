@@ -130,11 +130,11 @@ In your `AppDelegate` call `applicationWillResignActive` and `applicationWillTer
 ```swift
 import FolioReaderKit
 
-func applicationWillResignActive(application: UIApplication) {
+func applicationWillResignActive(_ application: UIApplication) {
     FolioReader.applicationWillResignActive()
 }
 
-func applicationWillTerminate(application: UIApplication) {
+func applicationWillTerminate(_ application: UIApplication) {
     FolioReader.applicationWillTerminate()
 }
 ```
