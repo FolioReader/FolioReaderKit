@@ -112,7 +112,7 @@ open class FolioReaderWebView: UIWebView {
 			isUserInteractionEnabled = false
 			isUserInteractionEnabled = true
 
-			createMenu(options: false)
+			createMenu(options: true)
 			setMenuVisible(true, andRect: rect)
 
 			// Persist
