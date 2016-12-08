@@ -87,6 +87,12 @@ Run the following command:
 $ carthage update
 ```
 
+To avoid of Carthage building frameworks for other OS than iOS and save your time use following steps:
+```bash
+$ carthage fetch
+$ carthage build --platform iOS
+```
+
 Then, follow the steps as described in Carthage's [README](https://github.com/Carthage/Carthage#adding-frameworks-to-an-application).
 
 ## Requirements
@@ -103,8 +109,8 @@ import FolioReaderKit
 
 func open(sender: AnyObject) {
     let config = FolioReaderConfig()
-    let bookPath = NSBundle.mainBundle().pathForResource("book", ofType: "epub")
-    FolioReader.presentReader(parentViewController: self, withEpubPath: bookPath!, andConfig: config)
+    let bookPath = Bundle.main.path(forResource: "book", ofType: "epub")
+    FolioReader.presentReader(parentViewController: self, withEpubPath: bookPath!, andConfig: config)
 }
 ```
 
@@ -112,11 +118,11 @@ You can also use your own FolioReader View Controller like this.
 
 ```swift
 let config = FolioReaderConfig()
-let bookPath = NSBundle.mainBundle().pathForResource("book", ofType: "epub")
-let epubVC = FolioReaderContainer(config: config, epubPath: bookPath!, removeEpub: true)
+let bookPath = Bundle.main.path(forResource: "book", ofType: "epub")
+let epubVC = FolioReaderContainer(withConfig: config, epubPath: bookPath!, removeEpub: true)
 
 // Present the epubVC view controller like every other UIViewController instance
-presentViewController(epubVC, animated: true, completion: nil)
+present(epubVC, animated: true, completion: nil)
 ```
 
 In your `AppDelegate` call `applicationWillResignActive` and `applicationWillTerminate`. This will save the reader state even if you kill the app.
@@ -124,11 +130,11 @@ In your `AppDelegate` call `applicationWillResignActive` and `applicationWillTer
 ```swift
 import FolioReaderKit
 
-func applicationWillResignActive(application: UIApplication) {
+func applicationWillResignActive(_ application: UIApplication) {
     FolioReader.applicationWillResignActive()
 }
 
-func applicationWillTerminate(application: UIApplication) {
+func applicationWillTerminate(_ application: UIApplication) {
     FolioReader.applicationWillTerminate()
 }
 ```
@@ -147,7 +153,7 @@ class StoryboardFolioReaderContrainer: FolioReaderContainer {
         let config = FolioReaderConfig()
         config.scrollDirection = .horizontalWithVerticalContent
         
-        guard let bookPath = NSBundle.mainBundle().pathForResource("The Silver Chair", ofType: "epub") else { return }
+        guard let bookPath = Bundle.main.path(forResource: "The Silver Chair", ofType: "epub") else { return }
         setupConfig(config, epubPath: bookPath)
     }
 }
