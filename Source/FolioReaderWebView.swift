@@ -50,8 +50,8 @@ open class FolioReaderWebView: UIWebView {
 			} else {
 				if let textToShare = self.js("getSelectedText()") {
 					FolioReader.shared.readerCenter?.presentQuoteShare(textToShare)
-					self.isUserInteractionEnabled = false
-					self.isUserInteractionEnabled = true
+
+					self.clearTextSelection()
 				}
 			}
 			self.setMenuVisible(false)
@@ -108,9 +108,7 @@ open class FolioReaderWebView: UIWebView {
 			let startOffset = dic["startOffset"]!
 			let endOffset = dic["endOffset"]!
 
-			// Force remove text selection
-			isUserInteractionEnabled = false
-			isUserInteractionEnabled = true
+			self.clearTextSelection()
 
 			createMenu(options: true)
 			setMenuVisible(true, andRect: rect)
@@ -129,8 +127,8 @@ open class FolioReaderWebView: UIWebView {
 		let selectedText = js("getSelectedText()")
 
 		setMenuVisible(false)
-		isUserInteractionEnabled = false
-		isUserInteractionEnabled = true
+
+		self.clearTextSelection()
 
 		let vc = UIReferenceLibraryViewController(term: selectedText! )
 		vc.view.tintColor = readerConfig.tintColor
@@ -140,10 +138,7 @@ open class FolioReaderWebView: UIWebView {
 	func play(_ sender: UIMenuController?) {
 		FolioReader.shared.readerAudioPlayer?.play()
 
-		// Force remove text selection
-		// @NOTE: this doesn't seem to always work
-		isUserInteractionEnabled = false
-		isUserInteractionEnabled = true
+		self.clearTextSelection()
 	}
 
 	func setYellow(_ sender: UIMenuController?) {
@@ -273,7 +268,15 @@ open class FolioReaderWebView: UIWebView {
 		return callback
 	}
 
-	// MARK: WebView direction config
+	// MARK: WebView
+
+	func clearTextSelection() {
+		// Forces text selection clearing
+		// @NOTE: this doesn't seem to always work
+
+		self.isUserInteractionEnabled = false
+		self.isUserInteractionEnabled = true
+	}
 
 	func setupScrollDirection() {
 		switch readerConfig.scrollDirection {
