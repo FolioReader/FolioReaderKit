@@ -80,8 +80,11 @@ class FolioReaderPageIndicator: UIView {
 		pagesLabel.textColor = isNight(UIColor(white: 1, alpha: 0.6), UIColor(white: 0, alpha: 0.9))
 	}
 
-    fileprivate func reloadViewWithPage(_ page: Int) {
+    fileprivate func reloadViewWithPage(_ page: Int, _ hidePageIndicator:Bool = readerConfig.hidePageIndicator) {
         let pagesRemaining = FolioReader.needsRTLChange ? totalPages-(totalPages-page+1) : totalPages-page
+        
+        pagesLabel.isHidden = hidePageIndicator
+        minutesLabel.isHidden = hidePageIndicator
         
         if pagesRemaining == 1 {
             pagesLabel.text = " "+readerConfig.localizedReaderOnePageLeft
