@@ -23,10 +23,7 @@ public enum FolioReaderScrollDirection: Int {
     
     /// Sections scroll horizontal and content scroll on vertical
 	case horizontalWithVerticalContent
-
-    /// The default scroll direction, if not overridden; works as .vertical
-    case defaultVertical
-
+    
     /**
      The current scroll direction
      
@@ -34,7 +31,7 @@ public enum FolioReaderScrollDirection: Int {
      */
     func collectionViewScrollDirection() -> UICollectionViewScrollDirection {
         switch self {
-        case .vertical, .defaultVertical:
+        case .vertical:
             return .vertical
         case .horizontal, .horizontalWithVerticalContent:
             return .horizontal
@@ -135,7 +132,7 @@ open class FolioReaderConfig: NSObject {
 	open var hideBars = false
 
     /// If `canChangeScrollDirection` is `true` it will be overrided by user's option.
-    open var scrollDirection: FolioReaderScrollDirection = .defaultVertical
+    open var scrollDirection: FolioReaderScrollDirection = .vertical
     
     /// Enable or disable hability to user change scroll direction on menu.
     open var canChangeScrollDirection = true

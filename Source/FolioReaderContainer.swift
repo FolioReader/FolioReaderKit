@@ -69,7 +69,7 @@ open class FolioReaderContainer: UIViewController {
             kCurrentHighlightStyle: 0,
             kCurrentTOCMenu: 0,
             kCurrentMediaOverlayStyle: MediaOverlayStyle.default.rawValue,
-            kCurrentScrollDirection: FolioReaderScrollDirection.defaultVertical.rawValue
+            kCurrentScrollDirection: FolioReaderScrollDirection.vertical.rawValue
             ])
     }
     
@@ -95,13 +95,8 @@ open class FolioReaderContainer: UIViewController {
         
         // If user can change scroll direction use the last saved
         if readerConfig.canChangeScrollDirection {
-            var scrollDirection = FolioReaderScrollDirection(rawValue: FolioReader.currentScrollDirection) ?? .vertical
-
-            if (scrollDirection == .defaultVertical && readerConfig.scrollDirection != .defaultVertical) {
-                scrollDirection = readerConfig.scrollDirection
-            }
-
-            readerConfig.scrollDirection = scrollDirection
+            let direction = FolioReaderScrollDirection(rawValue: FolioReader.currentScrollDirection) ?? .vertical
+            readerConfig.scrollDirection = direction
         }
 
 		readerConfig.shouldHideNavigationOnTap = ((readerConfig.hideBars == true) ? true : readerConfig.shouldHideNavigationOnTap)

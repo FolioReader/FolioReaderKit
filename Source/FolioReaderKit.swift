@@ -164,7 +164,7 @@ open class FolioReader: NSObject {
             FolioReader.defaults.setValue(value, forKey: kCurrentScrollDirection)
 
 			if let _readerCenter = FolioReader.shared.readerCenter  {
-				let direction = FolioReaderScrollDirection(rawValue: currentScrollDirection) ?? .defaultVertical
+				let direction = FolioReaderScrollDirection(rawValue: currentScrollDirection) ?? .vertical
 				_readerCenter.setScrollDirection(direction)
 			}
         }
@@ -277,7 +277,7 @@ func isNight<T> (_ f: T, _ l: T) -> T {
  */
 func isDirection<T> (_ vertical: T, _ horizontal: T, _ horizontalContentVertical: T? = nil) -> T {
 	switch readerConfig.scrollDirection {
-	case .vertical, .defaultVertical: return vertical
+	case .vertical: return vertical
 	case .horizontal: return horizontal
 	case .horizontalWithVerticalContent: return horizontalContentVertical ?? vertical
 	}

@@ -396,8 +396,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 		if !anchor.isEmpty {
 			let offset = getAnchorOffset(anchor)
 
-			switch readerConfig.scrollDirection {
-            case .vertical, .defaultVertical:
+			if readerConfig.scrollDirection == .vertical {
 				let isBeginning = offset < frame.forDirection()/2
 
 				if !avoidBeginningAnchors {
@@ -405,7 +404,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 				} else if avoidBeginningAnchors && !isBeginning {
 					scrollPageToOffset(offset, animated: animated)
 				}
-            case .horizontal, .horizontalWithVerticalContent:
+			} else {
 				scrollPageToOffset(offset, animated: animated)
 			}
 		}

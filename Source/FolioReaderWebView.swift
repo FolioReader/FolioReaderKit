@@ -280,7 +280,7 @@ open class FolioReaderWebView: UIWebView {
 
 	func setupScrollDirection() {
 		switch readerConfig.scrollDirection {
-		case .vertical, .defaultVertical, .horizontalWithVerticalContent:
+		case .vertical, .horizontalWithVerticalContent:
 			scrollView.isPagingEnabled = false
 			paginationMode = .unpaginated
 			scrollView.bounces = true
