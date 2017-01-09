@@ -77,6 +77,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     }
     
     deinit {
+        webView.scrollView.delegate = nil
         NotificationCenter.default.removeObserver(self)
     }
     
