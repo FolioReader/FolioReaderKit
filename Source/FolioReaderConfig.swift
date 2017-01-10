@@ -149,6 +149,9 @@ open class FolioReaderConfig: NSObject {
     /// Enable TTS (Text To Speech)
     open var enableTTS = true
     
+    // hide the page indicator
+    open var hidePageIndicator = false
+    
     // MARK: Quote image share
     
     /// Custom Quote logo
