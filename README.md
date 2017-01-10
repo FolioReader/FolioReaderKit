@@ -84,7 +84,7 @@ github "FolioReader/FolioReaderKit"
 Run the following command:
 
 ```bash
-$ carthage update --platform iOS
+$ carthage update --platform iOS --no-use-binaries
 ```
 
 Then, follow the steps as described in Carthage's [README](https://github.com/Carthage/Carthage#adding-frameworks-to-an-application).
