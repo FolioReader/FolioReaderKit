@@ -5,20 +5,20 @@ PODS:
     - FontBlaster (= 3.0.0)
     - JSQWebViewController (~> 5.0)
     - MenuItemKit (= 2.0)
-    - RealmSwift (~> 1.0)
-    - SSZipArchive (= 1.5)
+    - RealmSwift (~> 2.1)
+    - SSZipArchive (~> 1.6)
     - ZFDragableModalTransition (~> 0.6)
   - FontBlaster (3.0.0)
   - JSQWebViewController (5.0.0)
   - MenuItemKit (2.0)
   - Nimble (5.0.0)
   - Quick (0.10.0)
-  - Realm (1.1.0):
-    - Realm/Headers (= 1.1.0)
-  - Realm/Headers (1.1.0)
-  - RealmSwift (1.1.0):
-    - Realm (= 1.1.0)
-  - SSZipArchive (1.5)
+  - Realm (2.1.2):
+    - Realm/Headers (= 2.1.2)
+  - Realm/Headers (2.1.2)
+  - RealmSwift (2.1.2):
+    - Realm (= 2.1.2)
+  - SSZipArchive (1.6.2)
   - ZFDragableModalTransition (0.6)
 
 DEPENDENCIES:
@@ -28,19 +28,19 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   FolioReaderKit:
-    :path: ../
+    :path: "../"
 
 SPEC CHECKSUMS:
   AEXML: 6fc6433aa35bdc15dd8eb8d54eb7aa4520a010eb
-  FolioReaderKit: d3084e4e32428550c9203c12282ebbceada6a045
+  FolioReaderKit: 17b6e97c2db35ef531cd92db73f2fbb155bb4382
   FontBlaster: 0f4a3e2f965968e2dfc3f7f5cec7214c3f3b2f07
   JSQWebViewController: 0461aa42612b221571556df61d9c09f080cb2eef
   MenuItemKit: 9af69953dc983803ee85230e205fadbac0f26213
   Nimble: 56fc9f5020effa2206de22c3dd910f4fb011b92f
   Quick: 5d290df1c69d5ee2f0729956dcf0fd9a30447eaa
-  Realm: ceecf1a4540c4ce9efe196fe73fa9855bce05bd8
-  RealmSwift: 838058b2db95b12cb86bd0cf209df642c33fb60a
-  SSZipArchive: 29daace2bccb90a47de2837744da397728ff9207
+  Realm: efe855f4d977c8ce5a82d3116d9f1ff155a6550c
+  RealmSwift: 17d6ee30b6f9df86364408c2197492e33bfea567
+  SSZipArchive: 428eb1ac8d37dd133404d30f422b23958c1f9acc
   ZFDragableModalTransition: 0d294eaaba6edfcb9839595de765f9ca06a4b524
 
 PODFILE CHECKSUM: 591559c46a2b0a49e687795b8ae46fadbddf8fd4
