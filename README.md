@@ -84,13 +84,7 @@ github "FolioReader/FolioReaderKit"
 Run the following command:
 
 ```bash
-$ carthage update
-```
-
-To avoid of Carthage building frameworks for other OS than iOS and save your time use following steps:
-```bash
-$ carthage fetch
-$ carthage build --platform iOS
+$ carthage update --platform iOS
 ```
 
 Then, follow the steps as described in Carthage's [README](https://github.com/Carthage/Carthage#adding-frameworks-to-an-application).
