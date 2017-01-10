@@ -205,8 +205,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
         RunLoop.current.add(scrollDeltaTimer, forMode: RunLoopMode.commonModes)
     }
     
-    
-    func resetScrollDelta(){
+    func resetScrollDelta() {
         if scrollDeltaTimer != nil {
             scrollDeltaTimer.invalidate()
             scrollDeltaTimer = nil
@@ -217,7 +216,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     }
     
     
-    func setSliderVal(){
+    func setSliderVal() {
         slider.value = Float(scrollTop() / height())
     }
     
