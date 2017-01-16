@@ -273,7 +273,7 @@ open class FolioReaderAudioPlayer: NSObject {
                 
                 updateNowPlayingInfo()
             } catch {
-                print("could not read audio file:", audioFile)
+                print("could not read audio file:", audioFile ?? "nil")
                 return false
             }
         }
