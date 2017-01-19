@@ -70,15 +70,25 @@ enum MediaOverlayStyle: Int {
  Main Library class with some useful constants and methods
  */
 open class FolioReader: NSObject {
+    
+    /// Singleton instance
     open static let shared = FolioReader()
+    fileprivate override init() {}
+    
+    /// Custom unzip path
     open var unzipPath: String?
-    static let defaults = UserDefaults.standard
+    
+    /// FolioReaderDelegate
     open weak var delegate: FolioReaderDelegate?
+    
+    
     open weak var readerCenter: FolioReaderCenter?
     open weak var readerContainer: FolioReaderContainer!
     open weak var readerAudioPlayer: FolioReaderAudioPlayer?
     
-    fileprivate override init() {}
+    static let defaults = UserDefaults.standard
+    
+    
     
     /// Check if reader is open
     static var isReaderOpen = false

@@ -9,7 +9,6 @@
 import UIKit
 
 class FolioReaderSharingProvider: UIActivityItemProvider {
-
     var subject: String
     var text: String
     var html: String?

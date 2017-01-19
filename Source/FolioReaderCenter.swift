@@ -8,26 +8,6 @@
 
 import UIKit
 import ZFDragableModalTransition
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
-}
-
-fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l > r
-  default:
-    return rhs < lhs
-  }
-}
-
 
 let reuseIdentifier = "Cell"
 var pageWidth: CGFloat!
@@ -42,28 +22,35 @@ var isScrolling = false
 @objc public protocol FolioReaderCenterDelegate: class {
 
 	/**
-	Notifies that a page appeared. This is triggered is a page is chosen and displayed.
+     Notifies that a page appeared. This is triggered is a page is chosen and displayed.
 
-	- parameter page: The appeared page
-	*/
+     - parameter page: The appeared page
+	 */
 	@objc optional func pageDidAppear(_ page: FolioReaderPage)
 
 	/**
-	Passes and returns the HTML content as `String`. Implement this method if you want to modify the HTML content of a `FolioReaderPage`.
+     Passes and returns the HTML content as `String`. Implement this method if you want to modify the HTML content of a `FolioReaderPage`.
 
-	- parameter page: The `FolioReaderPage`
-	- parameter htmlContent: The current HTML content as `String`
+     - parameter page: The `FolioReaderPage`
+     - parameter htmlContent: The current HTML content as `String`
 
-	- returns: The adjusted HTML content as `String`. This is the content which will be loaded into the given `FolioReaderPage`
-	*/
+     - returns: The adjusted HTML content as `String`. This is the content which will be loaded into the given `FolioReaderPage`
+	 */
 	@objc optional func htmlContentForPage(_ page: FolioReaderPage, htmlContent: String) -> String
 }
 
+/// The base reader class
 open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
 
 	/// This delegate receives the events from the current `FolioReaderPage`s delegate.
 	open weak var delegate: FolioReaderCenterDelegate?
+
+	/// This delegate receives the events from current page
 	open weak var pageDelegate: FolioReaderPageDelegate?
+
+    
+    /// The current visible page on reader
+    open fileprivate(set) var currentPage: FolioReaderPage?
 
     var collectionView: UICollectionView!
     let collectionViewLayout = UICollectionViewFlowLayout()
@@ -71,16 +58,14 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     var pages: [String]!
     var totalPages: Int!
     var tempFragment: String?
-	open fileprivate(set) var currentPage: FolioReaderPage?
     var animator: ZFModalTransitionAnimator!
     var pageIndicatorView: FolioReaderPageIndicator?
 	var pageIndicatorHeight: CGFloat = 20
-
     var recentlyScrolled = false
     var recentlyScrolledDelay = 2.0 // 2 second delay until we clear recentlyScrolled
     var recentlyScrolledTimer: Timer!
     var scrollScrubber: ScrollScrubber?
-    
+
     fileprivate var screenBounds: CGRect!
     fileprivate var pointNow = CGPoint.zero
     fileprivate var pageOffsetRate: CGFloat = 0
@@ -198,10 +183,10 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 	// MARK: Layout
 
 	/**
-	Enable or disable the scrolling between chapters (`FolioReaderPage`s). If this is enabled it's only possible to read the current chapter. If another chapter should be displayed is has to be triggered programmatically with `changePageWith`.
+     Enable or disable the scrolling between chapters (`FolioReaderPage`s). If this is enabled it's only possible to read the current chapter. If another chapter should be displayed is has to be triggered programmatically with `changePageWith`.
 
-	- parameter scrollEnabled: `Bool` which enables or disables the scrolling between `FolioReaderPage`s.
-	*/
+     - parameter scrollEnabled: `Bool` which enables or disables the scrolling between `FolioReaderPage`s.
+	 */
 	open func enableScrollBetweenChapters(scrollEnabled: Bool) {
 		self.collectionView.isScrollEnabled = scrollEnabled
 	}
@@ -811,12 +796,12 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 	// MARK: Public page methods
 
 	/**
-	Changes the current page of the reader.
+     Changes the current page of the reader.
 	
-	- parameter page: The target page index. Note: The page index starts at 1 (and not 0).
-	- parameter animated: En-/Disables the animation of the page change.
-	- parameter completion: A Closure which is called if the page change is completed.
-	*/
+     - parameter page: The target page index. Note: The page index starts at 1 (and not 0).
+     - parameter animated: En-/Disables the animation of the page change.
+     - parameter completion: A Closure which is called if the page change is completed.
+	 */
 	open func changePageWith(page: Int, animated: Bool = false, completion: (() -> Void)? = nil) {
 		if page > 0 && page-1 < totalPages {
 			let indexPath = IndexPath(row: page-1, section: 0)
@@ -838,7 +823,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     
     /**
      Sharing chapter method.
-    */
+     */
     func shareChapter(_ sender: UIBarButtonItem) {
         guard let currentPage = currentPage else { return }
         
@@ -900,7 +885,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     
     /**
      Sharing highlight method.
-    */
+     */
     func shareHighlight(_ string: String, rect: CGRect) {
         var subject = readerConfig.localizedShareHighlightSubject
         var html = ""
