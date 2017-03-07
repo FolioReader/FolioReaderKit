@@ -8,11 +8,12 @@
 
 import UIKit
 
-@objc
-protocol FolioReaderChapterListDelegate: class {
+
+/// Table Of Contents delegate
+@objc protocol FolioReaderChapterListDelegate: class {
     /**
      Notifies when the user selected some item on menu.
-    */
+     */
     func chapterList(_ chapterList: FolioReaderChapterList, didSelectRowAtIndexPath indexPath: IndexPath, withTocReference reference: FRTocReference)
     
     /**

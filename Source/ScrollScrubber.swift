@@ -7,26 +7,26 @@
 //
 
 import UIKit
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
+
+func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+    switch (lhs, rhs) {
+    case let (l?, r?):
+        return l < r
+    case (nil, _?):
+        return true
+    default:
+        return false
+    }
 }
 
-fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l > r
-  default:
-    return rhs < lhs
-  }
+func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+    switch (lhs, rhs) {
+    case let (l?, r?):
+        return l > r
+    default:
+        return rhs < lhs
+    }
 }
-
 
 enum ScrollDirection: Int {
     case none
@@ -41,7 +41,6 @@ enum ScrollDirection: Int {
 }
 
 class ScrollScrubber: NSObject, UIScrollViewDelegate {
-    
     weak var delegate: FolioReaderCenter!
     var showSpeed = 0.6
     var hideSpeed = 0.6
@@ -112,7 +111,6 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     // MARK: - show / hide
     
     func show() {
-        
         cancelHide()
         
         visible = true

@@ -173,15 +173,15 @@ open class FolioReaderContainer: UIViewController {
     
     // MARK: - Status Bar
     
-    override open var prefersStatusBarHidden : Bool {
+    override open var prefersStatusBarHidden: Bool {
         return readerConfig.shouldHideNavigationOnTap == false ? false : shouldHideStatusBar
     }
     
-    override open var preferredStatusBarUpdateAnimation : UIStatusBarAnimation {
+    override open var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
         return UIStatusBarAnimation.slide
     }
     
-    override open var preferredStatusBarStyle : UIStatusBarStyle {
+    override open var preferredStatusBarStyle: UIStatusBarStyle {
         return isNight(.lightContent, .default)
     }
 }

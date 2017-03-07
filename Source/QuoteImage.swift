@@ -9,7 +9,7 @@
 import UIKit
 
 /**
- *  Defines a custom Quote image, can be a square `UIImage`, solid `UIColor` or `CAGradientLayer`.
+ Defines a custom Quote image, can be a square `UIImage`, solid `UIColor` or `CAGradientLayer`.
  */
 public struct QuoteImage {
     public var image: UIImage!

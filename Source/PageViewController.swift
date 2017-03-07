@@ -9,7 +9,6 @@
 import UIKit
 
 class PageViewController: UIPageViewController {
-    
     var segmentedControl: UISegmentedControl!
     var viewList = [UIViewController]()
     var segmentedControlItems = [String]()

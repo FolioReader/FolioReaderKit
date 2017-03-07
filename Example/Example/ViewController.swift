@@ -44,6 +44,7 @@ class ViewController: UIViewController {
 //        config.menuTextColor = UIColor.brownColor()
 //        config.menuBackgroundColor = UIColor.lightGrayColor()
 //        config.hidePageIndicator = true
+//        config.realmConfiguration = Realm.Configuration(fileURL: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("highlights.realm"))
         
         // Custom sharing quote background
         let customImageQuote = QuoteImage(withImage: UIImage(named: "demo-bg")!, alpha: 0.6, backgroundColor: UIColor.black)
