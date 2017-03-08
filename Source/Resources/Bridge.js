@@ -28,6 +28,17 @@ function guid() {
 
 // Get All HTML
 function getHTML() {
+    var ps = document.getElementsByTagName('p');
+    while (ps.length) {
+        var p = ps[0];
+        while (p.firstChild) {
+            p.parentNode.insertBefore(p.firstChild, p);
+        }
+        
+        p.parentNode.insertBefore(document.createElement('br'), p);
+        p.parentNode.insertBefore(document.createElement('br'), p);
+        p.parentNode.removeChild(p);
+    }
     return document.documentElement.outerHTML;
 }
 
@@ -86,6 +97,19 @@ function highlightString(style) {
     var startOffset = range.startOffset;
     var endOffset = range.endOffset;
     var selectionContents = range.extractContents();
+    
+    /*var ps = selectionContents.getElementsByTagName('p');//document.getElementsByTagName('p');
+    while (ps.length) {
+        var p = ps[0];
+        while (p.firstChild) {
+            p.parentNode.insertBefore(p.firstChild, p);
+        }
+        
+        p.parentNode.insertBefore(document.createElement('br'), p);
+        p.parentNode.insertBefore(document.createElement('br'), p);
+        p.parentNode.removeChild(p);
+    }*/
+    
     var elm = document.createElement("highlight");
     var id = guid();
     
