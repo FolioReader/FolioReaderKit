@@ -99,7 +99,6 @@ function highlightString(style) {
     var startOffset = range.startOffset;
     var endOffset = range.endOffset;
     var selectionContents = range.extractContents();
-    
     var elm = document.createElement("highlight");
     var id = guid();
     elm.appendChild(selectionContents);
