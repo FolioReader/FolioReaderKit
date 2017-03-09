@@ -118,6 +118,7 @@ open class FolioReaderWebView: UIWebView {
 			if let highlight = Highlight.matchHighlight(html, andId: dic["id"]!, startOffset: startOffset, endOffset: endOffset) {
 				highlight.persist()
 			}
+            setMenuVisible(false)
 		} catch {
 			print("Could not receive JSON")
 		}
