@@ -101,6 +101,7 @@ function highlightString(style) {
     var selectionContents = range.extractContents();
     var elm = document.createElement("highlight");
     var id = guid();
+    
     elm.appendChild(selectionContents);
     elm.setAttribute("id", id);
     elm.setAttribute("onclick","callHighlightURL(this);");
