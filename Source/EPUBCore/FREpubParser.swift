@@ -25,36 +25,35 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
      Parse the Cover Image from an epub file.
      Returns an UIImage.
      */
-    func parseCoverImage(_ epubPath: String) -> UIImage? {
-        guard let book = readEpub(epubPath: epubPath, removeEpub: false), let coverImage = book.coverImage else {
-            return nil
+    func parseCoverImage(_ epubPath: String) throws -> UIImage? {
+        guard let book = try readEpub(epubPath: epubPath, removeEpub: false), let coverImage = book.coverImage else {
+            throw FolioReaderError(kind: .CoverNotAvailable)
+
         }
         return UIImage(contentsOfFile: coverImage.fullHref)
     }
 
-    func parseTitle(_ epubPath: String) -> String? {
+    func parseTitle(_ epubPath: String) throws -> String? {
 
-        guard let book = readEpub(epubPath: epubPath, removeEpub: false), let title = book.title() else {
-            return nil
+        guard let book = try readEpub(epubPath: epubPath, removeEpub: false), let title = book.title() else {
+             throw FolioReaderError(kind: .TitleNotAvailable)
         }
         return title
     }
 
-    func parseAuthorName(_ epubPath: String) -> String? {
-        guard let book = readEpub(epubPath: epubPath, removeEpub: false), let authorName = book.authorName() else {
-        return nil
+    func parseAuthorName(_ epubPath: String) throws -> String? {
+        guard let book = try readEpub(epubPath: epubPath, removeEpub: false), let authorName = book.authorName() else {
+            throw FolioReaderError(kind: .AuthorNameNotAvailable)
         }
         return authorName
     }
 
-
-
-    
+  
     /**
      Unzip, delete and read an epub file.
      Returns a FRBook.
     */
-    func readEpub(epubPath withEpubPath: String, removeEpub: Bool = true, unzipPath: String? = nil) -> FRBook? {
+    func readEpub(epubPath withEpubPath: String, removeEpub: Bool = true, unzipPath: String? = nil) throws -> FRBook? {
         epubPathToRemove = withEpubPath
         shouldRemoveEpub = removeEpub
 
@@ -71,8 +70,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         bookBasePath = (bookBasePath as NSString).appendingPathComponent(bookName)
 
         guard fileManager.fileExists(atPath: withEpubPath) else {
-            print("Epub file does not exist.")
-            return nil
+            throw FolioReaderError(kind : .BookNotAvailable)
         }
         
         // Unzip if necessary
@@ -91,18 +89,18 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         addSkipBackupAttributeToItemAtURL(URL(fileURLWithPath: bookBasePath, isDirectory: true))
         
         kBookId = bookName
-        readContainer()
-        readOpf()
+        try readContainer()
+        try readOpf()
         return book
     }
     
     /**
      Read and parse container.xml file.
     */
-    fileprivate func readContainer() {
-        let containerPath = "META-INF/container.xml"
-        
+    fileprivate func readContainer() throws {
         do {
+            let containerPath = "META-INF/container.xml"
+            
             let containerData = try Data(contentsOf: URL(fileURLWithPath: (bookBasePath as NSString).appendingPathComponent(containerPath)), options: .alwaysMapped)
             let xmlDoc = try AEXMLDocument(xml: containerData)
             let opfResource = FRResource()
@@ -110,19 +108,20 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             opfResource.mediaType = FRMediaType.determineMediaType(xmlDoc.root["rootfiles"]["rootfile"].attributes["full-path"]!)
             book.opfResource = opfResource
             resourcesBasePath = (bookBasePath as NSString).appendingPathComponent((book.opfResource.href as NSString).deletingLastPathComponent)
+
         } catch {
-            print("Cannot read container.xml")
+            throw FolioReaderError(kind : .ErrorInContainer)
         }
     }
     
     /**
      Read and parse .opf file.
     */
-    fileprivate func readOpf() {
-        let opfPath = (bookBasePath as NSString).appendingPathComponent(book.opfResource.href)
-        var identifier: String?
-        
+    fileprivate func readOpf() throws {
         do {
+            let opfPath = (bookBasePath as NSString).appendingPathComponent(book.opfResource.href)
+            var identifier: String?
+            
             let opfData = try Data(contentsOf: URL(fileURLWithPath: opfPath), options: .alwaysMapped)
             let xmlDoc = try AEXMLDocument(xml: opfData)
             
@@ -162,7 +161,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             if let uniqueIdentifier = book.metadata.findIdentifierById(identifier) {
                 book.uniqueIdentifier = uniqueIdentifier
             }
-
+            
             // Read the cover image
             let coverImageId = book.metadata.findMetaByName("cover")
             if let coverResource = book.resources.findById(coverImageId) {
@@ -170,7 +169,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             } else if let coverResource = book.resources.findByProperties("cover-image") {
                 book.coverImage = coverResource
             }
-        
+            
             // Specific TOC for ePub 2 and 3
             // Get the first resource with the NCX mediatype
             if let tocResource = book.resources.findByMediaType(FRMediaType.NCX) {
@@ -196,8 +195,9 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             if let pageProgressionDirection = spine.attributes["page-progression-direction"] {
                 book.spine.pageProgressionDirection = pageProgressionDirection
             }
+
         } catch {
-            print("Cannot read .opf file.")
+            throw FolioReaderError(kind : .ErrorInOpf)
         }
     }
     
