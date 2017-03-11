@@ -33,7 +33,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     }
 
     func parseTitle(_ epubPath: String) throws -> String? {
-      guard let book = try readEpub(epubPath: epubPath, removeEpub: false), let title = book.title() else {
+        guard let book = try readEpub(epubPath: epubPath, removeEpub: false), let title = book.title() else {
              throw FolioReaderError(kind: .TitleNotAvailable)
         }
         return title
@@ -193,7 +193,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             if let pageProgressionDirection = spine.attributes["page-progression-direction"] {
                 book.spine.pageProgressionDirection = pageProgressionDirection
             }
-         } catch {
+        } catch {
             throw FolioReaderError(kind : .ErrorInOpf)
         }
     }
