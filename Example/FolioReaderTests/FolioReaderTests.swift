@@ -24,6 +24,8 @@ class FolioReaderTests: QuickSpec {
                     print(book!.tableOfContents.first.title)
                 } catch let e as FolioReaderError {
                     print(e.localizedDescription)
+                } catch {
+                    print("Unknown error")
                 }
             }
 
