@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     @IBOutlet var bookOne: UIButton!
     @IBOutlet var bookTwo: UIButton!
     let epubSampleFiles = [
-        "The Silver Chai", // standard eBook
+        "The Silver Chair", // standard eBook
         "The Adventures Of Sherlock Holmes - Adventure I", // audio-eBook
     ]
 
@@ -66,9 +66,10 @@ class ViewController: UIViewController {
             if let image = try FolioReader.getCoverImage(bookPath!) {
                 button.setBackgroundImage(image, for: .normal)
             }
+        } catch let e as FolioReaderError{
+            print(e.localizedDescription)
         } catch {
-            print("Cover image not available")
+            print("Unkown error")
         }
-        
     }
 }

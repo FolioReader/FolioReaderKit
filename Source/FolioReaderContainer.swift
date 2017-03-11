@@ -202,8 +202,7 @@ open class FolioReaderContainer: UIViewController {
 
 extension FolioReaderContainer {
     func alert(message: String) {
-        
-        let alertController = UIAlertController(
+         let alertController = UIAlertController(
             title: "Error",
             message: message,
             preferredStyle: UIAlertControllerStyle.alert
