@@ -21,7 +21,7 @@ class FolioReaderTests: QuickSpec {
                 subject = FREpubParser()
                 do {
                     let book = try subject.readEpub(epubPath: path)
-                    print(book!.tableOfContents.first.title)
+                    print(book!.tableOfContents.first!.title)
                 } catch let e as FolioReaderError {
                     print(e.localizedDescription)
                 } catch {
