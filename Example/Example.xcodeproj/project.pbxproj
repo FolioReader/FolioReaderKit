@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04ACB8EB1E73D8E300071740 /* Wildlife.20Adventure.epub in Resources */ = {isa = PBXBuildFile; fileRef = 04ACB8EA1E73D8E200071740 /* Wildlife.20Adventure.epub */; };
 		13EEB9E592A80F9B0437B43C /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D6C7FEDB0C1CA1F769F87ED /* Pods_Example.framework */; };
 		1A42C28D1C0E3882000F2137 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A42C28C1C0E3882000F2137 /* AppDelegate.swift */; };
 		1A42C28F1C0E3882000F2137 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A42C28E1C0E3882000F2137 /* ViewController.swift */; };
@@ -43,6 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		04ACB8EA1E73D8E200071740 /* Wildlife.20Adventure.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = Wildlife.20Adventure.epub; sourceTree = "<group>"; };
 		0D6C7FEDB0C1CA1F769F87ED /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A42C2891C0E3882000F2137 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A42C28C1C0E3882000F2137 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 		6E5C9B011C4037B7008F6FD9 /* Sample eBooks */ = {
 			isa = PBXGroup;
 			children = (
+				04ACB8EA1E73D8E200071740 /* Wildlife.20Adventure.epub */,
 				6E5C9B081C403942008F6FD9 /* The Adventures Of Sherlock Holmes - Adventure I.epub */,
 				6E5C9B031C4037B7008F6FD9 /* The Silver Chair.epub */,
 			);
@@ -329,6 +332,7 @@
 				1A42C2941C0E3883000F2137 /* Assets.xcassets in Resources */,
 				1A42C2A21C0E3A8D000F2137 /* LaunchScreen.storyboard in Resources */,
 				6E5C9B091C403968008F6FD9 /* The Adventures Of Sherlock Holmes - Adventure I.epub in Resources */,
+				04ACB8EB1E73D8E300071740 /* Wildlife.20Adventure.epub in Resources */,
 				6E5C9B051C4037B7008F6FD9 /* The Silver Chair.epub in Resources */,
 				1A42C2921C0E3883000F2137 /* Main.storyboard in Resources */,
 			);
