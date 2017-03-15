@@ -108,8 +108,6 @@ open class FolioReaderWebView: UIWebView {
 			let startOffset = dic["startOffset"]!
 			let endOffset = dic["endOffset"]!
 
-			self.clearTextSelection()
-
 			createMenu(options: true)
 			setMenuVisible(true, andRect: rect)
 
@@ -118,6 +116,7 @@ open class FolioReaderWebView: UIWebView {
 			if let highlight = Highlight.matchHighlight(html, andId: dic["id"]!, startOffset: startOffset, endOffset: endOffset) {
 				highlight.persist()
 			}
+            
 		} catch {
 			print("Could not receive JSON")
 		}
@@ -167,7 +166,6 @@ open class FolioReaderWebView: UIWebView {
 		if let updateId = js("setHighlightStyle('\(HighlightStyle.classForStyle(style.rawValue))')") {
 			Highlight.updateById(updateId, type: style)
 		}
-		colors(sender)
 	}
 
 	// MARK: - Create and show menu
@@ -245,7 +243,7 @@ open class FolioReaderWebView: UIWebView {
         menuController.menuItems = menuItems
 	}
 
-	func setMenuVisible(_ menuVisible: Bool, animated: Bool = true, andRect rect: CGRect = CGRect.zero) {
+	open func setMenuVisible(_ menuVisible: Bool, animated: Bool = true, andRect rect: CGRect = CGRect.zero) {
 		if !menuVisible && isShare || !menuVisible && isColors {
 			isColors = false
 			isShare = false

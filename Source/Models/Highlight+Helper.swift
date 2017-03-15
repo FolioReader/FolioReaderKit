@@ -150,6 +150,7 @@ extension Highlight {
             highlight?.type = type.hashValue
             
             try realm.commitWrite()
+            
         } catch let error as NSError {
             print("Error on updateById : \(error)")
         }
