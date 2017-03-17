@@ -239,7 +239,6 @@ html.nightMode .highlight-underline {border-bottom: 2px solid rgba(240, 40, 20, 
 .lato, .lato p, .lato span, .lato div { font-family: "Lato", serif !important; }
 .lora, .lora p, .lora span, .lora div { font-family: "Lora", serif !important; }
 .raleway, .raleway p, .raleway span, .raleway div { font-family: "Raleway", sans-serif !important; }
-.opensans, .opensans p, .opensans span, .opensans div { font-family: "Open Sans", sans-serif !important; }
 
 html.textSizeOne, .textSizeOne body { font-size: 13px !important; }
 html.textSizeTwo, .textSizeTwo body { font-size: 15px !important; }
