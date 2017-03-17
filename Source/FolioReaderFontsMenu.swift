@@ -13,6 +13,7 @@ public enum FolioReaderFont: Int {
 	case lato
 	case lora
 	case raleway
+    case openSans
 
 	public static func folioReaderFont(fontName: String) -> FolioReaderFont? {
 		var font: FolioReaderFont?
@@ -21,6 +22,7 @@ public enum FolioReaderFont: Int {
 		case "lato"			: font = .lato
 		case "lora"			: font = .lora
 		case "raleway"		: font = .raleway
+        case "opensans"     : font = .openSans
 		default 			: break
 		}
 		return font
@@ -32,6 +34,7 @@ public enum FolioReaderFont: Int {
 		case .lato		: return "lato"
 		case .lora		: return "lora"
 		case .raleway	: return "raleway"
+        case .openSans  : return "opensans"
 		}
 	}
 }
@@ -150,14 +153,18 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
             ])
         fontName.delegate = self
         fontName.tag = 2
+
         fontName.addSegmentWithTitle("Andada", onSelectionImage: nil, offSelectionImage: nil)
         fontName.addSegmentWithTitle("Lato", onSelectionImage: nil, offSelectionImage: nil)
         fontName.addSegmentWithTitle("Lora", onSelectionImage: nil, offSelectionImage: nil)
         fontName.addSegmentWithTitle("Raleway", onSelectionImage: nil, offSelectionImage: nil)
+        fontName.addSegmentWithTitle("OS", onSelectionImage: nil, offSelectionImage: nil)
+        
         fontName.segments[0].titleFont = UIFont(name: "Andada-Regular", size: 18)!
         fontName.segments[1].titleFont = UIFont(name: "Lato-Regular", size: 18)!
         fontName.segments[2].titleFont = UIFont(name: "Lora-Regular", size: 18)!
         fontName.segments[3].titleFont = UIFont(name: "Raleway-Regular", size: 18)!
+        fontName.segments[4].titleFont = UIFont(name: "OpenSans-Italic", size: 18)!
 
 		fontName.selectSegmentAtIndex(FolioReader.currentFont.rawValue)
         menuView.addSubview(fontName)
