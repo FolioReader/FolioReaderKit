@@ -266,7 +266,8 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 			var isClassBasedOnClickListenerScheme = false
 			for listener in readerConfig.classBasedOnClickListeners {
 
-				if url.scheme == listener.schemeName,
+				if let _urlScheme = url.scheme,
+					(_urlScheme == listener.schemeName),
                     let absoluteURLString = request.url?.absoluteString,
                     let range = absoluteURLString.range(of: "/clientX=") {
                     let baseURL = absoluteURLString.substring(to: range.lowerBound)
