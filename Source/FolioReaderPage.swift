@@ -273,7 +273,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
                     let baseURL = absoluteURLString.substring(to: range.lowerBound)
                     let positionString = absoluteURLString.substring(from: range.lowerBound)
                     if let point = getEventTouchPoint(fromPositionParameterString: positionString) {
-                        let attributeContentString = (baseURL.replacingOccurrences(of: "\(url.scheme)://", with: "").removingPercentEncoding)
+                        let attributeContentString = (baseURL.replacingOccurrences(of: "\(_urlScheme)://", with: "").removingPercentEncoding)
                         // Call the on click action block
                         listener.onClickAction(attributeContentString, point)
                         // Mark the scheme as class based click listener scheme
