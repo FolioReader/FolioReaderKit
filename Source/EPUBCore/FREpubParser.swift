@@ -164,7 +164,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             let coverImageId = book.metadata.findMetaByName("cover")
             if let coverResource = book.resources.findById(coverImageId) {
                 book.coverImage = coverResource
-            } else if let coverResource = book.resources.findByProperties("cover-image") {
+            } else if let coverResource = book.resources.findByProperty("cover-image") {
                 book.coverImage = coverResource
             }
             
@@ -175,7 +175,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             } else if let tocResource = book.resources.findByExtension(FRMediaType.NCX.defaultExtension) {
                 // Non-standard books may use wrong mediatype, fallback with extension
                 book.tocResource = tocResource
-            } else if let tocResource = book.resources.findByProperties("nav") {
+            } else if let tocResource = book.resources.findByProperty("nav") {
                 book.tocResource = tocResource
             }
             

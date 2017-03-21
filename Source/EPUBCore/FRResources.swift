@@ -54,7 +54,7 @@ class FRResources: NSObject {
      - parameter properties: ePub 3 properties. e.g. `cover-image`, `nav`
      - returns: The Resource.
      */
-    func findByProperties(_ properties: String) -> FRResource? {
+    func findByProperty(_ properties: String) -> FRResource? {
         for resource in resources.values {
             if resource.properties == properties {
                 return resource
