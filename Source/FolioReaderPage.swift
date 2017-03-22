@@ -180,11 +180,11 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     }
     
     open func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-		guard
-			let webView = webView as? FolioReaderWebView,
-			let scheme = request.url?.scheme else {
-				return true
-		}
+         guard
+            let webView = webView as? FolioReaderWebView,
+            let scheme = request.url?.scheme else {
+                return true
+        }
 
         guard let url = request.url else { return false }
         
@@ -264,12 +264,12 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
             }
             return false
 		} else {
-			// Check if the url is a custom class based onClick listerner
-			var isClassBasedOnClickListenerScheme = false
-			for listener in readerConfig.classBasedOnClickListeners {
+            // Check if the url is a custom class based onClick listerner
+            var isClassBasedOnClickListenerScheme = false
+            for listener in readerConfig.classBasedOnClickListeners {
 
-				if
-					(scheme == listener.schemeName),
+            if
+                    (scheme == listener.schemeName),
                     let absoluteURLString = request.url?.absoluteString,
                     let range = absoluteURLString.range(of: "/clientX=") {
                     let baseURL = absoluteURLString.substring(to: range.lowerBound)
