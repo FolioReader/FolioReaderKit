@@ -180,13 +180,15 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     }
     
     open func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-		guard let webView = webView as? FolioReaderWebView else {
-			return true
+		guard
+			let webView = webView as? FolioReaderWebView,
+			let scheme = request.url?.scheme else {
+				return true
 		}
 
         guard let url = request.url else { return false }
         
-        if url.scheme == "highlight" {
+        if scheme == "highlight" {
             
             shouldShowBar = false
             
@@ -198,7 +200,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
             menuIsVisible = true
             
             return false
-        } else if url.scheme == "play-audio" {
+        } else if scheme == "play-audio" {
 
             guard let decoded = url.absoluteString.removingPercentEncoding else { return false }
             let playID = decoded.substring(from: decoded.index(decoded.startIndex, offsetBy: 13))
@@ -207,7 +209,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
             FolioReader.shared.readerAudioPlayer?.playAudio(href, fragmentID: playID)
 
             return false
-        } else if url.scheme == "file" {
+        } else if scheme == "file" {
             
             let anchorFromURL = url.fragment
             
@@ -245,10 +247,10 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
             }
             
             return true
-        } else if url.scheme == "mailto" {
+        } else if scheme == "mailto" {
             print("Email")
             return true
-        } else if url.absoluteString != "about:blank" && url.scheme!.contains("http") && navigationType == .linkClicked {
+        } else if url.absoluteString != "about:blank" && scheme.contains("http") && navigationType == .linkClicked {
             
             if #available(iOS 9.0, *) {
                 let safariVC = SFSafariViewController(url: request.url!)
@@ -266,14 +268,14 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 			var isClassBasedOnClickListenerScheme = false
 			for listener in readerConfig.classBasedOnClickListeners {
 
-				if let _urlScheme = url.scheme,
-					(_urlScheme == listener.schemeName),
+				if
+					(scheme == listener.schemeName),
                     let absoluteURLString = request.url?.absoluteString,
                     let range = absoluteURLString.range(of: "/clientX=") {
                     let baseURL = absoluteURLString.substring(to: range.lowerBound)
                     let positionString = absoluteURLString.substring(from: range.lowerBound)
                     if let point = getEventTouchPoint(fromPositionParameterString: positionString) {
-                        let attributeContentString = (baseURL.replacingOccurrences(of: "\(url.scheme)://", with: "").removingPercentEncoding)
+                        let attributeContentString = (baseURL.replacingOccurrences(of: "\(scheme)://", with: "").removingPercentEncoding)
                         // Call the on click action block
                         listener.onClickAction(attributeContentString, point)
                         // Mark the scheme as class based click listener scheme
