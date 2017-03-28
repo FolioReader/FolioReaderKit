@@ -9,10 +9,14 @@
 import Foundation
 import UIKit
 
+// TODO_SMF: replace/remove utility function
+
 // MARK: - Internal constants for devices
 
 internal let isPad = UIDevice.current.userInterfaceIdiom == .pad
 internal let isPhone = UIDevice.current.userInterfaceIdiom == .phone
+
+// TODO_SMF: create constant file
 
 // MARK: - Internal constants
 
@@ -63,16 +67,19 @@ enum MediaOverlayStyle: Int {
     /**
      Called when reader did closed.
      */
-    @objc optional func folioReaderDidClosed()
+    @objc optional func folioReaderDidClosed(_ folioReader: FolioReader)
+
+	// TODO_SMF: make sure the following deprecated functions still work... or not.:
+	// TODO_SMF_KEVIN: ask the maind developer for that.
+	@objc optional func folioReaderDidClosed()
 }
 
 /**
  Main Library class with some useful constants and methods
  */
 open class FolioReader: NSObject {
-    
+
     /// Singleton instance
-    open static let shared = FolioReader()
     fileprivate override init() {}
     
     /// Custom unzip path
@@ -80,42 +87,45 @@ open class FolioReader: NSObject {
     
     /// FolioReaderDelegate
     open weak var delegate: FolioReaderDelegate?
-    
-    
+
     open weak var readerCenter: FolioReaderCenter?
+	// TODO_SMF: remove `!`
     open weak var readerContainer: FolioReaderContainer!
     open weak var readerAudioPlayer: FolioReaderAudioPlayer?
-    
-    static let defaults = UserDefaults.standard
-    
-    
-    
+
+	// TODO_SMF: remove/rename static UserDefaults object.
+	class var defaults : UserDefaults {
+		return UserDefaults.standard
+	}
+
     /// Check if reader is open
-    static var isReaderOpen = false
+    var isReaderOpen = false
     
     /// Check if reader is open and ready
-    static var isReaderReady = false
+    var isReaderReady = false
     
     /// Check if layout needs to change to fit Right To Left
-    static var needsRTLChange: Bool {
-        return book.spine.isRtl && readerConfig.scrollDirection == .horizontal
+    class var needsRTLChange: Bool {
+        return (book.spine.isRtl == true && readerConfig.scrollDirection == .horizontal)
     }
     
     /// Check if current theme is Night mode
-    open static var nightMode: Bool {
+    open var nightMode: Bool {
         get { return FolioReader.defaults.bool(forKey: kNightMode) }
         set (value) {
             FolioReader.defaults.set(value, forKey: kNightMode)
 			FolioReader.defaults.synchronize()
 
-			if let readerCenter = FolioReader.shared.readerCenter {
+			if let readerCenter = self.readerCenter {
 				UIView.animate(withDuration: 0.6, animations: {
-					_ = readerCenter.currentPage?.webView.js("nightMode(\(nightMode))")
+					// TODO_SMF: infinite loop?
+					_ = readerCenter.currentPage?.webView.js("nightMode(\(self.nightMode))")
 					readerCenter.pageIndicatorView?.reloadColors()
 					readerCenter.configureNavBar()
 					readerCenter.scrollScrubber?.reloadColors()
-					readerCenter.collectionView.backgroundColor = (nightMode ? readerConfig.nightModeBackground : UIColor.white)
+					readerCenter.collectionView.backgroundColor = (self.nightMode ? readerConfig.nightModeBackground : UIColor.white)
 					}, completion: { (finished: Bool) in
+						// TODO_SMF: add constant
 						NotificationCenter.default.post(name: Notification.Name(rawValue: "needRefreshPageMode"), object: nil)
 					})
 			}
@@ -123,28 +133,32 @@ open class FolioReader: NSObject {
     }
 
     /// Check current font name
-    open static var currentFont: FolioReaderFont {
+    open var currentFont: FolioReaderFont {
 		get { return FolioReaderFont(rawValue: FolioReader.defaults.value(forKey: kCurrentFontFamily) as! Int)! }
         set (font) {
             FolioReader.defaults.setValue(font.rawValue, forKey: kCurrentFontFamily)
-			_ = FolioReader.shared.readerCenter?.currentPage?.webView.js("setFontName('\(font.cssIdentifier)')")
+			_ = self.readerCenter?.currentPage?.webView.js("setFontName('\(font.cssIdentifier)')")
         }
     }
     
     /// Check current font size
-    open static var currentFontSize: FolioReaderFontSize {
+    open var currentFontSize: FolioReaderFontSize {
+		// TODO_SMF: remove unwrap
 		get { return FolioReaderFontSize(rawValue: FolioReader.defaults.value(forKey: kCurrentFontSize) as! Int)! }
         set (value) {
             FolioReader.defaults.setValue(value.rawValue, forKey: kCurrentFontSize)
 
-			if let _currentPage = FolioReader.shared.readerCenter?.currentPage {
-				_currentPage.webView.js("setFontSize('\(currentFontSize.cssIdentifier)')")
+			guard let currentPage = self.readerCenter?.currentPage else {
+				return
 			}
+
+			currentPage.webView.js("setFontSize('\(currentFontSize.cssIdentifier)')")
         }
     }
 
     /// Check current audio rate, the speed of speech voice
-    static var currentAudioRate: Int {
+    var currentAudioRate: Int {
+		// TODO_SMF: remove unwrap
         get { return FolioReader.defaults.value(forKey: kCurrentAudioRate) as! Int }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentAudioRate)
@@ -152,7 +166,8 @@ open class FolioReader: NSObject {
     }
 
     /// Check the current highlight style
-    static var currentHighlightStyle: Int {
+    var currentHighlightStyle: Int {
+		// TODO_SMF: remove unwrap
         get { return FolioReader.defaults.value(forKey: kCurrentHighlightStyle) as! Int }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentHighlightStyle)
@@ -161,6 +176,7 @@ open class FolioReader: NSObject {
     
     /// Check the current Media Overlay or TTS style
     static var currentMediaOverlayStyle: MediaOverlayStyle {
+		// TODO_SMF: remove unwrap
         get { return MediaOverlayStyle(rawValue: FolioReader.defaults.value(forKey: kCurrentMediaOverlayStyle) as! Int)! }
         set (value) {
             FolioReader.defaults.setValue(value.rawValue, forKey: kCurrentMediaOverlayStyle)
@@ -168,15 +184,15 @@ open class FolioReader: NSObject {
     }
     
     /// Check the current scroll direction
-    open static var currentScrollDirection: Int {
+	// TODO_SMF: value should use `FolioReaderScrollDirection` instead of `Int`?
+    open var currentScrollDirection: Int {
+		// TODO_SMF: remove unwrap
         get { return FolioReader.defaults.value(forKey: kCurrentScrollDirection) as! Int }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentScrollDirection)
 
-			if let _readerCenter = FolioReader.shared.readerCenter  {
-				let direction = FolioReaderScrollDirection(rawValue: currentScrollDirection) ?? .defaultVertical
-				_readerCenter.setScrollDirection(direction)
-			}
+			let direction = (FolioReaderScrollDirection(rawValue: currentScrollDirection) ?? .defaultVertical)
+			self.readerCenter?.setScrollDirection(direction)
         }
     }
 
@@ -204,35 +220,27 @@ open class FolioReader: NSObject {
     /**
      Present a Folio Reader for a Parent View Controller.
      */
-    open class func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated: Bool = true) {
-        let reader = FolioReaderContainer(withConfig: config, epubPath: epubPath, removeEpub: shouldRemoveEpub)
-        FolioReader.shared.readerContainer = reader
-        parentViewController.present(reader, animated: animated, completion: nil)
+    open class func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated: Bool = true) -> FolioReader {
+		let folioReader = FolioReader()
+		let readerContainer = FolioReaderContainer(withConfig: config, folioReader: folioReader, epubPath: epubPath, removeEpub: shouldRemoveEpub)
+		folioReader.readerContainer = readerContainer
+        parentViewController.present(readerContainer, animated: animated, completion: nil)
+		FolioReader.shared = folioReader
+		return folioReader
     }
-    
-    // MARK: - Application State
-    
-    /**
-     Called when the application will resign active
-     */
-    open class func applicationWillResignActive() {
-        saveReaderState()
-    }
-    
-    /**
-     Called when the application will terminate
-     */
-    open class func applicationWillTerminate() {
-        saveReaderState()
-    }
-    
+}
+
+// MARK: - Exit, save and close FolioReader
+
+extension FolioReader {
+
     /**
      Save Reader state, book, page and scroll are saved
      */
-    open class func saveReaderState() {
-        guard FolioReader.isReaderOpen else { return }
+    open func saveReaderState() {
+        guard self.isReaderOpen else { return }
         
-        if let currentPage = FolioReader.shared.readerCenter?.currentPage {
+        if let currentPage = self.readerCenter?.currentPage {
             let position = [
                 "pageNumber": currentPageNumber,
                 "pageOffsetX": currentPage.webView.scrollView.contentOffset.x,
@@ -246,20 +254,126 @@ open class FolioReader: NSObject {
     /**
      Closes and save the reader current instance
      */
-    open class func close() {
-        FolioReader.saveReaderState()
-        FolioReader.isReaderOpen = false
-        FolioReader.isReaderReady = false
-        FolioReader.shared.readerAudioPlayer?.stop(immediate: true)
+    open func close() {
+        self.saveReaderState()
+        self.isReaderOpen = false
+        self.isReaderReady = false
+        self.readerAudioPlayer?.stop(immediate: true)
         FolioReader.defaults.set(0, forKey: kCurrentTOCMenu)
-        FolioReader.shared.delegate?.folioReaderDidClosed?()
+        self.delegate?.folioReaderDidClosed?(self)
+		self.delegate?.folioReaderDidClosed?()
     }
+}
+
+// MARK: - Public shared extension. All Deprecated function
+
+extension FolioReader {
+
+	// TODO_SMF: temporal variable to build and run the current state. Should be completely remove.
+	private static var _sharedInstance = FolioReader()
+	open static var shared : FolioReader {
+		get { return _sharedInstance }
+		set {
+			_sharedInstance = newValue
+		}
+	}
+
+	/// Check if current theme is Night mode
+	open class var nightMode: Bool {
+		get { return FolioReader.shared.nightMode }
+		set (value) {
+			FolioReader.shared.nightMode = value
+		}
+	}
+
+	/// Check current font name
+	open class var currentFont: FolioReaderFont {
+		get { return FolioReader.shared.currentFont }
+		set (font) {
+			FolioReader.shared.currentFont = font
+		}
+	}
+
+	/// Check current font size
+	open class var currentFontSize: FolioReaderFontSize {
+		// TODO_SMF: remove unwrap
+		get { return FolioReader.shared.currentFontSize }
+		set (value) {
+			FolioReader.shared.currentFontSize = value
+		}
+	}
+
+	/// Check the current scroll direction
+	// TODO_SMF: value should use `FolioReaderScrollDirection` instead of `Int`?
+	open class var currentScrollDirection: Int {
+		// TODO_SMF: remove unwrap
+		get { return FolioReader.shared.currentScrollDirection }
+		set (value) {
+			FolioReader.shared.currentScrollDirection = value
+		}
+	}
+
+	open class var currentAudioRate: Int {
+		// TODO_SMF: remove unwrap
+		get { return FolioReader.shared.currentAudioRate }
+		set (value) {
+			FolioReader.shared.currentAudioRate = value
+		}
+	}
+
+	/// Check if reader is open and ready
+	open class var isReaderReady : Bool {
+		return FolioReader.shared.isReaderReady
+	}
+
+	/**
+	Save Reader state, book, page and scroll are saved
+	*/
+	open class func saveReaderState() {
+		FolioReader.shared.saveReaderState()
+	}
+
+	/**
+	Closes and save the reader current instance
+	*/
+	open class func close() {
+		FolioReader.shared.close()
+	}
+
+	/// Check the current highlight style
+	open class var currentHighlightStyle: Int {
+		get { return FolioReader.shared.currentHighlightStyle }
+		set (value) {
+			FolioReader.shared.currentHighlightStyle = value
+		}
+	}
+}
+
+// MARK: - Application State
+
+extension FolioReader {
+
+	// TODO_SMF: deprecate and find a replacement for those functions.
+
+	/**
+	Called when the application will resign active
+	*/
+	open class func applicationWillResignActive() {
+		FolioReader.shared.saveReaderState()
+	}
+
+	/**
+	Called when the application will terminate
+	*/
+	open class func applicationWillTerminate() {
+		FolioReader.shared.saveReaderState()
+	}
 }
 
 // MARK: - Global Functions
 
 func isNight<T> (_ f: T, _ l: T) -> T {
-    return FolioReader.nightMode ? f : l
+    return (FolioReader.shared.nightMode == true ? f : l)
 }
 
 // MARK: - Scroll Direction Functions
@@ -584,8 +698,9 @@ internal extension String {
 
         return String(format: "%02.f:%02.f", min, sec)
     }
-
 }
+
+// TODO_SMF: split files into extension files
 
 internal extension UIImage {
     convenience init?(readerImageNamed: String) {
@@ -687,7 +802,7 @@ internal extension UIViewController {
     }
     
     func dismiss() {
-        dismiss(nil)
+        self.dismiss(nil)
     }
     
     func dismiss(_ completion: (() -> Void)?) {

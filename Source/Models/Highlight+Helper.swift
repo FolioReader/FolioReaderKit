@@ -20,24 +20,20 @@ public enum HighlightStyle: Int {
     case underline
     
     public init () { self = .yellow }
-    
+
+	// TODO_SMF: replace with a string enum instead.
+
     /**
      Return HighlightStyle for CSS class.
      */
     public static func styleForClass(_ className: String) -> HighlightStyle {
         switch className {
-        case "highlight-yellow":
-            return .yellow
-        case "highlight-green":
-            return .green
-        case "highlight-blue":
-            return .blue
-        case "highlight-pink":
-            return .pink
-        case "highlight-underline":
-            return .underline
-        default:
-            return .yellow
+        case "highlight-yellow": 	return .yellow
+        case "highlight-green":		return .green
+        case "highlight-blue":		return .blue
+        case "highlight-pink":		return .pink
+        case "highlight-underline":	return .underline
+        default:					return .yellow
         }
     }
     
@@ -46,25 +42,22 @@ public enum HighlightStyle: Int {
      */
     public static func classForStyle(_ style: Int) -> String {
         switch style {
-        case HighlightStyle.yellow.rawValue:
-            return "highlight-yellow"
-        case HighlightStyle.green.rawValue:
-            return "highlight-green"
-        case HighlightStyle.blue.rawValue:
-            return "highlight-blue"
-        case HighlightStyle.pink.rawValue:
-            return "highlight-pink"
-        case HighlightStyle.underline.rawValue:
-            return "highlight-underline"
-        default:
-            return "highlight-yellow"
+        case HighlightStyle.yellow.rawValue:		return "highlight-yellow"
+        case HighlightStyle.green.rawValue:			return "highlight-green"
+        case HighlightStyle.blue.rawValue:			return "highlight-blue"
+        case HighlightStyle.pink.rawValue:			return "highlight-pink"
+        case HighlightStyle.underline.rawValue:		return "highlight-underline"
+        default:									return "highlight-yellow"
         }
     }
-    
+
+	// TODO_SMF: remove default cases, add optional result.
+
     /**
      Return CSS class for HighlightStyle.
      */
     public static func colorForStyle(_ style: Int, nightMode: Bool = false) -> UIColor {
+
         switch style {
         case HighlightStyle.yellow.rawValue:
             return UIColor(red: 255/255, green: 235/255, blue: 107/255, alpha: nightMode ? 0.9 : 1)
@@ -86,7 +79,9 @@ public enum HighlightStyle: Int {
 public typealias Completion = (_ error: NSError?) -> ()
 
 extension Highlight {
-    
+
+	// TODO_SMF: replace try with a 'do-try-catch' or at least a 'try?'.
+
     /**
      Save a Highlight with completion block
      

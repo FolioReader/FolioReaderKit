@@ -13,6 +13,7 @@ class ViewController: UIViewController {
 
     @IBOutlet var bookOne: UIButton!
     @IBOutlet var bookTwo: UIButton!
+
     let epubSampleFiles = [
         "The Silver Chair", // standard eBook
         "The Adventures Of Sherlock Holmes - Adventure I", // audio-eBook
@@ -55,7 +56,7 @@ class ViewController: UIViewController {
         // Epub file
         let epubName = epubSampleFiles[sampleNum-1];
         let bookPath = Bundle.main.path(forResource: epubName, ofType: "epub")
-        FolioReader.presentReader(parentViewController: self, withEpubPath: bookPath!, andConfig: config, shouldRemoveEpub: false)
+        _ = FolioReader.presentReader(parentViewController: self, withEpubPath: bookPath!, andConfig: config, shouldRemoveEpub: false)
     }
 
     func setCover(_ button: UIButton, index: Int) {
