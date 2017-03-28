@@ -11,7 +11,6 @@ import FontBlaster
 
 // TODO_SMF: remove static variables
 var readerConfig: FolioReaderConfig!
-var book: FRBook!
 
 /// Reader container
 open class FolioReaderContainer		: UIViewController {
@@ -22,7 +21,8 @@ open class FolioReaderContainer		: UIViewController {
     var audioPlayer					: FolioReaderAudioPlayer?
     var shouldHideStatusBar 		= true
     var shouldRemoveEpub 			= true
-    var epubPath					: String!
+    var epubPath					: String?
+	var book						: FRBook?
 
 	fileprivate var folioReader		: FolioReader?
     fileprivate var errorOnLoad 	= false
@@ -111,9 +111,8 @@ open class FolioReaderContainer		: UIViewController {
 
 		readerConfig.shouldHideNavigationOnTap = ((readerConfig.hideBars == true) ? true : readerConfig.shouldHideNavigationOnTap)
 
-        self.centerViewController = FolioReaderCenter()
-        self.folioReader?.readerCenter = self.centerViewController
-        
+		self.centerViewController = FolioReaderCenter(withContainer: self)
+
         self.centerNavigationController = UINavigationController(rootViewController: self.centerViewController)
         self.centerNavigationController.setNavigationBarHidden(readerConfig.shouldHideNavigationOnTap, animated: false)
         self.view.addSubview(self.centerNavigationController.view)
@@ -127,28 +126,27 @@ open class FolioReaderContainer		: UIViewController {
 		}
 
         // Read async book
-        guard (self.epubPath.isEmpty == false) else {
+        guard let epubPath = self.epubPath, (epubPath.isEmpty == false) else {
             print("Epub path is nil.")
             self.errorOnLoad = true
             return
         }
 
         DispatchQueue.global(qos: .userInitiated).async {
-            if let parsedBook = FREpubParser().readEpub(epubPath: self.epubPath, removeEpub: self.shouldRemoveEpub) {
-                book = parsedBook
-            } else {
-                self.errorOnLoad = true
-            }
-            
-            guard !self.errorOnLoad else { return }
-            
+
+			guard let parsedBook = FREpubParser().readEpub(epubPath: epubPath, removeEpub: self.shouldRemoveEpub) else {
+				self.errorOnLoad = true
+				return
+			}
+
+			self.book = parsedBook
             self.folioReader?.isReaderOpen = true
             
             // Reload data
             DispatchQueue.main.async(execute: {
                 
                 // Add audio player if needed
-                if book.hasAudio() || readerConfig.enableTTS {
+                if (self.book?.hasAudio() == true || readerConfig.enableTTS) {
                     self.addAudioPlayer()
                 }
                 
@@ -156,11 +154,13 @@ open class FolioReaderContainer		: UIViewController {
                 
                 self.folioReader?.isReaderReady = true
 
-				guard let reader = self.folioReader else {
-					return
+				guard
+					let reader = self.folioReader,
+					let loadedBook = self.book else {
+						return
 				}
 
-				reader.delegate?.folioReader?(reader, didFinishedLoading: book)
+				reader.delegate?.folioReader?(reader, didFinishedLoading: loadedBook)
             })
         }
     }

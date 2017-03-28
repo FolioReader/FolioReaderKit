@@ -23,7 +23,12 @@ class FolioReaderQuoteShare: UIViewController {
     var dataSource = [QuoteImage]()
     let imagePicker = UIImagePickerController()
     var selectedIndex = 0
-    
+
+	fileprivate var book : FRBook? {
+		// TODO_SMF: remove this getter
+		return FolioReader.shared.readerContainer?.book
+	}
+
     // MARK: Init
     
     init(initWithText shareText: String) {
@@ -79,8 +84,13 @@ class FolioReaderQuoteShare: UIViewController {
         var bookTitle = ""
         var authorName = ""
         
-        if let title = book.title() { bookTitle = title }
-        if let author = book.metadata.creators.first { authorName = author.name }
+        if let title = self.book?.title() {
+			bookTitle = title
+		}
+
+        if let author = self.book?.metadata.creators.first {
+			authorName = author.name
+		}
         
         titleLabel = UILabel()
         titleLabel.text = bookTitle
@@ -249,13 +259,13 @@ class FolioReaderQuoteShare: UIViewController {
         var shareItems = [AnyObject]()
         
         // Get book title
-        if let title = book.title() {
+        if let title = self.book?.title() {
             bookTitle = title
             subject += " “\(title)”"
         }
         
         // Get author name
-        if let author = book.metadata.creators.first {
+        if let author = self.book?.metadata.creators.first {
             authorName = author.name
         }
         

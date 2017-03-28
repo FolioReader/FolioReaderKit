@@ -70,7 +70,7 @@ enum MediaOverlayStyle: Int {
     @objc optional func folioReaderDidClosed(_ folioReader: FolioReader)
 
 	// TODO_SMF: make sure the following deprecated functions still work... or not.:
-	// TODO_SMF_KEVIN: ask the maind developer for that.
+	// TODO_SMF_QUESTION: ask the main developer(s) for that.
 	@objc optional func folioReaderDidClosed()
 }
 
@@ -88,7 +88,10 @@ open class FolioReader: NSObject {
     /// FolioReaderDelegate
     open weak var delegate: FolioReaderDelegate?
 
-    open weak var readerCenter: FolioReaderCenter?
+	open weak var readerCenter: FolioReaderCenter? {
+		return self.readerContainer.centerViewController
+	}
+
 	// TODO_SMF: remove `!`
     open weak var readerContainer: FolioReaderContainer!
     open weak var readerAudioPlayer: FolioReaderAudioPlayer?
@@ -106,7 +109,8 @@ open class FolioReader: NSObject {
     
     /// Check if layout needs to change to fit Right To Left
     class var needsRTLChange: Bool {
-        return (book.spine.isRtl == true && readerConfig.scrollDirection == .horizontal)
+		// TODO_SMF: after readerConfig has been migrated, use local variables instead. Plus create a static class getter.
+        return (FolioReader.shared.readerContainer.book?.spine.isRtl == true && readerConfig.scrollDirection == .horizontal)
     }
     
     /// Check if current theme is Night mode
@@ -127,7 +131,7 @@ open class FolioReader: NSObject {
 					}, completion: { (finished: Bool) in
 						// TODO_SMF: add constant
 						NotificationCenter.default.post(name: Notification.Name(rawValue: "needRefreshPageMode"), object: nil)
-					})
+				})
 			}
         }
     }

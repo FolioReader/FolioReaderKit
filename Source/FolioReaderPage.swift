@@ -32,12 +32,18 @@ import JSQWebViewController
 open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate {
     
     weak var delegate: FolioReaderPageDelegate?
+	// TODO_SMF: remove `!`
 	/// The index of the current page. Note: The index start at 1!
 	open var pageNumber: Int!
 	var webView: FolioReaderWebView!
     fileprivate var colorView: UIView!
     fileprivate var shouldShowBar = true
     fileprivate var menuIsVisible = false
+
+	fileprivate var book: FRBook? {
+		// TODO_SMF: remove this getter
+		return FolioReader.shared.readerContainer?.book
+	}
     
     // MARK: - View life cicle
     
@@ -157,7 +163,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
         refreshPageMode()
         
-        if readerConfig.enableTTS && !book.hasAudio() {
+        if (readerConfig.enableTTS && self.book?.hasAudio() == false) {
             webView.js("wrappingSentencesWithinPTags()")
             
             if let audioPlayer = FolioReader.shared.readerAudioPlayer , audioPlayer.isPlaying() {
@@ -214,10 +220,12 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
             let anchorFromURL = url.fragment
             
             // Handle internal url
-            if (url.path as NSString).pathExtension != "" {
-                let base = (book.opfResource.href as NSString).deletingLastPathComponent
+            if ((url.path as NSString).pathExtension != "") {
+                var base = (self.book?.opfResource.href as? NSString)?.deletingLastPathComponent
+				base = ((base == nil || base?.isEmpty == true) ? kBookId : base)
+
                 let path = url.path
-                let splitedPath = path.components(separatedBy: base.isEmpty ? kBookId : base)
+                let splitedPath = path.components(separatedBy: (base ?? kBookId))
                 
                 // Return to avoid crash
                 if splitedPath.count <= 1 || splitedPath[1].isEmpty {
@@ -227,7 +235,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
                 let href = splitedPath[1].trimmingCharacters(in: CharacterSet(charactersIn: "/"))
                 let hrefPage = (FolioReader.shared.readerCenter?.findPageByHref(href) ?? 0) + 1
                 
-                if hrefPage == pageNumber {
+                if (hrefPage == pageNumber) {
                     // Handle internal #anchor
                     if anchorFromURL != nil {
                         handleAnchor(anchorFromURL!, avoidBeginningAnchors: false, animated: true)
@@ -437,11 +445,15 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     /**
      Audio Mark ID - marks an element with an ID with the given class and scrolls to it
 
-     - parameter ID: The ID
+     - parameter identifier: The identifier
      */
-    func audioMarkID(_ ID: String) {
-        guard let currentPage = FolioReader.shared.readerCenter?.currentPage else { return }
-        currentPage.webView.js("audioMarkID('\(book.playbackActiveClass())','\(ID)')")
+    func audioMarkID(_ identifier: String) {
+        guard
+			let playbackActiveClass = self.book?.playbackActiveClass(),
+			let currentPage = FolioReader.shared.readerCenter?.currentPage else {
+				return
+		}
+        currentPage.webView.js("audioMarkID('\(playbackActiveClass)','\(identifier)')")
     }
     
     // MARK: UIMenu visibility

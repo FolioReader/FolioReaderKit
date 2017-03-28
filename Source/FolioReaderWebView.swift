@@ -14,6 +14,11 @@ open class FolioReaderWebView: UIWebView {
 	var isShare = false
     var isOneWord = false
 
+	fileprivate var book : FRBook? {
+		// TODO_SMF: remove this getter
+		return FolioReader.shared.readerContainer?.book
+	}
+
 	// MARK: - UIMenuController
 
 	open override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
@@ -28,7 +33,7 @@ open class FolioReaderWebView: UIWebView {
 		} else {
 			if action == #selector(highlight(_:))
 				|| (action == #selector(define(_:)) && isOneWord)
-                || (action == #selector(play(_:)) && (book.hasAudio() || readerConfig.enableTTS))
+                || (action == #selector(play(_:)) && (self.book?.hasAudio() == true || readerConfig.enableTTS))
 				|| (action == #selector(share(_:)) && readerConfig.allowSharing)
 				|| (action == #selector(copy(_:)) && readerConfig.allowSharing) {
 				return true
@@ -233,7 +238,7 @@ open class FolioReaderWebView: UIWebView {
             // default menu
             menuItems = [highlightItem, defineItem, shareItem]
             
-            if book.hasAudio() || readerConfig.enableTTS {
+            if (self.book?.hasAudio() == true || readerConfig.enableTTS) {
                 menuItems.insert(playAudioItem, at: 0)
             }
             

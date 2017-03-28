@@ -25,21 +25,26 @@ import UIKit
 class FolioReaderChapterList: UITableViewController {
     weak var delegate: FolioReaderChapterListDelegate?
     var tocItems = [FRTocReference]()
-    
+
+	fileprivate var book : FRBook? {
+		// TODO_SMF: remove this getter
+		return FolioReader.shared.readerContainer?.book
+	}
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Register cell classes
-        tableView.register(FolioReaderChapterListCell.self, forCellReuseIdentifier: reuseIdentifier)
-        tableView.separatorInset = UIEdgeInsets.zero
-        tableView.backgroundColor = isNight(readerConfig.nightModeMenuBackground, readerConfig.menuBackgroundColor)
-        tableView.separatorColor = isNight(readerConfig.nightModeSeparatorColor, readerConfig.menuSeparatorColor)
+        self.tableView.register(FolioReaderChapterListCell.self, forCellReuseIdentifier: reuseIdentifier)
+        self.tableView.separatorInset = UIEdgeInsets.zero
+        self.tableView.backgroundColor = isNight(readerConfig.nightModeMenuBackground, readerConfig.menuBackgroundColor)
+        self.tableView.separatorColor = isNight(readerConfig.nightModeSeparatorColor, readerConfig.menuSeparatorColor)
         
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 50
+        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.estimatedRowHeight = 50
         
         // Create TOC list
-        tocItems = book.flatTableOfContents
+        self.tocItems = (self.book?.flatTableOfContents ?? [])
     }
     
     // MARK: - Table view data source
@@ -63,7 +68,7 @@ class FolioReaderChapterList: UITableViewController {
         // Add audio duration for Media Ovelay
         if let resource = tocReference.resource {
             if let mediaOverlay = resource.mediaOverlay {
-                let duration = book.durationFor("#"+mediaOverlay)
+                let duration = self.book?.durationFor("#"+mediaOverlay)
                 let durationFormatted = (duration != nil ? duration : "")?.clockTimeToMinutesString()
 
                 cell.indexLabel.text = cell.indexLabel.text! + (duration != nil ? " - "+durationFormatted! : "");
@@ -71,9 +76,12 @@ class FolioReaderChapterList: UITableViewController {
         }
 
         // Mark current reading chapter
-        if let currentPageNumber = currentPageNumber, let reference = book.spine.spineReferences[safe: currentPageNumber-1] , tocReference.resource != nil {
-            let resource = reference.resource
-            cell.indexLabel.textColor = tocReference.resource == resource ? readerConfig.tintColor : readerConfig.menuTextColor
+        if
+			let currentPageNumber = currentPageNumber,
+			let reference = self.book?.spine.spineReferences[safe: currentPageNumber - 1],
+			(tocReference.resource != nil) {
+            	let resource = reference.resource
+            	cell.indexLabel.textColor = (tocReference.resource == resource ? readerConfig.tintColor : readerConfig.menuTextColor)
         }
         
         cell.layoutMargins = UIEdgeInsets.zero
