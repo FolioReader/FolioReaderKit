@@ -131,13 +131,13 @@ open class FolioReaderWebView: UIWebView {
 	func define(_ sender: UIMenuController?) {
 		let selectedText = js("getSelectedText()")
 
-		setMenuVisible(false)
+		self.setMenuVisible(false)
 
 		self.clearTextSelection()
 
 		let vc = UIReferenceLibraryViewController(term: selectedText! )
 		vc.view.tintColor = readerConfig.tintColor
-		FolioReader.shared.readerContainer.show(vc, sender: nil)
+		FolioReader.shared.readerContainer?.show(vc, sender: nil)
 	}
 
 	func play(_ sender: UIMenuController?) {

@@ -337,10 +337,10 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         if readerConfig.shouldHideNavigationOnTap == false { return }
 
         let shouldHide = true
-        FolioReader.shared.readerContainer.shouldHideStatusBar = shouldHide
+        self.readerContainer?.shouldHideStatusBar = shouldHide
         
         UIView.animate(withDuration: 0.25, animations: {
-            FolioReader.shared.readerContainer.setNeedsStatusBarAppearanceUpdate()
+            self.readerContainer?.setNeedsStatusBarAppearanceUpdate()
             
             // Show minutes indicator
 //            self.pageIndicatorView.minutesLabel.alpha = 0
@@ -352,10 +352,10 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         configureNavBar()
         
         let shouldHide = false
-        FolioReader.shared.readerContainer.shouldHideStatusBar = shouldHide
+        self.readerContainer?.shouldHideStatusBar = shouldHide
         
         UIView.animate(withDuration: 0.25, animations: {
-            FolioReader.shared.readerContainer.setNeedsStatusBarAppearanceUpdate()
+            self.readerContainer?.setNeedsStatusBarAppearanceUpdate()
         })
         navigationController?.setNavigationBarHidden(shouldHide, animated: true)
     }
@@ -363,13 +363,15 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     func toggleBars() {
         if readerConfig.shouldHideNavigationOnTap == false { return }
         
-        let shouldHide = !navigationController!.isNavigationBarHidden
-        if !shouldHide { configureNavBar() }
+        let shouldHide = !self.navigationController!.isNavigationBarHidden
+        if (shouldHide == false) {
+			self.configureNavBar()
+		}
         
-        FolioReader.shared.readerContainer.shouldHideStatusBar = shouldHide
+        self.readerContainer?.shouldHideStatusBar = shouldHide
         
         UIView.animate(withDuration: 0.25, animations: {
-            FolioReader.shared.readerContainer.setNeedsStatusBarAppearanceUpdate()
+            self.readerContainer?.setNeedsStatusBarAppearanceUpdate()
             
             // Show minutes indicator
 //            self.pageIndicatorView.minutesLabel.alpha = shouldHide ? 0 : 1

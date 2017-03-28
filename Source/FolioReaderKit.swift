@@ -83,21 +83,21 @@ open class FolioReader: NSObject {
     fileprivate override init() {}
     
     /// Custom unzip path
-    open var unzipPath: String?
+    open var unzipPath				: String?
     
     /// FolioReaderDelegate
-    open weak var delegate: FolioReaderDelegate?
+    open weak var delegate			: FolioReaderDelegate?
 
-	open weak var readerCenter: FolioReaderCenter? {
-		return self.readerContainer.centerViewController
+	open weak var readerCenter		: FolioReaderCenter? {
+		return self.readerContainer?.centerViewController
 	}
 
 	// TODO_SMF: remove `!`
-    open weak var readerContainer: FolioReaderContainer!
-    open weak var readerAudioPlayer: FolioReaderAudioPlayer?
+    open weak var readerContainer	: FolioReaderContainer?
+    open weak var readerAudioPlayer	: FolioReaderAudioPlayer?
 
 	// TODO_SMF: remove/rename static UserDefaults object.
-	class var defaults : UserDefaults {
+	class var defaults 				: UserDefaults {
 		return UserDefaults.standard
 	}
 
@@ -110,7 +110,7 @@ open class FolioReader: NSObject {
     /// Check if layout needs to change to fit Right To Left
     class var needsRTLChange: Bool {
 		// TODO_SMF: after readerConfig has been migrated, use local variables instead. Plus create a static class getter.
-        return (FolioReader.shared.readerContainer.book?.spine.isRtl == true && readerConfig.scrollDirection == .horizontal)
+        return (FolioReader.shared.readerContainer?.book?.spine.isRtl == true && readerConfig.scrollDirection == .horizontal)
     }
     
     /// Check if current theme is Night mode
