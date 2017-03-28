@@ -54,6 +54,11 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     var scrollDelta: CGFloat!
     var scrollDeltaTimer: Timer!
 
+	fileprivate var readerConfig : FolioReaderConfig {
+		// TODO_SMF: remove this getter
+		return FolioReader.shared.readerContainer!.readerConfig
+	}
+
 	var frame: CGRect! {
 		didSet {
 			self.slider.frame = frame
@@ -74,7 +79,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
         
         // less obtrusive knob and fixes jump: http://stackoverflow.com/a/22301039/484780
         let thumbImg = UIImage(readerImageNamed: "knob")
-        let thumbImgColor = thumbImg!.imageTintColor(readerConfig.tintColor).withRenderingMode(.alwaysOriginal)
+        let thumbImgColor = thumbImg!.imageTintColor(self.readerConfig.tintColor).withRenderingMode(.alwaysOriginal)
         slider.setThumbImage(thumbImgColor, for: UIControlState())
         slider.setThumbImage(thumbImgColor, for: .selected)
         slider.setThumbImage(thumbImgColor, for: .highlighted)
@@ -86,8 +91,8 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     }
     
     func reloadColors() {
-        slider.minimumTrackTintColor = readerConfig.tintColor
-        slider.maximumTrackTintColor = isNight(readerConfig.nightModeSeparatorColor, readerConfig.menuSeparatorColor)
+        slider.minimumTrackTintColor = self.readerConfig.tintColor
+        slider.maximumTrackTintColor = isNight(self.readerConfig.nightModeSeparatorColor, self.readerConfig.menuSeparatorColor)
     }
     
     // MARK: - slider events
@@ -171,11 +176,13 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
         }
     }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard readerConfig.scrollDirection == .vertical || readerConfig.scrollDirection == .defaultVertical || readerConfig.scrollDirection == .horizontalWithVerticalContent else {
-            return
-        }
-        
+	func scrollViewDidScroll(_ scrollView: UIScrollView) {
+		guard (self.readerConfig.scrollDirection == .vertical ||
+			self.readerConfig.scrollDirection == .defaultVertical ||
+			self.readerConfig.scrollDirection == .horizontalWithVerticalContent) else {
+				return
+		}
+
         if visible && usingSlider == false {
             setSliderVal()
         }

@@ -13,8 +13,8 @@ import UIKit
 
 // MARK: - Internal constants for devices
 
-internal let isPad = UIDevice.current.userInterfaceIdiom == .pad
-internal let isPhone = UIDevice.current.userInterfaceIdiom == .phone
+internal let isPad = (UIDevice.current.userInterfaceIdiom == .pad)
+internal let isPhone = (UIDevice.current.userInterfaceIdiom == .phone)
 
 // TODO_SMF: create constant file
 
@@ -88,13 +88,12 @@ open class FolioReader: NSObject {
     /// FolioReaderDelegate
     open weak var delegate			: FolioReaderDelegate?
 
+	// TODO_SMF_QUESTION: male those fileprivate (or internal) to avoid public access from other class?
+    open weak var readerContainer	: FolioReaderContainer?
+    open weak var readerAudioPlayer	: FolioReaderAudioPlayer?
 	open weak var readerCenter		: FolioReaderCenter? {
 		return self.readerContainer?.centerViewController
 	}
-
-	// TODO_SMF: remove `!`
-    open weak var readerContainer	: FolioReaderContainer?
-    open weak var readerAudioPlayer	: FolioReaderAudioPlayer?
 
 	// TODO_SMF: remove/rename static UserDefaults object.
 	class var defaults 				: UserDefaults {
@@ -108,9 +107,8 @@ open class FolioReader: NSObject {
     var isReaderReady = false
     
     /// Check if layout needs to change to fit Right To Left
-    class var needsRTLChange: Bool {
-		// TODO_SMF: after readerConfig has been migrated, use local variables instead. Plus create a static class getter.
-        return (FolioReader.shared.readerContainer?.book?.spine.isRtl == true && readerConfig.scrollDirection == .horizontal)
+    var needsRTLChange: Bool {
+        return (self.readerContainer?.book?.spine.isRtl == true && self.readerContainer?.readerConfig.scrollDirection == .horizontal)
     }
     
     /// Check if current theme is Night mode
@@ -127,7 +125,7 @@ open class FolioReader: NSObject {
 					readerCenter.pageIndicatorView?.reloadColors()
 					readerCenter.configureNavBar()
 					readerCenter.scrollScrubber?.reloadColors()
-					readerCenter.collectionView.backgroundColor = (self.nightMode ? readerConfig.nightModeBackground : UIColor.white)
+					readerCenter.collectionView.backgroundColor = (self.nightMode ? self.readerContainer?.readerConfig.nightModeBackground : UIColor.white)
 					}, completion: { (finished: Bool) in
 						// TODO_SMF: add constant
 						NotificationCenter.default.post(name: Notification.Name(rawValue: "needRefreshPageMode"), object: nil)
@@ -351,6 +349,11 @@ extension FolioReader {
 			FolioReader.shared.currentHighlightStyle = value
 		}
 	}
+
+	/// Check if layout needs to change to fit Right To Left
+	open class var needsRTLChange: Bool {
+		return FolioReader.shared.needsRTLChange
+	}
 }
 
 // MARK: - Application State
@@ -404,10 +407,11 @@ func isNight<T> (_ f: T, _ l: T) -> T {
  - returns: The right value based on direction.
  */
 func isDirection<T> (_ vertical: T, _ horizontal: T, _ horizontalContentVertical: T? = nil) -> T {
-	switch readerConfig.scrollDirection {
-	case .vertical, .defaultVertical: return vertical
-	case .horizontal: return horizontal
-	case .horizontalWithVerticalContent: return horizontalContentVertical ?? vertical
+	let direction = (FolioReader.shared.readerContainer?.readerConfig.scrollDirection ?? .defaultVertical)
+	switch direction {
+	case .vertical, .defaultVertical: 		return vertical
+	case .horizontal: 						return horizontal
+	case .horizontalWithVerticalContent: 	return (horizontalContentVertical ?? vertical)
 	}
 }
 
@@ -717,7 +721,7 @@ internal extension UIImage {
      - returns: Returns a colored image
      */
     func ignoreSystemTint() -> UIImage {
-        return self.imageTintColor(readerConfig.tintColor).withRenderingMode(.alwaysOriginal)
+        return self.imageTintColor(FolioReader.shared.readerContainer!.readerConfig.tintColor).withRenderingMode(.alwaysOriginal)
     }
     
     /**

@@ -9,20 +9,17 @@
 import UIKit
 import FontBlaster
 
-// TODO_SMF: remove static variables
-var readerConfig: FolioReaderConfig!
-
 /// Reader container
 open class FolioReaderContainer		: UIViewController {
 
-	// TODO_SMF: remove `!`
-    var centerNavigationController	: UINavigationController!
-	var centerViewController		: FolioReaderCenter!
+    var centerNavigationController	: UINavigationController?
+	var centerViewController		: FolioReaderCenter?
     var audioPlayer					: FolioReaderAudioPlayer?
     var shouldHideStatusBar 		= true
     var shouldRemoveEpub 			= true
     var epubPath					: String?
 	var book						: FRBook?
+	var readerConfig				: FolioReaderConfig
 
 	fileprivate var folioReader		: FolioReader?
     fileprivate var errorOnLoad 	= false
@@ -39,20 +36,19 @@ open class FolioReaderContainer		: UIViewController {
      - returns: `self`, initialized using the `FolioReaderConfig`.
      */
 	public init(withConfig config: FolioReaderConfig, folioReader: FolioReader, epubPath path: String, removeEpub: Bool = true) {
-        super.init(nibName: nil, bundle: Bundle.frameworkBundle())
-        
-        readerConfig = config
+		self.readerConfig = config
 		self.folioReader = folioReader
         self.epubPath = path
         self.shouldRemoveEpub = removeEpub
-        
+
+		super.init(nibName: nil, bundle: Bundle.frameworkBundle())
+		
 		self.initialization()
     }
     
     required public init?(coder aDecoder: NSCoder) {
-		super.init(coder: aDecoder)
-        
-        self.initialization()
+		// TODO_SMF_QUESTION: is that ok? do 'we' really support NSCoding?
+		fatalError("This class doesn't support NSCoding.")
     }
     
     /**
@@ -85,7 +81,7 @@ open class FolioReaderContainer		: UIViewController {
      - parameter removeEpub: Should delete the original file after unzip? Default to `true` so the ePub will be unziped only once.
      */
     open func setupConfig(_ config: FolioReaderConfig, folioReader: FolioReader, epubPath path: String, removeEpub: Bool = true) {
-        readerConfig = config
+        self.readerConfig = config
 		self.folioReader = folioReader
         self.epubPath = path
         self.shouldRemoveEpub = removeEpub
@@ -95,34 +91,42 @@ open class FolioReaderContainer		: UIViewController {
     
     override open func viewDidLoad() {
         super.viewDidLoad()
-        
-        readerConfig.canChangeScrollDirection = isDirection(readerConfig.canChangeScrollDirection, readerConfig.canChangeScrollDirection, false)
+
+		// TODO_SMF: wtf
+		let canChangeScrollDirection = self.readerConfig.canChangeScrollDirection
+        self.readerConfig.canChangeScrollDirection = isDirection(canChangeScrollDirection, canChangeScrollDirection, false)
         
         // If user can change scroll direction use the last saved
-        if readerConfig.canChangeScrollDirection {
+        if (self.readerConfig.canChangeScrollDirection == true) {
             var scrollDirection = (FolioReaderScrollDirection(rawValue: (self.folioReader?.currentScrollDirection ?? 0)) ?? .vertical)
 
-            if (scrollDirection == .defaultVertical && readerConfig.scrollDirection != .defaultVertical) {
-                scrollDirection = readerConfig.scrollDirection
+            if (scrollDirection == .defaultVertical && self.readerConfig.scrollDirection != .defaultVertical) {
+                scrollDirection = self.readerConfig.scrollDirection
             }
 
-            readerConfig.scrollDirection = scrollDirection
+            self.readerConfig.scrollDirection = scrollDirection
         }
 
-		readerConfig.shouldHideNavigationOnTap = ((readerConfig.hideBars == true) ? true : readerConfig.shouldHideNavigationOnTap)
+		let hideBars = (self.readerConfig.hideBars ?? false)
+		self.readerConfig.shouldHideNavigationOnTap = ((hideBars == true) ? true : self.readerConfig.shouldHideNavigationOnTap)
 
 		self.centerViewController = FolioReaderCenter(withContainer: self)
 
-        self.centerNavigationController = UINavigationController(rootViewController: self.centerViewController)
-        self.centerNavigationController.setNavigationBarHidden(readerConfig.shouldHideNavigationOnTap, animated: false)
-        self.view.addSubview(self.centerNavigationController.view)
-        self.addChildViewController(self.centerNavigationController)
-        self.centerNavigationController.didMove(toParentViewController: self)
+		if let rootViewController = self.centerViewController {
+			self.centerNavigationController = UINavigationController(rootViewController: rootViewController)
+		}
 
-		if (readerConfig.hideBars == true) {
-			readerConfig.shouldHideNavigationOnTap = false
+        self.centerNavigationController?.setNavigationBarHidden(self.readerConfig.shouldHideNavigationOnTap, animated: false)
+		if let _centerNavigationController = self.centerNavigationController {
+        	self.view.addSubview(_centerNavigationController.view)
+        	self.addChildViewController(_centerNavigationController)
+		}
+        self.centerNavigationController?.didMove(toParentViewController: self)
+
+		if (self.readerConfig.hideBars == true) {
+			self.readerConfig.shouldHideNavigationOnTap = false
 			self.navigationController?.navigationBar.isHidden = true
-			self.centerViewController.pageIndicatorHeight = 0
+			self.centerViewController?.pageIndicatorHeight = 0
 		}
 
         // Read async book
@@ -146,11 +150,11 @@ open class FolioReaderContainer		: UIViewController {
             DispatchQueue.main.async(execute: {
                 
                 // Add audio player if needed
-                if (self.book?.hasAudio() == true || readerConfig.enableTTS) {
+                if (self.book?.hasAudio() == true || self.readerConfig.enableTTS == true) {
                     self.addAudioPlayer()
                 }
                 
-                self.centerViewController.reloadData()
+                self.centerViewController?.reloadData()
                 
                 self.folioReader?.isReaderReady = true
 
@@ -184,7 +188,7 @@ open class FolioReaderContainer		: UIViewController {
     // MARK: - Status Bar
     
     override open var prefersStatusBarHidden: Bool {
-        return (readerConfig.shouldHideNavigationOnTap == false ? false : shouldHideStatusBar)
+        return (self.readerConfig.shouldHideNavigationOnTap == false ? false : self.shouldHideStatusBar)
     }
     
     override open var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {

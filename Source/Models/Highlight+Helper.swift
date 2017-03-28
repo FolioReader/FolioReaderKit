@@ -80,6 +80,11 @@ public typealias Completion = (_ error: NSError?) -> ()
 
 extension Highlight {
 
+	fileprivate static var readerConfig : FolioReaderConfig {
+		// TODO_SMF: remove this getter
+		return FolioReader.shared.readerContainer!.readerConfig
+	}
+
 	// TODO_SMF: replace try with a 'do-try-catch' or at least a 'try?'.
 
     /**
@@ -89,7 +94,7 @@ extension Highlight {
      */
     public func persist(_ completion: Completion? = nil) {
         do {
-            let realm = try! Realm(configuration: readerConfig.realmConfiguration)
+            let realm = try! Realm(configuration: Highlight.readerConfig.realmConfiguration)
             realm.beginWrite()
             realm.add(self, update: true)
             try realm.commitWrite()
@@ -105,7 +110,7 @@ extension Highlight {
      */
     public func remove() {
         do {
-            let realm = try! Realm(configuration: readerConfig.realmConfiguration)
+            let realm = try! Realm(configuration: Highlight.readerConfig.realmConfiguration)
             realm.beginWrite()
             realm.delete(self)
             try realm.commitWrite()
@@ -123,7 +128,7 @@ extension Highlight {
         var highlight: Highlight?
         let predicate = NSPredicate(format:"highlightId = %@", highlightId)
         
-        let realm = try! Realm(configuration: readerConfig.realmConfiguration)
+        let realm = try! Realm(configuration: self.readerConfig.realmConfiguration)
         highlight = realm.objects(Highlight.self).filter(predicate).toArray(Highlight.self).first
         highlight?.remove()
     }
@@ -138,7 +143,7 @@ extension Highlight {
         var highlight: Highlight?
         let predicate = NSPredicate(format:"highlightId = %@", highlightId)
         do {
-            let realm = try! Realm(configuration: readerConfig.realmConfiguration)
+            let realm = try! Realm(configuration: self.readerConfig.realmConfiguration)
             highlight = realm.objects(Highlight.self).filter(predicate).toArray(Highlight.self).first
             realm.beginWrite()
             
@@ -162,7 +167,7 @@ extension Highlight {
     public static func allByBookId(_ bookId: String, andPage page: NSNumber? = nil) -> [Highlight] {
         var highlights: [Highlight]?
         let predicate = (page != nil) ? NSPredicate(format: "bookId = %@ && page = %@", bookId, page!) : NSPredicate(format: "bookId = %@", bookId)
-        let realm = try! Realm(configuration: readerConfig.realmConfiguration)
+        let realm = try! Realm(configuration: self.readerConfig.realmConfiguration)
         highlights = realm.objects(Highlight.self).filter(predicate).toArray(Highlight.self)
         return highlights!
     }
@@ -174,7 +179,7 @@ extension Highlight {
      */
     public static func all() -> [Highlight] {
         var highlights: [Highlight]?
-        let realm = try! Realm(configuration: readerConfig.realmConfiguration)
+        let realm = try! Realm(configuration: self.readerConfig.realmConfiguration)
         highlights = realm.objects(Highlight.self).toArray(Highlight.self)
         return highlights!
     }

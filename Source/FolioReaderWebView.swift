@@ -19,10 +19,15 @@ open class FolioReaderWebView: UIWebView {
 		return FolioReader.shared.readerContainer?.book
 	}
 
+	fileprivate var readerConfig : FolioReaderConfig {
+		// TODO_SMF: remove this getter
+		return FolioReader.shared.readerContainer!.readerConfig
+	}
+
 	// MARK: - UIMenuController
 
 	open override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-		guard readerConfig != nil && readerConfig.useReaderMenuController == true else {
+		guard (self.readerConfig.useReaderMenuController == true) else {
 			return super.canPerformAction(action, withSender: sender)
 		}
         
@@ -33,9 +38,9 @@ open class FolioReaderWebView: UIWebView {
 		} else {
 			if action == #selector(highlight(_:))
 				|| (action == #selector(define(_:)) && isOneWord)
-                || (action == #selector(play(_:)) && (self.book?.hasAudio() == true || readerConfig.enableTTS))
-				|| (action == #selector(share(_:)) && readerConfig.allowSharing)
-				|| (action == #selector(copy(_:)) && readerConfig.allowSharing) {
+                || (action == #selector(play(_:)) && (self.book?.hasAudio() == true || self.readerConfig.enableTTS == true))
+				|| (action == #selector(share(_:)) && self.readerConfig.allowSharing == true)
+				|| (action == #selector(copy(_:)) && self.readerConfig.allowSharing == true) {
 				return true
 			}
 			return false
@@ -47,7 +52,7 @@ open class FolioReaderWebView: UIWebView {
 	func share(_ sender: UIMenuController) {
 		let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
-		let shareImage = UIAlertAction(title: readerConfig.localizedShareImageQuote, style: .default, handler: { (action) -> Void in
+		let shareImage = UIAlertAction(title: self.readerConfig.localizedShareImageQuote, style: .default, handler: { (action) -> Void in
 			if self.isShare {
 				if let textToShare = self.js("getHighlightContent()") {
 					FolioReader.shared.readerCenter?.presentQuoteShare(textToShare)
@@ -62,7 +67,7 @@ open class FolioReaderWebView: UIWebView {
 			self.setMenuVisible(false)
 		})
 
-		let shareText = UIAlertAction(title: readerConfig.localizedShareTextQuote, style: .default) { (action) -> Void in
+		let shareText = UIAlertAction(title: self.readerConfig.localizedShareTextQuote, style: .default) { (action) -> Void in
 			if self.isShare {
 				if let textToShare = self.js("getHighlightContent()") {
 					FolioReader.shared.readerCenter?.shareHighlight(textToShare, rect: sender.menuFrame)
@@ -75,7 +80,7 @@ open class FolioReaderWebView: UIWebView {
 			self.setMenuVisible(false)
 		}
 
-		let cancel = UIAlertAction(title: readerConfig.localizedCancel, style: .cancel, handler: nil)
+		let cancel = UIAlertAction(title: self.readerConfig.localizedCancel, style: .cancel, handler: nil)
 
 		alertController.addAction(shareImage)
 		alertController.addAction(shareText)
@@ -136,7 +141,7 @@ open class FolioReaderWebView: UIWebView {
 		self.clearTextSelection()
 
 		let vc = UIReferenceLibraryViewController(term: selectedText! )
-		vc.view.tintColor = readerConfig.tintColor
+		vc.view.tintColor = self.readerConfig.tintColor
 		FolioReader.shared.readerContainer?.show(vc, sender: nil)
 	}
 
@@ -178,7 +183,7 @@ open class FolioReaderWebView: UIWebView {
 	// MARK: - Create and show menu
 
 	func createMenu(options: Bool) {
-		guard readerConfig.useReaderMenuController else {
+		guard (self.readerConfig.useReaderMenuController == true) else {
 			return
 		}
 
@@ -195,9 +200,9 @@ open class FolioReaderWebView: UIWebView {
 
         let menuController = UIMenuController.shared
         
-		let highlightItem = UIMenuItem(title: readerConfig.localizedHighlightMenu, action: #selector(highlight(_:)))
-		let playAudioItem = UIMenuItem(title: readerConfig.localizedPlayMenu, action: #selector(play(_:)))
-		let defineItem = UIMenuItem(title: readerConfig.localizedDefineMenu, action: #selector(define(_:)))
+		let highlightItem = UIMenuItem(title: self.readerConfig.localizedHighlightMenu, action: #selector(highlight(_:)))
+		let playAudioItem = UIMenuItem(title: self.readerConfig.localizedPlayMenu, action: #selector(play(_:)))
+		let defineItem = UIMenuItem(title: self.readerConfig.localizedDefineMenu, action: #selector(define(_:)))
         let colorsItem = UIMenuItem(title: "C", image: colors) { [weak self] _ in
             self?.colors(menuController)
         }
@@ -228,7 +233,7 @@ open class FolioReaderWebView: UIWebView {
         // menu on existing highlight
         if isShare {
             menuItems = [colorsItem, removeItem]
-            if readerConfig.allowSharing {
+            if (self.readerConfig.allowSharing == true) {
                 menuItems.append(shareItem)
             }
         } else if isColors {
@@ -238,11 +243,11 @@ open class FolioReaderWebView: UIWebView {
             // default menu
             menuItems = [highlightItem, defineItem, shareItem]
             
-            if (self.book?.hasAudio() == true || readerConfig.enableTTS) {
+            if (self.book?.hasAudio() == true || self.readerConfig.enableTTS == true) {
                 menuItems.insert(playAudioItem, at: 0)
             }
             
-            if !readerConfig.allowSharing {
+            if (self.readerConfig.allowSharing == false) {
                 menuItems.removeLast()
             }
         }
@@ -284,7 +289,7 @@ open class FolioReaderWebView: UIWebView {
 	}
 
 	func setupScrollDirection() {
-		switch readerConfig.scrollDirection {
+		switch self.readerConfig.scrollDirection {
 		case .vertical, .defaultVertical, .horizontalWithVerticalContent:
 			scrollView.isPagingEnabled = false
 			paginationMode = .unpaginated

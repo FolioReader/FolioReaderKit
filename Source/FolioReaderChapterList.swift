@@ -31,14 +31,19 @@ class FolioReaderChapterList: UITableViewController {
 		return FolioReader.shared.readerContainer?.book
 	}
 
+	fileprivate var readerConfig : FolioReaderConfig {
+		// TODO_SMF: remove this getter
+		return FolioReader.shared.readerContainer!.readerConfig
+	}
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Register cell classes
         self.tableView.register(FolioReaderChapterListCell.self, forCellReuseIdentifier: reuseIdentifier)
         self.tableView.separatorInset = UIEdgeInsets.zero
-        self.tableView.backgroundColor = isNight(readerConfig.nightModeMenuBackground, readerConfig.menuBackgroundColor)
-        self.tableView.separatorColor = isNight(readerConfig.nightModeSeparatorColor, readerConfig.menuSeparatorColor)
+        self.tableView.backgroundColor = isNight(self.readerConfig.nightModeMenuBackground, self.readerConfig.menuBackgroundColor)
+        self.tableView.separatorColor = isNight(self.readerConfig.nightModeSeparatorColor, self.readerConfig.menuSeparatorColor)
         
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 50
@@ -81,7 +86,7 @@ class FolioReaderChapterList: UITableViewController {
 			let reference = self.book?.spine.spineReferences[safe: currentPageNumber - 1],
 			(tocReference.resource != nil) {
             	let resource = reference.resource
-            	cell.indexLabel.textColor = (tocReference.resource == resource ? readerConfig.tintColor : readerConfig.menuTextColor)
+            	cell.indexLabel.textColor = (tocReference.resource == resource ? self.readerConfig.tintColor : self.readerConfig.menuTextColor)
         }
         
         cell.layoutMargins = UIEdgeInsets.zero

@@ -48,7 +48,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 	/// This delegate receives the events from current page
 	open weak var pageDelegate		: FolioReaderPageDelegate?
 
-	open weak var readerContainer	: FolioReaderContainer?
+	open var readerContainer		: FolioReaderContainer
 
     /// The current visible page on reader
     open fileprivate(set) var currentPage: FolioReaderPage?
@@ -76,22 +76,27 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 	fileprivate var currentOrientation: UIInterfaceOrientation?
 
 	fileprivate var book : FRBook? {
-		return self.readerContainer?.book
+		// TODO_SMF: remove optional
+		return self.readerContainer.book
+	}
+
+	fileprivate var readerConfig : FolioReaderConfig {
+		return self.readerContainer.readerConfig
 	}
 
     // MARK: - Init
     
 	init(withContainer readerContainer: FolioReaderContainer) {
-        super.init(nibName: nil, bundle: Bundle.frameworkBundle())
-
 		self.readerContainer = readerContainer
+		super.init(nibName: nil, bundle: Bundle.frameworkBundle())
+
+
 		self.initialization()
     }
-    
-    required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
 
-		self.initialization()
+    required public init?(coder aDecoder: NSCoder) {
+		// TODO_SMF_QUESTION: is that ok? do 'we' really support NSCoding? 
+        fatalError("This class doesn't support NSCoding.")
     }
     
     /**
@@ -99,7 +104,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
      */
     fileprivate func initialization() {
         
-        if (readerConfig.hideBars == true) {
+        if (self.readerConfig.hideBars == true) {
             self.pageIndicatorHeight = 0
         }
         
@@ -127,7 +132,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         collectionViewLayout.minimumInteritemSpacing = 0
         collectionViewLayout.scrollDirection = .direction()
         
-        let background = isNight(readerConfig.nightModeBackground, UIColor.white)
+        let background = isNight(self.readerConfig.nightModeBackground, UIColor.white)
         view.backgroundColor = background
         
         // CollectionView
@@ -156,7 +161,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         configureNavBar()
 
 		// Page indicator view
-        if !readerConfig.hidePageIndicator {
+		if (self.readerConfig.hidePageIndicator == false) {
             pageIndicatorView = FolioReaderPageIndicator(frame: self.frameForPageIndicatorView())
             if let pageIndicatorView = pageIndicatorView {
                 view.addSubview(pageIndicatorView)
@@ -209,12 +214,12 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 	}
 
 	fileprivate func frameForScrollScrubber() -> CGRect {
-		let scrubberY: CGFloat = ((readerConfig.shouldHideNavigationOnTap == true || readerConfig.hideBars == true) ? 50 : 74)
+		let scrubberY: CGFloat = ((self.readerConfig.shouldHideNavigationOnTap == true || self.readerConfig.hideBars == true) ? 50 : 74)
 		return CGRect(x: pageWidth + 10, y: scrubberY, width: 40, height: pageHeight - 100)
 	}
 
     func configureNavBar() {
-        let navBackground = isNight(readerConfig.nightModeMenuBackground, UIColor.white)
+        let navBackground = isNight(self.readerConfig.nightModeMenuBackground, UIColor.white)
         let tintColor = readerConfig.tintColor
         let navText = isNight(UIColor.white, UIColor.black)
         let font = UIFont(name: "Avenir-Light", size: 17)!
@@ -238,11 +243,11 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         
         var rightBarIcons = [UIBarButtonItem]()
 
-        if readerConfig.allowSharing {
+        if (self.readerConfig.allowSharing == true) {
             rightBarIcons.append(UIBarButtonItem(image: shareIcon, style: .plain, target: self, action:#selector(shareChapter(_:))))
         }
 
-        if (self.book?.hasAudio() == true || readerConfig.enableTTS) {
+        if (self.book?.hasAudio() == true || self.readerConfig.enableTTS == true) {
             rightBarIcons.append(UIBarButtonItem(image: audioIcon, style: .plain, target: self, action:#selector(presentPlayerMenu(_:))))
         }
         
@@ -301,14 +306,14 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         pageOffsetRate = pageScrollView.contentOffset.forDirection() / pageScrollView.contentSize.forDirection()
         
         // Change layout
-        readerConfig.scrollDirection = direction
-        collectionViewLayout.scrollDirection = .direction()
-        currentPage.setNeedsLayout()
-        collectionView.collectionViewLayout.invalidateLayout()
-        collectionView.setContentOffset(frameForPage(currentPageNumber).origin, animated: false)
+        self.readerConfig.scrollDirection = direction
+        self.collectionViewLayout.scrollDirection = .direction()
+        self.currentPage?.setNeedsLayout()
+        self.collectionView.collectionViewLayout.invalidateLayout()
+        self.collectionView.setContentOffset(frameForPage(currentPageNumber).origin, animated: false)
         
         // Page progressive direction
-        setCollectionViewProgressiveDirection()
+        self.setCollectionViewProgressiveDirection()
         delay(0.2) { self.setPageProgressiveDirection(currentPage) }
         
         
@@ -320,7 +325,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
             var pageOffset = pageScrollView.contentSize.forDirection() * self.pageOffsetRate
             
             // Fix the offset for paged scroll
-            if readerConfig.scrollDirection == .horizontal {
+            if (self.readerConfig.scrollDirection == .horizontal) {
                 let page = round(pageOffset / pageWidth)
                 pageOffset = page * pageWidth
             }
@@ -332,51 +337,55 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 
     // MARK: Status bar and Navigation bar
 
+	// TODO_SMF: refactor similar code
     func hideBars() {
 
-        if readerConfig.shouldHideNavigationOnTap == false { return }
+        guard (self.readerConfig.shouldHideNavigationOnTap == true) else {
+			return
+		}
 
-        let shouldHide = true
-        self.readerContainer?.shouldHideStatusBar = shouldHide
+        self.readerContainer.shouldHideStatusBar = true
         
         UIView.animate(withDuration: 0.25, animations: {
-            self.readerContainer?.setNeedsStatusBarAppearanceUpdate()
+            self.readerContainer.setNeedsStatusBarAppearanceUpdate()
             
             // Show minutes indicator
 //            self.pageIndicatorView.minutesLabel.alpha = 0
         })
-        navigationController?.setNavigationBarHidden(shouldHide, animated: true)
+        navigationController?.setNavigationBarHidden(true, animated: true)
     }
     
     func showBars() {
         configureNavBar()
         
-        let shouldHide = false
-        self.readerContainer?.shouldHideStatusBar = shouldHide
+        let shouldHide =
+        self.readerContainer.shouldHideStatusBar = false
         
         UIView.animate(withDuration: 0.25, animations: {
-            self.readerContainer?.setNeedsStatusBarAppearanceUpdate()
+            self.readerContainer.setNeedsStatusBarAppearanceUpdate()
         })
-        navigationController?.setNavigationBarHidden(shouldHide, animated: true)
+        navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
     func toggleBars() {
-        if readerConfig.shouldHideNavigationOnTap == false { return }
+        guard (self.readerConfig.shouldHideNavigationOnTap == true) else {
+			return
+		}
         
-        let shouldHide = !self.navigationController!.isNavigationBarHidden
+        let shouldHide = (!self.navigationController!.isNavigationBarHidden)
         if (shouldHide == false) {
 			self.configureNavBar()
 		}
         
-        self.readerContainer?.shouldHideStatusBar = shouldHide
+        self.readerContainer.shouldHideStatusBar = shouldHide
         
         UIView.animate(withDuration: 0.25, animations: {
-            self.readerContainer?.setNeedsStatusBarAppearanceUpdate()
+            self.readerContainer.setNeedsStatusBarAppearanceUpdate()
             
             // Show minutes indicator
 //            self.pageIndicatorView.minutesLabel.alpha = shouldHide ? 0 : 1
         })
-        navigationController?.setNavigationBarHidden(shouldHide, animated: true)
+        self.navigationController?.setNavigationBarHidden(shouldHide, animated: true)
     }
     
     // MARK: UICollectionViewDataSource
@@ -402,44 +411,47 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         setPageProgressiveDirection(cell)
         
         // Configure the cell
-		if let resource = self.book?.spine.spineReferences[(indexPath as NSIndexPath).row].resource,
-            var html = try? String(contentsOfFile: resource.fullHref, encoding: String.Encoding.utf8) {
-			let mediaOverlayStyleColors = "\"\(readerConfig.mediaOverlayColor.hexString(false))\", \"\(readerConfig.mediaOverlayColor.highlightColor().hexString(false))\""
-
-			// Inject CSS
-			let jsFilePath = Bundle.frameworkBundle().path(forResource: "Bridge", ofType: "js")
-			let cssFilePath = Bundle.frameworkBundle().path(forResource: "Style", ofType: "css")
-			let cssTag = "<link rel=\"stylesheet\" type=\"text/css\" href=\"\(cssFilePath!)\">"
-			let jsTag = "<script type=\"text/javascript\" src=\"\(jsFilePath!)\"></script>" +
-				"<script type=\"text/javascript\">setMediaOverlayStyleColors(\(mediaOverlayStyleColors))</script>"
-
-			let toInject = "\n\(cssTag)\n\(jsTag)\n</head>"
-			html = html.replacingOccurrences(of: "</head>", with: toInject)
-
-			// Font class name
-			var classes = FolioReader.currentFont.cssIdentifier
-			classes += " "+FolioReader.currentMediaOverlayStyle.className()
-
-			// Night mode
-			if FolioReader.nightMode {
-				classes += " nightMode"
-			}
-
-			// Font Size
-			classes += " \(FolioReader.currentFontSize.cssIdentifier)"
-
-			html = html.replacingOccurrences(of: "<html ", with: "<html class=\"\(classes)\"")
-
-			// Let the delegate adjust the html string
-			if let modifiedHtmlContent = self.delegate?.htmlContentForPage?(cell, htmlContent: html) {
-				html = modifiedHtmlContent
-			}
-
-			cell.loadHTMLString(html, baseURL: URL(fileURLWithPath: (resource.fullHref as NSString).deletingLastPathComponent))
+		guard
+			let resource = self.book?.spine.spineReferences[(indexPath as NSIndexPath).row].resource,
+			var html = try? String(contentsOfFile: resource.fullHref, encoding: String.Encoding.utf8) else {
+				return cell
 		}
 
-        return cell
-    }
+		let mediaOverlayStyleColors = "\"\(self.readerConfig.mediaOverlayColor.hexString(false))\", \"\(self.readerConfig.mediaOverlayColor.highlightColor().hexString(false))\""
+
+		// Inject CSS
+		let jsFilePath = Bundle.frameworkBundle().path(forResource: "Bridge", ofType: "js")
+		let cssFilePath = Bundle.frameworkBundle().path(forResource: "Style", ofType: "css")
+		let cssTag = "<link rel=\"stylesheet\" type=\"text/css\" href=\"\(cssFilePath!)\">"
+		let jsTag = "<script type=\"text/javascript\" src=\"\(jsFilePath!)\"></script>" +
+		"<script type=\"text/javascript\">setMediaOverlayStyleColors(\(mediaOverlayStyleColors))</script>"
+
+		let toInject = "\n\(cssTag)\n\(jsTag)\n</head>"
+		html = html.replacingOccurrences(of: "</head>", with: toInject)
+
+		// Font class name
+		var classes = FolioReader.currentFont.cssIdentifier
+		classes += " "+FolioReader.currentMediaOverlayStyle.className()
+
+		// Night mode
+		if FolioReader.nightMode {
+			classes += " nightMode"
+		}
+
+		// Font Size
+		classes += " \(FolioReader.currentFontSize.cssIdentifier)"
+
+		html = html.replacingOccurrences(of: "<html ", with: "<html class=\"\(classes)\"")
+
+		// Let the delegate adjust the html string
+		if let modifiedHtmlContent = self.delegate?.htmlContentForPage?(cell, htmlContent: html) {
+			html = modifiedHtmlContent
+		}
+
+		cell.loadHTMLString(html, baseURL: URL(fileURLWithPath: (resource.fullHref as NSString).deletingLastPathComponent))
+
+		return cell
+	}
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
@@ -513,7 +525,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         var pageOffset = currentPage.webView.scrollView.contentSize.forDirection() * pageOffsetRate
         
         // Fix the offset for paged scroll
-        if readerConfig.scrollDirection == .horizontal {
+        if (self.readerConfig.scrollDirection == .horizontal && pageWidth != 0) {
             let page = round(pageOffset / pageWidth)
             pageOffset = page * pageWidth
         }

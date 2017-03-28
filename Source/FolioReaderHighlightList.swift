@@ -11,14 +11,19 @@ import UIKit
 class FolioReaderHighlightList: UITableViewController {
 
     var highlights: [Highlight]!
-    
+
+	fileprivate var readerConfig : FolioReaderConfig {
+		// TODO_SMF: remove this getter
+		return FolioReader.shared.readerContainer!.readerConfig
+	}
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)       
-        tableView.separatorInset = UIEdgeInsets.zero
-        tableView.backgroundColor = isNight(readerConfig.nightModeMenuBackground, readerConfig.menuBackgroundColor)
-        tableView.separatorColor = isNight(readerConfig.nightModeSeparatorColor, readerConfig.menuSeparatorColor)
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
+        self.tableView.separatorInset = UIEdgeInsets.zero
+        self.tableView.backgroundColor = isNight(self.readerConfig.nightModeMenuBackground, self.readerConfig.menuBackgroundColor)
+        self.tableView.separatorColor = isNight(self.readerConfig.nightModeSeparatorColor, self.readerConfig.menuSeparatorColor)
         
         highlights = Highlight.allByBookId((kBookId as NSString).deletingPathExtension)
     }
@@ -41,7 +46,7 @@ class FolioReaderHighlightList: UITableViewController {
         
         // Format date
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = readerConfig.localizedHighlightsDateFormat
+        dateFormatter.dateFormat = self.readerConfig.localizedHighlightsDateFormat
         let dateString = dateFormatter.string(from: highlight.date)
         
         // Date
@@ -66,7 +71,7 @@ class FolioReaderHighlightList: UITableViewController {
         let range = NSRange(location: 0, length: text.length)
         let paragraph = NSMutableParagraphStyle()
         paragraph.lineSpacing = 3
-        let textColor = isNight(readerConfig.menuTextColor, UIColor.black)
+        let textColor = isNight(self.readerConfig.menuTextColor, UIColor.black)
         
         text.addAttribute(NSParagraphStyleAttributeName, value: paragraph, range: range)
         text.addAttribute(NSFontAttributeName, value: UIFont(name: "Avenir-Light", size: 16)!, range: range)

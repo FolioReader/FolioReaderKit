@@ -15,7 +15,12 @@ class PageViewController: UIPageViewController {
     var viewControllerOne: UIViewController!
     var viewControllerTwo: UIViewController!
     var index = FolioReader.defaults.integer(forKey: kCurrentTOCMenu)
-    
+
+	fileprivate var readerConfig : FolioReaderConfig {
+		// TODO_SMF: remove this getter
+		return FolioReader.shared.readerContainer!.readerConfig
+	}
+
     // MARK: Init
     
     override init(transitionStyle style: UIPageViewControllerTransitionStyle, navigationOrientation: UIPageViewControllerNavigationOrientation, options: [String : Any]?) {
@@ -67,8 +72,8 @@ class PageViewController: UIPageViewController {
     }
     
     func configureNavBar() {
-        let navBackground = isNight(readerConfig.nightModeMenuBackground, UIColor.white)
-        let tintColor = readerConfig.tintColor
+        let navBackground = isNight(self.readerConfig.nightModeMenuBackground, UIColor.white)
+        let tintColor = self.readerConfig.tintColor
         let navText = isNight(UIColor.white, UIColor.black)
         let font = UIFont(name: "Avenir-Light", size: 17)!
         setTranslucentNavigation(false, color: navBackground, tintColor: tintColor, titleColor: navText, andFont: font)
