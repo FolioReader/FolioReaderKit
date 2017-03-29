@@ -31,11 +31,6 @@ import JSQWebViewController
 
 open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate {
 
-	fileprivate var readerConfig : FolioReaderConfig {
-		// TODO_SMF: remove this getter
-		return FolioReader.shared.readerContainer!.readerConfig
-	}
-
     weak var delegate: FolioReaderPageDelegate?
 	// TODO_SMF: remove `!`
 	/// The index of the current page. Note: The index start at 1!
@@ -45,15 +40,21 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     fileprivate var shouldShowBar = true
     fileprivate var menuIsVisible = false
 
-	fileprivate var book: FRBook? {
-		// TODO_SMF: remove this getter
-		return FolioReader.shared.readerContainer?.book
-	}
-    
+	fileprivate var readerConfig: FolioReaderConfig
+	fileprivate var book: FRBook?
+
     // MARK: - View life cicle
-    
-    override public init(frame: CGRect) {
-        super.init(frame: frame)
+
+	public override init(frame: CGRect) {
+		// Init reader config with a default one. Later the current one must be configured through the setup function.
+		self.readerConfig = FolioReaderConfig()
+		super.init(frame: frame)
+	}
+
+	public func setup(withReaderConfig readerConfig: FolioReaderConfig, book: FRBook?) {
+		self.readerConfig = readerConfig
+		self.book = book
+
         self.backgroundColor = UIColor.clear
         
         // TODO: Put the notification name in a Constants file
@@ -86,7 +87,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     required public init?(coder aDecoder: NSCoder) {
         fatalError("storyboards are incompatible with truth and beauty")
     }
-    
+
     deinit {
         webView.scrollView.delegate = nil
         NotificationCenter.default.removeObserver(self)
@@ -112,9 +113,9 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
         return CGRect(
             x: bounds.origin.x,
-            y: isDirection(bounds.origin.y + navTotal, bounds.origin.y + navTotal + paddingTop),
+            y: self.readerConfig.isDirection(bounds.origin.y + navTotal, bounds.origin.y + navTotal + paddingTop),
             width: bounds.width,
-            height: isDirection(bounds.height - navTotal, bounds.height - navTotal - paddingTop - paddingBottom)
+            height: self.readerConfig.isDirection(bounds.height - navTotal, bounds.height - navTotal - paddingTop - paddingBottom)
         )
     }
     
@@ -176,7 +177,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
             }
         }
         
-        let direction: ScrollDirection = FolioReader.needsRTLChange ? .positive() : .negative()
+		let direction: ScrollDirection = FolioReader.needsRTLChange ? .positive(withConfiguration: self.readerConfig) : .negative(withConfiguration: self.readerConfig)
         
         if pageScrollDirection == direction && isScrolling && self.readerConfig.scrollDirection != .horizontalWithVerticalContent {
             scrollPageToBottom()
@@ -381,7 +382,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 	- parameter animated: Enable or not scrolling animation
 	*/
 	open func scrollPageToOffset(_ offset: CGFloat, animated: Bool) {
-        let pageOffsetPoint = isDirection(CGPoint(x: 0, y: offset), CGPoint(x: offset, y: 0))
+        let pageOffsetPoint = self.readerConfig.isDirection(CGPoint(x: 0, y: offset), CGPoint(x: offset, y: 0))
 		webView.scrollView.setContentOffset(pageOffsetPoint, animated: animated)
 	}
 
@@ -389,7 +390,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 	Scrolls the page to bottom
 	*/
 	open func scrollPageToBottom() {
-		let bottomOffset = isDirection(
+		let bottomOffset = self.readerConfig.isDirection(
 			CGPoint(x: 0, y: webView.scrollView.contentSize.height - webView.scrollView.bounds.height),
 			CGPoint(x: webView.scrollView.contentSize.width - webView.scrollView.bounds.width, y: 0),
 			CGPoint(x: webView.scrollView.contentSize.width - webView.scrollView.bounds.width, y: 0)

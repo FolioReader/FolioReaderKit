@@ -54,7 +54,6 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     var scrollDelta: CGFloat!
     var scrollDeltaTimer: Timer!
 
-
 	fileprivate var readerContainer	: FolioReaderContainer
 
 	var frame: CGRect {
@@ -109,7 +108,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     func sliderChange(_ slider:UISlider) {
         let movePosition = height()*CGFloat(slider.value)
         let offset = isDirection(CGPoint(x: 0, y: movePosition), CGPoint(x: movePosition, y: 0))
-        scrollView().setContentOffset(offset, animated: false)
+        scrollView()?.setContentOffset(offset, animated: false)
     }
     
     // MARK: - show / hide
@@ -171,7 +170,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
         }
         
         if scrollStart == nil {
-            scrollStart = scrollView.contentOffset.forDirection()
+            scrollStart = scrollView.contentOffset.forDirection(withConfiguration: self.readerContainer.readerConfig)
         }
     }
     
@@ -192,7 +191,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
             show()
             
         } else if delegate.currentPage != nil && scrollStart != nil {
-            scrollDelta = scrollView.contentOffset.forDirection() - scrollStart
+            scrollDelta = scrollView.contentOffset.forDirection(withConfiguration: self.readerContainer.readerConfig) - scrollStart
             
             if scrollDeltaTimer == nil && scrollDelta > (pageHeight * 0.2 ) || (scrollDelta * -1) > (pageHeight * 0.2) {
                 show()
@@ -216,7 +215,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
             scrollDeltaTimer = nil
         }
         
-        scrollStart = scrollView().contentOffset.forDirection()
+        scrollStart = (scrollView()?.contentOffset.forDirection(withConfiguration: self.readerContainer.readerConfig) ?? 0)
         scrollDelta = 0
     }
     
@@ -227,15 +226,23 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     
     // MARK: - utility methods
     
-    fileprivate func scrollView() -> UIScrollView {
-        return delegate.currentPage!.webView.scrollView
+    fileprivate func scrollView() -> UIScrollView? {
+        return delegate.currentPage?.webView.scrollView
     }
     
     fileprivate func height() -> CGFloat {
-        return delegate.currentPage!.webView.scrollView.contentSize.height - pageHeight + 44
+		guard let currentPage = delegate.currentPage else {
+			return 0
+		}
+
+        return currentPage.webView.scrollView.contentSize.height - pageHeight + 44
     }
     
     fileprivate func scrollTop() -> CGFloat {
-        return delegate.currentPage!.webView.scrollView.contentOffset.forDirection()
+		guard let currentPage = delegate.currentPage else {
+			return 0
+		}
+
+        return currentPage.webView.scrollView.contentOffset.forDirection(withConfiguration: self.readerContainer.readerConfig)
     }
 }

@@ -401,8 +401,17 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     }
     
     open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! FolioReaderPage
-        
+        var reuseableCell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? FolioReaderPage
+		guard let pageCell = reuseableCell else {
+			return UICollectionViewCell()
+		}
+
+		return self.configure(readerPageCell: pageCell, atIndexPath: indexPath)
+	}
+
+	private func configure(readerPageCell cell: FolioReaderPage, atIndexPath indexPath: IndexPath) -> FolioReaderPage {
+
+		cell.setup(withReaderConfig: self.readerConfig, book: self.book)
         cell.pageNumber = (indexPath as NSIndexPath).row+1
         cell.webView.scrollView.delegate = self
         cell.webView.setupScrollDirection()
@@ -495,7 +504,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 				}
 
 				// Adjust collectionView
-				self.collectionView.contentSize = isDirection(
+				self.collectionView.contentSize = self.readerConfig.isDirection(
 					CGSize(width: pageWidth, height: pageHeight * CGFloat(self.totalPages)),
 					CGSize(width: pageWidth * CGFloat(self.totalPages), height: pageHeight),
 					CGSize(width: pageWidth * CGFloat(self.totalPages), height: pageHeight)
@@ -533,7 +542,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
             pageOffset = page * pageWidth
         }
 
-		let pageOffsetPoint = isDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0))
+		let pageOffsetPoint = self.readerConfig.isDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0))
 		currentPage.webView.scrollView.setContentOffset(pageOffsetPoint, animated: true)
     }
     
@@ -619,11 +628,11 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     func pagesForCurrentPage(_ page: FolioReaderPage?) {
         guard let page = page else { return }
 
-		let pageSize = isDirection(pageHeight, pageWidth)
+		let pageSize = self.readerConfig.isDirection(pageHeight, pageWidth)
 		// TODO_SMF: remove unwrap
 		pageIndicatorView?.totalPages = Int(ceil(page.webView.scrollView.contentSize.forDirection(withConfiguration: self.readerConfig)/pageSize!))
 
-		let pageOffSet = isDirection(page.webView.scrollView.contentOffset.x, page.webView.scrollView.contentOffset.x, page.webView.scrollView.contentOffset.y)
+		let pageOffSet = self.readerConfig.isDirection(page.webView.scrollView.contentOffset.x, page.webView.scrollView.contentOffset.x, page.webView.scrollView.contentOffset.y)
 		let webViewPage = pageForOffset(pageOffSet, pageHeight: pageSize!)
 
         pageIndicatorView?.currentPage = webViewPage
@@ -664,7 +673,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func frameForPage(_ page: Int) -> CGRect {
-        return isDirection(
+        return self.readerConfig.isDirection(
             CGRect(x: 0, y: pageHeight * CGFloat(page-1), width: pageWidth, height: pageHeight),
             CGRect(x: pageWidth * CGFloat(page-1), y: 0, width: pageWidth, height: pageHeight)
         )
@@ -1004,7 +1013,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 			// Do nothing?
 		} else {
 			if	let page = currentPage,
-				let pageSize = isDirection(pageHeight, pageWidth) {
+				let pageSize = self.readerConfig.isDirection(pageHeight, pageWidth) {
 
 				if (page.webView.scrollView.contentOffset.forDirection(withConfiguration: self.readerConfig)+pageSize <= page.webView.scrollView.contentSize.forDirection(withConfiguration: self.readerConfig)) {
 
@@ -1164,7 +1173,7 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
         
         if let position = FolioReader.defaults.value(forKey: kBookId) as? NSDictionary {
             let pageNumber = position["pageNumber"]! as! Int
-			let offset = isDirection(position["pageOffsetY"], position["pageOffsetX"]) as? CGFloat
+			let offset = self.readerConfig.isDirection(position["pageOffsetY"], position["pageOffsetX"]) as? CGFloat
 			let pageOffset = offset
 
             if isFirstLoad {
