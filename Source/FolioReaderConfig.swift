@@ -205,4 +205,34 @@ open class FolioReaderConfig: NSObject {
     open var localizedTakePhoto = NSLocalizedString("Take Photo", comment: "")
     open var localizedShareImageQuote = NSLocalizedString("Share image quote", comment: "")
     open var localizedShareTextQuote = NSLocalizedString("Share text quote", comment: "")
+
+
+	/**
+ 		Simplify attibution of values based on direction, basically is to avoid too much usage of `switch`,
+ 		`if` and `else` statements to check. So basically this is like a shorthand version of the `switch` verification.
+
+ 		For example:
+ 		```
+ 		let pageOffsetPoint = isDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0), CGPoint(x: 0, y: pageOffset))
+ 		```
+
+ 		As usually the `vertical` direction and `horizontalContentVertical` has similar statements you can basically hide the last
+		value and it will assume the value from `vertical` as fallback.
+ 		```
+ 		let pageOffsetPoint = isDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0))
+		```
+
+ 		- parameter vertical:                  Value for `vertical` direction
+ 		- parameter horizontal:                Value for `horizontal` direction
+ 		- parameter horizontalContentVertical: Value for `horizontalWithVerticalContent` direction, if nil will fallback to `vertical` value
+
+ 		- returns: The right value based on direction.
+ 	*/
+	func isDirection<T> (_ vertical: T, _ horizontal: T, _ horizontalContentVertical: T? = nil) -> T {
+		switch self.scrollDirection {
+		case .vertical, .defaultVertical: 		return vertical
+		case .horizontal: 						return horizontal
+		case .horizontalWithVerticalContent: 	return (horizontalContentVertical ?? vertical)
+		}
+	}
 }

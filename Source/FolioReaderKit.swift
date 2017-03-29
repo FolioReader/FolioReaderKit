@@ -71,6 +71,7 @@ enum MediaOverlayStyle: Int {
 
 	// TODO_SMF: make sure the following deprecated functions still work... or not.:
 	// TODO_SMF_QUESTION: ask the main developer(s) for that.
+	// TODO_SMF_DOC: new function signature change
 	@objc optional func folioReaderDidClosed()
 }
 
@@ -110,7 +111,11 @@ open class FolioReader: NSObject {
     var needsRTLChange: Bool {
         return (self.readerContainer?.book?.spine.isRtl == true && self.readerContainer?.readerConfig.scrollDirection == .horizontal)
     }
-    
+
+	func isNight<T>(_ f: T, _ l: T) -> T {
+		return (self.nightMode == true ? f : l)
+	}
+
     /// Check if current theme is Night mode
     open var nightMode: Bool {
         get { return FolioReader.defaults.bool(forKey: kNightMode) }
@@ -125,7 +130,7 @@ open class FolioReader: NSObject {
 					readerCenter.pageIndicatorView?.reloadColors()
 					readerCenter.configureNavBar()
 					readerCenter.scrollScrubber?.reloadColors()
-					readerCenter.collectionView.backgroundColor = (self.nightMode ? self.readerContainer?.readerConfig.nightModeBackground : UIColor.white)
+					readerCenter.collectionView.backgroundColor = (self.nightMode == true ? self.readerContainer?.readerConfig.nightModeBackground : UIColor.white)
 					}, completion: { (finished: Bool) in
 						// TODO_SMF: add constant
 						NotificationCenter.default.post(name: Notification.Name(rawValue: "needRefreshPageMode"), object: nil)
@@ -203,10 +208,12 @@ open class FolioReader: NSObject {
     /**
      Read Cover Image and Return an `UIImage`
      */
-    open class func getCoverImage(_ epubPath: String) -> UIImage? {
-        return FREpubParser().parseCoverImage(epubPath)
+	// TODO_SMF_DOC: new function signature change
+    open class func getCoverImage(_ epubPath: String, unzipPath: String? = nil) -> UIImage? {
+		// TODO_SMF_QUESTION: this used the shared instance before and ignore the parameter.
+		// Should we properly implement the parameter or change the API to use the current FolioReader?
+        return FREpubParser().parseCoverImage(epubPath, unzipPath: unzipPath)
     }
-
 
     // MARK: - Get Title
     open class func getTitle(_ epubPath: String) -> String? {
@@ -274,7 +281,9 @@ extension FolioReader {
 	// TODO_SMF: temporal variable to build and run the current state. Should be completely remove.
 	private static var _sharedInstance = FolioReader()
 	open static var shared : FolioReader {
-		get { return _sharedInstance }
+		get {
+			return _sharedInstance
+		}
 		set {
 			_sharedInstance = newValue
 		}
@@ -380,6 +389,9 @@ extension FolioReader {
 // MARK: - Global Functions
 
 func isNight<T> (_ f: T, _ l: T) -> T {
+	fatalError("should not use that function.")
+	// TODO_SMF: remove that function
+	// TODO_SMF_DOC: notify change
     return (FolioReader.shared.nightMode == true ? f : l)
 }
 
@@ -407,7 +419,8 @@ func isNight<T> (_ f: T, _ l: T) -> T {
  - returns: The right value based on direction.
  */
 func isDirection<T> (_ vertical: T, _ horizontal: T, _ horizontalContentVertical: T? = nil) -> T {
-	let direction = (FolioReader.shared.readerContainer?.readerConfig.scrollDirection ?? .defaultVertical)
+	fatalError("should not use that function.")
+	let direction = (FolioReader.shared.readerContainer!.readerConfig.scrollDirection)
 	switch direction {
 	case .vertical, .defaultVertical: 		return vertical
 	case .horizontal: 						return horizontal
@@ -416,47 +429,120 @@ func isDirection<T> (_ vertical: T, _ horizontal: T, _ horizontalContentVertical
 }
 
 extension UICollectionViewScrollDirection {
-    static func direction() -> UICollectionViewScrollDirection {
-        return isDirection(.vertical, .horizontal, .horizontal)
+
+	static func direction() -> UICollectionViewScrollDirection {
+		// TODO_SMF: deprecate
+		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
+			return .vertical
+		}
+
+		return UICollectionViewScrollDirection.direction(withConfiguration: readerConfig)
+	}
+
+    static func direction(withConfiguration readerConfig: FolioReaderConfig) -> UICollectionViewScrollDirection {
+        return readerConfig.isDirection(.vertical, .horizontal, .horizontal)
     }
 }
 
 extension UICollectionViewScrollPosition {
-    static func direction() -> UICollectionViewScrollPosition {
-        return isDirection(.top, .left, .left)
-    }
+
+	static func direction() -> UICollectionViewScrollPosition {
+		// TODO_SMF: deprecate
+		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
+			return .top
+		}
+
+		return UICollectionViewScrollPosition.direction(withConfiguration: readerConfig)
+	}
+
+	static func direction(withConfiguration readerConfig: FolioReaderConfig) -> UICollectionViewScrollPosition {
+		return readerConfig.isDirection(.top, .left, .left)
+	}
 }
 
 extension CGPoint {
     func forDirection() -> CGFloat {
-        return isDirection(y, x, y)
+		// TODO_SMF: deprecate
+		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
+			return self.y
+		}
+
+		return self.forDirection(withConfiguration: readerConfig)
     }
+
+	func forDirection(withConfiguration readerConfig: FolioReaderConfig) -> CGFloat {
+		return readerConfig.isDirection(self.y, self.x, self.y)
+	}
 }
 
 extension CGSize {
     func forDirection() -> CGFloat {
-        return isDirection(height, width, height)
+		// TODO_SMF: deprecate
+		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
+			return self.height
+		}
+		return self.forDirection(withConfiguration: readerConfig)
     }
-    
+
+	func forDirection(withConfiguration readerConfig: FolioReaderConfig) -> CGFloat {
+		return readerConfig.isDirection(height, width, height)
+	}
+
     func forReverseDirection() -> CGFloat {
-        return isDirection(width, height, width)
+		// TODO_SMF: deprecate
+		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
+			return self.width
+		}
+
+		return self.forReverseDirection(withConfiguration: readerConfig)
     }
+
+	func forReverseDirection(withConfiguration readerConfig: FolioReaderConfig) -> CGFloat {
+		return readerConfig.isDirection(width, height, width)
+	}
 }
 
 extension CGRect {
     func forDirection() -> CGFloat {
-        return isDirection(height, width, height)
+		// TODO_SMF: deprecate
+		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
+			return self.height
+		}
+
+		return self.forDirection(withConfiguration: readerConfig)
     }
+
+	func forDirection(withConfiguration readerConfig: FolioReaderConfig) -> CGFloat {
+		return readerConfig.isDirection(height, width, height)
+	}
 }
 
 extension ScrollDirection {
     static func negative() -> ScrollDirection {
-        return isDirection(.down, .right, .right)
+		// TODO_SMF: deprecate
+		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
+			return self.down
+		}
+
+        return self.negative(withConfiguration: readerConfig)
     }
-    
+
+	static func negative(withConfiguration readerConfig: FolioReaderConfig) -> ScrollDirection {
+		return readerConfig.isDirection(.down, .right, .right)
+	}
+
     static func positive() -> ScrollDirection {
-        return isDirection(.up, .left, .left)
+		// TODO_SMF: deprecate
+		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
+			return self.up
+		}
+
+        return self.positive(withConfiguration: readerConfig)
     }
+
+	static func positive(withConfiguration readerConfig: FolioReaderConfig) -> ScrollDirection {
+		return readerConfig.isDirection(.up, .left, .left)
+	}
 }
 
 // MARK: Helpers

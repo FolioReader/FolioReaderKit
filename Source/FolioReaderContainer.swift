@@ -20,8 +20,8 @@ open class FolioReaderContainer		: UIViewController {
     var epubPath					: String?
 	var book						: FRBook?
 	var readerConfig				: FolioReaderConfig
+	var folioReader					: FolioReader
 
-	fileprivate var folioReader		: FolioReader?
     fileprivate var errorOnLoad 	= false
 
     // MARK: - Init
@@ -55,7 +55,7 @@ open class FolioReaderContainer		: UIViewController {
      Common Initialization
      */
     fileprivate func initialization() {
-        book = FRBook()
+        self.book = FRBook()
         
         // Register custom fonts
         FontBlaster.blast(bundle: Bundle.frameworkBundle())
@@ -94,11 +94,11 @@ open class FolioReaderContainer		: UIViewController {
 
 		// TODO_SMF: wtf
 		let canChangeScrollDirection = self.readerConfig.canChangeScrollDirection
-        self.readerConfig.canChangeScrollDirection = isDirection(canChangeScrollDirection, canChangeScrollDirection, false)
+        self.readerConfig.canChangeScrollDirection = self.readerConfig.isDirection(canChangeScrollDirection, canChangeScrollDirection, false)
         
         // If user can change scroll direction use the last saved
         if (self.readerConfig.canChangeScrollDirection == true) {
-            var scrollDirection = (FolioReaderScrollDirection(rawValue: (self.folioReader?.currentScrollDirection ?? 0)) ?? .vertical)
+            var scrollDirection = (FolioReaderScrollDirection(rawValue: self.folioReader.currentScrollDirection) ?? .vertical)
 
             if (scrollDirection == .defaultVertical && self.readerConfig.scrollDirection != .defaultVertical) {
                 scrollDirection = self.readerConfig.scrollDirection
@@ -144,7 +144,7 @@ open class FolioReaderContainer		: UIViewController {
 			}
 
 			self.book = parsedBook
-            self.folioReader?.isReaderOpen = true
+            self.folioReader.isReaderOpen = true
             
             // Reload data
             DispatchQueue.main.async(execute: {
@@ -156,15 +156,13 @@ open class FolioReaderContainer		: UIViewController {
                 
                 self.centerViewController?.reloadData()
                 
-                self.folioReader?.isReaderReady = true
+                self.folioReader.isReaderReady = true
 
-				guard
-					let reader = self.folioReader,
-					let loadedBook = self.book else {
-						return
+				guard let loadedBook = self.book else {
+					return
 				}
 
-				reader.delegate?.folioReader?(reader, didFinishedLoading: loadedBook)
+				self.folioReader.delegate?.folioReader?(self.folioReader, didFinishedLoading: loadedBook)
             })
         }
     }
@@ -182,7 +180,7 @@ open class FolioReaderContainer		: UIViewController {
      */
     func addAudioPlayer() {
         self.audioPlayer = FolioReaderAudioPlayer()
-        self.folioReader?.readerAudioPlayer = audioPlayer
+        self.folioReader.readerAudioPlayer = audioPlayer
     }
     
     // MARK: - Status Bar
@@ -196,6 +194,6 @@ open class FolioReaderContainer		: UIViewController {
     }
     
     override open var preferredStatusBarStyle: UIStatusBarStyle {
-        return isNight(.lightContent, .default)
+        return self.folioReader.isNight(.lightContent, .default)
     }
 }
