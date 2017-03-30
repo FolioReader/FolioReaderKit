@@ -22,13 +22,25 @@ import UIKit
     func chapterList(didDismissedChapterList chapterList: FolioReaderChapterList)
 }
 
-class FolioReaderChapterList: UITableViewController {
-    weak var delegate: FolioReaderChapterListDelegate?
-    var tocItems = [FRTocReference]()
+class FolioReaderChapterList		: UITableViewController {
 
-	fileprivate var book : FRBook? {
-		// TODO_SMF: remove this getter
-		return FolioReader.shared.readerContainer?.book
+    weak var delegate				: FolioReaderChapterListDelegate?
+    fileprivate var tocItems		= [FRTocReference]()
+	fileprivate var book 			: FRBook
+	fileprivate var readerConfig 	: FolioReaderConfig
+	fileprivate var folioReader 	: FolioReader
+
+	init(folioReader: FolioReader, readerConfig: FolioReaderConfig, book: FRBook, delegate: FolioReaderChapterListDelegate?) {
+		self.readerConfig = readerConfig
+		self.folioReader = folioReader
+		self.delegate = delegate
+		self.book = book
+
+		super.init(style: UITableViewStyle.plain)
+	}
+
+	required init?(coder aDecoder: NSCoder) {
+		fatalError("init with coder not supported")
 	}
 
     override func viewDidLoad() {
@@ -37,14 +49,14 @@ class FolioReaderChapterList: UITableViewController {
         // Register cell classes
         self.tableView.register(FolioReaderChapterListCell.self, forCellReuseIdentifier: reuseIdentifier)
         self.tableView.separatorInset = UIEdgeInsets.zero
-        self.tableView.backgroundColor = isNight(readerConfig.nightModeMenuBackground, readerConfig.menuBackgroundColor)
-        self.tableView.separatorColor = isNight(readerConfig.nightModeSeparatorColor, readerConfig.menuSeparatorColor)
+        self.tableView.backgroundColor = self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, self.readerConfig.menuBackgroundColor)
+        self.tableView.separatorColor = self.folioReader.isNight(self.readerConfig.nightModeSeparatorColor, self.readerConfig.menuSeparatorColor)
         
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 50
         
         // Create TOC list
-        self.tocItems = (self.book?.flatTableOfContents ?? [])
+        self.tocItems = self.book.flatTableOfContents
     }
     
     // MARK: - Table view data source
@@ -59,29 +71,32 @@ class FolioReaderChapterList: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! FolioReaderChapterListCell
-        
+
+		cell.setup(withConfiguration: self.readerConfig)
         let tocReference = tocItems[(indexPath as NSIndexPath).row]
         let isSection = tocReference.children.count > 0
         
-        cell.indexLabel.text = tocReference.title.trimmingCharacters(in: .whitespacesAndNewlines)
+        cell.indexLabel?.text = tocReference.title.trimmingCharacters(in: .whitespacesAndNewlines)
 
         // Add audio duration for Media Ovelay
         if let resource = tocReference.resource {
             if let mediaOverlay = resource.mediaOverlay {
-                let duration = self.book?.durationFor("#"+mediaOverlay)
-                let durationFormatted = (duration != nil ? duration : "")?.clockTimeToMinutesString()
+                let duration = self.book.durationFor("#"+mediaOverlay)
 
-                cell.indexLabel.text = cell.indexLabel.text! + (duration != nil ? " - "+durationFormatted! : "");
+				if let durationFormatted = (duration != nil ? duration : "")?.clockTimeToMinutesString() {
+					let text = (cell.indexLabel?.text ?? "")
+					cell.indexLabel?.text = text + (duration != nil ? (" - " + durationFormatted) : "")
+				}
             }
         }
 
         // Mark current reading chapter
         if
 			let currentPageNumber = currentPageNumber,
-			let reference = self.book?.spine.spineReferences[safe: currentPageNumber - 1],
+			let reference = self.book.spine.spineReferences[safe: currentPageNumber - 1],
 			(tocReference.resource != nil) {
             	let resource = reference.resource
-            	cell.indexLabel.textColor = (tocReference.resource == resource ? readerConfig.tintColor : readerConfig.menuTextColor)
+            	cell.indexLabel?.textColor = (tocReference.resource == resource ? self.readerConfig.tintColor : self.readerConfig.menuTextColor)
         }
         
         cell.layoutMargins = UIEdgeInsets.zero

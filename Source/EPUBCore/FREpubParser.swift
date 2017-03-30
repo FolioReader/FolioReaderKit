@@ -14,20 +14,27 @@ import ZipArchive
 #endif
 import AEXML
 
-class FREpubParser: NSObject, SSZipArchiveDelegate {
-    let book = FRBook()
-    var bookBasePath: String!
-    var resourcesBasePath: String!
-    var shouldRemoveEpub = true
+class FREpubParser			: NSObject, SSZipArchiveDelegate {
+
+	let book 				= FRBook()
+    var bookBasePath		: String!
+    var resourcesBasePath	: String!
+    var shouldRemoveEpub 	= true
+
     fileprivate var epubPathToRemove: String?
-    
-    /**
-     Parse the Cover Image from an epub file.
-     Returns an UIImage.
-     */
-    func parseCoverImage(_ epubPath: String) -> UIImage? {
-        guard let book = readEpub(epubPath: epubPath, removeEpub: false), let coverImage = book.coverImage else {
-            return nil
+
+    /// Parse the Cover Image from an epub file.
+    ///
+    /// - Parameters:
+    ///   - epubPath: Epub path on the disk
+    ///   - unzipPath: Path to unzip the compressed epub.
+    /// - Returns: An UIImage object
+    func parseCoverImage(_ epubPath: String, unzipPath: String? = nil) -> UIImage? {
+		// TODO_SMF_DOC: new function signature change
+        guard
+			let book = readEpub(epubPath: epubPath, removeEpub: false, unzipPath: unzipPath),
+			let coverImage = book.coverImage else {
+            	return nil
         }
         return UIImage(contentsOfFile: coverImage.fullHref)
     }
@@ -47,9 +54,6 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         return authorName
     }
 
-
-
-    
     /**
      Unzip, delete and read an epub file.
      Returns a FRBook.
@@ -62,8 +66,8 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         let fileManager = FileManager.default
         let bookName = (withEpubPath as NSString).lastPathComponent
 
-        if let bookUnzipPath = FolioReader.shared.unzipPath, fileManager.fileExists(atPath: bookUnzipPath) {
-            bookBasePath = bookUnzipPath
+        if let path = unzipPath, (fileManager.fileExists(atPath: path) == true) {
+            bookBasePath = path
         } else {
             bookBasePath = kApplicationDocumentsDirectory
         }
