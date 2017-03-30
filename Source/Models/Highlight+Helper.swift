@@ -19,9 +19,10 @@ public enum HighlightStyle: Int {
     case pink
     case underline
     
-    public init () { self = .yellow }
-
-	// TODO_SMF: replace with a string enum instead.
+    public init () {
+		// Default style is `.yellow`
+		self = .yellow
+	}
 
     /**
      Return HighlightStyle for CSS class.
@@ -41,37 +42,37 @@ public enum HighlightStyle: Int {
      Return CSS class for HighlightStyle.
      */
     public static func classForStyle(_ style: Int) -> String {
-        switch style {
-        case HighlightStyle.yellow.rawValue:		return "highlight-yellow"
-        case HighlightStyle.green.rawValue:			return "highlight-green"
-        case HighlightStyle.blue.rawValue:			return "highlight-blue"
-        case HighlightStyle.pink.rawValue:			return "highlight-pink"
-        case HighlightStyle.underline.rawValue:		return "highlight-underline"
-        default:									return "highlight-yellow"
+
+		let enumStyle = (HighlightStyle(rawValue: style) ?? HighlightStyle())
+        switch enumStyle {
+        case .yellow:		return "highlight-yellow"
+        case .green:		return "highlight-green"
+        case .blue:			return "highlight-blue"
+        case .pink:			return "highlight-pink"
+        case .underline:	return "highlight-underline"
         }
     }
 
-	// TODO_SMF: remove default cases, add optional result.
+	/// Color components for the style
+	///
+	/// - Returns: Tuple of all color compnonents.
+	private func colorComponents() -> (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
+		switch self {
+		case .yellow: 		return (red: 255, green: 235, blue: 107, alpha: 0.9)
+		case .green:		return (red: 192, green: 237, blue: 114, alpha: 0.9)
+		case .blue:			return (red: 173, green: 216, blue: 255, alpha: 0.9)
+		case .pink:			return (red: 255, green: 176, blue: 202, alpha: 0.9)
+		case .underline:	return (red: 240, green: 40, blue: 20, alpha: 0.6)
+		}
+	}
 
     /**
      Return CSS class for HighlightStyle.
      */
     public static func colorForStyle(_ style: Int, nightMode: Bool = false) -> UIColor {
-
-        switch style {
-        case HighlightStyle.yellow.rawValue:
-            return UIColor(red: 255/255, green: 235/255, blue: 107/255, alpha: nightMode ? 0.9 : 1)
-        case HighlightStyle.green.rawValue:
-            return UIColor(red: 192/255, green: 237/255, blue: 114/255, alpha: nightMode ? 0.9 : 1)
-        case HighlightStyle.blue.rawValue:
-            return UIColor(red: 173/255, green: 216/255, blue: 255/255, alpha: nightMode ? 0.9 : 1)
-        case HighlightStyle.pink.rawValue:
-            return UIColor(red: 255/255, green: 176/255, blue: 202/255, alpha: nightMode ? 0.9 : 1)
-        case HighlightStyle.underline.rawValue:
-            return UIColor(red: 240/255, green: 40/255, blue: 20/255, alpha: nightMode ? 0.6 : 1)
-        default:
-            return UIColor(red: 255/255, green: 235/255, blue: 107/255, alpha: nightMode ? 0.9 : 1)
-        }
+		let enumStyle = (HighlightStyle(rawValue: style) ?? HighlightStyle())
+		let colors = enumStyle.colorComponents()
+		return UIColor(red: colors.red/255, green: colors.green/255, blue: colors.blue/255, alpha: (nightMode ? colors.alpha : 1))
     }
 }
 
