@@ -91,7 +91,7 @@ open class FolioReader: NSObject {
     /// FolioReaderDelegate
     open weak var delegate			: FolioReaderDelegate?
 
-	// TODO_SMF_QUESTION: male those fileprivate (or internal) to avoid public access from other class?
+	// TODO_SMF_QUESTION: make those fileprivate (or internal) to avoid public access from other class?
     open weak var readerContainer	: FolioReaderContainer?
     open weak var readerAudioPlayer	: FolioReaderAudioPlayer?
 	open weak var readerCenter		: FolioReaderCenter? {

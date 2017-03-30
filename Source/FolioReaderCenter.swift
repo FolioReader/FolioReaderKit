@@ -1155,7 +1155,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
      Present Quote Share
      */
     func presentQuoteShare(_ string: String) {
-        let quoteShare = FolioReaderQuoteShare(initWithText: string)
+		let quoteShare = FolioReaderQuoteShare(initWithText: string, readerConfig: self.readerConfig, folioReader: self.readerContainer.folioReader)
         let nav = UINavigationController(rootViewController: quoteShare)
 
         if isPad {

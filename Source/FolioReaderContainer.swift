@@ -93,7 +93,6 @@ open class FolioReaderContainer		: UIViewController {
     override open func viewDidLoad() {
         super.viewDidLoad()
 
-		// TODO_SMF: wtf
 		let canChangeScrollDirection = self.readerConfig.canChangeScrollDirection
         self.readerConfig.canChangeScrollDirection = self.readerConfig.isDirection(canChangeScrollDirection, canChangeScrollDirection, false)
         

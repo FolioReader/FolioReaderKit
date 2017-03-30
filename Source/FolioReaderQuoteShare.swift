@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 class FolioReaderQuoteShare: UIViewController {
     var quoteText: String!
     var filterImage: UIView!
@@ -24,21 +23,21 @@ class FolioReaderQuoteShare: UIViewController {
     let imagePicker = UIImagePickerController()
     var selectedIndex = 0
 
-	fileprivate var book : FRBook? {
-		// TODO_SMF: remove this getter
-		return FolioReader.shared.readerContainer?.book
+	fileprivate var book: FRBook? {
+		return self.folioReader.readerContainer?.book
 	}
 
-	fileprivate var readerConfig : FolioReaderConfig {
-		// TODO_SMF: remove this getter
-		return FolioReader.shared.readerContainer!.readerConfig
-	}
+	fileprivate var folioReader		: FolioReader
+	fileprivate var readerConfig	: FolioReaderConfig
 
     // MARK: Init
     
-    init(initWithText shareText: String) {
+	init(initWithText shareText: String, readerConfig: FolioReaderConfig, folioReader: FolioReader) {
+		self.folioReader = folioReader
+		self.readerConfig = readerConfig
+		self.quoteText = shareText.stripLineBreaks().stripHtml()
+
         super.init(nibName: nil, bundle: Bundle.frameworkBundle())
-        self.quoteText = shareText.stripLineBreaks().stripHtml()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -160,7 +159,7 @@ class FolioReaderQuoteShare: UIViewController {
         collectionViewLayout.minimumInteritemSpacing = 0
         collectionViewLayout.scrollDirection = .horizontal
         
-        let background = isNight(self.readerConfig.nightModeBackground, UIColor.white)
+        let background = self.folioReader.isNight(self.readerConfig.nightModeBackground, UIColor.white)
         view.backgroundColor = background
         
         // CollectionView
@@ -194,9 +193,9 @@ class FolioReaderQuoteShare: UIViewController {
     }
     
     func configureNavBar() {
-        let navBackground = isNight(self.readerConfig.nightModeMenuBackground, UIColor.white)
+        let navBackground = self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, UIColor.white)
         let tintColor = self.readerConfig.tintColor
-        let navText = isNight(UIColor.white, UIColor.black)
+        let navText = self.folioReader.isNight(UIColor.white, UIColor.black)
         let font = UIFont(name: "Avenir-Light", size: 17)!
         setTranslucentNavigation(false, color: navBackground, tintColor: tintColor, titleColor: navText, andFont: font)
     }
@@ -300,7 +299,7 @@ class FolioReaderQuoteShare: UIViewController {
     // MARK: Status Bar
     
     override var preferredStatusBarStyle : UIStatusBarStyle {
-        return isNight(.lightContent, .default)
+        return self.folioReader.isNight(.lightContent, .default)
     }
     
     override var supportedInterfaceOrientations : UIInterfaceOrientationMask {
