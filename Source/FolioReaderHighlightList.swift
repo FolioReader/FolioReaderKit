@@ -35,7 +35,7 @@ class FolioReaderHighlightList: UITableViewController {
         self.tableView.backgroundColor = self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, self.readerConfig.menuBackgroundColor)
         self.tableView.separatorColor = self.folioReader.isNight(self.readerConfig.nightModeSeparatorColor, self.readerConfig.menuSeparatorColor)
         
-        highlights = Highlight.allByBookId((kBookId as NSString).deletingPathExtension)
+        self.highlights = Highlight.allByBookId((kBookId as NSString).deletingPathExtension)
     }
 
     // MARK: - Table view data source

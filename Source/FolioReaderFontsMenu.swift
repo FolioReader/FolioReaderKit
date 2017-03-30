@@ -67,15 +67,24 @@ public enum FolioReaderFontSize: Int {
 	}
 }
 
-class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRecognizerDelegate {
+class FolioReaderFontsMenu			: UIViewController, SMSegmentViewDelegate, UIGestureRecognizerDelegate {
     
-    var menuView: UIView!
+    var menuView					: UIView!
 
-	fileprivate var readerConfig : FolioReaderConfig {
-		// TODO_SMF: remove this getter
-		return FolioReader.shared.readerContainer!.readerConfig
+	fileprivate var readerConfig 	: FolioReaderConfig
+	fileprivate var folioReader 	: FolioReader
+
+	init(folioReader: FolioReader, readerConfig: FolioReaderConfig) {
+		self.readerConfig = readerConfig
+		self.folioReader = folioReader
+
+		super.init(nibName: nil, bundle: nil)
 	}
-    
+
+	required init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -91,7 +100,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
         // Menu view
         let visibleHeight: CGFloat = self.readerConfig.canChangeScrollDirection ? 222 : 170
         menuView = UIView(frame: CGRect(x: 0, y: view.frame.height-visibleHeight, width: view.frame.width, height: view.frame.height))
-        menuView.backgroundColor = isNight(self.readerConfig.nightModeMenuBackground, UIColor.white)
+        menuView.backgroundColor = self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, UIColor.white)
         menuView.autoresizingMask = .flexibleWidth
         menuView.layer.shadowColor = UIColor.black.cgColor
         menuView.layer.shadowOffset = CGSize(width: 0, height: 0)

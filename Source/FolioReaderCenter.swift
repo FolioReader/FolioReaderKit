@@ -1112,7 +1112,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         FolioReader.saveReaderState()
         hideBars()
         
-        let menu = FolioReaderFontsMenu()
+        let menu = FolioReaderFontsMenu(folioReader: self.readerContainer.folioReader, readerConfig: self.readerConfig)
         menu.modalPresentationStyle = .custom
 
         animator = ZFModalTransitionAnimator(modalViewController: menu)
@@ -1124,7 +1124,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         animator.direction = ZFModalTransitonDirection.bottom
 
         menu.transitioningDelegate = animator
-        present(menu, animated: true, completion: nil)
+        self.present(menu, animated: true, completion: nil)
     }
 
     /**
