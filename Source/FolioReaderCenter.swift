@@ -76,7 +76,6 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 	fileprivate var currentOrientation: UIInterfaceOrientation?
 
 	fileprivate var book : FRBook {
-		// TODO_SMF: remove optional
 		return self.readerContainer.book
 	}
 
@@ -1095,7 +1094,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     func presentChapterList(_ sender: UIBarButtonItem) {
         FolioReader.saveReaderState()
         
-        let chapter = FolioReaderChapterList(folioReader: self.readerContainer.folioReader, readerConfig: self.readerConfig, delegate: self)
+		let chapter = FolioReaderChapterList(folioReader: self.readerContainer.folioReader, readerConfig: self.readerConfig, book: self.readerContainer.book, delegate: self)
         let highlight = FolioReaderHighlightList(folioReader: self.readerContainer.folioReader, readerConfig: self.readerConfig)
 		let pageController = PageViewController(folioReader: self.readerContainer.folioReader, readerConfig: self.readerConfig)
 
@@ -1155,7 +1154,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
      Present Quote Share
      */
     func presentQuoteShare(_ string: String) {
-		let quoteShare = FolioReaderQuoteShare(initWithText: string, readerConfig: self.readerConfig, folioReader: self.readerContainer.folioReader)
+		let quoteShare = FolioReaderQuoteShare(initWithText: string, readerConfig: self.readerConfig, folioReader: self.readerContainer.folioReader, book: self.readerContainer.book)
         let nav = UINavigationController(rootViewController: quoteShare)
 
         if (UIDevice.current.userInterfaceIdiom == .pad) {

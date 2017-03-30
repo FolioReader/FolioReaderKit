@@ -28,21 +28,23 @@ open class FolioReaderAudioPlayer: NSObject {
     var completionHandler: () -> Void = {}
     var utteranceRate: Float = 0
 
-	fileprivate var book : FRBook?
+	fileprivate var book : FRBook
 
     // MARK: Init
     
-	init(withBook book: FRBook?) {
-        super.init()
+	init(withBook book: FRBook) {
 		self.book = book
+
+        super.init()
+
         UIApplication.shared.beginReceivingRemoteControlEvents()
         
         // this is needed to the audio can play even when the "silent/vibrate" toggle is on
-        let session:AVAudioSession = AVAudioSession.sharedInstance()
+        let session = AVAudioSession.sharedInstance()
         try? session.setCategory(AVAudioSessionCategoryPlayback)
         try? session.setActive(true)
         
-        updateNowPlayingInfo()
+        self.updateNowPlayingInfo()
     }
     
     deinit {
@@ -156,7 +158,7 @@ open class FolioReaderAudioPlayer: NSObject {
     }
 
     func play() {
-        if (self.book?.hasAudio() == true) {
+        if (self.book.hasAudio() == true) {
             guard let currentPage = FolioReader.shared.readerCenter?.currentPage else { return }
             currentPage.webView.js("playAudio()")
         } else {
@@ -181,7 +183,7 @@ open class FolioReaderAudioPlayer: NSObject {
         
         self.stop()
 
-        let smilFile = self.book?.smilFileForHref(href)
+        let smilFile = self.book.smilFileForHref(href)
 
         // if no smil file for this href and the same href is being requested, we've hit the end. stop playing
         if smilFile == nil && currentHref != nil && href == currentHref {
@@ -311,7 +313,7 @@ open class FolioReaderAudioPlayer: NSObject {
     */
     fileprivate func nextAudioFragment() -> FRSmilElement? {
 
-		guard let smilFile = self.book?.smilFileForHref(currentHref) else {
+		guard let smilFile = self.book.smilFileForHref(currentHref) else {
 			return nil
 		}
 
@@ -322,7 +324,7 @@ open class FolioReaderAudioPlayer: NSObject {
             return smil
         }
 
-        self.currentHref = self.book?.spine.nextChapter(currentHref)?.href
+        self.currentHref = self.book.spine.nextChapter(currentHref)?.href
         self.currentFragment = nil
         self.currentSmilFile = smilFile
 
@@ -346,7 +348,7 @@ open class FolioReaderAudioPlayer: NSObject {
         
         let utterance = AVSpeechUtterance(string: text)
         utterance.rate = utteranceRate
-        utterance.voice = AVSpeechSynthesisVoice(language: self.book?.metadata.language)
+        utterance.voice = AVSpeechSynthesisVoice(language: self.book.metadata.language)
         
         if synthesizer.isSpeaking {
             stopSynthesizer()
@@ -361,11 +363,11 @@ open class FolioReaderAudioPlayer: NSObject {
     func speakSentence() {
 		guard
 			let readerCenter = FolioReader.shared.readerCenter,
-			let playbackActiveClass = self.book?.playbackActiveClass(),
 			let currentPage = readerCenter.currentPage else {
 				return
 		}
 
+		let playbackActiveClass = self.book.playbackActiveClass()
 		guard let sentence = currentPage.webView.js("getSentenceWithIndex('\(playbackActiveClass)')") else {
 			if (readerCenter.isLastPage() == true) {
 				self.stop()
@@ -438,13 +440,13 @@ open class FolioReaderAudioPlayer: NSObject {
         var songInfo = [String: AnyObject]()
         
         // Get book Artwork
-        if let coverImage = self.book?.coverImage, let artwork = UIImage(contentsOfFile: coverImage.fullHref) {
+        if let coverImage = self.book.coverImage, let artwork = UIImage(contentsOfFile: coverImage.fullHref) {
             let albumArt = MPMediaItemArtwork(image: artwork)
             songInfo[MPMediaItemPropertyArtwork] = albumArt
         }
         
         // Get book title
-        if let title = self.book?.title() {
+        if let title = self.book.title() {
             songInfo[MPMediaItemPropertyAlbumTitle] = title as AnyObject?
         }
         
@@ -454,7 +456,7 @@ open class FolioReaderAudioPlayer: NSObject {
         }
         
         // Get author name
-        if let author = self.book?.metadata.creators.first {
+        if let author = self.book.metadata.creators.first {
             songInfo[MPMediaItemPropertyArtist] = author.name as AnyObject?
         }
         
@@ -484,7 +486,7 @@ open class FolioReaderAudioPlayer: NSObject {
         
         currentHref = chapter.href
         
-        for item in (self.book?.flatTableOfContents ?? []) {
+        for item in (self.book.flatTableOfContents ?? []) {
             if let resource = item.resource , resource.href == currentHref {
                 return item.title
             }

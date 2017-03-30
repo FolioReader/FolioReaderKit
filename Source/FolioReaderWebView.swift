@@ -14,14 +14,14 @@ open class FolioReaderWebView		: UIWebView {
 	var isShare 					= false
     var isOneWord 					= false
 
-	fileprivate var book			: FRBook?
+	fileprivate var book			: FRBook
 	fileprivate var readerConfig	: FolioReaderConfig
 
 	override init(frame: CGRect) {
 		fatalError("use init(frame:readerConfig:book:) instead.")
 	}
 
-	init(frame: CGRect, readerConfig: FolioReaderConfig, book: FRBook?) {
+	init(frame: CGRect, readerConfig: FolioReaderConfig, book: FRBook) {
 		self.readerConfig = readerConfig
 		self.book = book
 
@@ -46,7 +46,7 @@ open class FolioReaderWebView		: UIWebView {
 		} else {
 			if action == #selector(highlight(_:))
 				|| (action == #selector(define(_:)) && isOneWord)
-                || (action == #selector(play(_:)) && (self.book?.hasAudio() == true || self.readerConfig.enableTTS == true))
+                || (action == #selector(play(_:)) && (self.book.hasAudio() == true || self.readerConfig.enableTTS == true))
 				|| (action == #selector(share(_:)) && self.readerConfig.allowSharing == true)
 				|| (action == #selector(copy(_:)) && self.readerConfig.allowSharing == true) {
 				return true
@@ -256,7 +256,7 @@ open class FolioReaderWebView		: UIWebView {
             // default menu
             menuItems = [highlightItem, defineItem, shareItem]
             
-            if (self.book?.hasAudio() == true || self.readerConfig.enableTTS == true) {
+            if (self.book.hasAudio() == true || self.readerConfig.enableTTS == true) {
                 menuItems.insert(playAudioItem, at: 0)
             }
             

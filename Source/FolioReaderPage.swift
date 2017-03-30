@@ -41,17 +41,19 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     fileprivate var menuIsVisible = false
 
 	fileprivate var readerConfig: FolioReaderConfig
-	fileprivate var book: FRBook?
+	fileprivate var book: FRBook
 
     // MARK: - View life cicle
 
 	public override init(frame: CGRect) {
-		// Init reader config with a default one. Later the current one must be configured through the setup function.
+		// Init explicit attributes with a default value. The `setup` function MUST be called to configure the current object with valid attributes.
 		self.readerConfig = FolioReaderConfig()
+		self.book = FRBook()
+
 		super.init(frame: frame)
 	}
 
-	public func setup(withReaderConfig readerConfig: FolioReaderConfig, book: FRBook?) {
+	public func setup(withReaderConfig readerConfig: FolioReaderConfig, book: FRBook) {
 		self.readerConfig = readerConfig
 		self.book = book
 
@@ -169,7 +171,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
         refreshPageMode()
         
-        if (self.readerConfig.enableTTS == true && self.book?.hasAudio() == false) {
+        if (self.readerConfig.enableTTS == true && self.book.hasAudio() == false) {
             webView.js("wrappingSentencesWithinPTags()")
             
             if let audioPlayer = FolioReader.shared.readerAudioPlayer , audioPlayer.isPlaying() {
@@ -227,7 +229,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
             
             // Handle internal url
             if ((url.path as NSString).pathExtension != "") {
-                var base = (self.book?.opfResource.href as? NSString)?.deletingLastPathComponent
+                var base = (self.book.opfResource.href as? NSString)?.deletingLastPathComponent
 				base = ((base == nil || base?.isEmpty == true) ? kBookId : base)
 
                 let path = url.path
@@ -454,11 +456,11 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
      - parameter identifier: The identifier
      */
     func audioMarkID(_ identifier: String) {
-        guard
-			let playbackActiveClass = self.book?.playbackActiveClass(),
-			let currentPage = FolioReader.shared.readerCenter?.currentPage else {
-				return
+        guard let currentPage = FolioReader.shared.readerCenter?.currentPage else {
+			return
 		}
+
+		let playbackActiveClass = self.book.playbackActiveClass()
         currentPage.webView.js("audioMarkID('\(playbackActiveClass)','\(identifier)')")
     }
     

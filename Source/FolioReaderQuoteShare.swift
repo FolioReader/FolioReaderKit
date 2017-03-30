@@ -23,19 +23,17 @@ class FolioReaderQuoteShare: UIViewController {
     let imagePicker = UIImagePickerController()
     var selectedIndex = 0
 
-	fileprivate var book: FRBook? {
-		return self.folioReader.readerContainer?.book
-	}
-
+	fileprivate var book			: FRBook
 	fileprivate var folioReader		: FolioReader
 	fileprivate var readerConfig	: FolioReaderConfig
 
     // MARK: Init
     
-	init(initWithText shareText: String, readerConfig: FolioReaderConfig, folioReader: FolioReader) {
+	init(initWithText shareText: String, readerConfig: FolioReaderConfig, folioReader: FolioReader, book: FRBook) {
 		self.folioReader = folioReader
 		self.readerConfig = readerConfig
 		self.quoteText = shareText.stripLineBreaks().stripHtml()
+		self.book = book
 
         super.init(nibName: nil, bundle: Bundle.frameworkBundle())
     }
@@ -88,11 +86,11 @@ class FolioReaderQuoteShare: UIViewController {
         var bookTitle = ""
         var authorName = ""
         
-        if let title = self.book?.title() {
+        if let title = self.book.title() {
 			bookTitle = title
 		}
 
-        if let author = self.book?.metadata.creators.first {
+        if let author = self.book.metadata.creators.first {
 			authorName = author.name
 		}
         
@@ -263,13 +261,13 @@ class FolioReaderQuoteShare: UIViewController {
         var shareItems = [AnyObject]()
         
         // Get book title
-        if let title = self.book?.title() {
+        if let title = self.book.title() {
             bookTitle = title
             subject += " “\(title)”"
         }
         
         // Get author name
-        if let author = self.book?.metadata.creators.first {
+        if let author = self.book.metadata.creators.first {
             authorName = author.name
         }
         
