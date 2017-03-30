@@ -468,7 +468,6 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
      - parameter identifier: The identifier
      */
     func audioMarkID(_ identifier: String) {
-		// TODO_SMF: replace shared readerContainer
         guard let currentPage = self.folioReader.readerCenter?.currentPage else {
 			return
 		}
