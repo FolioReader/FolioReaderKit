@@ -102,7 +102,7 @@ open class FolioReader: NSObject {
     
     /// Check if layout needs to change to fit Right To Left
     var needsRTLChange: Bool {
-        return (self.readerContainer?.book?.spine.isRtl == true && self.readerContainer?.readerConfig.scrollDirection == .horizontal)
+        return (self.readerContainer?.book.spine.isRtl == true && self.readerContainer?.readerConfig.scrollDirection == .horizontal)
     }
 
 	func isNight<T>(_ f: T, _ l: T) -> T {

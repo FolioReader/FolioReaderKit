@@ -17,30 +17,28 @@ open class FolioReaderContainer		: UIViewController {
     var audioPlayer					: FolioReaderAudioPlayer?
     var shouldHideStatusBar 		= true
     var shouldRemoveEpub 			= true
-	// TODO_SMF: remove optional for book and epubPath
-	var epubPath					: String?
-	var book						: FRBook?
+	var epubPath					: String
+	var book						: FRBook
 	var readerConfig				: FolioReaderConfig
 	var folioReader					: FolioReader
 
     fileprivate var errorOnLoad 	= false
 
     // MARK: - Init
-    
-    /**
-     Init a Container
-     
-     - parameter config:     A instance of `FolioReaderConfig`
-     - parameter path:       The ePub path on system
-     - parameter removeEpub: Should delete the original file after unzip? Default to `true` so the ePub will be unziped only once.
-     
-     - returns: `self`, initialized using the `FolioReaderConfig`.
-     */
+
+	/// Init a Folio Reader Container
+	///
+	/// - Parameters:
+	///   - config: Current Folio Reader configuration
+	///   - folioReader: Current instance of the FolioReader kit.
+	///   - path: The ePub path on system
+	///   - removeEpub:  Should delete the original file after unzip? Default to `true` so the ePub will be unziped only once.
 	public init(withConfig config: FolioReaderConfig, folioReader: FolioReader, epubPath path: String, removeEpub: Bool = true) {
 		self.readerConfig = config
 		self.folioReader = folioReader
         self.epubPath = path
         self.shouldRemoveEpub = removeEpub
+		self.book = FRBook()
 
 		super.init(nibName: nil, bundle: Bundle.frameworkBundle())
 		
@@ -51,13 +49,9 @@ open class FolioReaderContainer		: UIViewController {
 		// TODO_SMF_QUESTION: is that ok? do 'we' really support NSCoding?
 		fatalError("This class doesn't support NSCoding.")
     }
-    
-    /**
-     Common Initialization
-     */
+
+    /// Common Initialization
     fileprivate func initialization() {
-        self.book = FRBook()
-        
         // Register custom fonts
         FontBlaster.blast(bundle: Bundle.frameworkBundle())
 
@@ -73,14 +67,14 @@ open class FolioReaderContainer		: UIViewController {
             kCurrentScrollDirection: FolioReaderScrollDirection.defaultVertical.rawValue
 		])
     }
-    
-    /**
-     Set the `FolioReaderConfig` and epubPath.
-     
-     - parameter config:     A instance of `FolioReaderConfig`
-     - parameter path:       The ePub path on system
-     - parameter removeEpub: Should delete the original file after unzip? Default to `true` so the ePub will be unziped only once.
-     */
+
+    /// Set the `FolioReaderConfig` and epubPath.
+    ///
+    /// - Parameters:
+    ///   - config: Current Folio Reader configuration
+    ///   - folioReader: Current instance of the FolioReader kit.
+    ///   - path: The ePub path on system
+    ///   - removeEpub: Should delete the original file after unzip? Default to `true` so the ePub will be unziped only once.
     open func setupConfig(_ config: FolioReaderConfig, folioReader: FolioReader, epubPath path: String, removeEpub: Bool = true) {
         self.readerConfig = config
 		self.folioReader = folioReader
@@ -130,7 +124,7 @@ open class FolioReaderContainer		: UIViewController {
 		}
 
         // Read async book
-        guard let epubPath = self.epubPath, (epubPath.isEmpty == false) else {
+        guard (self.epubPath.isEmpty == false) else {
             print("Epub path is nil.")
             self.errorOnLoad = true
             return
@@ -138,7 +132,7 @@ open class FolioReaderContainer		: UIViewController {
 
         DispatchQueue.global(qos: .userInitiated).async {
 
-			guard let parsedBook = FREpubParser().readEpub(epubPath: epubPath, removeEpub: self.shouldRemoveEpub) else {
+			guard let parsedBook = FREpubParser().readEpub(epubPath: self.epubPath, removeEpub: self.shouldRemoveEpub) else {
 				self.errorOnLoad = true
 				return
 			}
@@ -150,19 +144,13 @@ open class FolioReaderContainer		: UIViewController {
             DispatchQueue.main.async(execute: {
                 
                 // Add audio player if needed
-                if (self.book?.hasAudio() == true || self.readerConfig.enableTTS == true) {
+                if (self.book.hasAudio() == true || self.readerConfig.enableTTS == true) {
                     self.addAudioPlayer()
                 }
                 
                 self.centerViewController?.reloadData()
-                
                 self.folioReader.isReaderReady = true
-
-				guard let loadedBook = self.book else {
-					return
-				}
-
-				self.folioReader.delegate?.folioReader?(self.folioReader, didFinishedLoading: loadedBook)
+				self.folioReader.delegate?.folioReader?(self.folioReader, didFinishedLoading: self.book)
             })
         }
     }

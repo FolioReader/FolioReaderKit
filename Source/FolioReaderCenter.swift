@@ -75,7 +75,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 	fileprivate var currentWebViewScrollPositions = [Int: CGPoint]()
 	fileprivate var currentOrientation: UIInterfaceOrientation?
 
-	fileprivate var book : FRBook? {
+	fileprivate var book : FRBook {
 		// TODO_SMF: remove optional
 		return self.readerContainer.book
 	}
@@ -108,7 +108,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
             self.pageIndicatorHeight = 0
         }
         
-        self.totalPages = (self.book?.spine.spineReferences.count ?? 0)
+        self.totalPages = self.book.spine.spineReferences.count
         
         // Loading indicator
         let style: UIActivityIndicatorViewStyle = self.readerContainer.folioReader.isNight(UIActivityIndicatorViewStyle.white, UIActivityIndicatorViewStyle.gray)
@@ -248,7 +248,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
             rightBarIcons.append(UIBarButtonItem(image: shareIcon, style: .plain, target: self, action:#selector(shareChapter(_:))))
         }
 
-        if (self.book?.hasAudio() == true || self.readerConfig.enableTTS == true) {
+        if (self.book.hasAudio() == true || self.readerConfig.enableTTS == true) {
             rightBarIcons.append(UIBarButtonItem(image: audioIcon, style: .plain, target: self, action:#selector(presentPlayerMenu(_:))))
         }
         
@@ -261,7 +261,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 
     func reloadData() {
         self.loadingView.stopAnimating()
-        self.totalPages = (self.book?.spine.spineReferences.count ?? 0)
+        self.totalPages = (self.book.spine.spineReferences.count ?? 0)
 
         self.collectionView.reloadData()
         self.configureNavBarButtons()
@@ -423,7 +423,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         
         // Configure the cell
 		guard
-			let resource = self.book?.spine.spineReferences[(indexPath as NSIndexPath).row].resource,
+			let resource = self.book.spine.spineReferences[(indexPath as NSIndexPath).row].resource,
 			var html = try? String(contentsOfFile: resource.fullHref, encoding: String.Encoding.utf8) else {
 				return cell
 		}
@@ -772,7 +772,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     */
     func findPageByResource(_ reference: FRTocReference) -> Int {
         var count = 0
-        for item in (self.book?.spine.spineReferences ?? []) {
+        for item in self.book.spine.spineReferences {
             if let resource = reference.resource, item.resource == resource {
                 return count
             }
@@ -786,7 +786,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     */
     func findPageByHref(_ href: String) -> Int {
         var count = 0
-        for item in (self.book?.spine.spineReferences ?? []) {
+        for item in self.book.spine.spineReferences {
             if item.resource.href == href {
                 return count
             }
@@ -800,8 +800,8 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     */
     func getCurrentChapter() -> FRResource? {
         if let currentPageNumber = currentPageNumber {
-            for item in (self.book?.flatTableOfContents ?? []) {
-                if let reference = self.book?.spine.spineReferences[safe: currentPageNumber-1], let resource = item.resource
+            for item in self.book.flatTableOfContents {
+                if let reference = self.book.spine.spineReferences[safe: currentPageNumber-1], let resource = item.resource
                     , resource == reference.resource {
                     return item.resource
                 }
@@ -815,9 +815,9 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
      */
     func getCurrentChapterName() -> String? {
         if let currentPageNumber = currentPageNumber {
-            for item in (self.book?.flatTableOfContents ?? []) {
+            for item in self.book.flatTableOfContents {
                 guard
-					let reference = self.book?.spine.spineReferences[safe: currentPageNumber-1],
+					let reference = self.book.spine.spineReferences[safe: currentPageNumber-1],
 					let resource = item.resource else {
 						return nil
 				}
@@ -882,7 +882,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 
 			// TODO_SMF: refactor similar code in current functions.
             // Get book title
-            if let title = self.book?.title() {
+            if let title = self.book.title() {
                 bookTitle = title
                 subject += " “\(title)”"
             }
@@ -893,7 +893,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
             }
             
             // Get author name
-            if let author = self.book?.metadata.creators.first {
+            if let author = self.book.metadata.creators.first {
                 authorName = author.name
             }
             
@@ -940,7 +940,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         var shareItems = [AnyObject]()
         
         // Get book title
-        if let title = self.book?.title() {
+        if let title = self.book.title() {
             bookTitle = title
             subject += " “\(title)”"
         }
@@ -951,7 +951,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         }
         
         // Get author name
-        if let author = self.book?.metadata.creators.first {
+        if let author = self.book.metadata.creators.first {
             authorName = author.name
         }
         
