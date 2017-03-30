@@ -81,19 +81,6 @@ public typealias Completion = (_ error: NSError?) -> ()
 
 extension Highlight {
 
-	private static var readerConfig : FolioReaderConfig {
-		// TODO_SMF_DEPRECATE
-		return FolioReader.shared.readerContainer!.readerConfig
-	}
-
-	/// Save a Highlight with completion block
-	///
-	/// - Parameter completion: Completion block
-	public func persist(_ completion: Completion? = nil) {
-		// TODO_SMF_DEPRECATE
-		self.persist(withConfiguration: Highlight.readerConfig, completion: completion)
-	}
-
 	/// Save a Highlight with completion block
 	///
 	/// - Parameters:
@@ -113,12 +100,6 @@ extension Highlight {
 	}
 
 	/// Remove a Highlight
-	public func remove() {
-		// TODO_SMF_DEPRECATE
-		self.remove(withConfiguration: Highlight.readerConfig)
-	}
-
-	/// Remove a Highlight
 	///
 	/// - Parameter readerConfig: Current folio reader configuration.
 	public func remove(withConfiguration readerConfig: FolioReaderConfig) {
@@ -130,14 +111,6 @@ extension Highlight {
 		} catch let error as NSError {
 			print("Error on remove highlight: \(error)")
 		}
-	}
-
-	/// Remove a Highlight by ID
-	///
-	/// - Parameter highlightId: The ID to be removed
-	public static func removeById(_ highlightId: String) {
-		// TODO_SMF_DEPRECATE
-		Highlight.removeById(withConfiguration: Highlight.readerConfig, highlightId: highlightId)
 	}
 
 	/// Remove a Highlight by ID
@@ -156,16 +129,6 @@ extension Highlight {
 		} catch let error as NSError {
 			print("Error on remove highlight by id: \(error)")
 		}
-	}
-
-	/// Update a Highlight by ID
-	///
-	/// - Parameters:
-	///   - highlightId: The ID to be removed
-	///   - type: The `HighlightStyle`
-	public static func updateById(_ highlightId: String, type: HighlightStyle) {
-		// TODO_SMF_DEPRECATE: deprecate
-		Highlight.updateById(withConfiguration: Highlight.readerConfig, highlightId: highlightId, type: type)
 	}
 
 	/// Update a Highlight by ID
@@ -194,17 +157,6 @@ extension Highlight {
 	/// Return a list of Highlights with a given ID
 	///
 	/// - Parameters:
-	///   - bookId: Book ID
-	///   - page: Page number
-	/// - Returns: Return a list of Highlights
-	public static func allByBookId(_ bookId: String, andPage page: NSNumber? = nil) -> [Highlight] {
-		// TODO_SMF_DEPRECATE
-		return Highlight.allByBookId(withConfiguration: Highlight.readerConfig, bookId: bookId, andPage: page)
-	}
-
-	/// Return a list of Highlights with a given ID
-	///
-	/// - Parameters:
 	///   - readerConfig: Current folio reader configuration.
 	///   - bookId: Book ID
 	///   - page: Page number
@@ -228,14 +180,6 @@ extension Highlight {
 
 	/// Return all Highlights
 	///
-	/// - Returns: Return all Highlights
-	public static func all() -> [Highlight] {
-		// TODO_SMF_DEPRECATE
-		return Highlight.all(withConfiguration: Highlight.readerConfig)
-	}
-
-	/// Return all Highlights
-	///
 	/// - Parameter readerConfig: - readerConfig: Current folio reader configuration.
 	/// - Returns: Return all Highlights
 	public static func all(withConfiguration readerConfig: FolioReaderConfig) -> [Highlight] {
@@ -248,6 +192,67 @@ extension Highlight {
 			print("Error on fetch all: \(error)")
 			return []
 		}
+	}
+}
+
+// MARK: - Static functions
+
+extension Highlight {
+
+	private static var readerConfig : FolioReaderConfig {
+		// TODO_SMF_DEPRECATE
+		return FolioReader.shared.readerContainer!.readerConfig
+	}
+
+	/// Save a Highlight with completion block
+	///
+	/// - Parameter completion: Completion block
+	public func persist(_ completion: Completion? = nil) {
+		// TODO_SMF_DEPRECATE
+		self.persist(withConfiguration: Highlight.readerConfig, completion: completion)
+	}
+
+	/// Return all Highlights
+	///
+	/// - Returns: Return all Highlights
+	public static func all() -> [Highlight] {
+		// TODO_SMF_DEPRECATE
+		return Highlight.all(withConfiguration: Highlight.readerConfig)
+	}
+
+	/// Return a list of Highlights with a given ID
+	///
+	/// - Parameters:
+	///   - bookId: Book ID
+	///   - page: Page number
+	/// - Returns: Return a list of Highlights
+	public static func allByBookId(_ bookId: String, andPage page: NSNumber? = nil) -> [Highlight] {
+		// TODO_SMF_DEPRECATE
+		return Highlight.allByBookId(withConfiguration: Highlight.readerConfig, bookId: bookId, andPage: page)
+	}
+
+	/// Update a Highlight by ID
+	///
+	/// - Parameters:
+	///   - highlightId: The ID to be removed
+	///   - type: The `HighlightStyle`
+	public static func updateById(_ highlightId: String, type: HighlightStyle) {
+		// TODO_SMF_DEPRECATE: deprecate
+		Highlight.updateById(withConfiguration: Highlight.readerConfig, highlightId: highlightId, type: type)
+	}
+
+	/// Remove a Highlight by ID
+	///
+	/// - Parameter highlightId: The ID to be removed
+	public static func removeById(_ highlightId: String) {
+		// TODO_SMF_DEPRECATE
+		Highlight.removeById(withConfiguration: Highlight.readerConfig, highlightId: highlightId)
+	}
+
+	/// Remove a Highlight
+	public func remove() {
+		// TODO_SMF_DEPRECATE
+		self.remove(withConfiguration: Highlight.readerConfig)
 	}
 }
 
