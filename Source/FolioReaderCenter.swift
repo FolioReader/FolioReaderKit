@@ -266,14 +266,17 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         self.configureNavBarButtons()
         self.setCollectionViewProgressiveDirection()
         
-        if let position = FolioReader.defaults.value(forKey: kBookId) as? NSDictionary,
-            let pageNumber = position["pageNumber"] as? Int , pageNumber > 0 {
-            self.changePageWith(page: pageNumber)
-            currentPageNumber = pageNumber
-            return
-        }
-        
-        currentPageNumber = 1
+        guard
+			let bookId = self.book.name,
+			let position = FolioReader.defaults.value(forKey: bookId) as? NSDictionary,
+			let pageNumber = position["pageNumber"] as? Int,
+			(pageNumber > 0) else {
+				currentPageNumber = 1
+				return
+		}
+
+		self.changePageWith(page: pageNumber)
+		currentPageNumber = pageNumber
     }
     
     // MARK: Change page progressive direction
@@ -1169,7 +1172,9 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
     
     public func pageDidLoad(_ page: FolioReaderPage) {
         
-        if let position = FolioReader.defaults.value(forKey: kBookId) as? NSDictionary {
+        if
+			let bookId = self.book.name,
+			let position = FolioReader.defaults.value(forKey: bookId) as? NSDictionary {
             let pageNumber = position["pageNumber"]! as! Int
 			let offset = self.readerConfig.isDirection(position["pageOffsetY"], position["pageOffsetX"]) as? CGFloat
 			let pageOffset = offset

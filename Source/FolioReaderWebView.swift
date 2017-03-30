@@ -139,7 +139,8 @@ open class FolioReaderWebView		: UIWebView {
 			guard
 				let html = js("getHTML()"),
 				let identifier = dic["id"],
-				let highlight = Highlight.matchHighlight(html, andId: identifier, startOffset: startOffset, endOffset: endOffset) else {
+				let bookId = (self.book.name as? NSString)?.deletingPathExtension,
+				let highlight = Highlight.matchHighlight(html, andId: identifier, startOffset: startOffset, endOffset: endOffset, bookId: bookId) else {
 					return
 			}
 

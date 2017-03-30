@@ -22,9 +22,6 @@ internal let kNightMode = "com.folioreader.kNightMode"
 internal let kCurrentTOCMenu = "com.folioreader.kCurrentTOCMenu"
 internal let kHighlightRange = 30
 
-// TODO_SMF: remove kBookId
-internal var kBookId: String!
-
 /// Defines the media overlay and TTS selection
 ///
 /// - `default`: The background is colored
@@ -238,17 +235,21 @@ extension FolioReader {
     open func saveReaderState() {
         guard self.isReaderOpen else { return }
         
-        if let currentPage = self.readerCenter?.currentPage {
-            let position = [
-                "pageNumber": currentPageNumber,
-                "pageOffsetX": currentPage.webView.scrollView.contentOffset.x,
-                "pageOffsetY": currentPage.webView.scrollView.contentOffset.y
-            ] as [String : Any]
-            
-            FolioReader.defaults.set(position, forKey: kBookId)
-        }
-    }
-    
+        guard
+			let bookId = self.readerContainer?.book.name,
+			let currentPage = self.readerCenter?.currentPage else {
+				return
+		}
+
+		let position = [
+			"pageNumber": currentPageNumber,
+			"pageOffsetX": currentPage.webView.scrollView.contentOffset.x,
+			"pageOffsetY": currentPage.webView.scrollView.contentOffset.y
+			] as [String : Any]
+
+		FolioReader.defaults.set(position, forKey: bookId)
+	}
+
     /**
      Closes and save the reader current instance
      */

@@ -136,9 +136,13 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 	fileprivate func htmlContentWithInsertHighlights(_ htmlContent: String) -> String {
 		var tempHtmlContent = htmlContent as NSString
 		// Restore highlights
-		let highlights = Highlight.allByBookId(withConfiguration: self.readerConfig, bookId: (kBookId as NSString).deletingPathExtension, andPage: pageNumber as NSNumber?)
+		guard let bookId = (self.book.name as? NSString)?.deletingPathExtension else {
+			return tempHtmlContent as String
+		}
 
-		if highlights.count > 0 {
+		let highlights = Highlight.allByBookId(withConfiguration: self.readerConfig, bookId: bookId, andPage: pageNumber as NSNumber?)
+
+		if (highlights.count > 0) {
 			for item in highlights {
 				let style = HighlightStyle.classForStyle(item.type)
 				let tag = "<highlight id=\"\(item.highlightId!)\" onclick=\"callHighlightURL(this);\" class=\"\(style)\">\(item.content!)</highlight>"
@@ -231,14 +235,17 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
             
             // Handle internal url
             if ((url.path as NSString).pathExtension != "") {
-                var base = (self.book.opfResource.href as? NSString)?.deletingLastPathComponent
-				base = ((base == nil || base?.isEmpty == true) ? kBookId : base)
+
+                var pathComponent = (self.book.opfResource.href as? NSString)?.deletingLastPathComponent
+				guard let base = ((pathComponent == nil || pathComponent?.isEmpty == true) ? self.book.name : pathComponent) else {
+					return true
+				}
 
                 let path = url.path
-                let splitedPath = path.components(separatedBy: (base ?? kBookId))
+                let splitedPath = path.components(separatedBy: base)
                 
                 // Return to avoid crash
-                if splitedPath.count <= 1 || splitedPath[1].isEmpty {
+                if (splitedPath.count <= 1 || splitedPath[1].isEmpty) {
                     return true
                 }
                 
