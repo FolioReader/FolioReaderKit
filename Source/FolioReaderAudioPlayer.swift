@@ -28,15 +28,13 @@ open class FolioReaderAudioPlayer: NSObject {
     var completionHandler: () -> Void = {}
     var utteranceRate: Float = 0
 
-	fileprivate var book : FRBook? {
-		// TODO_SMF: remove this getter
-		return FolioReader.shared.readerContainer?.book
-	}
+	fileprivate var book : FRBook?
 
     // MARK: Init
     
-    override init() {
+	init(withBook book: FRBook?) {
         super.init()
+		self.book = book
         UIApplication.shared.beginReceivingRemoteControlEvents()
         
         // this is needed to the audio can play even when the "silent/vibrate" toggle is on
