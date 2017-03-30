@@ -14,16 +14,19 @@ open class FolioReaderWebView		: UIWebView {
 	var isShare 					= false
     var isOneWord 					= false
 
-	fileprivate var book			: FRBook
 	fileprivate var readerConfig	: FolioReaderConfig
+	fileprivate var readerContainer	: FolioReaderContainer
+	fileprivate var book			: FRBook {
+		return self.readerContainer.book
+	}
 
 	override init(frame: CGRect) {
 		fatalError("use init(frame:readerConfig:book:) instead.")
 	}
 
-	init(frame: CGRect, readerConfig: FolioReaderConfig, book: FRBook) {
+	init(frame: CGRect, readerConfig: FolioReaderConfig, readerContainer: FolioReaderContainer) {
 		self.readerConfig = readerConfig
-		self.book = book
+		self.readerContainer = readerContainer
 
 		super.init(frame: frame)
 	}
@@ -148,15 +151,17 @@ open class FolioReaderWebView		: UIWebView {
 	}
 
 	func define(_ sender: UIMenuController?) {
-		let selectedText = js("getSelectedText()")
+
+		guard let selectedText = js("getSelectedText()") else {
+			return
+		}
 
 		self.setMenuVisible(false)
-
 		self.clearTextSelection()
 
-		let vc = UIReferenceLibraryViewController(term: selectedText! )
+		let vc = UIReferenceLibraryViewController(term: selectedText)
 		vc.view.tintColor = self.readerConfig.tintColor
-		FolioReader.shared.readerContainer?.show(vc, sender: nil)
+		self.readerContainer.show(vc, sender: nil)
 	}
 
 	func play(_ sender: UIMenuController?) {

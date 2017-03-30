@@ -332,23 +332,25 @@ extension FolioReaderQuoteShare: UICollectionViewDataSource {
             imageView.tag = tag
             cell.contentView.addSubview(imageView)
         }
-        
-        // Image color
-        let normalColor = UIColor(white: 0.5, alpha: 0.7)
-        let camera = UIImage(readerImageNamed: "icon-camera")
-        let dash = UIImage(readerImageNamed: "border-dashed-pattern")
-        let cameraNormal = camera!.imageTintColor(normalColor)
-        let dashNormal = dash!.imageTintColor(normalColor)
-        
+
         // Camera
-        guard (indexPath as NSIndexPath).row > 0 else {
+        guard ((indexPath as NSIndexPath).row > 0) else {
+
+			// Image color
+			let normalColor = UIColor(white: 0.5, alpha: 0.7)
+			let camera = UIImage(readerImageNamed: "icon-camera")
+			let dash = UIImage(readerImageNamed: "border-dashed-pattern")
+			let cameraNormal = camera?.imageTintColor(normalColor)
+
             imageView.contentMode = .center
             imageView.image = cameraNormal
-            cell.contentView.layer.borderColor = UIColor(patternImage: dashNormal).cgColor
+			if let dashNormal = dash?.imageTintColor(normalColor) {
+            	cell.contentView.layer.borderColor = UIColor(patternImage: dashNormal).cgColor
+			}
             return cell
         }
         
-        if selectedIndex == (indexPath as NSIndexPath).row {
+        if (selectedIndex == (indexPath as NSIndexPath).row) {
             cell.contentView.layer.borderColor = self.readerConfig.tintColor.cgColor
             cell.contentView.layer.borderWidth = 3
         } else {

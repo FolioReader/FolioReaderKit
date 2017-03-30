@@ -18,6 +18,7 @@ class FolioReaderChapterListCell: UITableViewCell {
         indexLabel.numberOfLines = 0
         indexLabel.translatesAutoresizingMaskIntoConstraints = false
         indexLabel.font = UIFont(name: "Avenir-Light", size: 17)
+		// TODO_SMF: replace shared readerContainer
         indexLabel.textColor = FolioReader.shared.readerContainer?.readerConfig.menuTextColor
         contentView.addSubview(indexLabel)
         

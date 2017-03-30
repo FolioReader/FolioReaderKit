@@ -25,13 +25,11 @@ internal let kHighlightRange = 30
 // TODO_SMF: remove kBookId
 internal var kBookId: String!
 
-/**
- Defines the media overlay and TTS selection
- 
- - Default:   The background is colored
- - Underline: The underlined is colored
- - TextColor: The text is colored
- */
+/// Defines the media overlay and TTS selection
+///
+/// - `default`: The background is colored
+/// - underline: The underlined is colored
+/// - textColor: The text is colored
 enum MediaOverlayStyle: Int {
     case `default`
     case underline
@@ -73,9 +71,6 @@ enum MediaOverlayStyle: Int {
  */
 open class FolioReader: NSObject {
 
-    /// Singleton instance
-    fileprivate override init() {}
-    
     /// Custom unzip path
     open var unzipPath				: String?
     
@@ -391,6 +386,7 @@ extension UICollectionViewScrollDirection {
 	}
 
     static func direction(withConfiguration readerConfig: FolioReaderConfig) -> UICollectionViewScrollDirection {
+		// TODO_SMF_DOC
         return readerConfig.isDirection(.vertical, .horizontal, .horizontal)
     }
 }
@@ -407,11 +403,13 @@ extension UICollectionViewScrollPosition {
 	}
 
 	static func direction(withConfiguration readerConfig: FolioReaderConfig) -> UICollectionViewScrollPosition {
+		// TODO_SMF_DOC
 		return readerConfig.isDirection(.top, .left, .left)
 	}
 }
 
 extension CGPoint {
+
     func forDirection() -> CGFloat {
 		// TODO_SMF_DEPRECATE
 		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
@@ -422,11 +420,13 @@ extension CGPoint {
     }
 
 	func forDirection(withConfiguration readerConfig: FolioReaderConfig) -> CGFloat {
+		// TODO_SMF_DOC
 		return readerConfig.isDirection(self.y, self.x, self.y)
 	}
 }
 
 extension CGSize {
+
     func forDirection() -> CGFloat {
 		// TODO_SMF_DEPRECATE
 		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
@@ -436,6 +436,7 @@ extension CGSize {
     }
 
 	func forDirection(withConfiguration readerConfig: FolioReaderConfig) -> CGFloat {
+		// TODO_SMF_DOC
 		return readerConfig.isDirection(height, width, height)
 	}
 
@@ -449,11 +450,13 @@ extension CGSize {
     }
 
 	func forReverseDirection(withConfiguration readerConfig: FolioReaderConfig) -> CGFloat {
+		// TODO_SMF_DOC
 		return readerConfig.isDirection(width, height, width)
 	}
 }
 
 extension CGRect {
+
     func forDirection() -> CGFloat {
 		// TODO_SMF_DEPRECATE
 		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
@@ -464,11 +467,13 @@ extension CGRect {
     }
 
 	func forDirection(withConfiguration readerConfig: FolioReaderConfig) -> CGFloat {
+		// TODO_SMF_DOC
 		return readerConfig.isDirection(height, width, height)
 	}
 }
 
 extension ScrollDirection {
+
     static func negative() -> ScrollDirection {
 		// TODO_SMF_DEPRECATE
 		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
@@ -479,6 +484,7 @@ extension ScrollDirection {
     }
 
 	static func negative(withConfiguration readerConfig: FolioReaderConfig) -> ScrollDirection {
+		// TODO_SMF_DOC
 		return readerConfig.isDirection(.down, .right, .right)
 	}
 
@@ -492,6 +498,7 @@ extension ScrollDirection {
     }
 
 	static func positive(withConfiguration readerConfig: FolioReaderConfig) -> ScrollDirection {
+		// TODO_SMF_DOC
 		return readerConfig.isDirection(.up, .left, .left)
 	}
 }
@@ -748,42 +755,57 @@ internal extension String {
 // TODO_SMF: split files into extension files
 
 internal extension UIImage {
-    convenience init?(readerImageNamed: String) {
+
+	convenience init?(readerImageNamed: String) {
         self.init(named: readerImageNamed, in: Bundle.frameworkBundle(), compatibleWith: nil)
     }
-    
-    /**
-     Forces the image to be colored with Reader Config tintColor
-     
-     - returns: Returns a colored image
-     */
-    func ignoreSystemTint() -> UIImage {
-		// TODO_SMF: replace shared readerContainer
-        return self.imageTintColor(FolioReader.shared.readerContainer!.readerConfig.tintColor).withRenderingMode(.alwaysOriginal)
+
+    /// Forces the image to be colored with Reader Config tintColor
+    ///
+    /// - Returns: Returns a colored image
+	func ignoreSystemTint() -> UIImage? {
+		// TODO_SMF_DEPRECATE
+		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
+			return nil
+		}
+
+		return self.ignoreSystemTint(withConfiguration: readerConfig)
+	}
+
+    /// Forces the image to be colored with Reader Config tintColor
+    ///
+    /// - Parameter readerConfig: Current folio reader configuration.
+    /// - Returns: Returns a colored image
+    func ignoreSystemTint(withConfiguration readerConfig: FolioReaderConfig) -> UIImage? {
+		// TODO_SMF_DOC
+        return self.imageTintColor(readerConfig.tintColor)?.withRenderingMode(.alwaysOriginal)
     }
-    
+
     /**
      Colorize the image with a color
      
      - parameter tintColor: The input color
      - returns: Returns a colored image
      */
-    func imageTintColor(_ tintColor: UIColor) -> UIImage {
+    func imageTintColor(_ tintColor: UIColor) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
         
-        let context = UIGraphicsGetCurrentContext()! as CGContext
-        context.translateBy(x: 0, y: self.size.height)
-        context.scaleBy(x: 1.0, y: -1.0)
-        context.setBlendMode(CGBlendMode.normal)
-        
+        let context = UIGraphicsGetCurrentContext()
+        context?.translateBy(x: 0, y: self.size.height)
+        context?.scaleBy(x: 1.0, y: -1.0)
+        context?.setBlendMode(CGBlendMode.normal)
+
         let rect = CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height) as CGRect
-        context.clip(to: rect, mask: self.cgImage!)
+		if let cgImage = self.cgImage {
+        	context?.clip(to: rect, mask:  cgImage)
+		}
+
         tintColor.setFill()
-        context.fill(rect)
-        
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()! as UIImage
+        context?.fill(rect)
+
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        
+
         return newImage
     }
     

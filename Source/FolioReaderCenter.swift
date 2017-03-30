@@ -408,7 +408,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 
 	private func configure(readerPageCell cell: FolioReaderPage, atIndexPath indexPath: IndexPath) -> FolioReaderPage {
 
-		cell.setup(withReaderConfig: self.readerConfig, book: self.book)
+		cell.setup(withReaderConfig: self.readerConfig, readerContainer: self.readerContainer)
         cell.pageNumber = (indexPath as NSIndexPath).row+1
         cell.webView.scrollView.delegate = self
         cell.webView.setupScrollDirection()

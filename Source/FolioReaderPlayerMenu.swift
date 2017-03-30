@@ -68,13 +68,13 @@ class FolioReaderPlayerMenu			: UIViewController, SMSegmentViewDelegate, UIGestu
         let pause = UIImage(readerImageNamed: "pause-icon")
         let prev = UIImage(readerImageNamed: "prev-icon")
         let next = UIImage(readerImageNamed: "next-icon")
-        let playSelected = play!.imageTintColor(selectedColor).withRenderingMode(.alwaysOriginal)
-        let pauseSelected = pause!.imageTintColor(selectedColor).withRenderingMode(.alwaysOriginal)
+        let playSelected = play?.imageTintColor(selectedColor)?.withRenderingMode(.alwaysOriginal)
+        let pauseSelected = pause?.imageTintColor(selectedColor)?.withRenderingMode(.alwaysOriginal)
         
-        let prevNormal = prev!.imageTintColor(normalColor).withRenderingMode(.alwaysOriginal)
-        let nextNormal = next!.imageTintColor(normalColor).withRenderingMode(.alwaysOriginal)
-        let prevSelected = prev!.imageTintColor(selectedColor).withRenderingMode(.alwaysOriginal)
-        let nextSelected = next!.imageTintColor(selectedColor).withRenderingMode(.alwaysOriginal)
+        let prevNormal = prev?.imageTintColor(normalColor)?.withRenderingMode(.alwaysOriginal)
+        let nextNormal = next?.imageTintColor(normalColor)?.withRenderingMode(.alwaysOriginal)
+        let prevSelected = prev?.imageTintColor(selectedColor)?.withRenderingMode(.alwaysOriginal)
+        let nextSelected = next?.imageTintColor(selectedColor)?.withRenderingMode(.alwaysOriginal)
         
         // prev button
         let prevBtn = UIButton(frame: CGRect(x: gutterX + padX, y: 0, width: size, height: size))

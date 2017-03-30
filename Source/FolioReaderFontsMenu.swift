@@ -118,13 +118,13 @@ class FolioReaderFontsMenu			: UIViewController, SMSegmentViewDelegate, UIGestur
         let fontSmall = UIImage(readerImageNamed: "icon-font-small")
         let fontBig = UIImage(readerImageNamed: "icon-font-big")
         
-        let sunNormal = sun!.imageTintColor(normalColor).withRenderingMode(.alwaysOriginal)
-        let moonNormal = moon!.imageTintColor(normalColor).withRenderingMode(.alwaysOriginal)
-        let fontSmallNormal = fontSmall!.imageTintColor(normalColor).withRenderingMode(.alwaysOriginal)
-        let fontBigNormal = fontBig!.imageTintColor(normalColor).withRenderingMode(.alwaysOriginal)
+        let sunNormal = sun?.imageTintColor(normalColor)?.withRenderingMode(.alwaysOriginal)
+        let moonNormal = moon?.imageTintColor(normalColor)?.withRenderingMode(.alwaysOriginal)
+        let fontSmallNormal = fontSmall?.imageTintColor(normalColor)?.withRenderingMode(.alwaysOriginal)
+        let fontBigNormal = fontBig?.imageTintColor(normalColor)?.withRenderingMode(.alwaysOriginal)
         
-        let sunSelected = sun!.imageTintColor(selectedColor).withRenderingMode(.alwaysOriginal)
-        let moonSelected = moon!.imageTintColor(selectedColor).withRenderingMode(.alwaysOriginal)
+        let sunSelected = sun?.imageTintColor(selectedColor)?.withRenderingMode(.alwaysOriginal)
+        let moonSelected = moon?.imageTintColor(selectedColor)?.withRenderingMode(.alwaysOriginal)
         
         // Day night mode
         let dayNight = SMSegmentView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 55),
@@ -229,10 +229,10 @@ class FolioReaderFontsMenu			: UIViewController, SMSegmentViewDelegate, UIGestur
         
         let vertical = UIImage(readerImageNamed: "icon-menu-vertical")
         let horizontal = UIImage(readerImageNamed: "icon-menu-horizontal")
-        let verticalNormal = vertical!.imageTintColor(normalColor).withRenderingMode(.alwaysOriginal)
-        let horizontalNormal = horizontal!.imageTintColor(normalColor).withRenderingMode(.alwaysOriginal)
-        let verticalSelected = vertical!.imageTintColor(selectedColor).withRenderingMode(.alwaysOriginal)
-        let horizontalSelected = horizontal!.imageTintColor(selectedColor).withRenderingMode(.alwaysOriginal)
+        let verticalNormal = vertical?.imageTintColor(normalColor)?.withRenderingMode(.alwaysOriginal)
+        let horizontalNormal = horizontal?.imageTintColor(normalColor)?.withRenderingMode(.alwaysOriginal)
+        let verticalSelected = vertical?.imageTintColor(selectedColor)?.withRenderingMode(.alwaysOriginal)
+        let horizontalSelected = horizontal?.imageTintColor(selectedColor)?.withRenderingMode(.alwaysOriginal)
         
         // Layout direction
         let layoutDirection = SMSegmentView(frame: CGRect(x: 0, y: line3.frame.origin.y, width: view.frame.width, height: 55),

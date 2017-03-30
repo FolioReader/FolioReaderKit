@@ -40,30 +40,32 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     fileprivate var shouldShowBar = true
     fileprivate var menuIsVisible = false
 
-	fileprivate var readerConfig: FolioReaderConfig
-	fileprivate var book: FRBook
+	fileprivate var readerConfig	: FolioReaderConfig
+	fileprivate var readerContainer	: FolioReaderContainer
+	fileprivate var book			: FRBook {
+		return self.readerContainer.book
+	}
 
     // MARK: - View life cicle
 
 	public override init(frame: CGRect) {
 		// Init explicit attributes with a default value. The `setup` function MUST be called to configure the current object with valid attributes.
 		self.readerConfig = FolioReaderConfig()
-		self.book = FRBook()
+		self.readerContainer = FolioReaderContainer(withConfig: self.readerConfig, folioReader: FolioReader(), epubPath: "")
 
 		super.init(frame: frame)
 	}
 
-	public func setup(withReaderConfig readerConfig: FolioReaderConfig, book: FRBook) {
+	public func setup(withReaderConfig readerConfig: FolioReaderConfig, readerContainer: FolioReaderContainer) {
 		self.readerConfig = readerConfig
-		self.book = book
+		self.readerContainer = readerContainer
 
         self.backgroundColor = UIColor.clear
-        
-        // TODO: Put the notification name in a Constants file
+
         NotificationCenter.default.addObserver(self, selector: #selector(refreshPageMode), name: NSNotification.Name(rawValue: "needRefreshPageMode"), object: nil)
         
         if webView == nil {
-			webView = FolioReaderWebView(frame: webViewFrame(), readerConfig: self.readerConfig, book: self.book)
+			webView = FolioReaderWebView(frame: webViewFrame(), readerConfig: self.readerConfig, readerContainer: self.readerContainer)
             webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             webView.dataDetectorTypes = .link
             webView.scrollView.showsVerticalScrollIndicator = false
