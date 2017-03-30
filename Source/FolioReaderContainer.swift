@@ -17,7 +17,8 @@ open class FolioReaderContainer		: UIViewController {
     var audioPlayer					: FolioReaderAudioPlayer?
     var shouldHideStatusBar 		= true
     var shouldRemoveEpub 			= true
-    var epubPath					: String?
+	// TODO_SMF: remove optional for book and epubPath
+	var epubPath					: String?
 	var book						: FRBook?
 	var readerConfig				: FolioReaderConfig
 	var folioReader					: FolioReader

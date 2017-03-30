@@ -825,7 +825,9 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 				guard
 					(resource == reference.resource),
 					let title = item.title else {
-					return nil
+						// TODO_SMF: check if this really works fine (or if it was working anyway).
+						// Select text -> share.
+						return nil
 				}
 
 				return title
@@ -1134,7 +1136,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         FolioReader.saveReaderState()
         hideBars()
 
-        let menu = FolioReaderPlayerMenu()
+        let menu = FolioReaderPlayerMenu(folioReader: self.readerContainer.folioReader, readerConfig: self.readerConfig)
         menu.modalPresentationStyle = .custom
 
         animator = ZFModalTransitionAnimator(modalViewController: menu)

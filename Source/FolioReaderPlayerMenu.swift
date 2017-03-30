@@ -8,16 +8,25 @@
 
 import UIKit
 
-class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureRecognizerDelegate {
+class FolioReaderPlayerMenu			: UIViewController, SMSegmentViewDelegate, UIGestureRecognizerDelegate {
 
-    var menuView: UIView!
-    var playPauseBtn: UIButton!
-    var styleOptionBtns = [UIButton]()
-    var viewDidAppear = false
+    var menuView					: UIView!
+    var	playPauseBtn				: UIButton!
+    var styleOptionBtns 			= [UIButton]()
+    var viewDidAppear 				= false
 
-	fileprivate var readerConfig : FolioReaderConfig {
-		// TODO_SMF: remove this getter
-		return FolioReader.shared.readerContainer!.readerConfig
+	fileprivate var readerConfig 	: FolioReaderConfig
+	fileprivate var folioReader 	: FolioReader
+
+	init(folioReader: FolioReader, readerConfig: FolioReaderConfig) {
+		self.readerConfig = readerConfig
+		self.folioReader = folioReader
+
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
 	}
 
     override func viewDidLoad() {
@@ -34,7 +43,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
 
         // Menu view
         menuView = UIView(frame: CGRect(x: 0, y: view.frame.height-165, width: view.frame.width, height: view.frame.height))
-        menuView.backgroundColor = isNight(self.readerConfig.nightModeMenuBackground, UIColor.white)
+        menuView.backgroundColor = self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, UIColor.white)
         menuView.autoresizingMask = .flexibleWidth
         menuView.layer.shadowColor = UIColor.black.cgColor
         menuView.layer.shadowOffset = CGSize(width: 0, height: 0)
@@ -133,8 +142,8 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
         let style0 = UIButton(frame: CGRect(x: 0, y: line2.frame.height+line2.frame.origin.y, width: view.frame.width/3, height: 55))
         style0.titleLabel!.textAlignment = .center
         style0.titleLabel!.font = UIFont(name: "Avenir-Light", size: 17)
-        style0.setTitleColor(isNight(self.readerConfig.nightModeMenuBackground, UIColor.white), for: UIControlState())
-        style0.setTitleColor(isNight(self.readerConfig.nightModeMenuBackground, UIColor.white), for: .selected)
+        style0.setTitleColor(self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, UIColor.white), for: UIControlState())
+        style0.setTitleColor(self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, UIColor.white), for: .selected)
         style0.setTitle(self.readerConfig.localizedPlayerMenuStyle, for: UIControlState())
         menuView.addSubview(style0);
         style0.titleLabel?.sizeToFit()
@@ -157,7 +166,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
             NSUnderlineColorAttributeName: normalColor
         ]), for: UIControlState())
         style1.setAttributedTitle(NSAttributedString(string: self.readerConfig.localizedPlayerMenuStyle, attributes: [
-            NSForegroundColorAttributeName: isNight(UIColor.white, UIColor.black),
+            NSForegroundColorAttributeName: self.folioReader.isNight(UIColor.white, UIColor.black),
             NSUnderlineStyleAttributeName: NSUnderlineStyle.patternDot.rawValue|NSUnderlineStyle.styleSingle.rawValue,
             NSUnderlineColorAttributeName: selectedColor
             ]), for: .selected)

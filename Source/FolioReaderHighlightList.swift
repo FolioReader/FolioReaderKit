@@ -26,7 +26,6 @@ class FolioReaderHighlightList: UITableViewController {
 		fatalError("init with coder not supported")
 	}
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
