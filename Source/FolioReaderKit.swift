@@ -62,7 +62,7 @@ enum MediaOverlayStyle: Int {
      */
     @objc optional func folioReaderDidClosed(_ folioReader: FolioReader)
 
-	// TODO_SMF: make sure the following deprecated functions still work... or not.:
+	// TODO_SMF_CHECK: make sure the following deprecated functions still work... or not.:
 	// TODO_SMF_QUESTION: ask the main developer(s) for that.
 	// TODO_SMF_DOC: new function signature change
 	@objc optional func folioReaderDidClosed()
@@ -118,7 +118,7 @@ open class FolioReader: NSObject {
 
 			if let readerCenter = self.readerCenter {
 				UIView.animate(withDuration: 0.6, animations: {
-					// TODO_SMF: infinite loop?
+					// TODO_SMF_CHECK: infinite loop?
 					_ = readerCenter.currentPage?.webView.js("nightMode(\(self.nightMode))")
 					readerCenter.pageIndicatorView?.reloadColors()
 					readerCenter.configureNavBar()
@@ -183,7 +183,6 @@ open class FolioReader: NSObject {
     }
     
     /// Check the current scroll direction
-	// TODO_SMF: value should use `FolioReaderScrollDirection` instead of `Int`?
     open var currentScrollDirection: Int {
 		// TODO_SMF: remove unwrap
         get { return FolioReader.defaults.value(forKey: kCurrentScrollDirection) as! Int }
@@ -284,43 +283,30 @@ extension FolioReader {
 	/// Check if current theme is Night mode
 	open class var nightMode: Bool {
 		get { return FolioReader.shared.nightMode }
-		set (value) {
-			FolioReader.shared.nightMode = value
-		}
+		set { FolioReader.shared.nightMode = newValue }
 	}
 
 	/// Check current font name
 	open class var currentFont: FolioReaderFont {
 		get { return FolioReader.shared.currentFont }
-		set (font) {
-			FolioReader.shared.currentFont = font
-		}
+		set { FolioReader.shared.currentFont = newValue }
 	}
 
 	/// Check current font size
 	open class var currentFontSize: FolioReaderFontSize {
-		// TODO_SMF: remove unwrap
 		get { return FolioReader.shared.currentFontSize }
-		set (value) {
-			FolioReader.shared.currentFontSize = value
-		}
+		set { FolioReader.shared.currentFontSize = newValue }
 	}
 
 	/// Check the current scroll direction
 	open class var currentScrollDirection: Int {
-		// TODO_SMF: remove unwrap
 		get { return FolioReader.shared.currentScrollDirection }
-		set (value) {
-			FolioReader.shared.currentScrollDirection = value
-		}
+		set { FolioReader.shared.currentScrollDirection = newValue }
 	}
 
 	open class var currentAudioRate: Int {
-		// TODO_SMF: remove unwrap
 		get { return FolioReader.shared.currentAudioRate }
-		set (value) {
-			FolioReader.shared.currentAudioRate = value
-		}
+		set { FolioReader.shared.currentAudioRate = newValue }
 	}
 
 	/// Check if reader is open and ready
@@ -345,9 +331,7 @@ extension FolioReader {
 	/// Check the current highlight style
 	open class var currentHighlightStyle: Int {
 		get { return FolioReader.shared.currentHighlightStyle }
-		set (value) {
-			FolioReader.shared.currentHighlightStyle = value
-		}
+		set { FolioReader.shared.currentHighlightStyle = newValue }
 	}
 
 	/// Check if layout needs to change to fit Right To Left
@@ -360,7 +344,7 @@ extension FolioReader {
 
 extension FolioReader {
 
-	// TODO_SMF: deprecate and find a replacement for those functions.
+	// TODO_SMF_DEPRECATE and find a replacement for those functions.
 
 	/**
 	Called when the application will resign active
@@ -422,7 +406,7 @@ func isDirection<T> (_ vertical: T, _ horizontal: T, _ horizontalContentVertical
 extension UICollectionViewScrollDirection {
 
 	static func direction() -> UICollectionViewScrollDirection {
-		// TODO_SMF: deprecate
+		// TODO_SMF_DEPRECATE
 		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
 			return .vertical
 		}
@@ -438,7 +422,7 @@ extension UICollectionViewScrollDirection {
 extension UICollectionViewScrollPosition {
 
 	static func direction() -> UICollectionViewScrollPosition {
-		// TODO_SMF: deprecate
+		// TODO_SMF_DEPRECATE
 		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
 			return .top
 		}
@@ -453,7 +437,7 @@ extension UICollectionViewScrollPosition {
 
 extension CGPoint {
     func forDirection() -> CGFloat {
-		// TODO_SMF: deprecate
+		// TODO_SMF_DEPRECATE
 		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
 			return self.y
 		}
@@ -468,7 +452,7 @@ extension CGPoint {
 
 extension CGSize {
     func forDirection() -> CGFloat {
-		// TODO_SMF: deprecate
+		// TODO_SMF_DEPRECATE
 		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
 			return self.height
 		}
@@ -480,7 +464,7 @@ extension CGSize {
 	}
 
     func forReverseDirection() -> CGFloat {
-		// TODO_SMF: deprecate
+		// TODO_SMF_DEPRECATE
 		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
 			return self.width
 		}
@@ -495,7 +479,7 @@ extension CGSize {
 
 extension CGRect {
     func forDirection() -> CGFloat {
-		// TODO_SMF: deprecate
+		// TODO_SMF_DEPRECATE
 		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
 			return self.height
 		}
@@ -510,7 +494,7 @@ extension CGRect {
 
 extension ScrollDirection {
     static func negative() -> ScrollDirection {
-		// TODO_SMF: deprecate
+		// TODO_SMF_DEPRECATE
 		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
 			return self.down
 		}
@@ -523,7 +507,7 @@ extension ScrollDirection {
 	}
 
     static func positive() -> ScrollDirection {
-		// TODO_SMF: deprecate
+		// TODO_SMF_DEPRECATE
 		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
 			return self.up
 		}

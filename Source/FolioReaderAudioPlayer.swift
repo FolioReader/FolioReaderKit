@@ -361,6 +361,7 @@ open class FolioReaderAudioPlayer: NSObject {
     // MARK: TTS Sentence
     
     func speakSentence() {
+		// TODO_SMF_CHECK: does it work fine?
 		guard
 			let readerCenter = FolioReader.shared.readerCenter,
 			let currentPage = readerCenter.currentPage else {

@@ -824,7 +824,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 				guard
 					(resource == reference.resource),
 					let title = item.title else {
-						// TODO_SMF: check if this really works fine (or if it was working anyway).
+						// TODO_SMF_CHECK: check if this really works fine (or if it was working anyway).
 						// Select text -> share.
 						return nil
 				}

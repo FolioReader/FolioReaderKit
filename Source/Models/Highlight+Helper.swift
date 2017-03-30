@@ -82,7 +82,7 @@ public typealias Completion = (_ error: NSError?) -> ()
 extension Highlight {
 
 	private static var readerConfig : FolioReaderConfig {
-		// TODO_SMF: deprecate
+		// TODO_SMF_DEPRECATE
 		return FolioReader.shared.readerContainer!.readerConfig
 	}
 
@@ -90,7 +90,7 @@ extension Highlight {
 	///
 	/// - Parameter completion: Completion block
 	public func persist(_ completion: Completion? = nil) {
-		// TODO_SMF: deprecate
+		// TODO_SMF_DEPRECATE
 		self.persist(withConfiguration: Highlight.readerConfig, completion: completion)
 	}
 
@@ -114,7 +114,7 @@ extension Highlight {
 
 	/// Remove a Highlight
 	public func remove() {
-		// TODO_SMF: deprecate
+		// TODO_SMF_DEPRECATE
 		self.remove(withConfiguration: Highlight.readerConfig)
 	}
 
@@ -136,7 +136,7 @@ extension Highlight {
 	///
 	/// - Parameter highlightId: The ID to be removed
 	public static func removeById(_ highlightId: String) {
-		// TODO_SMF: deprecate
+		// TODO_SMF_DEPRECATE
 		Highlight.removeById(withConfiguration: Highlight.readerConfig, highlightId: highlightId)
 	}
 
@@ -164,7 +164,7 @@ extension Highlight {
 	///   - highlightId: The ID to be removed
 	///   - type: The `HighlightStyle`
 	public static func updateById(_ highlightId: String, type: HighlightStyle) {
-		// TODO_SMF: deprecate
+		// TODO_SMF_DEPRECATE: deprecate
 		Highlight.updateById(withConfiguration: Highlight.readerConfig, highlightId: highlightId, type: type)
 	}
 
@@ -198,7 +198,7 @@ extension Highlight {
 	///   - page: Page number
 	/// - Returns: Return a list of Highlights
 	public static func allByBookId(_ bookId: String, andPage page: NSNumber? = nil) -> [Highlight] {
-		// TODO_SMF: deprecate
+		// TODO_SMF_DEPRECATE
 		return Highlight.allByBookId(withConfiguration: Highlight.readerConfig, bookId: bookId, andPage: page)
 	}
 
@@ -230,7 +230,7 @@ extension Highlight {
 	///
 	/// - Returns: Return all Highlights
 	public static func all() -> [Highlight] {
-		// TODO_SMF: deprecate
+		// TODO_SMF_DEPRECATE
 		return Highlight.all(withConfiguration: Highlight.readerConfig)
 	}
 
