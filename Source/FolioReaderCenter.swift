@@ -279,7 +279,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     // MARK: Change page progressive direction
     
     func setCollectionViewProgressiveDirection() {
-        if FolioReader.needsRTLChange {
+        if (FolioReader.needsRTLChange == true) {
             collectionView.transform = CGAffineTransform(scaleX: -1, y: 1)
         } else {
             collectionView.transform = CGAffineTransform.identity
@@ -287,7 +287,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func setPageProgressiveDirection(_ page: FolioReaderPage) {
-        if FolioReader.needsRTLChange {
+        if (FolioReader.needsRTLChange == true) {
 //            if page.transform.a == -1 { return }
             page.transform = CGAffineTransform(scaleX: -1, y: 1)
         } else {
@@ -295,7 +295,6 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         }
     }
 
-    
     // MARK: Change layout orientation
     
     func setScrollDirection(_ direction: FolioReaderScrollDirection) {
@@ -357,9 +356,8 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func showBars() {
-        configureNavBar()
-        
-        let shouldHide =
+        self.configureNavBar()
+
         self.readerContainer.shouldHideStatusBar = false
         
         UIView.animate(withDuration: 0.25, animations: {
@@ -1011,7 +1009,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         
         // Update current reading page
         if scrollView is UICollectionView {
-			// Do nothing?
+			// TODO_SMF: refactor?
 		} else {
 			if	let page = currentPage,
 				let pageSize = self.readerConfig.isDirection(pageHeight, pageWidth) {
@@ -1027,7 +1025,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 
 						// if the cell reload don't save the top position offset
 						if let oldOffSet = self.currentWebViewScrollPositions[currentIndexPathRow], (abs(oldOffSet.y - scrollView.contentOffset.y) > 100) {
-							// DO nothing?
+							// TODO_SMF: refactor?
 						} else {
 							self.currentWebViewScrollPositions[currentIndexPathRow] = scrollView.contentOffset
 						}

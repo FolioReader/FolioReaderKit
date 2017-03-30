@@ -67,6 +67,7 @@ open class FolioReaderWebView		: UIWebView {
 				}
 			} else {
 				if let textToShare = self.js("getSelectedText()") {
+					// TODO_SMF: remove call to FolioReader.shared.readerCenter
 					FolioReader.shared.readerCenter?.presentQuoteShare(textToShare)
 
 					self.clearTextSelection()

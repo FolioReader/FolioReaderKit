@@ -138,8 +138,9 @@ class FolioReaderHighlightList		: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let highlight = highlights[(indexPath as NSIndexPath).row]
 
+		// TODO_SMF: remove call to FolioReader.shared.readerCenter
         FolioReader.shared.readerCenter?.changePageWith(page: highlight.page, andFragment: highlight.highlightId)
-        dismiss()
+        self.dismiss()
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {

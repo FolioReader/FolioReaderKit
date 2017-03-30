@@ -272,12 +272,8 @@ extension FolioReader {
 	// TODO_SMF: temporal variable to build and run the current state. Should be completely remove.
 	private static var _sharedInstance = FolioReader()
 	open static var shared : FolioReader {
-		get {
-			return _sharedInstance
-		}
-		set {
-			_sharedInstance = newValue
-		}
+		get { return _sharedInstance }
+		set { _sharedInstance = newValue }
 	}
 
 	/// Check if current theme is Night mode
@@ -304,6 +300,7 @@ extension FolioReader {
 		set { FolioReader.shared.currentScrollDirection = newValue }
 	}
 
+	/// Check current audio rate, the speed of speech voice
 	open class var currentAudioRate: Int {
 		get { return FolioReader.shared.currentAudioRate }
 		set { FolioReader.shared.currentAudioRate = newValue }
@@ -314,16 +311,12 @@ extension FolioReader {
 		return FolioReader.shared.isReaderReady
 	}
 
-	/**
-	Save Reader state, book, page and scroll are saved
-	*/
+	/// Save Reader state, book, page and scroll are saved
 	open class func saveReaderState() {
 		FolioReader.shared.saveReaderState()
 	}
 
-	/**
-	Closes and save the reader current instance
-	*/
+	/// Closes and save the reader current instance
 	open class func close() {
 		FolioReader.shared.close()
 	}
@@ -364,36 +357,19 @@ extension FolioReader {
 // MARK: - Global Functions
 
 func isNight<T> (_ f: T, _ l: T) -> T {
-	fatalError("should not use that function.")
-	// TODO_SMF: remove that function
+	// TODO_SMF: remove fatal error
+	// TODO_SMF_DEPRECATE
 	// TODO_SMF_DOC: notify change
+	fatalError("should not use that function.")
     return (FolioReader.shared.nightMode == true ? f : l)
 }
 
 // MARK: - Scroll Direction Functions
 
-/**
- Simplify attibution of values based on direction, basically is to avoid too much usage of `switch`,
- `if` and `else` statements to check. So basically this is like a shorthand version of the `switch` verification.
- 
- For example:
- ```
- let pageOffsetPoint = readerConfig.isDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0), CGPoint(x: 0, y: pageOffset))
- ```
- 
- As usually the `vertical` direction and `horizontalContentVertical` has similar statements you can basically hide the last
- value and it will assume the value from `vertical` as fallback.
- ```
- let pageOffsetPoint = readerConfig.isDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0))
- ```
- 
- - parameter vertical:                  Value for `vertical` direction
- - parameter horizontal:                Value for `horizontal` direction
- - parameter horizontalContentVertical: Value for `horizontalWithVerticalContent` direction, if nil will fallback to `vertical` value
- 
- - returns: The right value based on direction.
- */
 func isDirection<T> (_ vertical: T, _ horizontal: T, _ horizontalContentVertical: T? = nil) -> T {
+	// TODO_SMF_DEPRECATE
+	// TODO_SMF: remove fatal error
+	// TODO_SMF_DOC: notify change
 	fatalError("should not use that function.")
 	let direction = (FolioReader.shared.readerContainer!.readerConfig.scrollDirection)
 	switch direction {
@@ -782,6 +758,7 @@ internal extension UIImage {
      - returns: Returns a colored image
      */
     func ignoreSystemTint() -> UIImage {
+		// TODO_SMF: replace shared readerContainer
         return self.imageTintColor(FolioReader.shared.readerContainer!.readerConfig.tintColor).withRenderingMode(.alwaysOriginal)
     }
     

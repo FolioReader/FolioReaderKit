@@ -271,6 +271,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
             if #available(iOS 9.0, *) {
                 let safariVC = SFSafariViewController(url: request.url!)
                 safariVC.view.tintColor = self.readerConfig.tintColor
+				// TODO_SMF: remove call to FolioReader.shared.readerCenter
                 FolioReader.shared.readerCenter?.present(safariVC, animated: true, completion: nil)
             } else {
                 let webViewController = WebViewController(url: request.url!)
@@ -456,6 +457,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
      - parameter identifier: The identifier
      */
     func audioMarkID(_ identifier: String) {
+		// TODO_SMF: replace shared readerContainer
         guard let currentPage = FolioReader.shared.readerCenter?.currentPage else {
 			return
 		}

@@ -231,6 +231,7 @@ open class FolioReaderAudioPlayer: NSObject {
     func playNextChapter() {
         stopPlayerTimer()
         // Wait for "currentPage" to update, then request to play audio
+		// TODO_SMF: remove call to FolioReader.shared.readerCenter
         FolioReader.shared.readerCenter?.changePageToNext {
             if self.isPlaying() {
                 self.play()

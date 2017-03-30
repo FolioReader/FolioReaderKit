@@ -264,6 +264,7 @@ class FolioReaderFontsMenu			: UIViewController, SMSegmentViewDelegate, UIGestur
     // MARK: - SMSegmentView delegate
     
     func segmentView(_ segmentView: SMSegmentView, didSelectSegmentAtIndex index: Int) {
+		// TODO_SMF: remove call to FolioReader.shared.readerCenter
         guard (FolioReader.shared.readerCenter?.currentPage) != nil else { return }
         
         if segmentView.tag == 1 {

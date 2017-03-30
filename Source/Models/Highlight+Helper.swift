@@ -312,6 +312,7 @@ extension Highlight {
 	- returns: The removed id
 	*/
 	@discardableResult public static func removeFromHTMLById(_ highlightId: String) -> String? {
+		// TODO_SMF: remove call to FolioReader.shared.readerCenter
 		guard let currentPage = FolioReader.shared.readerCenter?.currentPage else { return nil }
 
 		if let removedId = currentPage.webView.js("removeHighlightById('\(highlightId)')") {

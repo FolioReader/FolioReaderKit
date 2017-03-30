@@ -266,6 +266,7 @@ class FolioReaderPlayerMenu			: UIViewController, SMSegmentViewDelegate, UIGestu
         }
         
         // update the current page style
+		// TODO_SMF: remove call to FolioReader.shared.readerCenter
         if let currentPage = FolioReader.shared.readerCenter?.currentPage {
             currentPage.webView.js("setMediaOverlayStyle(\"\(FolioReader.currentMediaOverlayStyle.className())\")")
         }
