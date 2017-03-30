@@ -9,19 +9,27 @@
 import UIKit
 
 /// The custom WebView used in each page 
-open class FolioReaderWebView: UIWebView {
-	var isColors = false
-	var isShare = false
-    var isOneWord = false
+open class FolioReaderWebView		: UIWebView {
+	var isColors 					= false
+	var isShare 					= false
+    var isOneWord 					= false
 
-	fileprivate var book : FRBook? {
-		// TODO_SMF: remove this getter
-		return FolioReader.shared.readerContainer?.book
+	fileprivate var book			: FRBook?
+	fileprivate var readerConfig	: FolioReaderConfig
+
+	override init(frame: CGRect) {
+		fatalError("use init(frame:readerConfig:book:) instead.")
 	}
 
-	fileprivate var readerConfig : FolioReaderConfig {
-		// TODO_SMF: remove this getter
-		return FolioReader.shared.readerContainer!.readerConfig
+	init(frame: CGRect, readerConfig: FolioReaderConfig, book: FRBook?) {
+		self.readerConfig = readerConfig
+		self.book = book
+
+		super.init(frame: frame)
+	}
+	
+	required public init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
 	}
 
 	// MARK: - UIMenuController
