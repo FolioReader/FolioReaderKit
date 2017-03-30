@@ -264,8 +264,7 @@ class FolioReaderFontsMenu			: UIViewController, SMSegmentViewDelegate, UIGestur
     // MARK: - SMSegmentView delegate
     
     func segmentView(_ segmentView: SMSegmentView, didSelectSegmentAtIndex index: Int) {
-		// TODO_SMF: remove call to FolioReader.shared.readerCenter
-        guard (FolioReader.shared.readerCenter?.currentPage) != nil else { return }
+        guard (self.folioReader.readerCenter?.currentPage) != nil else { return }
         
         if segmentView.tag == 1 {
 
@@ -290,12 +289,13 @@ class FolioReaderFontsMenu			: UIViewController, SMSegmentViewDelegate, UIGestur
     // MARK: - Font slider changed
     
     func sliderValueChanged(_ sender: HADiscreteSlider) {
-        guard (FolioReader.shared.readerCenter?.currentPage) != nil else { return }
-        let index = Int(sender.value)
-
-		if let _fontSize = FolioReaderFontSize(rawValue: index) {
-			FolioReader.currentFontSize = _fontSize
+        guard
+			(self.folioReader.readerCenter?.currentPage != nil),
+			let fontSize = FolioReaderFontSize(rawValue: Int(sender.value)) else {
+			return
 		}
+
+		FolioReader.currentFontSize = fontSize
     }
     
     // MARK: - Gestures
@@ -304,7 +304,7 @@ class FolioReaderFontsMenu			: UIViewController, SMSegmentViewDelegate, UIGestur
         dismiss()
         
         if (self.readerConfig.shouldHideNavigationOnTap == false) {
-            FolioReader.shared.readerCenter?.showBars()
+            self.folioReader.readerCenter?.showBars()
         }
     }
     

@@ -167,7 +167,7 @@ open class FolioReaderContainer		: UIViewController {
      Initialize the media player
      */
     func addAudioPlayer() {
-		self.audioPlayer = FolioReaderAudioPlayer(withBook: self.book)
+		self.audioPlayer = FolioReaderAudioPlayer(withFolioReader: self.folioReader, book: self.book)
         self.folioReader.readerAudioPlayer = audioPlayer
     }
     

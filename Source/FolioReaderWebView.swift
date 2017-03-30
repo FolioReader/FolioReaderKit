@@ -19,6 +19,9 @@ open class FolioReaderWebView		: UIWebView {
 	fileprivate var book			: FRBook {
 		return self.readerContainer.book
 	}
+	fileprivate var folioReader		: FolioReader {
+		return self.readerContainer.folioReader
+	}
 
 	override init(frame: CGRect) {
 		fatalError("use init(frame:readerConfig:book:) instead.")
@@ -66,12 +69,11 @@ open class FolioReaderWebView		: UIWebView {
 		let shareImage = UIAlertAction(title: self.readerConfig.localizedShareImageQuote, style: .default, handler: { (action) -> Void in
 			if self.isShare {
 				if let textToShare = self.js("getHighlightContent()") {
-					FolioReader.shared.readerCenter?.presentQuoteShare(textToShare)
+					self.folioReader.readerCenter?.presentQuoteShare(textToShare)
 				}
 			} else {
 				if let textToShare = self.js("getSelectedText()") {
-					// TODO_SMF: remove call to FolioReader.shared.readerCenter
-					FolioReader.shared.readerCenter?.presentQuoteShare(textToShare)
+					self.folioReader.readerCenter?.presentQuoteShare(textToShare)
 
 					self.clearTextSelection()
 				}
@@ -82,11 +84,11 @@ open class FolioReaderWebView		: UIWebView {
 		let shareText = UIAlertAction(title: self.readerConfig.localizedShareTextQuote, style: .default) { (action) -> Void in
 			if self.isShare {
 				if let textToShare = self.js("getHighlightContent()") {
-					FolioReader.shared.readerCenter?.shareHighlight(textToShare, rect: sender.menuFrame)
+					self.folioReader.readerCenter?.shareHighlight(textToShare, rect: sender.menuFrame)
 				}
 			} else {
 				if let textToShare = self.js("getSelectedText()") {
-					FolioReader.shared.readerCenter?.shareHighlight(textToShare, rect: sender.menuFrame)
+					self.folioReader.readerCenter?.shareHighlight(textToShare, rect: sender.menuFrame)
 				}
 			}
 			self.setMenuVisible(false)
@@ -99,11 +101,11 @@ open class FolioReaderWebView		: UIWebView {
 		alertController.addAction(cancel)
 
         if let alert = alertController.popoverPresentationController {
-            alert.sourceView = FolioReader.shared.readerCenter?.currentPage
+            alert.sourceView = self.folioReader.readerCenter?.currentPage
             alert.sourceRect = sender.menuFrame
         }
         
-		FolioReader.shared.readerCenter?.present(alertController, animated: true, completion: nil)
+		self.folioReader.readerCenter?.present(alertController, animated: true, completion: nil)
 	}
 
 	func colors(_ sender: UIMenuController?) {
@@ -166,7 +168,7 @@ open class FolioReaderWebView		: UIWebView {
 	}
 
 	func play(_ sender: UIMenuController?) {
-		FolioReader.shared.readerAudioPlayer?.play()
+		self.folioReader.readerAudioPlayer?.play()
 
 		self.clearTextSelection()
 	}

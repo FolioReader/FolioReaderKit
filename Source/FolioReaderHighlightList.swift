@@ -141,19 +141,20 @@ class FolioReaderHighlightList		: UITableViewController {
     // MARK: - Table view delegate
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let highlight = highlights[(indexPath as NSIndexPath).row]
+		guard let highlight = highlights[safe: (indexPath as NSIndexPath).row] else {
+			return
+		}
 
-		// TODO_SMF: remove call to FolioReader.shared.readerCenter
-        FolioReader.shared.readerCenter?.changePageWith(page: highlight.page, andFragment: highlight.highlightId)
+        self.folioReader.readerCenter?.changePageWith(page: highlight.page, andFragment: highlight.highlightId)
         self.dismiss()
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let highlight = highlights[(indexPath as NSIndexPath).row]
-            
-            if highlight.page == currentPageNumber {
-                Highlight.removeFromHTMLById(highlight.highlightId) // Remove from HTML
+
+            if (highlight.page == currentPageNumber), let page = self.folioReader.readerCenter?.currentPage {
+				Highlight.removeFromHTMLById(withinPage: page, highlightId: highlight.highlightId) // Remove from HTML
             }
             
 			highlight.remove(withConfiguration: self.readerConfig) // Remove from Database
