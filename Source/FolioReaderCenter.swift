@@ -1093,11 +1093,10 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     func presentChapterList(_ sender: UIBarButtonItem) {
         FolioReader.saveReaderState()
         
-        let chapter = FolioReaderChapterList()
-        chapter.delegate = self
-        let highlight = FolioReaderHighlightList()
-        
-        let pageController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options:nil)
+        let chapter = FolioReaderChapterList(folioReader: self.readerContainer.folioReader, readerConfig: self.readerConfig, delegate: self)
+        let highlight = FolioReaderHighlightList(folioReader: self.readerContainer.folioReader, readerConfig: self.readerConfig)
+		let pageController = PageViewController(folioReader: self.readerContainer.folioReader, readerConfig: self.readerConfig)
+
         pageController.viewControllerOne = chapter
         pageController.viewControllerTwo = highlight
         pageController.segmentedControlItems = [readerConfig.localizedContentsTitle, readerConfig.localizedHighlightsTitle]

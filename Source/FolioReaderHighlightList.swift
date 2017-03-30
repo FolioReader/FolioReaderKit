@@ -12,18 +12,28 @@ class FolioReaderHighlightList: UITableViewController {
 
     var highlights: [Highlight]!
 
-	fileprivate var readerConfig : FolioReaderConfig {
-		// TODO_SMF: remove this getter
-		return FolioReader.shared.readerContainer!.readerConfig
+	fileprivate var readerConfig : FolioReaderConfig
+	fileprivate var folioReader : FolioReader
+
+	init(folioReader: FolioReader, readerConfig: FolioReaderConfig) {
+		self.readerConfig = readerConfig
+		self.folioReader = folioReader
+
+		super.init(style: UITableViewStyle.plain)
 	}
+
+	required init?(coder aDecoder: NSCoder) {
+		fatalError("init with coder not supported")
+	}
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
         self.tableView.separatorInset = UIEdgeInsets.zero
-        self.tableView.backgroundColor = isNight(self.readerConfig.nightModeMenuBackground, self.readerConfig.menuBackgroundColor)
-        self.tableView.separatorColor = isNight(self.readerConfig.nightModeSeparatorColor, self.readerConfig.menuSeparatorColor)
+        self.tableView.backgroundColor = self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, self.readerConfig.menuBackgroundColor)
+        self.tableView.separatorColor = self.folioReader.isNight(self.readerConfig.nightModeSeparatorColor, self.readerConfig.menuSeparatorColor)
         
         highlights = Highlight.allByBookId((kBookId as NSString).deletingPathExtension)
     }
@@ -62,7 +72,7 @@ class FolioReaderHighlightList: UITableViewController {
         }
         
         dateLabel.text = dateString.uppercased()
-        dateLabel.textColor = isNight(UIColor(white: 5, alpha: 0.3), UIColor.lightGray)
+        dateLabel.textColor = self.folioReader.isNight(UIColor(white: 5, alpha: 0.3), UIColor.lightGray)
         dateLabel.frame = CGRect(x: 20, y: 20, width: view.frame.width-40, height: dateLabel.frame.height)
         
         // Text
@@ -71,7 +81,7 @@ class FolioReaderHighlightList: UITableViewController {
         let range = NSRange(location: 0, length: text.length)
         let paragraph = NSMutableParagraphStyle()
         paragraph.lineSpacing = 3
-        let textColor = isNight(self.readerConfig.menuTextColor, UIColor.black)
+        let textColor = self.folioReader.isNight(self.readerConfig.menuTextColor, UIColor.black)
         
         text.addAttribute(NSParagraphStyleAttributeName, value: paragraph, range: range)
         text.addAttribute(NSFontAttributeName, value: UIFont(name: "Avenir-Light", size: 16)!, range: range)

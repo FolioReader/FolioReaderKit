@@ -30,6 +30,8 @@ internal var kCurrentScrollDirection = "com.folioreader.kCurrentScrollDirection"
 internal let kNightMode = "com.folioreader.kNightMode"
 internal let kCurrentTOCMenu = "com.folioreader.kCurrentTOCMenu"
 internal let kHighlightRange = 30
+
+// TODO_SMF: remove kBookId
 internal var kBookId: String!
 
 /**
@@ -403,13 +405,13 @@ func isNight<T> (_ f: T, _ l: T) -> T {
  
  For example:
  ```
- let pageOffsetPoint = isDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0), CGPoint(x: 0, y: pageOffset))
+ let pageOffsetPoint = readerConfig.isDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0), CGPoint(x: 0, y: pageOffset))
  ```
  
  As usually the `vertical` direction and `horizontalContentVertical` has similar statements you can basically hide the last
  value and it will assume the value from `vertical` as fallback.
  ```
- let pageOffsetPoint = isDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0))
+ let pageOffsetPoint = readerConfig.isDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0))
  ```
  
  - parameter vertical:                  Value for `vertical` direction

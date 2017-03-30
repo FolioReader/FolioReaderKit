@@ -396,7 +396,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 			CGPoint(x: webView.scrollView.contentSize.width - webView.scrollView.bounds.width, y: 0)
 		)
 
-		if bottomOffset.forDirection() >= 0 {
+		if bottomOffset.forDirection(withConfiguration: self.readerConfig) >= 0 {
 			DispatchQueue.main.async(execute: {
 				self.webView.scrollView.setContentOffset(bottomOffset, animated: false)
 			})
@@ -416,7 +416,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
 			switch self.readerConfig.scrollDirection {
             case .vertical, .defaultVertical:
-				let isBeginning = offset < frame.forDirection()/2
+				let isBeginning = (offset < frame.forDirection(withConfiguration: self.readerConfig) * 0.5)
 
 				if !avoidBeginningAnchors {
 					scrollPageToOffset(offset, animated: animated)

@@ -27,13 +27,22 @@ class FolioReaderChapterList: UITableViewController {
     var tocItems = [FRTocReference]()
 
 	fileprivate var book : FRBook? {
-		// TODO_SMF: remove this getter
-		return FolioReader.shared.readerContainer?.book
+		return self.folioReader.readerContainer?.book
 	}
 
-	fileprivate var readerConfig : FolioReaderConfig {
-		// TODO_SMF: remove this getter
-		return FolioReader.shared.readerContainer!.readerConfig
+	fileprivate var readerConfig : FolioReaderConfig
+	fileprivate var folioReader : FolioReader
+
+	init(folioReader: FolioReader, readerConfig: FolioReaderConfig, delegate: FolioReaderChapterListDelegate?) {
+		self.readerConfig = readerConfig
+		self.folioReader = folioReader
+		self.delegate = delegate
+
+		super.init(style: UITableViewStyle.plain)
+	}
+
+	required init?(coder aDecoder: NSCoder) {
+		fatalError("init with coder not supported")
 	}
 
     override func viewDidLoad() {
@@ -42,8 +51,8 @@ class FolioReaderChapterList: UITableViewController {
         // Register cell classes
         self.tableView.register(FolioReaderChapterListCell.self, forCellReuseIdentifier: reuseIdentifier)
         self.tableView.separatorInset = UIEdgeInsets.zero
-        self.tableView.backgroundColor = isNight(self.readerConfig.nightModeMenuBackground, self.readerConfig.menuBackgroundColor)
-        self.tableView.separatorColor = isNight(self.readerConfig.nightModeSeparatorColor, self.readerConfig.menuSeparatorColor)
+        self.tableView.backgroundColor = self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, self.readerConfig.menuBackgroundColor)
+        self.tableView.separatorColor = self.folioReader.isNight(self.readerConfig.nightModeSeparatorColor, self.readerConfig.menuSeparatorColor)
         
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 50

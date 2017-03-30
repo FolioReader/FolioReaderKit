@@ -106,8 +106,8 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     }
     
     func sliderChange(_ slider:UISlider) {
-        let movePosition = height()*CGFloat(slider.value)
-        let offset = isDirection(CGPoint(x: 0, y: movePosition), CGPoint(x: movePosition, y: 0))
+        let movePosition = (height() * CGFloat(slider.value))
+        let offset = self.readerContainer.readerConfig.isDirection(CGPoint(x: 0, y: movePosition), CGPoint(x: movePosition, y: 0))
         scrollView()?.setContentOffset(offset, animated: false)
     }
     
@@ -235,7 +235,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
 			return 0
 		}
 
-        return currentPage.webView.scrollView.contentSize.height - pageHeight + 44
+        return (currentPage.webView.scrollView.contentSize.height - pageHeight + 44)
     }
     
     fileprivate func scrollTop() -> CGFloat {

@@ -213,13 +213,13 @@ open class FolioReaderConfig: NSObject {
 
  		For example:
  		```
- 		let pageOffsetPoint = isDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0), CGPoint(x: 0, y: pageOffset))
+ 		let pageOffsetPoint = readerConfig.isDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0), CGPoint(x: 0, y: pageOffset))
  		```
 
  		As usually the `vertical` direction and `horizontalContentVertical` has similar statements you can basically hide the last
 		value and it will assume the value from `vertical` as fallback.
  		```
- 		let pageOffsetPoint = isDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0))
+ 		let pageOffsetPoint = readerConfig.isDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0))
 		```
 
  		- parameter vertical:                  Value for `vertical` direction
