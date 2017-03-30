@@ -27,9 +27,8 @@ class FolioReaderChapterListCell	: UITableViewCell {
 		self.indexLabel?.textColor = readerConfig.menuTextColor
 
 		if let label = self.indexLabel {
-			contentView.addSubview(label)
+			self.contentView.addSubview(label)
 
-			// TODO_SMF_CHECK
 			// Configure cell contraints
 			var constraints = [NSLayoutConstraint]()
 			let views = ["label": label]
@@ -42,7 +41,7 @@ class FolioReaderChapterListCell	: UITableViewCell {
 				constraints.append($0 as NSLayoutConstraint)
 			}
 
-			contentView.addConstraints(constraints)
+			self.contentView.addConstraints(constraints)
 		}
 	}
 
