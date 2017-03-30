@@ -9,15 +9,6 @@
 import Foundation
 import UIKit
 
-// TODO_SMF: replace/remove utility function
-
-// MARK: - Internal constants for devices
-
-internal let isPad = (UIDevice.current.userInterfaceIdiom == .pad)
-internal let isPhone = (UIDevice.current.userInterfaceIdiom == .phone)
-
-// TODO_SMF: create constant file
-
 // MARK: - Internal constants
 
 internal let kApplicationDocumentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] 
@@ -134,7 +125,6 @@ open class FolioReader: NSObject {
 					readerCenter.scrollScrubber?.reloadColors()
 					readerCenter.collectionView.backgroundColor = (self.nightMode == true ? self.readerContainer?.readerConfig.nightModeBackground : UIColor.white)
 					}, completion: { (finished: Bool) in
-						// TODO_SMF: add constant
 						NotificationCenter.default.post(name: Notification.Name(rawValue: "needRefreshPageMode"), object: nil)
 				})
 			}
@@ -317,7 +307,6 @@ extension FolioReader {
 	}
 
 	/// Check the current scroll direction
-	// TODO_SMF: value should use `FolioReaderScrollDirection` instead of `Int`?
 	open class var currentScrollDirection: Int {
 		// TODO_SMF: remove unwrap
 		get { return FolioReader.shared.currentScrollDirection }
