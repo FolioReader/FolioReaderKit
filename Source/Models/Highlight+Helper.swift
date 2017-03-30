@@ -80,19 +80,27 @@ public typealias Completion = (_ error: NSError?) -> ()
 
 extension Highlight {
 
-	fileprivate static var readerConfig : FolioReaderConfig {
-		// TODO_SMF: remove this getter
+	private static var readerConfig : FolioReaderConfig {
+		// TODO_SMF: deprecate
 		return FolioReader.shared.readerContainer!.readerConfig
 	}
 
-	/**
-	Save a Highlight with completion block
-
-	- parameter completion: Completion block
-	*/
+	/// Save a Highlight with completion block
+	///
+	/// - Parameter completion: Completion block
 	public func persist(_ completion: Completion? = nil) {
+		// TODO_SMF: deprecate
+		self.persist(withConfiguration: Highlight.readerConfig, completion: completion)
+	}
+
+	/// Save a Highlight with completion block
+	///
+	/// - Parameters:
+	///   - readerConfig: Current folio reader configuration.
+	///   - completion: Completion block.
+	public func persist(withConfiguration readerConfig: FolioReaderConfig, completion: Completion? = nil) {
 		do {
-			let realm = try Realm(configuration: Highlight.readerConfig.realmConfiguration)
+			let realm = try Realm(configuration: readerConfig.realmConfiguration)
 			realm.beginWrite()
 			realm.add(self, update: true)
 			try realm.commitWrite()
@@ -103,12 +111,18 @@ extension Highlight {
 		}
 	}
 
-	/**
-	Remove a Highlight
-	*/
+	/// Remove a Highlight
 	public func remove() {
+		// TODO_SMF: deprecate
+		self.remove(withConfiguration: Highlight.readerConfig)
+	}
+
+	/// Remove a Highlight
+	///
+	/// - Parameter readerConfig: Current folio reader configuration.
+	public func remove(withConfiguration readerConfig: FolioReaderConfig) {
 		do {
-			let realm = try Realm(configuration: Highlight.readerConfig.realmConfiguration)
+			let realm = try Realm(configuration: readerConfig.realmConfiguration)
 			realm.beginWrite()
 			realm.delete(self)
 			try realm.commitWrite()
@@ -117,35 +131,53 @@ extension Highlight {
 		}
 	}
 
-	/**
-	Remove a Highlight by ID
-
-	- parameter highlightId: The ID to be removed
-	*/
+	/// Remove a Highlight by ID
+	///
+	/// - Parameter highlightId: The ID to be removed
 	public static func removeById(_ highlightId: String) {
+		// TODO_SMF: deprecate
+		Highlight.removeById(withConfiguration: Highlight.readerConfig, highlightId: highlightId)
+	}
+
+	/// Remove a Highlight by ID
+	///
+	/// - Parameters:
+	///   - readerConfig: Current folio reader configuration.
+	///   - highlightId: The ID to be removed
+	public static func removeById(withConfiguration readerConfig: FolioReaderConfig, highlightId: String) {
 		var highlight: Highlight?
 		let predicate = NSPredicate(format:"highlightId = %@", highlightId)
 
 		do {
-			let realm = try Realm(configuration: self.readerConfig.realmConfiguration)
+			let realm = try Realm(configuration: readerConfig.realmConfiguration)
 			highlight = realm.objects(Highlight.self).filter(predicate).toArray(Highlight.self).first
-			highlight?.remove()
+			highlight?.remove(withConfiguration: readerConfig)
 		} catch let error as NSError {
 			print("Error on remove highlight by id: \(error)")
 		}
 	}
 
-	/**
-	Update a Highlight by ID
-
-	- parameter highlightId: The ID to be removed
-	- parameter type:        The `HighlightStyle`
-	*/
+	/// Update a Highlight by ID
+	///
+	/// - Parameters:
+	///   - highlightId: The ID to be removed
+	///   - type: The `HighlightStyle`
 	public static func updateById(_ highlightId: String, type: HighlightStyle) {
+		// TODO_SMF: deprecate
+		Highlight.updateById(withConfiguration: Highlight.readerConfig, highlightId: highlightId, type: type)
+	}
+
+	/// Update a Highlight by ID
+	///
+	/// - Parameters:
+	///   - readerConfig: Current folio reader configuration.
+	///   - highlightId: The ID to be removed
+	///   - type: The `HighlightStyle`
+	public static func updateById(withConfiguration readerConfig: FolioReaderConfig, highlightId: String, type: HighlightStyle) {
 		var highlight: Highlight?
 		let predicate = NSPredicate(format:"highlightId = %@", highlightId)
 		do {
-			let realm = try Realm(configuration: self.readerConfig.realmConfiguration)
+			let realm = try Realm(configuration: readerConfig.realmConfiguration)
 			highlight = realm.objects(Highlight.self).filter(predicate).toArray(Highlight.self).first
 			realm.beginWrite()
 
@@ -158,15 +190,25 @@ extension Highlight {
 
 	}
 
-	/**
-	Return a list of Highlights with a given ID
-
-	- parameter bookId: Book ID
-	- parameter page:   Page number
-
-	- returns: Return a list of Highlights
-	*/
+	/// Return a list of Highlights with a given ID
+	///
+	/// - Parameters:
+	///   - bookId: Book ID
+	///   - page: Page number
+	/// - Returns: Return a list of Highlights
 	public static func allByBookId(_ bookId: String, andPage page: NSNumber? = nil) -> [Highlight] {
+		// TODO_SMF: deprecate
+		return Highlight.allByBookId(withConfiguration: Highlight.readerConfig, bookId: bookId, andPage: page)
+	}
+
+	/// Return a list of Highlights with a given ID
+	///
+	/// - Parameters:
+	///   - readerConfig: Current folio reader configuration.
+	///   - bookId: Book ID
+	///   - page: Page number
+	/// - Returns: Return a list of Highlights
+	public static func allByBookId(withConfiguration readerConfig: FolioReaderConfig, bookId: String, andPage page: NSNumber? = nil) -> [Highlight] {
 		var highlights: [Highlight]?
 		var predicate = NSPredicate(format: "bookId = %@", bookId)
 		if let page = page {
@@ -174,7 +216,7 @@ extension Highlight {
 		}
 
 		do {
-			let realm = try Realm(configuration: self.readerConfig.realmConfiguration)
+			let realm = try Realm(configuration: readerConfig.realmConfiguration)
 			highlights = realm.objects(Highlight.self).filter(predicate).toArray(Highlight.self)
 			return (highlights ?? [])
 		} catch let error as NSError {
@@ -183,15 +225,22 @@ extension Highlight {
 		}
 	}
 
-	/**
-	Return all Highlights
-
-	- returns: Return all Highlights
-	*/
+	/// Return all Highlights
+	///
+	/// - Returns: Return all Highlights
 	public static func all() -> [Highlight] {
+		// TODO_SMF: deprecate
+		return Highlight.all(withConfiguration: Highlight.readerConfig)
+	}
+
+	/// Return all Highlights
+	///
+	/// - Parameter readerConfig: - readerConfig: Current folio reader configuration.
+	/// - Returns: Return all Highlights
+	public static func all(withConfiguration readerConfig: FolioReaderConfig) -> [Highlight] {
 		var highlights: [Highlight]?
 		do {
-			let realm = try Realm(configuration: self.readerConfig.realmConfiguration)
+			let realm = try Realm(configuration: readerConfig.realmConfiguration)
 			highlights = realm.objects(Highlight.self).toArray(Highlight.self)
 			return (highlights ?? [])
 		} catch let error as NSError {
@@ -199,8 +248,11 @@ extension Highlight {
 			return []
 		}
 	}
+}
 
-	// MARK: HTML Methods
+// MARK: - HTML Methods
+
+extension Highlight {
 
 	/**
 	Match a highlight on string.
@@ -264,7 +316,7 @@ extension Highlight {
 		if let removedId = currentPage.webView.js("removeHighlightById('\(highlightId)')") {
 			return removedId
 		} else {
-			print("Error removing Higlight from page")
+			print("Error removing Highlight from page")
 			return nil
 		}
 	}
@@ -286,8 +338,7 @@ extension Highlight {
 			let str = (locator as NSString)
 
 			var newLocator = ""
-			// TODO_SMF: check this and add match type
-			matches?.forEach( { match in
+			matches?.forEach({ (match: NSTextCheckingResult) in
 				newLocator += str.substring(with: match.rangeAt(1))
 			})
 

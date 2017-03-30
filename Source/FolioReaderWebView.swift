@@ -110,7 +110,7 @@ open class FolioReaderWebView		: UIWebView {
 
 	func remove(_ sender: UIMenuController?) {
 		if let removedId = js("removeThisHighlight()") {
-			Highlight.removeById(removedId)
+			Highlight.removeById(withConfiguration: self.readerConfig, highlightId: removedId)
 		}
 		setMenuVisible(false)
 	}
@@ -139,7 +139,7 @@ open class FolioReaderWebView		: UIWebView {
 					return
 			}
 
-			highlight.persist()
+			highlight.persist(withConfiguration: self.readerConfig)
 
 		} catch {
 			print("Could not receive JSON")
@@ -188,7 +188,7 @@ open class FolioReaderWebView		: UIWebView {
 		FolioReader.currentHighlightStyle = style.rawValue
 
 		if let updateId = js("setHighlightStyle('\(HighlightStyle.classForStyle(style.rawValue))')") {
-			Highlight.updateById(updateId, type: style)
+			Highlight.updateById(withConfiguration: self.readerConfig, highlightId: updateId, type: style)
 		}
 		colors(sender)
 	}

@@ -8,12 +8,11 @@
 
 import UIKit
 
-class FolioReaderHighlightList: UITableViewController {
+class FolioReaderHighlightList		: UITableViewController {
 
-    var highlights: [Highlight]!
-
-	fileprivate var readerConfig : FolioReaderConfig
-	fileprivate var folioReader : FolioReader
+	fileprivate var highlights		= [Highlight]()
+	fileprivate var readerConfig 	: FolioReaderConfig
+	fileprivate var folioReader 	: FolioReader
 
 	init(folioReader: FolioReader, readerConfig: FolioReaderConfig) {
 		self.readerConfig = readerConfig
@@ -34,7 +33,7 @@ class FolioReaderHighlightList: UITableViewController {
         self.tableView.backgroundColor = self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, self.readerConfig.menuBackgroundColor)
         self.tableView.separatorColor = self.folioReader.isNight(self.readerConfig.nightModeSeparatorColor, self.readerConfig.menuSeparatorColor)
         
-        self.highlights = Highlight.allByBookId((kBookId as NSString).deletingPathExtension)
+		self.highlights = Highlight.allByBookId(withConfiguration: self.readerConfig, bookId: (kBookId as NSString).deletingPathExtension)
     }
 
     // MARK: - Table view data source
@@ -151,7 +150,7 @@ class FolioReaderHighlightList: UITableViewController {
                 Highlight.removeFromHTMLById(highlight.highlightId) // Remove from HTML
             }
             
-            highlight.remove() // Remove from Database
+			highlight.remove(withConfiguration: self.readerConfig) // Remove from Database
             highlights.remove(at: (indexPath as NSIndexPath).row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
