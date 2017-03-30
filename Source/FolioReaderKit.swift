@@ -71,6 +71,9 @@ enum MediaOverlayStyle: Int {
  */
 open class FolioReader: NSObject {
 
+	/// Internal init function to disable the creation of `FolioReader` objects outside the current scope.
+	internal override init() { }
+
     /// Custom unzip path
     open var unzipPath				: String?
     
