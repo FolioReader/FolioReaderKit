@@ -71,19 +71,22 @@ class FolioReaderChapterList		: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! FolioReaderChapterListCell
-        
+
+		cell.setup(withConfiguration: self.readerConfig)
         let tocReference = tocItems[(indexPath as NSIndexPath).row]
         let isSection = tocReference.children.count > 0
         
-        cell.indexLabel.text = tocReference.title.trimmingCharacters(in: .whitespacesAndNewlines)
+        cell.indexLabel?.text = tocReference.title.trimmingCharacters(in: .whitespacesAndNewlines)
 
         // Add audio duration for Media Ovelay
         if let resource = tocReference.resource {
             if let mediaOverlay = resource.mediaOverlay {
                 let duration = self.book.durationFor("#"+mediaOverlay)
-                let durationFormatted = (duration != nil ? duration : "")?.clockTimeToMinutesString()
 
-                cell.indexLabel.text = cell.indexLabel.text! + (duration != nil ? " - "+durationFormatted! : "");
+				if let durationFormatted = (duration != nil ? duration : "")?.clockTimeToMinutesString() {
+					let text = (cell.indexLabel?.text ?? "")
+					cell.indexLabel?.text = text + (duration != nil ? (" - " + durationFormatted) : "")
+				}
             }
         }
 
@@ -93,7 +96,7 @@ class FolioReaderChapterList		: UITableViewController {
 			let reference = self.book.spine.spineReferences[safe: currentPageNumber - 1],
 			(tocReference.resource != nil) {
             	let resource = reference.resource
-            	cell.indexLabel.textColor = (tocReference.resource == resource ? self.readerConfig.tintColor : self.readerConfig.menuTextColor)
+            	cell.indexLabel?.textColor = (tocReference.resource == resource ? self.readerConfig.tintColor : self.readerConfig.menuTextColor)
         }
         
         cell.layoutMargins = UIEdgeInsets.zero

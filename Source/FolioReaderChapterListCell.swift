@@ -8,36 +8,52 @@
 
 import UIKit
 
-class FolioReaderChapterListCell: UITableViewCell {
-    var indexLabel = UILabel()
-    
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        indexLabel.lineBreakMode = .byWordWrapping
-        indexLabel.numberOfLines = 0
-        indexLabel.translatesAutoresizingMaskIntoConstraints = false
-        indexLabel.font = UIFont(name: "Avenir-Light", size: 17)
-		// TODO_SMF: replace shared readerContainer
-        indexLabel.textColor = FolioReader.shared.readerContainer?.readerConfig.menuTextColor
-        contentView.addSubview(indexLabel)
-        
-        // Configure cell contraints
-        var constraints = [NSLayoutConstraint]()
-        let views = ["label": self.indexLabel]
-        
-        NSLayoutConstraint.constraints(withVisualFormat: "H:|-15-[label]-15-|", options: [], metrics: nil, views: views).forEach {
-            constraints.append($0 as NSLayoutConstraint)
-        }
-        
-        NSLayoutConstraint.constraints(withVisualFormat: "V:|-16-[label]-16-|", options: [], metrics: nil, views: views).forEach {
-            constraints.append($0 as NSLayoutConstraint)
-        }
-        
-        contentView.addConstraints(constraints)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("storyboards are incompatible with truth and beauty")
-    }
+class FolioReaderChapterListCell	: UITableViewCell {
+
+	var indexLabel 					: UILabel?
+
+	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+		super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+		self.indexLabel = UILabel()
+	}
+
+	func setup(withConfiguration readerConfig: FolioReaderConfig) {
+
+		self.indexLabel?.lineBreakMode = .byWordWrapping
+		self.indexLabel?.numberOfLines = 0
+		self.indexLabel?.translatesAutoresizingMaskIntoConstraints = false
+		self.indexLabel?.font = UIFont(name: "Avenir-Light", size: 17)
+		self.indexLabel?.textColor = readerConfig.menuTextColor
+
+		if let label = self.indexLabel {
+			contentView.addSubview(label)
+
+			// TODO_SMF_CHECK
+			// Configure cell contraints
+			var constraints = [NSLayoutConstraint]()
+			let views = ["label": label]
+
+			NSLayoutConstraint.constraints(withVisualFormat: "H:|-15-[label]-15-|", options: [], metrics: nil, views: views).forEach {
+				constraints.append($0 as NSLayoutConstraint)
+			}
+
+			NSLayoutConstraint.constraints(withVisualFormat: "V:|-16-[label]-16-|", options: [], metrics: nil, views: views).forEach {
+				constraints.append($0 as NSLayoutConstraint)
+			}
+
+			contentView.addConstraints(constraints)
+		}
+	}
+
+	required init?(coder aDecoder: NSCoder) {
+		fatalError("storyboards are incompatible with truth and beauty")
+	}
+
+	override func prepareForReuse() {
+		super.prepareForReuse()
+
+		// As the `setup` is called at each reuse, make sure the label is added only once to the view hierarchy.
+		self.indexLabel?.removeFromSuperview()
+	}
 }
