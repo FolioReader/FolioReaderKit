@@ -9,8 +9,6 @@
 import Foundation
 import RealmSwift
 
-// TODO_SMF: Remove `!`.
-
 /// A Highlight object
 open class Highlight: Object {
     open dynamic var bookId: String!

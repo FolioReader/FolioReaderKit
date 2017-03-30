@@ -132,7 +132,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 	fileprivate func htmlContentWithInsertHighlights(_ htmlContent: String) -> String {
 		var tempHtmlContent = htmlContent as NSString
 		// Restore highlights
-		let highlights = Highlight.allByBookId((kBookId as NSString).deletingPathExtension, andPage: pageNumber as NSNumber?)
+		let highlights = Highlight.allByBookId(withConfiguration: self.readerConfig, bookId: (kBookId as NSString).deletingPathExtension, andPage: pageNumber as NSNumber?)
 
 		if highlights.count > 0 {
 			for item in highlights {

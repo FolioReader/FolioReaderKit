@@ -1158,7 +1158,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 		let quoteShare = FolioReaderQuoteShare(initWithText: string, readerConfig: self.readerConfig, folioReader: self.readerContainer.folioReader)
         let nav = UINavigationController(rootViewController: quoteShare)
 
-        if isPad {
+        if (UIDevice.current.userInterfaceIdiom == .pad) {
             nav.modalPresentationStyle = .formSheet
         }
         
