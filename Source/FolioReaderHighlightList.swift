@@ -90,12 +90,12 @@ class FolioReaderHighlightList		: UITableViewController {
         text.addAttribute(NSFontAttributeName, value: UIFont(name: "Avenir-Light", size: 16)!, range: range)
         text.addAttribute(NSForegroundColorAttributeName, value: textColor, range: range)
         
-        if highlight.type == HighlightStyle.underline.rawValue {
+        if (highlight.type == HighlightStyle.underline.rawValue) {
             text.addAttribute(NSBackgroundColorAttributeName, value: UIColor.clear, range: range)
-            text.addAttribute(NSUnderlineColorAttributeName, value: HighlightStyle.colorForStyle(highlight.type, nightMode: FolioReader.nightMode), range: range)
+            text.addAttribute(NSUnderlineColorAttributeName, value: HighlightStyle.colorForStyle(highlight.type, nightMode: self.folioReader.nightMode), range: range)
             text.addAttribute(NSUnderlineStyleAttributeName, value: NSNumber(value: NSUnderlineStyle.styleSingle.rawValue as Int), range: range)
         } else {
-            text.addAttribute(NSBackgroundColorAttributeName, value: HighlightStyle.colorForStyle(highlight.type, nightMode: FolioReader.nightMode), range: range)
+            text.addAttribute(NSBackgroundColorAttributeName, value: HighlightStyle.colorForStyle(highlight.type, nightMode: self.folioReader.nightMode), range: range)
         }
         
         // Text

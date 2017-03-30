@@ -188,7 +188,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
             }
         }
         
-		let direction: ScrollDirection = FolioReader.needsRTLChange ? .positive(withConfiguration: self.readerConfig) : .negative(withConfiguration: self.readerConfig)
+		let direction: ScrollDirection = self.folioReader.needsRTLChange ? .positive(withConfiguration: self.readerConfig) : .negative(withConfiguration: self.readerConfig)
         
         if pageScrollDirection == direction && isScrolling && self.readerConfig.scrollDirection != .horizontalWithVerticalContent {
             scrollPageToBottom()
@@ -499,7 +499,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     
     // MARK: ColorView fix for horizontal layout
     func refreshPageMode() {
-        if FolioReader.nightMode {
+        if (self.folioReader.nightMode == true) {
             // omit create webView and colorView
             let script = "document.documentElement.offsetHeight"
             let contentHeight = webView.stringByEvaluatingJavaScript(from: script)

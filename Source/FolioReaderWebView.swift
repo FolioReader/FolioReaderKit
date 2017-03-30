@@ -122,7 +122,7 @@ open class FolioReaderWebView		: UIWebView {
 	}
 
 	func highlight(_ sender: UIMenuController?) {
-		let highlightAndReturn = js("highlightString('\(HighlightStyle.classForStyle(FolioReader.currentHighlightStyle))')")
+		let highlightAndReturn = js("highlightString('\(HighlightStyle.classForStyle(self.folioReader.currentHighlightStyle))')")
 		let jsonData = highlightAndReturn?.data(using: String.Encoding.utf8)
 
 		do {
@@ -194,7 +194,7 @@ open class FolioReaderWebView		: UIWebView {
 	}
 
 	func changeHighlightStyle(_ sender: UIMenuController?, style: HighlightStyle) {
-		FolioReader.currentHighlightStyle = style.rawValue
+		self.folioReader.currentHighlightStyle = style.rawValue
 
 		if let updateId = js("setHighlightStyle('\(HighlightStyle.classForStyle(style.rawValue))')") {
 			Highlight.updateById(withConfiguration: self.readerConfig, highlightId: updateId, type: style)

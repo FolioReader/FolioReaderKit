@@ -128,7 +128,7 @@ class FolioReaderPlayerMenu			: UIViewController, SMSegmentViewDelegate, UIGestu
         playbackRate.addSegmentWithTitle("1½x", onSelectionImage: nil, offSelectionImage: nil)
         playbackRate.addSegmentWithTitle("2x", onSelectionImage: nil, offSelectionImage: nil)
         playbackRate.segmentTitleFont = UIFont(name: "Avenir-Light", size: 17)!
-        playbackRate.selectSegmentAtIndex(Int(FolioReader.currentAudioRate))
+        playbackRate.selectSegmentAtIndex(Int(self.folioReader.currentAudioRate))
         menuView.addSubview(playbackRate)
         
         
@@ -189,9 +189,9 @@ class FolioReaderPlayerMenu			: UIViewController, SMSegmentViewDelegate, UIGestu
         menuView.addSubview(style2line)
         
         // select the current style
-        style0.isSelected = (FolioReader.currentMediaOverlayStyle == .default)
-        style1.isSelected = (FolioReader.currentMediaOverlayStyle == .underline)
-        style2.isSelected = (FolioReader.currentMediaOverlayStyle == .textColor)
+        style0.isSelected = (self.folioReader.currentMediaOverlayStyle == .default)
+        style1.isSelected = (self.folioReader.currentMediaOverlayStyle == .underline)
+        style2.isSelected = (self.folioReader.currentMediaOverlayStyle == .textColor)
         if style0.isSelected { style0Bgd.backgroundColor = selectedColor }
         
         // hook up button actions
@@ -235,7 +235,7 @@ class FolioReaderPlayerMenu			: UIViewController, SMSegmentViewDelegate, UIGestu
 
         if let audioPlayer = self.folioReader.readerAudioPlayer , segmentView.tag == 2 {
             audioPlayer.setRate(index)
-            FolioReader.currentAudioRate = index
+            self.folioReader.currentAudioRate = index
         }
     }
 
@@ -254,7 +254,7 @@ class FolioReaderPlayerMenu			: UIViewController, SMSegmentViewDelegate, UIGestu
     }
     
     func changeStyle(_ sender: UIButton!) {
-        FolioReader.currentMediaOverlayStyle = MediaOverlayStyle(rawValue: sender.tag)!
+        self.folioReader.currentMediaOverlayStyle = MediaOverlayStyle(rawValue: sender.tag)!
         
         // select the proper style button
         for btn in styleOptionBtns {
@@ -267,7 +267,7 @@ class FolioReaderPlayerMenu			: UIViewController, SMSegmentViewDelegate, UIGestu
         
         // update the current page style
         if let currentPage = self.folioReader.readerCenter?.currentPage {
-            currentPage.webView.js("setMediaOverlayStyle(\"\(FolioReader.currentMediaOverlayStyle.className())\")")
+            currentPage.webView.js("setMediaOverlayStyle(\"\(self.folioReader.currentMediaOverlayStyle.className())\")")
         }
     }
 
