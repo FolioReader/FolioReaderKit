@@ -9,6 +9,7 @@
 import UIKit
 import ZFDragableModalTransition
 
+// TODO_SMF: remove global variables
 let reuseIdentifier = "Cell"
 var pageWidth: CGFloat!
 var pageHeight: CGFloat!
