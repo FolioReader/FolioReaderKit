@@ -12,7 +12,6 @@ import MediaPlayer
 
 open class FolioReaderAudioPlayer: NSObject {
 
-	// TODO_SMF: remove `!`
     var isTextToSpeech = false
     var synthesizer: AVSpeechSynthesizer!
     var playing = false

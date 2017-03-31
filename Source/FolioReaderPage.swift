@@ -32,7 +32,7 @@ import JSQWebViewController
 open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate {
 
     weak var delegate: FolioReaderPageDelegate?
-	// TODO_SMF: remove `!`
+
 	/// The index of the current page. Note: The index start at 1!
 	open var pageNumber: Int!
 	var webView: FolioReaderWebView!

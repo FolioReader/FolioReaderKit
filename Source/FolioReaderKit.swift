@@ -84,7 +84,7 @@ open class FolioReader: NSObject {
 		return self.readerContainer?.centerViewController
 	}
 
-	// TODO_SMF: remove/rename static UserDefaults object.
+	// TODO_SMF: USERDEFAULT
 	class var defaults 				: UserDefaults {
 		return UserDefaults.standard
 	}

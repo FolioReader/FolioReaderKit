@@ -293,15 +293,27 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     }
 
     // MARK: Change layout orientation
-    
+
+	/// Get internal page offset before layout change
+	private func updatePageOffsetRate() {
+		guard let currentPage = self.currentPage else {
+			return
+		}
+
+		let pageScrollView = currentPage.webView.scrollView
+		let contentSize = pageScrollView.contentSize.forDirection(withConfiguration: self.readerConfig)
+		let contentOffset = pageScrollView.contentOffset.forDirection(withConfiguration: self.readerConfig)
+		self.pageOffsetRate = (contentSize != 0 ? (contentOffset / contentSize) : 0)
+	}
+
     func setScrollDirection(_ direction: FolioReaderScrollDirection) {
-        guard let currentPage = currentPage else { return }
-        
-        // Get internal page offset before layout change
-        let pageScrollView = currentPage.webView.scrollView
-		// TODO_SMF: check not divided by 0
-        pageOffsetRate = (pageScrollView.contentOffset.forDirection(withConfiguration: self.readerConfig) / pageScrollView.contentSize.forDirection(withConfiguration: self.readerConfig))
-        
+		guard let currentPage = self.currentPage else {
+			return
+		}
+		let pageScrollView = currentPage.webView.scrollView
+
+		// Get internal page offset before layout change
+		self.updatePageOffsetRate()
         // Change layout
         self.readerConfig.scrollDirection = direction
         self.collectionViewLayout.scrollDirection = .direction(withConfiguration: self.readerConfig)
@@ -507,10 +519,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 				self.collectionView.collectionViewLayout.invalidateLayout()
 
 				// Adjust internal page offset
-				guard let currentPage = self.currentPage else { return }
-				let pageScrollView = currentPage.webView.scrollView
-				// TODO_SMF: check not divided by 0
-				self.pageOffsetRate = (pageScrollView.contentOffset.forDirection(withConfiguration: self.readerConfig) / pageScrollView.contentSize.forDirection(withConfiguration: self.readerConfig))
+				self.updatePageOffsetRate()
 			})
 		}
 
@@ -629,13 +638,12 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 
 		let pageSize = self.readerConfig.isDirection(pageHeight, self.pageWidth)
 		let contentSize = page.webView.scrollView.contentSize.forDirection(withConfiguration: self.readerConfig)
-		// TODO_SMF: remove unwrap
-		pageIndicatorView?.totalPages = ((pageSize != 0) ? Int(ceil(contentSize / pageSize)) : 0)
+		self.pageIndicatorView?.totalPages = ((pageSize != 0) ? Int(ceil(contentSize / pageSize)) : 0)
 
 		let pageOffSet = self.readerConfig.isDirection(page.webView.scrollView.contentOffset.x, page.webView.scrollView.contentOffset.x, page.webView.scrollView.contentOffset.y)
 		let webViewPage = pageForOffset(pageOffSet, pageHeight: pageSize)
 
-        pageIndicatorView?.currentPage = webViewPage
+        self.pageIndicatorView?.currentPage = webViewPage
     }
     
     func pageForOffset(_ offset: CGFloat, pageHeight height: CGFloat) -> Int {
