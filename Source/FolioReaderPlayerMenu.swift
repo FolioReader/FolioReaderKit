@@ -233,7 +233,7 @@ class FolioReaderPlayerMenu			: UIViewController, SMSegmentViewDelegate, UIGestu
     func segmentView(_ segmentView: SMSegmentView, didSelectSegmentAtIndex index: Int) {
         guard viewDidAppear else { return }
 
-        if let audioPlayer = self.folioReader.readerAudioPlayer , segmentView.tag == 2 {
+        if let audioPlayer = self.folioReader.readerAudioPlayer, (segmentView.tag == 2) {
             audioPlayer.setRate(index)
             self.folioReader.currentAudioRate = index
         }
