@@ -177,7 +177,7 @@ class FolioReaderQuoteShare: UIViewController {
         
         // Register cell classes
         collectionView?.register(UICollectionViewCell.self, forCellWithReuseIdentifier: kReuseCellIdentifier)
-        
+
         // Create images
         dataSource = self.readerConfig.quoteCustomBackgrounds
         if (self.readerConfig.quotePreserveDefaultBackgrounds == true) {

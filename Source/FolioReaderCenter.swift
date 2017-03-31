@@ -146,7 +146,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         }
         
         // Register cell classes
-        collectionView!.register(FolioReaderPage.self, forCellWithReuseIdentifier: kReuseCellIdentifier)
+        collectionView?.register(FolioReaderPage.self, forCellWithReuseIdentifier: kReuseCellIdentifier)
         
         // Configure navigation bar and layout
         automaticallyAdjustsScrollViewInsets = false
