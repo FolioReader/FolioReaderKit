@@ -277,6 +277,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 
 	private func transformViewForRTL(_ view: UIView?) {
 		if (self.readerContainer.folioReader.needsRTLChange == true) {
+			// TODO_SMF_CHECK: when do this happen?
 			view?.transform = CGAffineTransform(scaleX: -1, y: 1)
 		} else {
 			view?.transform = CGAffineTransform.identity
@@ -826,9 +827,11 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 					return nil
 			}
 
+			// TODO_SMF_CHECK: when do this happen?
 			return title
 		}
 
+		// TODO_SMF_CHECK: when do this happen?
 		return nil
 	}
 

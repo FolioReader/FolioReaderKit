@@ -200,6 +200,7 @@ open class FolioReader: NSObject {
     /// Check the current scroll direction. Default .defaultVertical
     open var currentScrollDirection: Int {
         get {
+			// TODO_SMF_CHECK: when do this happen?
 			guard let value = FolioReader.defaults.value(forKey: kCurrentScrollDirection) as? Int else {
 				return FolioReaderScrollDirection.defaultVertical.rawValue
 			}
