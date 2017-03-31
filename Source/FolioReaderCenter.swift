@@ -10,7 +10,6 @@ import UIKit
 import ZFDragableModalTransition
 
 // TODO_SMF: remove global variables
-let reuseIdentifier = "Cell"
 var pageWidth: CGFloat!
 var pageHeight: CGFloat!
 
@@ -153,7 +152,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         }
         
         // Register cell classes
-        collectionView!.register(FolioReaderPage.self, forCellWithReuseIdentifier: reuseIdentifier)
+        collectionView!.register(FolioReaderPage.self, forCellWithReuseIdentifier: kReuseCellIdentifier)
         
         // Configure navigation bar and layout
         automaticallyAdjustsScrollViewInsets = false
@@ -402,7 +401,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     }
     
     open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        var reuseableCell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? FolioReaderPage
+        var reuseableCell = collectionView.dequeueReusableCell(withReuseIdentifier: kReuseCellIdentifier, for: indexPath) as? FolioReaderPage
 		guard let pageCell = reuseableCell else {
 			return UICollectionViewCell()
 		}

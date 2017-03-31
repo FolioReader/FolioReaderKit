@@ -21,6 +21,7 @@ internal let kCurrentScrollDirection = "com.folioreader.kCurrentScrollDirection"
 internal let kNightMode = "com.folioreader.kNightMode"
 internal let kCurrentTOCMenu = "com.folioreader.kCurrentTOCMenu"
 internal let kHighlightRange = 30
+internal let kReuseCellIdentifier = "com.folioreader.Cell.ReuseIdentifier"
 
 /// Defines the media overlay and TTS selection
 ///

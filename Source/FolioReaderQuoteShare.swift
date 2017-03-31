@@ -176,7 +176,7 @@ class FolioReaderQuoteShare: UIViewController {
         }
         
         // Register cell classes
-        collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        collectionView?.register(UICollectionViewCell.self, forCellWithReuseIdentifier: kReuseCellIdentifier)
         
         // Create images
         dataSource = self.readerConfig.quoteCustomBackgrounds
@@ -318,7 +318,7 @@ extension FolioReaderQuoteShare: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: kReuseCellIdentifier, for: indexPath)
         let imageView: UIImageView!
         let tag = 9999
         
