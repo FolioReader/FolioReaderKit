@@ -9,11 +9,6 @@
 import Foundation
 import UIKit
 
-// MARK: - Internal constants for devices
-
-internal let isPad = UIDevice.current.userInterfaceIdiom == .pad
-internal let isPhone = UIDevice.current.userInterfaceIdiom == .phone
-
 // MARK: - Internal constants
 
 internal let kApplicationDocumentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] 
@@ -21,20 +16,20 @@ internal let kCurrentFontFamily = "com.folioreader.kCurrentFontFamily"
 internal let kCurrentFontSize = "com.folioreader.kCurrentFontSize"
 internal let kCurrentAudioRate = "com.folioreader.kCurrentAudioRate"
 internal let kCurrentHighlightStyle = "com.folioreader.kCurrentHighlightStyle"
-internal var kCurrentMediaOverlayStyle = "com.folioreader.kMediaOverlayStyle"
-internal var kCurrentScrollDirection = "com.folioreader.kCurrentScrollDirection"
+internal let kCurrentMediaOverlayStyle = "com.folioreader.kMediaOverlayStyle"
+internal let kCurrentScrollDirection = "com.folioreader.kCurrentScrollDirection"
 internal let kNightMode = "com.folioreader.kNightMode"
 internal let kCurrentTOCMenu = "com.folioreader.kCurrentTOCMenu"
 internal let kHighlightRange = 30
+
+// TODO_SMF: remove kBookId
 internal var kBookId: String!
 
-/**
- Defines the media overlay and TTS selection
- 
- - Default:   The background is colored
- - Underline: The underlined is colored
- - TextColor: The text is colored
- */
+/// Defines the media overlay and TTS selection
+///
+/// - `default`: The background is colored
+/// - underline: The underlined is colored
+/// - textColor: The text is colored
 enum MediaOverlayStyle: Int {
     case `default`
     case underline
@@ -63,88 +58,104 @@ enum MediaOverlayStyle: Int {
     /**
      Called when reader did closed.
      */
-    @objc optional func folioReaderDidClosed()
+    @objc optional func folioReaderDidClosed(_ folioReader: FolioReader)
+
+	// TODO_SMF_CHECK: make sure the following deprecated functions still work... or not.:
+	// TODO_SMF_QUESTION: ask the main developer(s) for that.
+	// TODO_SMF_DOC: new function signature change
+	@objc optional func folioReaderDidClosed()
 }
 
 /**
  Main Library class with some useful constants and methods
  */
 open class FolioReader: NSObject {
-    
-    /// Singleton instance
-    open static let shared = FolioReader()
-    fileprivate override init() {}
-    
+
+	/// Internal init function to disable the creation of `FolioReader` objects outside the current scope.
+	internal override init() { }
+
     /// Custom unzip path
-    open var unzipPath: String?
+    open var unzipPath				: String?
     
     /// FolioReaderDelegate
-    open weak var delegate: FolioReaderDelegate?
-    
-    
-    open weak var readerCenter: FolioReaderCenter?
-    open weak var readerContainer: FolioReaderContainer!
-    open weak var readerAudioPlayer: FolioReaderAudioPlayer?
-    
-    static let defaults = UserDefaults.standard
-    
-    
-    
+    open weak var delegate			: FolioReaderDelegate?
+
+	// TODO_SMF_QUESTION: make those fileprivate (or internal) to avoid public access from other class?
+    open weak var readerContainer	: FolioReaderContainer?
+    open weak var readerAudioPlayer	: FolioReaderAudioPlayer?
+	open weak var readerCenter		: FolioReaderCenter? {
+		return self.readerContainer?.centerViewController
+	}
+
+	// TODO_SMF: remove/rename static UserDefaults object.
+	class var defaults 				: UserDefaults {
+		return UserDefaults.standard
+	}
+
     /// Check if reader is open
-    static var isReaderOpen = false
+    var isReaderOpen = false
     
     /// Check if reader is open and ready
-    static var isReaderReady = false
+    var isReaderReady = false
     
     /// Check if layout needs to change to fit Right To Left
-    static var needsRTLChange: Bool {
-        return book.spine.isRtl && readerConfig.scrollDirection == .horizontal
+    var needsRTLChange: Bool {
+        return (self.readerContainer?.book.spine.isRtl == true && self.readerContainer?.readerConfig.scrollDirection == .horizontal)
     }
-    
+
+	func isNight<T>(_ f: T, _ l: T) -> T {
+		return (self.nightMode == true ? f : l)
+	}
+
     /// Check if current theme is Night mode
-    open static var nightMode: Bool {
+    open var nightMode: Bool {
         get { return FolioReader.defaults.bool(forKey: kNightMode) }
         set (value) {
             FolioReader.defaults.set(value, forKey: kNightMode)
 			FolioReader.defaults.synchronize()
 
-			if let readerCenter = FolioReader.shared.readerCenter {
+			if let readerCenter = self.readerCenter {
 				UIView.animate(withDuration: 0.6, animations: {
-					_ = readerCenter.currentPage?.webView.js("nightMode(\(nightMode))")
+					// TODO_SMF_CHECK: infinite loop?
+					_ = readerCenter.currentPage?.webView.js("nightMode(\(self.nightMode))")
 					readerCenter.pageIndicatorView?.reloadColors()
 					readerCenter.configureNavBar()
 					readerCenter.scrollScrubber?.reloadColors()
-					readerCenter.collectionView.backgroundColor = (nightMode ? readerConfig.nightModeBackground : UIColor.white)
+					readerCenter.collectionView.backgroundColor = (self.nightMode == true ? self.readerContainer?.readerConfig.nightModeBackground : UIColor.white)
 					}, completion: { (finished: Bool) in
 						NotificationCenter.default.post(name: Notification.Name(rawValue: "needRefreshPageMode"), object: nil)
-					})
+				})
 			}
         }
     }
 
     /// Check current font name
-    open static var currentFont: FolioReaderFont {
+    open var currentFont: FolioReaderFont {
 		get { return FolioReaderFont(rawValue: FolioReader.defaults.value(forKey: kCurrentFontFamily) as! Int)! }
         set (font) {
             FolioReader.defaults.setValue(font.rawValue, forKey: kCurrentFontFamily)
-			_ = FolioReader.shared.readerCenter?.currentPage?.webView.js("setFontName('\(font.cssIdentifier)')")
+			_ = self.readerCenter?.currentPage?.webView.js("setFontName('\(font.cssIdentifier)')")
         }
     }
     
     /// Check current font size
-    open static var currentFontSize: FolioReaderFontSize {
+    open var currentFontSize: FolioReaderFontSize {
+		// TODO_SMF: remove unwrap
 		get { return FolioReaderFontSize(rawValue: FolioReader.defaults.value(forKey: kCurrentFontSize) as! Int)! }
         set (value) {
             FolioReader.defaults.setValue(value.rawValue, forKey: kCurrentFontSize)
 
-			if let _currentPage = FolioReader.shared.readerCenter?.currentPage {
-				_currentPage.webView.js("setFontSize('\(currentFontSize.cssIdentifier)')")
+			guard let currentPage = self.readerCenter?.currentPage else {
+				return
 			}
+
+			currentPage.webView.js("setFontSize('\(currentFontSize.cssIdentifier)')")
         }
     }
 
     /// Check current audio rate, the speed of speech voice
-    static var currentAudioRate: Int {
+    var currentAudioRate: Int {
+		// TODO_SMF: remove unwrap
         get { return FolioReader.defaults.value(forKey: kCurrentAudioRate) as! Int }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentAudioRate)
@@ -152,7 +163,8 @@ open class FolioReader: NSObject {
     }
 
     /// Check the current highlight style
-    static var currentHighlightStyle: Int {
+    var currentHighlightStyle: Int {
+		// TODO_SMF: remove unwrap
         get { return FolioReader.defaults.value(forKey: kCurrentHighlightStyle) as! Int }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentHighlightStyle)
@@ -161,6 +173,7 @@ open class FolioReader: NSObject {
     
     /// Check the current Media Overlay or TTS style
     static var currentMediaOverlayStyle: MediaOverlayStyle {
+		// TODO_SMF: remove unwrap
         get { return MediaOverlayStyle(rawValue: FolioReader.defaults.value(forKey: kCurrentMediaOverlayStyle) as! Int)! }
         set (value) {
             FolioReader.defaults.setValue(value.rawValue, forKey: kCurrentMediaOverlayStyle)
@@ -168,15 +181,14 @@ open class FolioReader: NSObject {
     }
     
     /// Check the current scroll direction
-    open static var currentScrollDirection: Int {
+    open var currentScrollDirection: Int {
+		// TODO_SMF: remove unwrap
         get { return FolioReader.defaults.value(forKey: kCurrentScrollDirection) as! Int }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentScrollDirection)
 
-			if let _readerCenter = FolioReader.shared.readerCenter  {
-				let direction = FolioReaderScrollDirection(rawValue: currentScrollDirection) ?? .defaultVertical
-				_readerCenter.setScrollDirection(direction)
-			}
+			let direction = (FolioReaderScrollDirection(rawValue: currentScrollDirection) ?? .defaultVertical)
+			self.readerCenter?.setScrollDirection(direction)
         }
     }
 
@@ -185,10 +197,12 @@ open class FolioReader: NSObject {
     /**
      Read Cover Image and Return an `UIImage`
      */
-    open class func getCoverImage(_ epubPath: String) -> UIImage? {
-        return FREpubParser().parseCoverImage(epubPath)
+	// TODO_SMF_DOC: new function signature change
+    open class func getCoverImage(_ epubPath: String, unzipPath: String? = nil) -> UIImage? {
+		// TODO_SMF_QUESTION: this used the shared instance before and ignore the parameter.
+		// Should we properly implement the parameter or change the API to use the current FolioReader?
+        return FREpubParser().parseCoverImage(epubPath, unzipPath: unzipPath)
     }
-
 
     // MARK: - Get Title
     open class func getTitle(_ epubPath: String) -> String? {
@@ -204,35 +218,27 @@ open class FolioReader: NSObject {
     /**
      Present a Folio Reader for a Parent View Controller.
      */
-    open class func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated: Bool = true) {
-        let reader = FolioReaderContainer(withConfig: config, epubPath: epubPath, removeEpub: shouldRemoveEpub)
-        FolioReader.shared.readerContainer = reader
-        parentViewController.present(reader, animated: animated, completion: nil)
+    open class func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated: Bool = true) -> FolioReader {
+		let folioReader = FolioReader()
+		let readerContainer = FolioReaderContainer(withConfig: config, folioReader: folioReader, epubPath: epubPath, removeEpub: shouldRemoveEpub)
+		folioReader.readerContainer = readerContainer
+        parentViewController.present(readerContainer, animated: animated, completion: nil)
+		FolioReader.shared = folioReader
+		return folioReader
     }
-    
-    // MARK: - Application State
-    
-    /**
-     Called when the application will resign active
-     */
-    open class func applicationWillResignActive() {
-        saveReaderState()
-    }
-    
-    /**
-     Called when the application will terminate
-     */
-    open class func applicationWillTerminate() {
-        saveReaderState()
-    }
-    
+}
+
+// MARK: - Exit, save and close FolioReader
+
+extension FolioReader {
+
     /**
      Save Reader state, book, page and scroll are saved
      */
-    open class func saveReaderState() {
-        guard FolioReader.isReaderOpen else { return }
+    open func saveReaderState() {
+        guard self.isReaderOpen else { return }
         
-        if let currentPage = FolioReader.shared.readerCenter?.currentPage {
+        if let currentPage = self.readerCenter?.currentPage {
             let position = [
                 "pageNumber": currentPageNumber,
                 "pageOffsetX": currentPage.webView.scrollView.contentOffset.x,
@@ -246,95 +252,258 @@ open class FolioReader: NSObject {
     /**
      Closes and save the reader current instance
      */
-    open class func close() {
-        FolioReader.saveReaderState()
-        FolioReader.isReaderOpen = false
-        FolioReader.isReaderReady = false
-        FolioReader.shared.readerAudioPlayer?.stop(immediate: true)
+    open func close() {
+        self.saveReaderState()
+        self.isReaderOpen = false
+        self.isReaderReady = false
+        self.readerAudioPlayer?.stop(immediate: true)
         FolioReader.defaults.set(0, forKey: kCurrentTOCMenu)
-        FolioReader.shared.delegate?.folioReaderDidClosed?()
+        self.delegate?.folioReaderDidClosed?(self)
+		self.delegate?.folioReaderDidClosed?()
     }
+}
+
+// MARK: - Public shared extension. All Deprecated function
+
+extension FolioReader {
+
+	// TODO_SMF: temporal variable to build and run the current state. Should be completely remove.
+	private static var _sharedInstance = FolioReader()
+	open static var shared : FolioReader {
+		get { return _sharedInstance }
+		set { _sharedInstance = newValue }
+	}
+
+	/// Check if current theme is Night mode
+	open class var nightMode: Bool {
+		get { return FolioReader.shared.nightMode }
+		set { FolioReader.shared.nightMode = newValue }
+	}
+
+	/// Check current font name
+	open class var currentFont: FolioReaderFont {
+		get { return FolioReader.shared.currentFont }
+		set { FolioReader.shared.currentFont = newValue }
+	}
+
+	/// Check current font size
+	open class var currentFontSize: FolioReaderFontSize {
+		get { return FolioReader.shared.currentFontSize }
+		set { FolioReader.shared.currentFontSize = newValue }
+	}
+
+	/// Check the current scroll direction
+	open class var currentScrollDirection: Int {
+		get { return FolioReader.shared.currentScrollDirection }
+		set { FolioReader.shared.currentScrollDirection = newValue }
+	}
+
+	/// Check current audio rate, the speed of speech voice
+	open class var currentAudioRate: Int {
+		get { return FolioReader.shared.currentAudioRate }
+		set { FolioReader.shared.currentAudioRate = newValue }
+	}
+
+	/// Check if reader is open and ready
+	open class var isReaderReady : Bool {
+		return FolioReader.shared.isReaderReady
+	}
+
+	/// Save Reader state, book, page and scroll are saved
+	open class func saveReaderState() {
+		FolioReader.shared.saveReaderState()
+	}
+
+	/// Closes and save the reader current instance
+	open class func close() {
+		FolioReader.shared.close()
+	}
+
+	/// Check the current highlight style
+	open class var currentHighlightStyle: Int {
+		get { return FolioReader.shared.currentHighlightStyle }
+		set { FolioReader.shared.currentHighlightStyle = newValue }
+	}
+
+	/// Check if layout needs to change to fit Right To Left
+	open class var needsRTLChange: Bool {
+		return FolioReader.shared.needsRTLChange
+	}
+}
+
+// MARK: - Application State
+
+extension FolioReader {
+
+	// TODO_SMF_DEPRECATE and find a replacement for those functions.
+
+	/**
+	Called when the application will resign active
+	*/
+	open class func applicationWillResignActive() {
+		FolioReader.shared.saveReaderState()
+	}
+
+	/**
+	Called when the application will terminate
+	*/
+	open class func applicationWillTerminate() {
+		FolioReader.shared.saveReaderState()
+	}
 }
 
 // MARK: - Global Functions
 
 func isNight<T> (_ f: T, _ l: T) -> T {
-    return FolioReader.nightMode ? f : l
+	// TODO_SMF: remove fatal error
+	// TODO_SMF_DEPRECATE
+	// TODO_SMF_DOC: notify change
+	fatalError("should not use that function.")
+    return (FolioReader.shared.nightMode == true ? f : l)
 }
 
 // MARK: - Scroll Direction Functions
 
-/**
- Simplify attibution of values based on direction, basically is to avoid too much usage of `switch`,
- `if` and `else` statements to check. So basically this is like a shorthand version of the `switch` verification.
- 
- For example:
- ```
- let pageOffsetPoint = isDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0), CGPoint(x: 0, y: pageOffset))
- ```
- 
- As usually the `vertical` direction and `horizontalContentVertical` has similar statements you can basically hide the last
- value and it will assume the value from `vertical` as fallback.
- ```
- let pageOffsetPoint = isDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0))
- ```
- 
- - parameter vertical:                  Value for `vertical` direction
- - parameter horizontal:                Value for `horizontal` direction
- - parameter horizontalContentVertical: Value for `horizontalWithVerticalContent` direction, if nil will fallback to `vertical` value
- 
- - returns: The right value based on direction.
- */
 func isDirection<T> (_ vertical: T, _ horizontal: T, _ horizontalContentVertical: T? = nil) -> T {
-	switch readerConfig.scrollDirection {
-	case .vertical, .defaultVertical: return vertical
-	case .horizontal: return horizontal
-	case .horizontalWithVerticalContent: return horizontalContentVertical ?? vertical
+	// TODO_SMF_DEPRECATE
+	// TODO_SMF: remove fatal error
+	// TODO_SMF_DOC: notify change
+	fatalError("should not use that function.")
+	let direction = (FolioReader.shared.readerContainer!.readerConfig.scrollDirection)
+	switch direction {
+	case .vertical, .defaultVertical: 		return vertical
+	case .horizontal: 						return horizontal
+	case .horizontalWithVerticalContent: 	return (horizontalContentVertical ?? vertical)
 	}
 }
 
 extension UICollectionViewScrollDirection {
-    static func direction() -> UICollectionViewScrollDirection {
-        return isDirection(.vertical, .horizontal, .horizontal)
+
+	static func direction() -> UICollectionViewScrollDirection {
+		// TODO_SMF_DEPRECATE
+		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
+			return .vertical
+		}
+
+		return UICollectionViewScrollDirection.direction(withConfiguration: readerConfig)
+	}
+
+    static func direction(withConfiguration readerConfig: FolioReaderConfig) -> UICollectionViewScrollDirection {
+		// TODO_SMF_DOC
+        return readerConfig.isDirection(.vertical, .horizontal, .horizontal)
     }
 }
 
 extension UICollectionViewScrollPosition {
-    static func direction() -> UICollectionViewScrollPosition {
-        return isDirection(.top, .left, .left)
-    }
+
+	static func direction() -> UICollectionViewScrollPosition {
+		// TODO_SMF_DEPRECATE
+		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
+			return .top
+		}
+
+		return UICollectionViewScrollPosition.direction(withConfiguration: readerConfig)
+	}
+
+	static func direction(withConfiguration readerConfig: FolioReaderConfig) -> UICollectionViewScrollPosition {
+		// TODO_SMF_DOC
+		return readerConfig.isDirection(.top, .left, .left)
+	}
 }
 
 extension CGPoint {
+
     func forDirection() -> CGFloat {
-        return isDirection(y, x, y)
+		// TODO_SMF_DEPRECATE
+		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
+			return self.y
+		}
+
+		return self.forDirection(withConfiguration: readerConfig)
     }
+
+	func forDirection(withConfiguration readerConfig: FolioReaderConfig) -> CGFloat {
+		// TODO_SMF_DOC
+		return readerConfig.isDirection(self.y, self.x, self.y)
+	}
 }
 
 extension CGSize {
+
     func forDirection() -> CGFloat {
-        return isDirection(height, width, height)
+		// TODO_SMF_DEPRECATE
+		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
+			return self.height
+		}
+		return self.forDirection(withConfiguration: readerConfig)
     }
-    
+
+	func forDirection(withConfiguration readerConfig: FolioReaderConfig) -> CGFloat {
+		// TODO_SMF_DOC
+		return readerConfig.isDirection(height, width, height)
+	}
+
     func forReverseDirection() -> CGFloat {
-        return isDirection(width, height, width)
+		// TODO_SMF_DEPRECATE
+		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
+			return self.width
+		}
+
+		return self.forReverseDirection(withConfiguration: readerConfig)
     }
+
+	func forReverseDirection(withConfiguration readerConfig: FolioReaderConfig) -> CGFloat {
+		// TODO_SMF_DOC
+		return readerConfig.isDirection(width, height, width)
+	}
 }
 
 extension CGRect {
+
     func forDirection() -> CGFloat {
-        return isDirection(height, width, height)
+		// TODO_SMF_DEPRECATE
+		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
+			return self.height
+		}
+
+		return self.forDirection(withConfiguration: readerConfig)
     }
+
+	func forDirection(withConfiguration readerConfig: FolioReaderConfig) -> CGFloat {
+		// TODO_SMF_DOC
+		return readerConfig.isDirection(height, width, height)
+	}
 }
 
 extension ScrollDirection {
+
     static func negative() -> ScrollDirection {
-        return isDirection(.down, .right, .right)
+		// TODO_SMF_DEPRECATE
+		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
+			return self.down
+		}
+
+        return self.negative(withConfiguration: readerConfig)
     }
-    
+
+	static func negative(withConfiguration readerConfig: FolioReaderConfig) -> ScrollDirection {
+		// TODO_SMF_DOC
+		return readerConfig.isDirection(.down, .right, .right)
+	}
+
     static func positive() -> ScrollDirection {
-        return isDirection(.up, .left, .left)
+		// TODO_SMF_DEPRECATE
+		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
+			return self.up
+		}
+
+        return self.positive(withConfiguration: readerConfig)
     }
+
+	static func positive(withConfiguration readerConfig: FolioReaderConfig) -> ScrollDirection {
+		// TODO_SMF_DOC
+		return readerConfig.isDirection(.up, .left, .left)
+	}
 }
 
 // MARK: Helpers
@@ -584,45 +753,62 @@ internal extension String {
 
         return String(format: "%02.f:%02.f", min, sec)
     }
-
 }
 
+// TODO_SMF: split files into extension files
+
 internal extension UIImage {
-    convenience init?(readerImageNamed: String) {
+
+	convenience init?(readerImageNamed: String) {
         self.init(named: readerImageNamed, in: Bundle.frameworkBundle(), compatibleWith: nil)
     }
-    
-    /**
-     Forces the image to be colored with Reader Config tintColor
-     
-     - returns: Returns a colored image
-     */
-    func ignoreSystemTint() -> UIImage {
-        return self.imageTintColor(readerConfig.tintColor).withRenderingMode(.alwaysOriginal)
+
+    /// Forces the image to be colored with Reader Config tintColor
+    ///
+    /// - Returns: Returns a colored image
+	func ignoreSystemTint() -> UIImage? {
+		// TODO_SMF_DEPRECATE
+		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
+			return nil
+		}
+
+		return self.ignoreSystemTint(withConfiguration: readerConfig)
+	}
+
+    /// Forces the image to be colored with Reader Config tintColor
+    ///
+    /// - Parameter readerConfig: Current folio reader configuration.
+    /// - Returns: Returns a colored image
+    func ignoreSystemTint(withConfiguration readerConfig: FolioReaderConfig) -> UIImage? {
+		// TODO_SMF_DOC
+        return self.imageTintColor(readerConfig.tintColor)?.withRenderingMode(.alwaysOriginal)
     }
-    
+
     /**
      Colorize the image with a color
      
      - parameter tintColor: The input color
      - returns: Returns a colored image
      */
-    func imageTintColor(_ tintColor: UIColor) -> UIImage {
+    func imageTintColor(_ tintColor: UIColor) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
         
-        let context = UIGraphicsGetCurrentContext()! as CGContext
-        context.translateBy(x: 0, y: self.size.height)
-        context.scaleBy(x: 1.0, y: -1.0)
-        context.setBlendMode(CGBlendMode.normal)
-        
+        let context = UIGraphicsGetCurrentContext()
+        context?.translateBy(x: 0, y: self.size.height)
+        context?.scaleBy(x: 1.0, y: -1.0)
+        context?.setBlendMode(CGBlendMode.normal)
+
         let rect = CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height) as CGRect
-        context.clip(to: rect, mask: self.cgImage!)
+		if let cgImage = self.cgImage {
+        	context?.clip(to: rect, mask:  cgImage)
+		}
+
         tintColor.setFill()
-        context.fill(rect)
-        
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()! as UIImage
+        context?.fill(rect)
+
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        
+
         return newImage
     }
     
@@ -687,7 +873,7 @@ internal extension UIViewController {
     }
     
     func dismiss() {
-        dismiss(nil)
+        self.dismiss(nil)
     }
     
     func dismiss(_ completion: (() -> Void)?) {

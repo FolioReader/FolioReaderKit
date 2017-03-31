@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 class FolioReaderQuoteShare: UIViewController {
     var quoteText: String!
     var filterImage: UIView!
@@ -23,12 +22,20 @@ class FolioReaderQuoteShare: UIViewController {
     var dataSource = [QuoteImage]()
     let imagePicker = UIImagePickerController()
     var selectedIndex = 0
-    
+
+	fileprivate var book			: FRBook
+	fileprivate var folioReader		: FolioReader
+	fileprivate var readerConfig	: FolioReaderConfig
+
     // MARK: Init
     
-    init(initWithText shareText: String) {
+	init(initWithText shareText: String, readerConfig: FolioReaderConfig, folioReader: FolioReader, book: FRBook) {
+		self.folioReader = folioReader
+		self.readerConfig = readerConfig
+		self.quoteText = shareText.stripLineBreaks().stripHtml()
+		self.book = book
+
         super.init(nibName: nil, bundle: Bundle.frameworkBundle())
-        self.quoteText = shareText.stripLineBreaks().stripHtml()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -45,20 +52,20 @@ class FolioReaderQuoteShare: UIViewController {
         setCloseButton()
         configureNavBar()
         
-        let titleAttrs = [NSForegroundColorAttributeName: readerConfig.tintColor]
-        let share = UIBarButtonItem(title: readerConfig.localizedShare, style: .plain, target: self, action: #selector(shareQuote(_:)))
+        let titleAttrs = [NSForegroundColorAttributeName: self.readerConfig.tintColor]
+        let share = UIBarButtonItem(title: self.readerConfig.localizedShare, style: .plain, target: self, action: #selector(shareQuote(_:)))
         share.setTitleTextAttributes(titleAttrs, for: UIControlState())
         navigationItem.rightBarButtonItem = share
-        
-        //
-        if isPad {
+
+		let isPad = (UIDevice.current.userInterfaceIdiom == .pad)
+        if (isPad == true) {
             preferredContentSize = CGSize(width: 400, height: 600)
         }
-        let screenBounds = isPad ? preferredContentSize : UIScreen.main.bounds.size
+        let screenBounds = (isPad == true ? preferredContentSize : UIScreen.main.bounds.size)
         
-        filterImage = UIView(frame: CGRect(x: 0, y: 0, width: screenBounds.width, height: screenBounds.width))
-        filterImage.backgroundColor = readerConfig.menuSeparatorColor
-        view.addSubview(filterImage)
+        self.filterImage = UIView(frame: CGRect(x: 0, y: 0, width: screenBounds.width, height: screenBounds.width))
+        self.filterImage.backgroundColor = self.readerConfig.menuSeparatorColor
+        view.addSubview(self.filterImage)
         
         imageView = UIImageView(frame: filterImage.bounds)
         filterImage.addSubview(imageView)
@@ -79,8 +86,13 @@ class FolioReaderQuoteShare: UIViewController {
         var bookTitle = ""
         var authorName = ""
         
-        if let title = book.title() { bookTitle = title }
-        if let author = book.metadata.creators.first { authorName = author.name }
+        if let title = self.book.title() {
+			bookTitle = title
+		}
+
+        if let author = self.book.metadata.creators.first {
+			authorName = author.name
+		}
         
         titleLabel = UILabel()
         titleLabel.text = bookTitle
@@ -96,7 +108,7 @@ class FolioReaderQuoteShare: UIViewController {
         
         // Attributed author
         let attrs = [NSFontAttributeName: UIFont(name: "Lato-Italic", size: 15)!]
-        let attributedString = NSMutableAttributedString(string:"\(readerConfig.localizedShareBy) ", attributes: attrs)
+        let attributedString = NSMutableAttributedString(string:"\(self.readerConfig.localizedShareBy) ", attributes: attrs)
         
         let attrs1 = [NSFontAttributeName: UIFont(name: "Lato-Regular", size: 15)!]
         let boldString = NSMutableAttributedString(string: authorName, attributes:attrs1)
@@ -112,7 +124,7 @@ class FolioReaderQuoteShare: UIViewController {
         authorLabel.minimumScaleFactor = 0.5
         filterImage.addSubview(authorLabel)
         
-        let logoImage = readerConfig.quoteCustomLogoImage
+        let logoImage = self.readerConfig.quoteCustomLogoImage
         let logoHeight = logoImage?.size.height ?? 0
         logoImageView = UIImageView(image: logoImage)
         logoImageView.contentMode = .center
@@ -145,7 +157,7 @@ class FolioReaderQuoteShare: UIViewController {
         collectionViewLayout.minimumInteritemSpacing = 0
         collectionViewLayout.scrollDirection = .horizontal
         
-        let background = isNight(readerConfig.nightModeBackground, UIColor.white)
+        let background = self.folioReader.isNight(self.readerConfig.nightModeBackground, UIColor.white)
         view.backgroundColor = background
         
         // CollectionView
@@ -158,7 +170,7 @@ class FolioReaderQuoteShare: UIViewController {
         collectionView.decelerationRate = UIScrollViewDecelerationRateFast
         view.addSubview(collectionView)
         
-        if isPhone {
+        if (UIDevice.current.userInterfaceIdiom == .phone) {
             collectionView.autoresizingMask = [.flexibleWidth]
         }
         
@@ -166,8 +178,8 @@ class FolioReaderQuoteShare: UIViewController {
         collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         
         // Create images
-        dataSource = readerConfig.quoteCustomBackgrounds
-        if readerConfig.quotePreserveDefaultBackgrounds {
+        dataSource = self.readerConfig.quoteCustomBackgrounds
+        if (self.readerConfig.quotePreserveDefaultBackgrounds == true) {
             createDefaultImages()
         }
         
@@ -179,9 +191,9 @@ class FolioReaderQuoteShare: UIViewController {
     }
     
     func configureNavBar() {
-        let navBackground = isNight(readerConfig.nightModeMenuBackground, UIColor.white)
-        let tintColor = readerConfig.tintColor
-        let navText = isNight(UIColor.white, UIColor.black)
+        let navBackground = self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, UIColor.white)
+        let tintColor = self.readerConfig.tintColor
+        let navText = self.folioReader.isNight(UIColor.white, UIColor.black)
         let font = UIFont(name: "Avenir-Light", size: 17)!
         setTranslucentNavigation(false, color: navBackground, tintColor: tintColor, titleColor: navText, andFont: font)
     }
@@ -242,29 +254,29 @@ class FolioReaderQuoteShare: UIViewController {
     // MARK: Share
     
     func shareQuote(_ sender: UIBarButtonItem) {
-        var subject = readerConfig.localizedShareHighlightSubject
+        var subject = self.readerConfig.localizedShareHighlightSubject
         var text = ""
         var bookTitle = ""
         var authorName = ""
         var shareItems = [AnyObject]()
         
         // Get book title
-        if let title = book.title() {
+        if let title = self.book.title() {
             bookTitle = title
             subject += " “\(title)”"
         }
         
         // Get author name
-        if let author = book.metadata.creators.first {
+        if let author = self.book.metadata.creators.first {
             authorName = author.name
         }
         
-        text = "\(bookTitle) \n\(readerConfig.localizedShareBy) \(authorName)"
+        text = "\(bookTitle) \n\(self.readerConfig.localizedShareBy) \(authorName)"
         
         let imageQuote = UIImage.imageWithView(filterImage)
         shareItems.append(imageQuote)
         
-        if let bookShareLink = readerConfig.localizedShareWebLink {
+        if let bookShareLink = self.readerConfig.localizedShareWebLink {
             text += "\n\(bookShareLink.absoluteString)"
         }
         
@@ -285,7 +297,7 @@ class FolioReaderQuoteShare: UIViewController {
     // MARK: Status Bar
     
     override var preferredStatusBarStyle : UIStatusBarStyle {
-        return isNight(.lightContent, .default)
+        return self.folioReader.isNight(.lightContent, .default)
     }
     
     override var supportedInterfaceOrientations : UIInterfaceOrientationMask {
@@ -320,24 +332,26 @@ extension FolioReaderQuoteShare: UICollectionViewDataSource {
             imageView.tag = tag
             cell.contentView.addSubview(imageView)
         }
-        
-        // Image color
-        let normalColor = UIColor(white: 0.5, alpha: 0.7)
-        let camera = UIImage(readerImageNamed: "icon-camera")
-        let dash = UIImage(readerImageNamed: "border-dashed-pattern")
-        let cameraNormal = camera!.imageTintColor(normalColor)
-        let dashNormal = dash!.imageTintColor(normalColor)
-        
+
         // Camera
-        guard (indexPath as NSIndexPath).row > 0 else {
+        guard ((indexPath as NSIndexPath).row > 0) else {
+
+			// Image color
+			let normalColor = UIColor(white: 0.5, alpha: 0.7)
+			let camera = UIImage(readerImageNamed: "icon-camera")
+			let dash = UIImage(readerImageNamed: "border-dashed-pattern")
+			let cameraNormal = camera?.imageTintColor(normalColor)
+
             imageView.contentMode = .center
             imageView.image = cameraNormal
-            cell.contentView.layer.borderColor = UIColor(patternImage: dashNormal).cgColor
+			if let dashNormal = dash?.imageTintColor(normalColor) {
+            	cell.contentView.layer.borderColor = UIColor(patternImage: dashNormal).cgColor
+			}
             return cell
         }
         
-        if selectedIndex == (indexPath as NSIndexPath).row {
-            cell.contentView.layer.borderColor = readerConfig.tintColor.cgColor
+        if (selectedIndex == (indexPath as NSIndexPath).row) {
+            cell.contentView.layer.borderColor = self.readerConfig.tintColor.cgColor
             cell.contentView.layer.borderWidth = 3
         } else {
             cell.contentView.layer.borderColor = UIColor(white: 0.5, alpha: 0.2).cgColor
@@ -364,19 +378,19 @@ extension FolioReaderQuoteShare: UICollectionViewDelegate {
         guard (indexPath as NSIndexPath).row > 0 else {
             let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
             
-            let takePhoto = UIAlertAction(title: readerConfig.localizedTakePhoto, style: .default, handler: { (action) -> Void in
+            let takePhoto = UIAlertAction(title: self.readerConfig.localizedTakePhoto, style: .default, handler: { (action) -> Void in
                 self.imagePicker.sourceType = .camera
                 self.imagePicker.allowsEditing = true
                 self.present(self.imagePicker, animated: true, completion: nil)
             })
             
-            let existingPhoto = UIAlertAction(title: readerConfig.localizedChooseExisting, style: .default) { (action) -> Void in
+            let existingPhoto = UIAlertAction(title: self.readerConfig.localizedChooseExisting, style: .default) { (action) -> Void in
                 self.imagePicker.sourceType = .photoLibrary
                 self.imagePicker.allowsEditing = true
                 self.present(self.imagePicker, animated: true, completion: nil)
             }
             
-            let cancel = UIAlertAction(title: readerConfig.localizedCancel, style: .cancel, handler: nil)
+            let cancel = UIAlertAction(title: self.readerConfig.localizedCancel, style: .cancel, handler: nil)
             
             alertController.addAction(takePhoto)
             alertController.addAction(existingPhoto)

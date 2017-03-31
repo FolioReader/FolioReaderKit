@@ -9,17 +9,23 @@
 import UIKit
 
 class PageViewController: UIPageViewController {
+
     var segmentedControl: UISegmentedControl!
     var viewList = [UIViewController]()
     var segmentedControlItems = [String]()
     var viewControllerOne: UIViewController!
     var viewControllerTwo: UIViewController!
     var index = FolioReader.defaults.integer(forKey: kCurrentTOCMenu)
-    
+
+	fileprivate var readerConfig 	: FolioReaderConfig
+	fileprivate var folioReader		: FolioReader
+
     // MARK: Init
-    
-    override init(transitionStyle style: UIPageViewControllerTransitionStyle, navigationOrientation: UIPageViewControllerNavigationOrientation, options: [String : Any]?) {
-        super.init(transitionStyle: style, navigationOrientation: navigationOrientation, options: options)
+
+	init(folioReader: FolioReader, readerConfig: FolioReaderConfig) {
+		self.folioReader = folioReader
+		self.readerConfig = readerConfig
+        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         
         self.edgesForExtendedLayout = UIRectEdge()
         self.extendedLayoutIncludesOpaqueBars = true
@@ -67,9 +73,9 @@ class PageViewController: UIPageViewController {
     }
     
     func configureNavBar() {
-        let navBackground = isNight(readerConfig.nightModeMenuBackground, UIColor.white)
-        let tintColor = readerConfig.tintColor
-        let navText = isNight(UIColor.white, UIColor.black)
+        let navBackground = self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, UIColor.white)
+        let tintColor = self.readerConfig.tintColor
+        let navText = self.folioReader.isNight(UIColor.white, UIColor.black)
         let font = UIFont(name: "Avenir-Light", size: 17)!
         setTranslucentNavigation(false, color: navBackground, tintColor: tintColor, titleColor: navText, andFont: font)
     }
@@ -86,7 +92,7 @@ class PageViewController: UIPageViewController {
     // MARK: - Status Bar
     
     override var preferredStatusBarStyle : UIStatusBarStyle {
-        return isNight(.lightContent, .default)
+        return self.folioReader.isNight(.lightContent, .default)
     }
 }
 

@@ -8,19 +8,32 @@
 
 import UIKit
 
-class FolioReaderHighlightList: UITableViewController {
+class FolioReaderHighlightList		: UITableViewController {
 
-    var highlights: [Highlight]!
-    
+	fileprivate var highlights		= [Highlight]()
+	fileprivate var readerConfig 	: FolioReaderConfig
+	fileprivate var folioReader 	: FolioReader
+
+	init(folioReader: FolioReader, readerConfig: FolioReaderConfig) {
+		self.readerConfig = readerConfig
+		self.folioReader = folioReader
+
+		super.init(style: UITableViewStyle.plain)
+	}
+
+	required init?(coder aDecoder: NSCoder) {
+		fatalError("init with coder not supported")
+	}
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)       
-        tableView.separatorInset = UIEdgeInsets.zero
-        tableView.backgroundColor = isNight(readerConfig.nightModeMenuBackground, readerConfig.menuBackgroundColor)
-        tableView.separatorColor = isNight(readerConfig.nightModeSeparatorColor, readerConfig.menuSeparatorColor)
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
+        self.tableView.separatorInset = UIEdgeInsets.zero
+        self.tableView.backgroundColor = self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, self.readerConfig.menuBackgroundColor)
+        self.tableView.separatorColor = self.folioReader.isNight(self.readerConfig.nightModeSeparatorColor, self.readerConfig.menuSeparatorColor)
         
-        highlights = Highlight.allByBookId((kBookId as NSString).deletingPathExtension)
+		self.highlights = Highlight.allByBookId(withConfiguration: self.readerConfig, bookId: (kBookId as NSString).deletingPathExtension)
     }
 
     // MARK: - Table view data source
@@ -41,7 +54,7 @@ class FolioReaderHighlightList: UITableViewController {
         
         // Format date
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = readerConfig.localizedHighlightsDateFormat
+        dateFormatter.dateFormat = self.readerConfig.localizedHighlightsDateFormat
         let dateString = dateFormatter.string(from: highlight.date)
         
         // Date
@@ -57,7 +70,7 @@ class FolioReaderHighlightList: UITableViewController {
         }
         
         dateLabel.text = dateString.uppercased()
-        dateLabel.textColor = isNight(UIColor(white: 5, alpha: 0.3), UIColor.lightGray)
+        dateLabel.textColor = self.folioReader.isNight(UIColor(white: 5, alpha: 0.3), UIColor.lightGray)
         dateLabel.frame = CGRect(x: 20, y: 20, width: view.frame.width-40, height: dateLabel.frame.height)
         
         // Text
@@ -66,7 +79,7 @@ class FolioReaderHighlightList: UITableViewController {
         let range = NSRange(location: 0, length: text.length)
         let paragraph = NSMutableParagraphStyle()
         paragraph.lineSpacing = 3
-        let textColor = isNight(readerConfig.menuTextColor, UIColor.black)
+        let textColor = self.folioReader.isNight(self.readerConfig.menuTextColor, UIColor.black)
         
         text.addAttribute(NSParagraphStyleAttributeName, value: paragraph, range: range)
         text.addAttribute(NSFontAttributeName, value: UIFont(name: "Avenir-Light", size: 16)!, range: range)
@@ -125,8 +138,9 @@ class FolioReaderHighlightList: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let highlight = highlights[(indexPath as NSIndexPath).row]
 
+		// TODO_SMF: remove call to FolioReader.shared.readerCenter
         FolioReader.shared.readerCenter?.changePageWith(page: highlight.page, andFragment: highlight.highlightId)
-        dismiss()
+        self.dismiss()
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
@@ -137,7 +151,7 @@ class FolioReaderHighlightList: UITableViewController {
                 Highlight.removeFromHTMLById(highlight.highlightId) // Remove from HTML
             }
             
-            highlight.remove() // Remove from Database
+			highlight.remove(withConfiguration: self.readerConfig) // Remove from Database
             highlights.remove(at: (indexPath as NSIndexPath).row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }

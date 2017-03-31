@@ -16,11 +16,17 @@ class FolioReaderPageIndicator: UIView {
     var currentPage: Int = 1 {
         didSet { self.reloadViewWithPage(self.currentPage) }
     }
-    
-    override init(frame: CGRect) {
+
+	fileprivate var readerConfig	: FolioReaderConfig
+	fileprivate var folioReader		: FolioReader
+
+	init(frame: CGRect, readerConfig: FolioReaderConfig, folioReader: FolioReader) {
+		self.readerConfig = readerConfig
+		self.folioReader = folioReader
+
         super.init(frame: frame)
         
-        let color = isNight(readerConfig.nightModeBackground, UIColor.white)
+        let color = self.folioReader.isNight(self.readerConfig.nightModeBackground, UIColor.white)
         backgroundColor = color
         layer.shadowColor = color.cgColor
         layer.shadowOffset = CGSize(width: 0, height: -6)
@@ -56,12 +62,12 @@ class FolioReaderPageIndicator: UIView {
         
         if updateShadow {
             layer.shadowPath = UIBezierPath(rect: bounds).cgPath
-			reloadColors()
+			self.reloadColors()
         }
     }
 
 	func reloadColors() {
-		let color = isNight(readerConfig.nightModeBackground, UIColor.white)
+		let color = self.folioReader.isNight(self.readerConfig.nightModeBackground, UIColor.white)
 		backgroundColor = color
 
 		// Animate the shadow color change
@@ -76,27 +82,27 @@ class FolioReaderPageIndicator: UIView {
 		animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
 		layer.add(animation, forKey: "shadowColor")
 
-		minutesLabel.textColor = isNight(UIColor(white: 1, alpha: 0.3), UIColor(white: 0, alpha: 0.6))
-		pagesLabel.textColor = isNight(UIColor(white: 1, alpha: 0.6), UIColor(white: 0, alpha: 0.9))
+		minutesLabel.textColor = self.folioReader.isNight(UIColor(white: 1, alpha: 0.3), UIColor(white: 0, alpha: 0.6))
+		pagesLabel.textColor = self.folioReader.isNight(UIColor(white: 1, alpha: 0.6), UIColor(white: 0, alpha: 0.9))
 	}
 
     fileprivate func reloadViewWithPage(_ page: Int) {
         let pagesRemaining = FolioReader.needsRTLChange ? totalPages-(totalPages-page+1) : totalPages-page
         
         if pagesRemaining == 1 {
-            pagesLabel.text = " "+readerConfig.localizedReaderOnePageLeft
+            pagesLabel.text = " " + self.readerConfig.localizedReaderOnePageLeft
         } else {
-            pagesLabel.text = " \(pagesRemaining) "+readerConfig.localizedReaderManyPagesLeft
+            pagesLabel.text = " \(pagesRemaining) " + self.readerConfig.localizedReaderManyPagesLeft
         }
         
         
         let minutesRemaining = Int(ceil(CGFloat((pagesRemaining * totalMinutes)/totalPages)))
         if minutesRemaining > 1 {
-            minutesLabel.text = "\(minutesRemaining) "+readerConfig.localizedReaderManyMinutes+" ·"
+            minutesLabel.text = "\(minutesRemaining) " + self.readerConfig.localizedReaderManyMinutes+" ·"
         } else if minutesRemaining == 1 {
-            minutesLabel.text = readerConfig.localizedReaderOneMinute+" ·"
+            minutesLabel.text = self.readerConfig.localizedReaderOneMinute+" ·"
         } else {
-            minutesLabel.text = readerConfig.localizedReaderLessThanOneMinute+" ·"
+            minutesLabel.text = self.readerConfig.localizedReaderLessThanOneMinute+" ·"
         }
         
         reloadView(updateShadow: false)
@@ -107,7 +113,7 @@ extension FolioReaderPageIndicator: CAAnimationDelegate {
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         // Set the shadow color to the final value of the animation is done
         if let keyPath = anim.value(forKeyPath: "keyPath") as? String , keyPath == "shadowColor" {
-            let color = isNight(readerConfig.nightModeBackground, UIColor.white)
+            let color = self.folioReader.isNight(self.readerConfig.nightModeBackground, UIColor.white)
             layer.shadowColor = color.cgColor
         }
     }
