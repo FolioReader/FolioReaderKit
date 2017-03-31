@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 /// Table Of Contents delegate
 @objc protocol FolioReaderChapterListDelegate: class {
     /**
@@ -47,7 +46,7 @@ class FolioReaderChapterList		: UITableViewController {
         super.viewDidLoad()
         
         // Register cell classes
-        self.tableView.register(FolioReaderChapterListCell.self, forCellReuseIdentifier: reuseIdentifier)
+        self.tableView.register(FolioReaderChapterListCell.self, forCellReuseIdentifier: kReuseCellIdentifier)
         self.tableView.separatorInset = UIEdgeInsets.zero
         self.tableView.backgroundColor = self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, self.readerConfig.menuBackgroundColor)
         self.tableView.separatorColor = self.folioReader.isNight(self.readerConfig.nightModeSeparatorColor, self.readerConfig.menuSeparatorColor)
@@ -70,7 +69,7 @@ class FolioReaderChapterList		: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! FolioReaderChapterListCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: kReuseCellIdentifier, for: indexPath) as! FolioReaderChapterListCell
 
 		cell.setup(withConfiguration: self.readerConfig)
         let tocReference = tocItems[(indexPath as NSIndexPath).row]
@@ -92,7 +91,7 @@ class FolioReaderChapterList		: UITableViewController {
 
         // Mark current reading chapter
         if
-			let currentPageNumber = currentPageNumber,
+			let currentPageNumber = self.folioReader.readerCenter?.currentPageNumber,
 			let reference = self.book.spine.spineReferences[safe: currentPageNumber - 1],
 			(tocReference.resource != nil) {
             	let resource = reference.resource

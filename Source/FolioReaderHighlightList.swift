@@ -28,7 +28,7 @@ class FolioReaderHighlightList		: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: kReuseCellIdentifier)
         self.tableView.separatorInset = UIEdgeInsets.zero
         self.tableView.backgroundColor = self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, self.readerConfig.menuBackgroundColor)
         self.tableView.separatorColor = self.folioReader.isNight(self.readerConfig.nightModeSeparatorColor, self.readerConfig.menuSeparatorColor)
@@ -52,7 +52,7 @@ class FolioReaderHighlightList		: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) 
+        let cell = tableView.dequeueReusableCell(withIdentifier: kReuseCellIdentifier, for: indexPath) 
         cell.backgroundColor = UIColor.clear
 
         let highlight = highlights[(indexPath as NSIndexPath).row]
@@ -153,8 +153,9 @@ class FolioReaderHighlightList		: UITableViewController {
         if editingStyle == .delete {
             let highlight = highlights[(indexPath as NSIndexPath).row]
 
-            if (highlight.page == currentPageNumber), let page = self.folioReader.readerCenter?.currentPage {
-				Highlight.removeFromHTMLById(withinPage: page, highlightId: highlight.highlightId) // Remove from HTML
+            if (highlight.page == self.folioReader.readerCenter?.currentPageNumber),
+				let page = self.folioReader.readerCenter?.currentPage {
+					Highlight.removeFromHTMLById(withinPage: page, highlightId: highlight.highlightId) // Remove from HTML
             }
             
 			highlight.remove(withConfiguration: self.readerConfig) // Remove from Database

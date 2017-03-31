@@ -32,7 +32,7 @@ import JSQWebViewController
 open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate {
 
     weak var delegate: FolioReaderPageDelegate?
-	// TODO_SMF: remove `!`
+
 	/// The index of the current page. Note: The index start at 1!
 	open var pageNumber: Int!
 	var webView: FolioReaderWebView!
@@ -190,7 +190,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         
 		let direction: ScrollDirection = self.folioReader.needsRTLChange ? .positive(withConfiguration: self.readerConfig) : .negative(withConfiguration: self.readerConfig)
         
-        if pageScrollDirection == direction && isScrolling && self.readerConfig.scrollDirection != .horizontalWithVerticalContent {
+        if (self.folioReader.readerCenter?.pageScrollDirection == direction && self.folioReader.readerCenter?.isScrolling == true && self.readerConfig.scrollDirection != .horizontalWithVerticalContent) {
             scrollPageToBottom()
         }
         

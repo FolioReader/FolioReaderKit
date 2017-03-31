@@ -21,6 +21,7 @@ internal let kCurrentScrollDirection = "com.folioreader.kCurrentScrollDirection"
 internal let kNightMode = "com.folioreader.kNightMode"
 internal let kCurrentTOCMenu = "com.folioreader.kCurrentTOCMenu"
 internal let kHighlightRange = 30
+internal let kReuseCellIdentifier = "com.folioreader.Cell.ReuseIdentifier"
 
 /// Defines the media overlay and TTS selection
 ///
@@ -83,7 +84,7 @@ open class FolioReader: NSObject {
 		return self.readerContainer?.centerViewController
 	}
 
-	// TODO_SMF: remove/rename static UserDefaults object.
+	// TODO_SMF: USERDEFAULT
 	class var defaults 				: UserDefaults {
 		return UserDefaults.standard
 	}
@@ -125,19 +126,34 @@ open class FolioReader: NSObject {
         }
     }
 
-    /// Check current font name
+    /// Check current font name. Default .andada
     open var currentFont: FolioReaderFont {
-		get { return FolioReaderFont(rawValue: FolioReader.defaults.value(forKey: kCurrentFontFamily) as! Int)! }
+		get {
+			guard
+				let rawValue = FolioReader.defaults.value(forKey: kCurrentFontFamily) as? Int,
+				let font = FolioReaderFont(rawValue: rawValue) else {
+					return .andada
+			}
+
+			return font
+		}
         set (font) {
             FolioReader.defaults.setValue(font.rawValue, forKey: kCurrentFontFamily)
 			_ = self.readerCenter?.currentPage?.webView.js("setFontName('\(font.cssIdentifier)')")
         }
     }
     
-    /// Check current font size
+    /// Check current font size. Default .m
     open var currentFontSize: FolioReaderFontSize {
-		// TODO_SMF: remove unwrap
-		get { return FolioReaderFontSize(rawValue: FolioReader.defaults.value(forKey: kCurrentFontSize) as! Int)! }
+		get {
+			guard
+				let rawValue = FolioReader.defaults.value(forKey: kCurrentFontSize) as? Int,
+				let size = FolioReaderFontSize(rawValue: rawValue) else {
+					return .m
+			}
+
+			return size
+		}
         set (value) {
             FolioReader.defaults.setValue(value.rawValue, forKey: kCurrentFontSize)
 
@@ -149,19 +165,17 @@ open class FolioReader: NSObject {
         }
     }
 
-    /// Check current audio rate, the speed of speech voice
+    /// Check current audio rate, the speed of speech voice. Default 0
     var currentAudioRate: Int {
-		// TODO_SMF: remove unwrap
-        get { return FolioReader.defaults.value(forKey: kCurrentAudioRate) as! Int }
+        get { return (FolioReader.defaults.value(forKey: kCurrentAudioRate) as? Int ?? 0) }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentAudioRate)
         }
     }
 
-    /// Check the current highlight style
+    /// Check the current highlight style.Default 0
     var currentHighlightStyle: Int {
-		// TODO_SMF: remove unwrap
-        get { return FolioReader.defaults.value(forKey: kCurrentHighlightStyle) as! Int }
+        get { return (FolioReader.defaults.value(forKey: kCurrentHighlightStyle) as? Int ?? 0) }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentHighlightStyle)
         }
@@ -169,17 +183,29 @@ open class FolioReader: NSObject {
     
     /// Check the current Media Overlay or TTS style
     var currentMediaOverlayStyle: MediaOverlayStyle {
-		// TODO_SMF: remove unwrap
-        get { return MediaOverlayStyle(rawValue: FolioReader.defaults.value(forKey: kCurrentMediaOverlayStyle) as! Int)! }
+        get {
+			guard
+				let rawValue = FolioReader.defaults.value(forKey: kCurrentMediaOverlayStyle) as? Int,
+				let style = MediaOverlayStyle(rawValue: rawValue) else {
+					return MediaOverlayStyle.default
+			}
+
+			return style
+		}
         set (value) {
             FolioReader.defaults.setValue(value.rawValue, forKey: kCurrentMediaOverlayStyle)
         }
     }
     
-    /// Check the current scroll direction
+    /// Check the current scroll direction. Default .defaultVertical
     open var currentScrollDirection: Int {
-		// TODO_SMF: remove unwrap
-        get { return FolioReader.defaults.value(forKey: kCurrentScrollDirection) as! Int }
+        get {
+			guard let value = FolioReader.defaults.value(forKey: kCurrentScrollDirection) as? Int else {
+				return FolioReaderScrollDirection.defaultVertical.rawValue
+			}
+
+			return value
+		}
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentScrollDirection)
 
@@ -247,7 +273,7 @@ extension FolioReader {
 		}
 
 		let position = [
-			"pageNumber": currentPageNumber,
+			"pageNumber": (self.readerCenter?.currentPageNumber ?? 0),
 			"pageOffsetX": currentPage.webView.scrollView.contentOffset.x,
 			"pageOffsetY": currentPage.webView.scrollView.contentOffset.y
 			] as [String : Any]

@@ -142,12 +142,14 @@ open class FolioReaderWebView		: UIWebView {
 			guard
 				let html = js("getHTML()"),
 				let identifier = dic["id"],
-				let bookId = (self.book.name as? NSString)?.deletingPathExtension,
-				let highlight = Highlight.matchHighlight(html, andId: identifier, startOffset: startOffset, endOffset: endOffset, bookId: bookId) else {
+				let bookId = (self.book.name as? NSString)?.deletingPathExtension else {
 					return
 			}
 
-			highlight.persist(withConfiguration: self.readerConfig)
+			let pageNumber = (self.readerContainer.folioReader.readerCenter?.currentPageNumber ?? 0)
+			let match = Highlight.MatchingHighlight(text: html, id: identifier, startOffset: startOffset, endOffset: endOffset, bookId: bookId, currentPage: pageNumber)
+			let highlight = Highlight.matchHighlight(match)
+			highlight?.persist(withConfiguration: self.readerConfig)
 
 		} catch {
 			print("Could not receive JSON")

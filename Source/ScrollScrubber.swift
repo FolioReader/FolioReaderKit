@@ -186,20 +186,22 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
             setSliderVal()
         }
         
-        if( slider.alpha > 0 ){
-            
-            show()
-            
-        } else if delegate.currentPage != nil && scrollStart != nil {
-            scrollDelta = scrollView.contentOffset.forDirection(withConfiguration: self.readerContainer.readerConfig) - scrollStart
-            
-            if scrollDeltaTimer == nil && scrollDelta > (pageHeight * 0.2 ) || (scrollDelta * -1) > (pageHeight * 0.2) {
-                show()
-                resetScrollDelta()
-            }
-        }
-    }
-    
+        if (slider.alpha > 0) {
+            self.show()
+
+		} else if delegate.currentPage != nil && scrollStart != nil {
+			scrollDelta = scrollView.contentOffset.forDirection(withConfiguration: self.readerContainer.readerConfig) - scrollStart
+
+			guard let pageHeight = self.readerContainer.folioReader.readerCenter?.pageHeight,
+				(scrollDeltaTimer == nil && scrollDelta > (pageHeight * 0.2 ) || (scrollDelta * -1) > (pageHeight * 0.2)) else {
+					return
+			}
+
+			self.show()
+			self.resetScrollDelta()
+		}
+	}
+
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         resetScrollDelta()
     }
@@ -231,8 +233,10 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     }
     
     fileprivate func height() -> CGFloat {
-		guard let currentPage = delegate.currentPage else {
-			return 0
+		guard
+			let currentPage = delegate.currentPage,
+			let pageHeight = self.readerContainer.folioReader.readerCenter?.pageHeight else {
+				return 0
 		}
 
         return (currentPage.webView.scrollView.contentSize.height - pageHeight + 44)
