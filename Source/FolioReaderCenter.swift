@@ -883,7 +883,6 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
             var authorName = ""
             var shareItems = [AnyObject]()
 
-			// TODO_SMF: refactor similar code in current functions.
             // Get book title
             if let title = self.book.title() {
                 bookTitle = title
@@ -1007,21 +1006,21 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     
     open func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        if !navigationController!.isNavigationBarHidden {
-            toggleBars()
+        if (navigationController?.isNavigationBarHidden == false) {
+            self.toggleBars()
         }
         
         scrollScrubber?.scrollViewDidScroll(scrollView)
-        
-        // Update current reading page
-        if scrollView is UICollectionView {
-			// TODO_SMF: refactor?
-		} else if let page = currentPage {
+
+		// Update current reading page
+		if ((scrollView is UICollectionView) == false), let page = currentPage {
+
 			let pageSize = self.readerConfig.isDirection(self.pageHeight, self.pageWidth)
+			let contentOffset = page.webView.scrollView.contentOffset.forDirection(withConfiguration: self.readerConfig)
+			let contentSize = page.webView.scrollView.contentSize.forDirection(withConfiguration: self.readerConfig)
+			if (contentOffset + pageSize <= contentSize) {
 
-			if (page.webView.scrollView.contentOffset.forDirection(withConfiguration: self.readerConfig)+pageSize <= page.webView.scrollView.contentSize.forDirection(withConfiguration: self.readerConfig)) {
-
-				let webViewPage = pageForOffset(page.webView.scrollView.contentOffset.forDirection(withConfiguration: self.readerConfig), pageHeight: pageSize)
+				let webViewPage = pageForOffset(contentOffset, pageHeight: pageSize)
 
 				if (readerConfig.scrollDirection == .horizontalWithVerticalContent),
 					let cell = ((scrollView.superview as? UIWebView)?.delegate as? FolioReaderPage) {
@@ -1030,13 +1029,13 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 
 					// if the cell reload don't save the top position offset
 					if let oldOffSet = self.currentWebViewScrollPositions[currentIndexPathRow], (abs(oldOffSet.y - scrollView.contentOffset.y) > 100) {
-						// TODO_SMF: refactor?
+						// Do nothing
 					} else {
 						self.currentWebViewScrollPositions[currentIndexPathRow] = scrollView.contentOffset
 					}
 				}
 
-				if pageIndicatorView?.currentPage != webViewPage {
+				if (pageIndicatorView?.currentPage != webViewPage) {
 					pageIndicatorView?.currentPage = webViewPage
 				}
 			}
