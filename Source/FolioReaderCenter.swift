@@ -13,9 +13,6 @@ import ZFDragableModalTransition
 let reuseIdentifier = "Cell"
 var pageWidth: CGFloat!
 var pageHeight: CGFloat!
-var previousPageNumber: Int!
-var currentPageNumber: Int!
-var nextPageNumber: Int!
 
 /// Protocol which is used from `FolioReaderCenter`s.
 @objc public protocol FolioReaderCenterDelegate: class {
@@ -67,6 +64,9 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     var scrollScrubber: ScrollScrubber?
 	var isScrolling = false
 	var pageScrollDirection = ScrollDirection()
+	var nextPageNumber: Int = 0
+	var previousPageNumber: Int = 0
+	var currentPageNumber: Int = 0
 
     fileprivate var screenBounds: CGRect!
     fileprivate var pointNow = CGPoint.zero
@@ -272,12 +272,12 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 			let position = FolioReader.defaults.value(forKey: bookId) as? NSDictionary,
 			let pageNumber = position["pageNumber"] as? Int,
 			(pageNumber > 0) else {
-				currentPageNumber = 1
+				self.currentPageNumber = 1
 				return
 		}
 
 		self.changePageWith(page: pageNumber)
-		currentPageNumber = pageNumber
+		self.currentPageNumber = pageNumber
     }
     
     // MARK: Change page progressive direction
@@ -314,7 +314,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         self.collectionViewLayout.scrollDirection = .direction(withConfiguration: self.readerConfig)
         self.currentPage?.setNeedsLayout()
         self.collectionView.collectionViewLayout.invalidateLayout()
-        self.collectionView.setContentOffset(frameForPage(currentPageNumber).origin, animated: false)
+        self.collectionView.setContentOffset(frameForPage(self.currentPageNumber).origin, animated: false)
         
         // Page progressive direction
         self.setCollectionViewProgressiveDirection()
@@ -510,7 +510,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 					CGSize(width: pageWidth * CGFloat(self.totalPages), height: pageHeight),
 					CGSize(width: pageWidth * CGFloat(self.totalPages), height: pageHeight)
 				)
-				self.collectionView.setContentOffset(self.frameForPage(currentPageNumber).origin, animated: false)
+				self.collectionView.setContentOffset(self.frameForPage(self.currentPageNumber).origin, animated: false)
 				self.collectionView.collectionViewLayout.invalidateLayout()
 
 				// Adjust internal page offset
@@ -555,10 +555,10 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 			return
 		}
         
-		self.collectionView.scrollToItem(at: IndexPath(row: currentPageNumber - 1, section: 0), at: UICollectionViewScrollPosition(), animated: false)
-        if currentPageNumber+1 >= totalPages {
+		self.collectionView.scrollToItem(at: IndexPath(row: self.currentPageNumber - 1, section: 0), at: UICollectionViewScrollPosition(), animated: false)
+        if ((self.currentPageNumber + 1) >= totalPages) {
             UIView.animate(withDuration: duration, animations: {
-                self.collectionView.setContentOffset(self.frameForPage(currentPageNumber).origin, animated: false)
+                self.collectionView.setContentOffset(self.frameForPage(self.currentPageNumber).origin, animated: false)
             })
         }
     }
@@ -594,17 +594,17 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     func updateCurrentPage(_ page: FolioReaderPage? = nil, completion: (() -> Void)? = nil) {
         if let page = page {
             currentPage = page
-            previousPageNumber = page.pageNumber-1
-            currentPageNumber = page.pageNumber
+            self.previousPageNumber = page.pageNumber-1
+            self.currentPageNumber = page.pageNumber
         } else {
             let currentIndexPath = getCurrentIndexPath()
 			currentPage = collectionView.cellForItem(at: currentIndexPath) as? FolioReaderPage
 
-            previousPageNumber = (currentIndexPath as NSIndexPath).row
-            currentPageNumber = (currentIndexPath as NSIndexPath).row+1
+            self.previousPageNumber = (currentIndexPath as NSIndexPath).row
+            self.currentPageNumber = (currentIndexPath as NSIndexPath).row+1
         }
         
-        nextPageNumber = currentPageNumber+1 <= totalPages ? currentPageNumber+1 : currentPageNumber
+        self.nextPageNumber = (((self.currentPageNumber + 1) <= totalPages) ? (self.currentPageNumber + 1) : self.currentPageNumber)
         
 //        // Set navigation title
 //        if let chapterName = getCurrentChapterName() {
@@ -686,7 +686,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func changePageWith(page: Int, andFragment fragment: String, animated: Bool = false, completion: (() -> Void)? = nil) {
-        if currentPageNumber == page {
+        if (self.currentPageNumber == page) {
             if let currentPage = currentPage , fragment != "" {
                 currentPage.handleAnchor(fragment, avoidBeginningAnchors: true, animated: animated)
             }
@@ -758,17 +758,17 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func isLastPage() -> Bool{
-        return currentPageNumber == nextPageNumber
+        return (currentPageNumber == self.nextPageNumber)
     }
 
     func changePageToNext(_ completion: (() -> Void)? = nil) {
-        changePageWith(page: nextPageNumber, animated: true) { () -> Void in
+        changePageWith(page: self.nextPageNumber, animated: true) { () -> Void in
             completion?()
         }
     }
     
     func changePageToPrevious(_ completion: (() -> Void)? = nil) {
-        changePageWith(page: previousPageNumber, animated: true) { () -> Void in
+        changePageWith(page: self.previousPageNumber, animated: true) { () -> Void in
             completion?()
         }
     }
@@ -804,39 +804,38 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     /**
      Find and return the current chapter resource.
     */
-    func getCurrentChapter() -> FRResource? {
-        if let currentPageNumber = currentPageNumber {
-            for item in self.book.flatTableOfContents {
-                if let reference = self.book.spine.spineReferences[safe: currentPageNumber-1], let resource = item.resource
-                    , resource == reference.resource {
-                    return item.resource
-                }
-            }
-        }
+	func getCurrentChapter() -> FRResource? {
+		for item in self.book.flatTableOfContents {
+			if
+				let reference = self.book.spine.spineReferences[safe: (self.currentPageNumber - 1)],
+				let resource = item.resource,
+				(resource == reference.resource) {
+					return item.resource
+			}
+		}
         return nil
     }
 
     /**
      Find and return the current chapter name.
      */
-    func getCurrentChapterName() -> String? {
-        if let currentPageNumber = currentPageNumber {
-            for item in self.book.flatTableOfContents {
-                guard
-					let reference = self.book.spine.spineReferences[safe: currentPageNumber-1],
-					let resource = item.resource,
-					(resource == reference.resource),
-					let title = item.title else {
-						// TODO_SMF_CHECK: check if this really works fine (or if it was working anyway).
-						// Select text -> share.
-						return nil
-				}
+	func getCurrentChapterName() -> String? {
+		for item in self.book.flatTableOfContents {
+			guard
+				let reference = self.book.spine.spineReferences[safe: (self.currentPageNumber - 1)],
+				let resource = item.resource,
+				(resource == reference.resource),
+				let title = item.title else {
+					// TODO_SMF_CHECK: check if this really works fine (or if it was working anyway).
+					// Select text -> share.
+					return nil
+			}
 
-				return title
-            }
-        }
-        return nil
-    }
+			return title
+		}
+
+		return nil
+	}
 
 	// MARK: Public page methods
 
@@ -1185,7 +1184,7 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
                 updateCurrentPage(page)
                 isFirstLoad = false
                 
-                if currentPageNumber == pageNumber && pageOffset > 0 {
+                if (self.currentPageNumber == pageNumber && pageOffset > 0) {
                     page.scrollPageToOffset(pageOffset!, animated: false)
                 }
             } else if (self.isScrolling == false && self.readerContainer.folioReader.needsRTLChange == true) {

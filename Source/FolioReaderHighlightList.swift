@@ -153,8 +153,9 @@ class FolioReaderHighlightList		: UITableViewController {
         if editingStyle == .delete {
             let highlight = highlights[(indexPath as NSIndexPath).row]
 
-            if (highlight.page == currentPageNumber), let page = self.folioReader.readerCenter?.currentPage {
-				Highlight.removeFromHTMLById(withinPage: page, highlightId: highlight.highlightId) // Remove from HTML
+            if (highlight.page == self.folioReader.readerCenter?.currentPageNumber),
+				let page = self.folioReader.readerCenter?.currentPage {
+					Highlight.removeFromHTMLById(withinPage: page, highlightId: highlight.highlightId) // Remove from HTML
             }
             
 			highlight.remove(withConfiguration: self.readerConfig) // Remove from Database

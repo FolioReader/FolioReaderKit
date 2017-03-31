@@ -92,7 +92,7 @@ class FolioReaderChapterList		: UITableViewController {
 
         // Mark current reading chapter
         if
-			let currentPageNumber = currentPageNumber,
+			let currentPageNumber = self.folioReader.readerCenter?.currentPageNumber,
 			let reference = self.book.spine.spineReferences[safe: currentPageNumber - 1],
 			(tocReference.resource != nil) {
             	let resource = reference.resource

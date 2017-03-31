@@ -276,34 +276,43 @@ extension Highlight {
 
 extension Highlight {
 
+	public struct MatchingHighlight {
+		var text: String
+		var id: String
+		var startOffset: String
+		var endOffset: String
+		var bookId: String
+		var currentPage: Int
+	}
+
 	/**
 	Match a highlight on string.
 	*/
-	public static func matchHighlight(_ text: String, andId id: String, startOffset: String, endOffset: String, bookId: String) -> Highlight? {
-		let pattern = "<highlight id=\"\(id)\" onclick=\".*?\" class=\"(.*?)\">((.|\\s)*?)</highlight>"
+	public static func matchHighlight(_ matchingHighlight: MatchingHighlight) -> Highlight? {
+		let pattern = "<highlight id=\"\(matchingHighlight.id)\" onclick=\".*?\" class=\"(.*?)\">((.|\\s)*?)</highlight>"
 		let regex = try? NSRegularExpression(pattern: pattern, options: [])
-		let matches = regex?.matches(in: text, options: [], range: NSRange(location: 0, length: text.utf16.count))
-		let str = (text as NSString)
+		let matches = regex?.matches(in: matchingHighlight.text, options: [], range: NSRange(location: 0, length: matchingHighlight.text.utf16.count))
+		let str = (matchingHighlight.text as NSString)
 
 		let mapped = matches?.map { (match) -> Highlight in
 			var contentPre = str.substring(with: NSRange(location: match.range.location-kHighlightRange, length: kHighlightRange))
 			var contentPost = str.substring(with: NSRange(location: match.range.location + match.range.length, length: kHighlightRange))
 
 			// Normalize string before save
-			contentPre 	= Highlight.subString(ofContent: contentPre, fromRangeOfString: ">", withPattern: "((?=[^>]*$)(.|\\s)*$)")
+			contentPre = Highlight.subString(ofContent: contentPre, fromRangeOfString: ">", withPattern: "((?=[^>]*$)(.|\\s)*$)")
 			contentPost = Highlight.subString(ofContent: contentPost, fromRangeOfString: "<", withPattern: "^((.|\\s)*?)(?=<)")
 
 			let highlight = Highlight()
-			highlight.highlightId = id
+			highlight.highlightId = matchingHighlight.id
 			highlight.type = HighlightStyle.styleForClass(str.substring(with: match.rangeAt(1))).rawValue
 			highlight.date = Foundation.Date()
 			highlight.content = Highlight.removeSentenceSpam(str.substring(with: match.rangeAt(2)))
 			highlight.contentPre = Highlight.removeSentenceSpam(contentPre)
 			highlight.contentPost = Highlight.removeSentenceSpam(contentPost)
-			highlight.page = currentPageNumber
-			highlight.bookId = bookId
-			highlight.startOffset = (Int(startOffset) ?? -1)
-			highlight.endOffset = (Int(endOffset) ?? -1)
+			highlight.page = matchingHighlight.currentPage
+			highlight.bookId = matchingHighlight.bookId
+			highlight.startOffset = (Int(matchingHighlight.startOffset) ?? -1)
+			highlight.endOffset = (Int(matchingHighlight.endOffset) ?? -1)
 
 			return highlight
 		}
