@@ -221,9 +221,10 @@ extension FolioReader {
 
     /**
      Present a Folio Reader for a Parent View Controller.
-	// TODO_SMF_DOC
      */
-    open class func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated: Bool = true) -> FolioReader {
+    open class func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated:
+		Bool = true) -> FolioReader {
+		// TODO_SMF_DOC
 		let folioReader = FolioReader()
 		let readerContainer = FolioReaderContainer(withConfig: config, folioReader: folioReader, epubPath: epubPath, removeEpub: shouldRemoveEpub)
 		folioReader.readerContainer = readerContainer

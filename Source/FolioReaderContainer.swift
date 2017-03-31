@@ -19,8 +19,9 @@ open class FolioReaderContainer		: UIViewController {
     var shouldRemoveEpub 			= true
 	var epubPath					: String
 	var book						: FRBook
-	var readerConfig				: FolioReaderConfig
-	var folioReader					: FolioReader
+	// Mark those property as public so they can accessed from other classes/subclasses.
+	public var readerConfig			: FolioReaderConfig
+	public var folioReader			: FolioReader
 
     fileprivate var errorOnLoad 	= false
 
@@ -46,8 +47,19 @@ open class FolioReaderContainer		: UIViewController {
     }
     
     required public init?(coder aDecoder: NSCoder) {
-		// TODO_SMF_QUESTION: is that ok? do 'we' really support NSCoding?
-		fatalError("This class doesn't support NSCoding.")
+		// When a FolioReaderContainer object is instantiated from the storyboard this function is called before.
+		// At this moment, we need to initialize all non-optional objects with default values.
+		// The function `setupConfig(config:epubPath:removeEpub:)` MUST be called afterward.
+		// See the ExampleFolioReaderContainer.swift for more information?
+		self.readerConfig = FolioReaderConfig()
+		self.folioReader = FolioReader()
+		self.epubPath = ""
+		self.shouldRemoveEpub = false
+		self.book = FRBook()
+
+		super.init(coder: aDecoder)
+
+		self.folioReader.readerContainer = self
     }
 
     /// Common Initialization
@@ -72,12 +84,12 @@ open class FolioReaderContainer		: UIViewController {
     ///
     /// - Parameters:
     ///   - config: Current Folio Reader configuration
-    ///   - folioReader: Current instance of the FolioReader kit.
     ///   - path: The ePub path on system
     ///   - removeEpub: Should delete the original file after unzip? Default to `true` so the ePub will be unziped only once.
-    open func setupConfig(_ config: FolioReaderConfig, folioReader: FolioReader, epubPath path: String, removeEpub: Bool = true) {
+    open func setupConfig(_ config: FolioReaderConfig, epubPath path: String, removeEpub: Bool = true) {
         self.readerConfig = config
-		self.folioReader = folioReader
+		self.folioReader = FolioReader()
+		self.folioReader.readerContainer = self
         self.epubPath = path
         self.shouldRemoveEpub = removeEpub
     }
