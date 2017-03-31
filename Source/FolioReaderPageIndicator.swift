@@ -87,7 +87,7 @@ class FolioReaderPageIndicator: UIView {
 	}
 
     fileprivate func reloadViewWithPage(_ page: Int) {
-        let pagesRemaining = FolioReader.needsRTLChange ? totalPages-(totalPages-page+1) : totalPages-page
+        let pagesRemaining = self.folioReader.needsRTLChange ? totalPages-(totalPages-page+1) : totalPages-page
         
         if pagesRemaining == 1 {
             pagesLabel.text = " " + self.readerConfig.localizedReaderOnePageLeft

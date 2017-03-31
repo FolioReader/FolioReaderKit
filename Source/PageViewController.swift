@@ -64,7 +64,7 @@ class PageViewController: UIPageViewController {
             }
         }
         
-        setCloseButton()
+		self.setCloseButton(withConfiguration: self.readerConfig)
     }
     
     override func viewWillAppear(_ animated: Bool) {

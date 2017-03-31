@@ -32,8 +32,13 @@ class FolioReaderHighlightList		: UITableViewController {
         self.tableView.separatorInset = UIEdgeInsets.zero
         self.tableView.backgroundColor = self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, self.readerConfig.menuBackgroundColor)
         self.tableView.separatorColor = self.folioReader.isNight(self.readerConfig.nightModeSeparatorColor, self.readerConfig.menuSeparatorColor)
-        
-		self.highlights = Highlight.allByBookId(withConfiguration: self.readerConfig, bookId: (kBookId as NSString).deletingPathExtension)
+
+		guard let bookId = (self.folioReader.readerContainer?.book.name as? NSString)?.deletingPathExtension else {
+			self.highlights = []
+			return
+		}
+
+		self.highlights = Highlight.allByBookId(withConfiguration: self.readerConfig, bookId: bookId)
     }
 
     // MARK: - Table view data source
@@ -85,12 +90,12 @@ class FolioReaderHighlightList		: UITableViewController {
         text.addAttribute(NSFontAttributeName, value: UIFont(name: "Avenir-Light", size: 16)!, range: range)
         text.addAttribute(NSForegroundColorAttributeName, value: textColor, range: range)
         
-        if highlight.type == HighlightStyle.underline.rawValue {
+        if (highlight.type == HighlightStyle.underline.rawValue) {
             text.addAttribute(NSBackgroundColorAttributeName, value: UIColor.clear, range: range)
-            text.addAttribute(NSUnderlineColorAttributeName, value: HighlightStyle.colorForStyle(highlight.type, nightMode: FolioReader.nightMode), range: range)
+            text.addAttribute(NSUnderlineColorAttributeName, value: HighlightStyle.colorForStyle(highlight.type, nightMode: self.folioReader.nightMode), range: range)
             text.addAttribute(NSUnderlineStyleAttributeName, value: NSNumber(value: NSUnderlineStyle.styleSingle.rawValue as Int), range: range)
         } else {
-            text.addAttribute(NSBackgroundColorAttributeName, value: HighlightStyle.colorForStyle(highlight.type, nightMode: FolioReader.nightMode), range: range)
+            text.addAttribute(NSBackgroundColorAttributeName, value: HighlightStyle.colorForStyle(highlight.type, nightMode: self.folioReader.nightMode), range: range)
         }
         
         // Text
@@ -136,19 +141,20 @@ class FolioReaderHighlightList		: UITableViewController {
     // MARK: - Table view delegate
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let highlight = highlights[(indexPath as NSIndexPath).row]
+		guard let highlight = highlights[safe: (indexPath as NSIndexPath).row] else {
+			return
+		}
 
-		// TODO_SMF: remove call to FolioReader.shared.readerCenter
-        FolioReader.shared.readerCenter?.changePageWith(page: highlight.page, andFragment: highlight.highlightId)
+        self.folioReader.readerCenter?.changePageWith(page: highlight.page, andFragment: highlight.highlightId)
         self.dismiss()
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let highlight = highlights[(indexPath as NSIndexPath).row]
-            
-            if highlight.page == currentPageNumber {
-                Highlight.removeFromHTMLById(highlight.highlightId) // Remove from HTML
+
+            if (highlight.page == currentPageNumber), let page = self.folioReader.readerCenter?.currentPage {
+				Highlight.removeFromHTMLById(withinPage: page, highlightId: highlight.highlightId) // Remove from HTML
             }
             
 			highlight.remove(withConfiguration: self.readerConfig) // Remove from Database

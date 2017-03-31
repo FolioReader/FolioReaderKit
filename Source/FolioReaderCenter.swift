@@ -229,11 +229,11 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     func configureNavBarButtons() {
 
         // Navbar buttons
-        let shareIcon = UIImage(readerImageNamed: "icon-navbar-share")?.ignoreSystemTint()
-        let audioIcon = UIImage(readerImageNamed: "icon-navbar-tts")?.ignoreSystemTint() //man-speech-icon
-        let closeIcon = UIImage(readerImageNamed: "icon-navbar-close")?.ignoreSystemTint()
-        let tocIcon = UIImage(readerImageNamed: "icon-navbar-toc")?.ignoreSystemTint()
-        let fontIcon = UIImage(readerImageNamed: "icon-navbar-font")?.ignoreSystemTint()
+        let shareIcon = UIImage(readerImageNamed: "icon-navbar-share")?.ignoreSystemTint(withConfiguration: self.readerConfig)
+        let audioIcon = UIImage(readerImageNamed: "icon-navbar-tts")?.ignoreSystemTint(withConfiguration: self.readerConfig) //man-speech-icon
+        let closeIcon = UIImage(readerImageNamed: "icon-navbar-close")?.ignoreSystemTint(withConfiguration: self.readerConfig)
+        let tocIcon = UIImage(readerImageNamed: "icon-navbar-toc")?.ignoreSystemTint(withConfiguration: self.readerConfig)
+        let fontIcon = UIImage(readerImageNamed: "icon-navbar-font")?.ignoreSystemTint(withConfiguration: self.readerConfig)
         let space = 70 as CGFloat
 
         let menu = UIBarButtonItem(image: closeIcon, style: .plain, target: self, action:#selector(closeReader(_:)))
@@ -266,20 +266,23 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         self.configureNavBarButtons()
         self.setCollectionViewProgressiveDirection()
         
-        if let position = FolioReader.defaults.value(forKey: kBookId) as? NSDictionary,
-            let pageNumber = position["pageNumber"] as? Int , pageNumber > 0 {
-            self.changePageWith(page: pageNumber)
-            currentPageNumber = pageNumber
-            return
-        }
-        
-        currentPageNumber = 1
+        guard
+			let bookId = self.book.name,
+			let position = FolioReader.defaults.value(forKey: bookId) as? NSDictionary,
+			let pageNumber = position["pageNumber"] as? Int,
+			(pageNumber > 0) else {
+				currentPageNumber = 1
+				return
+		}
+
+		self.changePageWith(page: pageNumber)
+		currentPageNumber = pageNumber
     }
     
     // MARK: Change page progressive direction
     
     func setCollectionViewProgressiveDirection() {
-        if (FolioReader.needsRTLChange == true) {
+        if (self.readerContainer.folioReader.needsRTLChange == true) {
             collectionView.transform = CGAffineTransform(scaleX: -1, y: 1)
         } else {
             collectionView.transform = CGAffineTransform.identity
@@ -287,7 +290,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func setPageProgressiveDirection(_ page: FolioReaderPage) {
-        if (FolioReader.needsRTLChange == true) {
+        if (self.readerContainer.folioReader.needsRTLChange == true) {
 //            if page.transform.a == -1 { return }
             page.transform = CGAffineTransform(scaleX: -1, y: 1)
         } else {
@@ -438,16 +441,16 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 		html = html.replacingOccurrences(of: "</head>", with: toInject)
 
 		// Font class name
-		var classes = FolioReader.currentFont.cssIdentifier
-		classes += " "+FolioReader.currentMediaOverlayStyle.className()
+		var classes = self.readerContainer.folioReader.currentFont.cssIdentifier
+		classes += " " + self.readerContainer.folioReader.currentMediaOverlayStyle.className()
 
 		// Night mode
-		if FolioReader.nightMode {
+		if (self.readerContainer.folioReader.nightMode == true) {
 			classes += " nightMode"
 		}
 
 		// Font Size
-		classes += " \(FolioReader.currentFontSize.cssIdentifier)"
+		classes += " \(self.readerContainer.folioReader.currentFontSize.cssIdentifier)"
 
 		html = html.replacingOccurrences(of: "<html ", with: "<html class=\"\(classes)\"")
 
@@ -468,7 +471,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     // MARK: - Device rotation
     
     override open func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
-        guard FolioReader.isReaderReady else { return }
+        guard self.readerContainer.folioReader.isReaderReady else { return }
         
         setPageSize(toInterfaceOrientation)
         updateCurrentPage()
@@ -521,9 +524,12 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     }
     
     override open func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
-        guard FolioReader.isReaderReady else { return }
-        guard let currentPage = currentPage else { return }
-        
+        guard
+			(self.readerContainer.folioReader.isReaderReady == true),
+			let currentPage = currentPage else {
+				return
+		}
+
         // Update pages
         pagesForCurrentPage(currentPage)
         currentPage.refreshPageMode()
@@ -544,7 +550,9 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     }
     
     override open func willAnimateRotation(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
-        guard FolioReader.isReaderReady else { return }
+        guard self.readerContainer.folioReader.isReaderReady else {
+			return
+		}
         
 		self.collectionView.scrollToItem(at: IndexPath(row: currentPageNumber - 1, section: 0), at: UICollectionViewScrollPosition(), animated: false)
         if currentPageNumber+1 >= totalPages {
@@ -1079,14 +1087,14 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     
     func closeReader(_ sender: UIBarButtonItem) {
         dismiss()
-        FolioReader.close()
+        self.readerContainer.folioReader.close()
     }
     
     /**
      Present chapter list
      */
     func presentChapterList(_ sender: UIBarButtonItem) {
-        FolioReader.saveReaderState()
+        self.readerContainer.folioReader.saveReaderState()
         
 		let chapter = FolioReaderChapterList(folioReader: self.readerContainer.folioReader, readerConfig: self.readerConfig, book: self.readerContainer.book, delegate: self)
         let highlight = FolioReaderHighlightList(folioReader: self.readerContainer.folioReader, readerConfig: self.readerConfig)
@@ -1104,7 +1112,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
      Present fonts and settings menu
      */
     func presentFontsMenu() {
-        FolioReader.saveReaderState()
+        self.readerContainer.folioReader.saveReaderState()
         hideBars()
         
         let menu = FolioReaderFontsMenu(folioReader: self.readerContainer.folioReader, readerConfig: self.readerConfig)
@@ -1126,7 +1134,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
      Present audio player menu
      */
     func presentPlayerMenu(_ sender: UIBarButtonItem) {
-        FolioReader.saveReaderState()
+        self.readerContainer.folioReader.saveReaderState()
         hideBars()
 
         let menu = FolioReaderPlayerMenu(folioReader: self.readerContainer.folioReader, readerConfig: self.readerConfig)
@@ -1165,7 +1173,9 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
     
     public func pageDidLoad(_ page: FolioReaderPage) {
         
-        if let position = FolioReader.defaults.value(forKey: kBookId) as? NSDictionary {
+        if
+			let bookId = self.book.name,
+			let position = FolioReader.defaults.value(forKey: bookId) as? NSDictionary {
             let pageNumber = position["pageNumber"]! as! Int
 			let offset = self.readerConfig.isDirection(position["pageOffsetY"], position["pageOffsetX"]) as? CGFloat
 			let pageOffset = offset
@@ -1177,7 +1187,7 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
                 if currentPageNumber == pageNumber && pageOffset > 0 {
                     page.scrollPageToOffset(pageOffset!, animated: false)
                 }
-            } else if !isScrolling && FolioReader.needsRTLChange {
+            } else if !isScrolling && self.readerContainer.folioReader.needsRTLChange {
                 page.scrollPageToBottom()
             }
         } else if isFirstLoad {

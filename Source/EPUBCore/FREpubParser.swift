@@ -93,11 +93,11 @@ class FREpubParser			: NSObject, SSZipArchiveDelegate {
         
         // Skip from backup this folder
         addSkipBackupAttributeToItemAtURL(URL(fileURLWithPath: bookBasePath, isDirectory: true))
-        
-        kBookId = bookName
+
+		self.book.name = bookName
         readContainer()
         readOpf()
-        return book
+        return self.book
     }
     
     /**
