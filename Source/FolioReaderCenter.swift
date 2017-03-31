@@ -274,22 +274,21 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     }
     
     // MARK: Change page progressive direction
-    
+
+	private func transformViewForRTL(_ view: UIView?) {
+		if (self.readerContainer.folioReader.needsRTLChange == true) {
+			view?.transform = CGAffineTransform(scaleX: -1, y: 1)
+		} else {
+			view?.transform = CGAffineTransform.identity
+		}
+	}
+
     func setCollectionViewProgressiveDirection() {
-        if (self.readerContainer.folioReader.needsRTLChange == true) {
-            collectionView.transform = CGAffineTransform(scaleX: -1, y: 1)
-        } else {
-            collectionView.transform = CGAffineTransform.identity
-        }
+		self.transformViewForRTL(self.collectionView)
     }
     
     func setPageProgressiveDirection(_ page: FolioReaderPage) {
-        if (self.readerContainer.folioReader.needsRTLChange == true) {
-//            if page.transform.a == -1 { return }
-            page.transform = CGAffineTransform(scaleX: -1, y: 1)
-        } else {
-            page.transform = CGAffineTransform.identity
-        }
+		self.transformViewForRTL(page)
     }
 
     // MARK: Change layout orientation
@@ -310,6 +309,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 		guard let currentPage = self.currentPage else {
 			return
 		}
+
 		let pageScrollView = currentPage.webView.scrollView
 
 		// Get internal page offset before layout change
@@ -346,33 +346,18 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 
     // MARK: Status bar and Navigation bar
 
-	// TODO_SMF: refactor similar code
     func hideBars() {
 
         guard (self.readerConfig.shouldHideNavigationOnTap == true) else {
 			return
 		}
 
-        self.readerContainer.shouldHideStatusBar = true
-        
-        UIView.animate(withDuration: 0.25, animations: {
-            self.readerContainer.setNeedsStatusBarAppearanceUpdate()
-            
-            // Show minutes indicator
-//            self.pageIndicatorView.minutesLabel.alpha = 0
-        })
-        navigationController?.setNavigationBarHidden(true, animated: true)
+		self.updateBarsStatus(true)
     }
     
     func showBars() {
         self.configureNavBar()
-
-        self.readerContainer.shouldHideStatusBar = false
-        
-        UIView.animate(withDuration: 0.25, animations: {
-            self.readerContainer.setNeedsStatusBarAppearanceUpdate()
-        })
-        navigationController?.setNavigationBarHidden(false, animated: true)
+		self.updateBarsStatus(false)
     }
     
     func toggleBars() {
@@ -384,20 +369,28 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         if (shouldHide == false) {
 			self.configureNavBar()
 		}
-        
-        self.readerContainer.shouldHideStatusBar = shouldHide
-        
-        UIView.animate(withDuration: 0.25, animations: {
-            self.readerContainer.setNeedsStatusBarAppearanceUpdate()
-            
-            // Show minutes indicator
-//            self.pageIndicatorView.minutesLabel.alpha = shouldHide ? 0 : 1
-        })
-        self.navigationController?.setNavigationBarHidden(shouldHide, animated: true)
+
+		self.updateBarsStatus(shouldHide)
     }
-    
+
+	private func updateBarsStatus(_ shouldHide: Bool, shouldShowIndicator: Bool = false) {
+
+		self.readerContainer.shouldHideStatusBar = shouldHide
+
+		UIView.animate(withDuration: 0.25, animations: {
+			self.readerContainer.setNeedsStatusBarAppearanceUpdate()
+
+			// Show minutes indicator
+			if (shouldShowIndicator == true) {
+				self.pageIndicatorView?.minutesLabel.alpha = (shouldHide == true ? 0 : 1)
+			}
+		})
+
+		self.navigationController?.setNavigationBarHidden(shouldHide, animated: true)
+	}
+
     // MARK: UICollectionViewDataSource
-    
+
     open func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -1027,7 +1020,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 
 					let currentIndexPathRow = cell.pageNumber - 1
 
-					// if the cell reload don't save the top position offset
+					// if the cell reload doesn't save the top position offset
 					if let oldOffSet = self.currentWebViewScrollPositions[currentIndexPathRow], (abs(oldOffSet.y - scrollView.contentOffset.y) > 100) {
 						// Do nothing
 					} else {
