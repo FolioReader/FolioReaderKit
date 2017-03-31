@@ -17,7 +17,6 @@ var previousPageNumber: Int!
 var currentPageNumber: Int!
 var nextPageNumber: Int!
 var pageScrollDirection = ScrollDirection()
-var isScrolling = false
 
 /// Protocol which is used from `FolioReaderCenter`s.
 @objc public protocol FolioReaderCenterDelegate: class {
@@ -67,6 +66,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     var recentlyScrolledDelay = 2.0 // 2 second delay until we clear recentlyScrolled
     var recentlyScrolledTimer: Timer!
     var scrollScrubber: ScrollScrubber?
+	var isScrolling = false
 
     fileprivate var screenBounds: CGRect!
     fileprivate var pointNow = CGPoint.zero
@@ -991,7 +991,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     // MARK: - ScrollView Delegate
     
     open func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        isScrolling = true
+        self.isScrolling = true
         clearRecentlyScrolled()
         recentlyScrolled = true
         pointNow = scrollView.contentOffset
@@ -1051,7 +1051,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     }
 
     open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        isScrolling = false
+        self.isScrolling = false
 
 		if (readerConfig.scrollDirection == .horizontalWithVerticalContent),
 			let cell = ((scrollView.superview as? UIWebView)?.delegate as? FolioReaderPage) {
@@ -1188,7 +1188,7 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
                 if currentPageNumber == pageNumber && pageOffset > 0 {
                     page.scrollPageToOffset(pageOffset!, animated: false)
                 }
-            } else if !isScrolling && self.readerContainer.folioReader.needsRTLChange {
+            } else if (self.isScrolling == false && self.readerContainer.folioReader.needsRTLChange == true) {
                 page.scrollPageToBottom()
             }
         } else if isFirstLoad {
