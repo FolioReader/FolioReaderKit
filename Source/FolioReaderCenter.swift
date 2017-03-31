@@ -9,28 +9,20 @@
 import UIKit
 import ZFDragableModalTransition
 
-// TODO_SMF: remove global variables
-var pageWidth: CGFloat!
-var pageHeight: CGFloat!
-
 /// Protocol which is used from `FolioReaderCenter`s.
 @objc public protocol FolioReaderCenterDelegate: class {
 
-	/**
-     Notifies that a page appeared. This is triggered is a page is chosen and displayed.
-
-     - parameter page: The appeared page
-	 */
+	/// Notifies that a page appeared. This is triggered is a page is chosen and displayed.
+	///
+	/// - Parameter page: The appeared page
 	@objc optional func pageDidAppear(_ page: FolioReaderPage)
 
-	/**
-     Passes and returns the HTML content as `String`. Implement this method if you want to modify the HTML content of a `FolioReaderPage`.
-
-     - parameter page: The `FolioReaderPage`
-     - parameter htmlContent: The current HTML content as `String`
-
-     - returns: The adjusted HTML content as `String`. This is the content which will be loaded into the given `FolioReaderPage`
-	 */
+	/// Passes and returns the HTML content as `String`. Implement this method if you want to modify the HTML content of a `FolioReaderPage`.
+	///
+	/// - Parameters:
+	///   - page: The `FolioReaderPage`.
+	///   - htmlContent: The current HTML content as `String`.
+	/// - Returns: The adjusted HTML content as `String`. This is the content which will be loaded into the given `FolioReaderPage`.
 	@objc optional func htmlContentForPage(_ page: FolioReaderPage, htmlContent: String) -> String
 }
 
@@ -66,6 +58,8 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 	var nextPageNumber: Int = 0
 	var previousPageNumber: Int = 0
 	var currentPageNumber: Int = 0
+	var pageWidth: CGFloat = 0.0
+	var pageHeight: CGFloat = 0.0
 
     fileprivate var screenBounds: CGRect!
     fileprivate var pointNow = CGPoint.zero
@@ -215,7 +209,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 
 	fileprivate func frameForScrollScrubber() -> CGRect {
 		let scrubberY: CGFloat = ((self.readerConfig.shouldHideNavigationOnTap == true || self.readerConfig.hideBars == true) ? 50 : 74)
-		return CGRect(x: pageWidth + 10, y: scrubberY, width: 40, height: pageHeight - 100)
+		return CGRect(x: self.pageWidth + 10, y: scrubberY, width: 40, height: (self.pageHeight - 100))
 	}
 
     func configureNavBar() {
@@ -328,9 +322,9 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
             var pageOffset = (pageScrollView.contentSize.forDirection(withConfiguration: self.readerConfig) * self.pageOffsetRate)
             
             // Fix the offset for paged scroll
-            if (self.readerConfig.scrollDirection == .horizontal) {
-                let page = round(pageOffset / pageWidth)
-                pageOffset = page * pageWidth
+            if (self.readerConfig.scrollDirection == .horizontal && self.pageWidth != 0) {
+                let page = round(pageOffset / self.pageWidth)
+                pageOffset = (page * self.pageWidth)
             }
             
             let pageOffsetPoint = self.readerConfig.isDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0))
@@ -505,9 +499,9 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 
 				// Adjust collectionView
 				self.collectionView.contentSize = self.readerConfig.isDirection(
-					CGSize(width: pageWidth, height: pageHeight * CGFloat(self.totalPages)),
-					CGSize(width: pageWidth * CGFloat(self.totalPages), height: pageHeight),
-					CGSize(width: pageWidth * CGFloat(self.totalPages), height: pageHeight)
+					CGSize(width: self.pageWidth, height: self.pageHeight * CGFloat(self.totalPages)),
+					CGSize(width: self.pageWidth * CGFloat(self.totalPages), height: self.pageHeight),
+					CGSize(width: self.pageWidth * CGFloat(self.totalPages), height: self.pageHeight)
 				)
 				self.collectionView.setContentOffset(self.frameForPage(self.currentPageNumber).origin, animated: false)
 				self.collectionView.collectionViewLayout.invalidateLayout()
@@ -540,9 +534,9 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         var pageOffset = (currentPage.webView.scrollView.contentSize.forDirection(withConfiguration: self.readerConfig) * pageOffsetRate)
         
         // Fix the offset for paged scroll
-        if (self.readerConfig.scrollDirection == .horizontal && pageWidth != 0) {
-            let page = round(pageOffset / pageWidth)
-            pageOffset = page * pageWidth
+        if (self.readerConfig.scrollDirection == .horizontal && self.pageWidth != 0) {
+            let page = round(pageOffset / self.pageWidth)
+            pageOffset = page * self.pageWidth
         }
 
 		let pageOffsetPoint = self.readerConfig.isDirection(CGPoint(x: 0, y: pageOffset), CGPoint(x: pageOffset, y: 0))
@@ -566,20 +560,20 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     
     func setPageSize(_ orientation: UIInterfaceOrientation) {
         if orientation.isPortrait {
-            if screenBounds.size.width < screenBounds.size.height {
-                pageWidth = self.view.frame.width
-                pageHeight = self.view.frame.height
+            if (screenBounds.size.width < screenBounds.size.height) {
+                self.pageWidth = self.view.frame.width
+                self.pageHeight = self.view.frame.height
             } else {
-                pageWidth = self.view.frame.height
-                pageHeight = self.view.frame.width
+                self.pageWidth = self.view.frame.height
+                self.pageHeight = self.view.frame.width
             }
         } else {
-            if screenBounds.size.width > screenBounds.size.height {
-                pageWidth = self.view.frame.width
-                pageHeight = self.view.frame.height
+            if (screenBounds.size.width > screenBounds.size.height) {
+                self.pageWidth = self.view.frame.width
+                self.pageHeight = self.view.frame.height
             } else {
-                pageWidth = self.view.frame.height
-                pageHeight = self.view.frame.width
+                self.pageWidth = self.view.frame.height
+                self.pageHeight = self.view.frame.width
             }
         }
     }
@@ -633,12 +627,13 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     func pagesForCurrentPage(_ page: FolioReaderPage?) {
         guard let page = page else { return }
 
-		let pageSize = self.readerConfig.isDirection(pageHeight, pageWidth)
+		let pageSize = self.readerConfig.isDirection(pageHeight, self.pageWidth)
+		let contentSize = page.webView.scrollView.contentSize.forDirection(withConfiguration: self.readerConfig)
 		// TODO_SMF: remove unwrap
-		pageIndicatorView?.totalPages = Int(ceil(page.webView.scrollView.contentSize.forDirection(withConfiguration: self.readerConfig)/pageSize!))
+		pageIndicatorView?.totalPages = ((pageSize != 0) ? Int(ceil(contentSize / pageSize)) : 0)
 
 		let pageOffSet = self.readerConfig.isDirection(page.webView.scrollView.contentOffset.x, page.webView.scrollView.contentOffset.x, page.webView.scrollView.contentOffset.y)
-		let webViewPage = pageForOffset(pageOffSet, pageHeight: pageSize!)
+		let webViewPage = pageForOffset(pageOffSet, pageHeight: pageSize)
 
         pageIndicatorView?.currentPage = webViewPage
     }
@@ -679,8 +674,8 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     
     func frameForPage(_ page: Int) -> CGRect {
         return self.readerConfig.isDirection(
-            CGRect(x: 0, y: pageHeight * CGFloat(page-1), width: pageWidth, height: pageHeight),
-            CGRect(x: pageWidth * CGFloat(page-1), y: 0, width: pageWidth, height: pageHeight)
+            CGRect(x: 0, y: self.pageHeight * CGFloat(page-1), width: self.pageWidth, height: self.pageHeight),
+            CGRect(x: self.pageWidth * CGFloat(page-1), y: 0, width: self.pageWidth, height: self.pageHeight)
         )
     }
     
@@ -1013,30 +1008,28 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         // Update current reading page
         if scrollView is UICollectionView {
 			// TODO_SMF: refactor?
-		} else {
-			if	let page = currentPage,
-				let pageSize = self.readerConfig.isDirection(pageHeight, pageWidth) {
+		} else if let page = currentPage {
+			let pageSize = self.readerConfig.isDirection(self.pageHeight, self.pageWidth)
 
-				if (page.webView.scrollView.contentOffset.forDirection(withConfiguration: self.readerConfig)+pageSize <= page.webView.scrollView.contentSize.forDirection(withConfiguration: self.readerConfig)) {
+			if (page.webView.scrollView.contentOffset.forDirection(withConfiguration: self.readerConfig)+pageSize <= page.webView.scrollView.contentSize.forDirection(withConfiguration: self.readerConfig)) {
 
-					let webViewPage = pageForOffset(page.webView.scrollView.contentOffset.forDirection(withConfiguration: self.readerConfig), pageHeight: pageSize)
+				let webViewPage = pageForOffset(page.webView.scrollView.contentOffset.forDirection(withConfiguration: self.readerConfig), pageHeight: pageSize)
 
-					if (readerConfig.scrollDirection == .horizontalWithVerticalContent),
-						let cell = ((scrollView.superview as? UIWebView)?.delegate as? FolioReaderPage) {
+				if (readerConfig.scrollDirection == .horizontalWithVerticalContent),
+					let cell = ((scrollView.superview as? UIWebView)?.delegate as? FolioReaderPage) {
 
-						let currentIndexPathRow = cell.pageNumber - 1
+					let currentIndexPathRow = cell.pageNumber - 1
 
-						// if the cell reload don't save the top position offset
-						if let oldOffSet = self.currentWebViewScrollPositions[currentIndexPathRow], (abs(oldOffSet.y - scrollView.contentOffset.y) > 100) {
-							// TODO_SMF: refactor?
-						} else {
-							self.currentWebViewScrollPositions[currentIndexPathRow] = scrollView.contentOffset
-						}
+					// if the cell reload don't save the top position offset
+					if let oldOffSet = self.currentWebViewScrollPositions[currentIndexPathRow], (abs(oldOffSet.y - scrollView.contentOffset.y) > 100) {
+						// TODO_SMF: refactor?
+					} else {
+						self.currentWebViewScrollPositions[currentIndexPathRow] = scrollView.contentOffset
 					}
+				}
 
-					if pageIndicatorView?.currentPage != webViewPage {
-						pageIndicatorView?.currentPage = webViewPage
-					}
+				if pageIndicatorView?.currentPage != webViewPage {
+					pageIndicatorView?.currentPage = webViewPage
 				}
 			}
 		}
