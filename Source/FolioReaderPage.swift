@@ -65,7 +65,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         NotificationCenter.default.addObserver(self, selector: #selector(refreshPageMode), name: NSNotification.Name(rawValue: "needRefreshPageMode"), object: nil)
         
         if webView == nil {
-			webView = FolioReaderWebView(frame: webViewFrame(), readerConfig: self.readerConfig, readerContainer: self.readerContainer)
+			webView = FolioReaderWebView(frame: webViewFrame(), readerContainer: self.readerContainer)
             webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             webView.dataDetectorTypes = .link
             webView.scrollView.showsVerticalScrollIndicator = false

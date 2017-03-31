@@ -815,11 +815,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
             for item in self.book.flatTableOfContents {
                 guard
 					let reference = self.book.spine.spineReferences[safe: currentPageNumber-1],
-					let resource = item.resource else {
-						return nil
-				}
-
-				guard
+					let resource = item.resource,
 					(resource == reference.resource),
 					let title = item.title else {
 						// TODO_SMF_CHECK: check if this really works fine (or if it was working anyway).

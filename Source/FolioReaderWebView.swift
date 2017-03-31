@@ -14,7 +14,9 @@ open class FolioReaderWebView		: UIWebView {
 	var isShare 					= false
     var isOneWord 					= false
 
-	fileprivate var readerConfig	: FolioReaderConfig
+	fileprivate var readerConfig	: FolioReaderConfig {
+		return self.readerContainer.readerConfig
+	}
 	fileprivate var readerContainer	: FolioReaderContainer
 	fileprivate var book			: FRBook {
 		return self.readerContainer.book
@@ -24,8 +26,7 @@ open class FolioReaderWebView		: UIWebView {
 		fatalError("use init(frame:readerConfig:book:) instead.")
 	}
 
-	init(frame: CGRect, readerConfig: FolioReaderConfig, readerContainer: FolioReaderContainer) {
-		self.readerConfig = readerConfig
+	init(frame: CGRect, readerContainer: FolioReaderContainer) {
 		self.readerContainer = readerContainer
 
 		super.init(frame: frame)
