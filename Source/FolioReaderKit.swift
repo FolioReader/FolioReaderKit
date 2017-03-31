@@ -224,7 +224,7 @@ extension FolioReader {
      Present a Folio Reader for a Parent View Controller.
      */
     open class func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated:
-		Bool = true) -> FolioReader {
+		Bool = true) -> FolioReaderContainer {
 		// TODO_SMF_DOC
 		let folioReader = FolioReader()
 		let readerContainer = FolioReaderContainer(withConfig: config, folioReader: folioReader, epubPath: epubPath, removeEpub: shouldRemoveEpub)
@@ -232,7 +232,7 @@ extension FolioReader {
         parentViewController.present(readerContainer, animated: animated, completion: nil)
 		// TODO_SMF_DOC
 		FolioReader.shared = folioReader
-		return folioReader
+		return readerContainer
     }
 }
 
@@ -799,8 +799,6 @@ internal extension String {
         return String(format: "%02.f:%02.f", min, sec)
     }
 }
-
-// TODO_SMF: split files into extension files
 
 internal extension UIImage {
 

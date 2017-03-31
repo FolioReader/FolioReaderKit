@@ -38,12 +38,12 @@ enum Epub: Int {
 		return Bundle.main.path(forResource: self.name, ofType: "epub")
 	}
 
-	func retain(folioReader: FolioReader) {
+	func retain(folioReaderContainer: FolioReaderContainer) {
 		let appDelegate = (UIApplication.shared.delegate as? AppDelegate)
 
 		switch self {
-		case .bookOne: appDelegate?.standardEpub = folioReader
-		case .bookTwo: appDelegate?.audioEpub = folioReader
+		case .bookOne: appDelegate?.standardEpub = folioReaderContainer
+		case .bookTwo: appDelegate?.audioEpub = folioReaderContainer
 		}
 	}
 }
@@ -103,9 +103,9 @@ class ViewController		: UIViewController {
 		}
 
 		let readerConfiguration = self.readerConfiguration(forEpub: epub)
-        let folioReader = FolioReader.presentReader(parentViewController: self, withEpubPath: bookPath, andConfig: readerConfiguration, shouldRemoveEpub: false)
+        let folioReaderContainer = FolioReader.presentReader(parentViewController: self, withEpubPath: bookPath, andConfig: readerConfiguration, shouldRemoveEpub: false)
 
-		epub.retain(folioReader: folioReader)
+		epub.retain(folioReaderContainer: folioReaderContainer)
     }
 
     private func setCover(_ button: UIButton?, index: Int) {

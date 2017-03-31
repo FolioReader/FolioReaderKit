@@ -159,6 +159,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 					tempHtmlContent = tempHtmlContent.replacingCharacters(in: newRange, with: tag) as NSString
 				}
 				else {
+					// TODO_SMF_CHECK: this might not be normal.
 					print("highlight range not found")
 				}
 			}
