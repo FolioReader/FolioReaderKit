@@ -16,7 +16,6 @@ var pageHeight: CGFloat!
 var previousPageNumber: Int!
 var currentPageNumber: Int!
 var nextPageNumber: Int!
-var pageScrollDirection = ScrollDirection()
 
 /// Protocol which is used from `FolioReaderCenter`s.
 @objc public protocol FolioReaderCenterDelegate: class {
@@ -67,6 +66,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     var recentlyScrolledTimer: Timer!
     var scrollScrubber: ScrollScrubber?
 	var isScrolling = false
+	var pageScrollDirection = ScrollDirection()
 
     fileprivate var screenBounds: CGRect!
     fileprivate var pointNow = CGPoint.zero
@@ -657,7 +657,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
             let first = indexPaths.first! as IndexPath
             let last = indexPaths.last! as IndexPath
             
-            switch pageScrollDirection {
+            switch self.pageScrollDirection {
             case .up:
                 if (first as NSIndexPath).compare(last) == .orderedAscending {
                     indexPath = last
@@ -1044,9 +1044,9 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 		}
 
 		if (scrollView.contentOffset.forDirection(withConfiguration: self.readerConfig) < pointNow.forDirection(withConfiguration: self.readerConfig)) {
-			pageScrollDirection = .negative(withConfiguration: self.readerConfig)
+			self.pageScrollDirection = .negative(withConfiguration: self.readerConfig)
 		} else {
-			pageScrollDirection = .positive(withConfiguration: self.readerConfig)
+			self.pageScrollDirection = .positive(withConfiguration: self.readerConfig)
 		}
     }
 
