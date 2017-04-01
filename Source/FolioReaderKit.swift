@@ -97,6 +97,7 @@ open class FolioReader: NSObject {
 		return (self.nightMode == true ? f : l)
 	}
 
+	/// UserDefault for the current ePub file.
 	fileprivate var defaults: FolioReaderUserDefaults {
 
 		guard
@@ -116,9 +117,15 @@ open class FolioReader: NSObject {
 
 extension FolioReader {
 
-	/**
-	Present a Folio Reader for a Parent View Controller.
-	*/
+	/// Present a Folio Reader Container modally on a Parent View Controller.
+	///
+	/// - Parameters:
+	///   - parentViewController: View Controller that will present the reader container.
+	///   - epubPath: String representing the path on the disk of the ePub file. Must not be nil nor empty string.
+	///   - config: FolioReader configuration.
+	///   - shouldRemoveEpub: Boolean to remove the epub or not. Default true.
+	///   - animated: Pass true to animate the presentation; otherwise, pass false.
+	/// - Returns: The new and presented FolioReaderContainer instance.
 	open class func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated:
 		Bool = true) -> FolioReaderContainer {
 		// TODO_SMF_DOC
