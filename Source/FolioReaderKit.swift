@@ -343,9 +343,9 @@ extension FolioReader {
 
 // MARK: - Public static functions. All Deprecated function
 
+@available(*, deprecated, message: "Shared instance removed. Use a local instance instead.")
 extension FolioReader {
 
-	// TODO_SMF_DEPRECATE
 	private static var _sharedInstance = FolioReader()
 	open static var shared : FolioReader {
 		get { return _sharedInstance }
@@ -354,91 +354,79 @@ extension FolioReader {
 
 	/// Check the current Media Overlay or TTS style
 	static var currentMediaOverlayStyle: MediaOverlayStyle {
-		// TODO_SMF_DEPRECATE
 		return FolioReader.shared.currentMediaOverlayStyle
 	}
 
 	/// Check if current theme is Night mode
 	open class var nightMode: Bool {
-		// TODO_SMF_DEPRECATE
 		get { return FolioReader.shared.nightMode }
 		set { FolioReader.shared.nightMode = newValue }
 	}
 
 	/// Check current font name
 	open class var currentFont: FolioReaderFont {
-		// TODO_SMF_DEPRECATE
 		get { return FolioReader.shared.currentFont }
 		set { FolioReader.shared.currentFont = newValue }
 	}
 
 	/// Check current font size
 	open class var currentFontSize: FolioReaderFontSize {
-		// TODO_SMF_DEPRECATE
 		get { return FolioReader.shared.currentFontSize }
 		set { FolioReader.shared.currentFontSize = newValue }
 	}
 
 	/// Check the current scroll direction
 	open class var currentScrollDirection: Int {
-		// TODO_SMF_DEPRECATE
 		get { return FolioReader.shared.currentScrollDirection }
 		set { FolioReader.shared.currentScrollDirection = newValue }
 	}
 
 	/// Check current audio rate, the speed of speech voice
 	open class var currentAudioRate: Int {
-		// TODO_SMF_DEPRECATE
 		get { return FolioReader.shared.currentAudioRate }
 		set { FolioReader.shared.currentAudioRate = newValue }
 	}
 
 	/// Check if reader is open and ready
 	open class var isReaderReady : Bool {
-		// TODO_SMF_DEPRECATE
 		return FolioReader.shared.isReaderReady
 	}
 
 	/// Save Reader state, book, page and scroll are saved
 	open class func saveReaderState() {
-		// TODO_SMF_DEPRECATE
 		FolioReader.shared.saveReaderState()
 	}
 
 	/// Closes and save the reader current instance
 	open class func close() {
-		// TODO_SMF_DEPRECATE
 		FolioReader.shared.close()
 	}
 
 	/// Check the current highlight style
 	open class var currentHighlightStyle: Int {
-		// TODO_SMF_DEPRECATE
 		get { return FolioReader.shared.currentHighlightStyle }
 		set { FolioReader.shared.currentHighlightStyle = newValue }
 	}
 
 	/// Check if layout needs to change to fit Right To Left
 	open class var needsRTLChange: Bool {
-		// TODO_SMF_DEPRECATE
 		return FolioReader.shared.needsRTLChange
 	}
 }
 
 // MARK: - Application State
 
+@available(*, deprecated, message: "Use 'saveReaderState' on a FolioReaderContainer object instead.")
 extension FolioReader {
 
 	/// Called when the application will resign active
 	open class func applicationWillResignActive() {
-		// TODO_SMF_DEPRECATE
 		// TODO_DOC: no replacement required. Call `aFolioReader.saveReaderState()` instead
 		FolioReader.shared.saveReaderState()
 	}
 
 	/// Called when the application will terminate
 	open class func applicationWillTerminate() {
-		// TODO_SMF_DEPRECATE
 		// TODO_DOC: no replacement required. Call `aFolioReader.saveReaderState()` instead
 		FolioReader.shared.saveReaderState()
 	}
@@ -446,16 +434,16 @@ extension FolioReader {
 
 // MARK: - Global Functions
 
+@available(*, deprecated, message: "Shared instance removed. Use a local instance instead.")
 func isNight<T> (_ f: T, _ l: T) -> T {
-	// TODO_SMF_DEPRECATE
 	// TODO_SMF_DOC: notify change
     return (FolioReader.shared.nightMode == true ? f : l)
 }
 
 // MARK: - Scroll Direction Functions
 
+@available(*, deprecated, message: "Shared instance removed. Use a local instance instead.")
 func isDirection<T> (_ vertical: T, _ horizontal: T, _ horizontalContentVertical: T? = nil) -> T {
-	// TODO_SMF_DEPRECATE
 	// TODO_SMF_DOC: notify change
 	let direction = (FolioReader.shared.readerContainer!.readerConfig.scrollDirection)
 	switch direction {
@@ -467,8 +455,8 @@ func isDirection<T> (_ vertical: T, _ horizontal: T, _ horizontalContentVertical
 
 extension UICollectionViewScrollDirection {
 
+	@available(*, deprecated, message: "Use 'direction(withConfiguration:)' instead.")
 	static func direction() -> UICollectionViewScrollDirection {
-		// TODO_SMF_DEPRECATE
 		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
 			return .vertical
 		}
@@ -484,8 +472,8 @@ extension UICollectionViewScrollDirection {
 
 extension UICollectionViewScrollPosition {
 
+	@available(*, deprecated, message: "Use 'direction(withConfiguration:)' instead.")
 	static func direction() -> UICollectionViewScrollPosition {
-		// TODO_SMF_DEPRECATE
 		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
 			return .top
 		}
@@ -501,8 +489,8 @@ extension UICollectionViewScrollPosition {
 
 extension CGPoint {
 
+	@available(*, deprecated, message: "Use 'forDirection(withConfiguration:)' instead.")
     func forDirection() -> CGFloat {
-		// TODO_SMF_DEPRECATE
 		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
 			return self.y
 		}
@@ -518,8 +506,8 @@ extension CGPoint {
 
 extension CGSize {
 
+	@available(*, deprecated, message: "Use 'forDirection(withConfiguration:)' instead.")
     func forDirection() -> CGFloat {
-		// TODO_SMF_DEPRECATE
 		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
 			return self.height
 		}
@@ -531,8 +519,8 @@ extension CGSize {
 		return readerConfig.isDirection(height, width, height)
 	}
 
+	@available(*, deprecated, message: "Use 'forReverseDirection(withConfiguration:)' instead.")
     func forReverseDirection() -> CGFloat {
-		// TODO_SMF_DEPRECATE
 		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
 			return self.width
 		}
@@ -548,8 +536,8 @@ extension CGSize {
 
 extension CGRect {
 
+	@available(*, deprecated, message: "Use 'forDirection(withConfiguration:)' instead.")
     func forDirection() -> CGFloat {
-		// TODO_SMF_DEPRECATE
 		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
 			return self.height
 		}
@@ -565,8 +553,8 @@ extension CGRect {
 
 extension ScrollDirection {
 
+	@available(*, deprecated, message: "Use 'negative(withConfiguration:)' instead.")
     static func negative() -> ScrollDirection {
-		// TODO_SMF_DEPRECATE
 		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
 			return self.down
 		}
@@ -579,8 +567,8 @@ extension ScrollDirection {
 		return readerConfig.isDirection(.down, .right, .right)
 	}
 
+	@available(*, deprecated, message: "Use 'positive(withConfiguration:)' instead.")
     static func positive() -> ScrollDirection {
-		// TODO_SMF_DEPRECATE
 		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
 			return self.up
 		}
@@ -853,8 +841,8 @@ internal extension UIImage {
     /// Forces the image to be colored with Reader Config tintColor
     ///
     /// - Returns: Returns a colored image
+	@available(*, deprecated, message: "Use 'ignoreSystemTint(withConfiguration:)' instead.")
 	func ignoreSystemTint() -> UIImage? {
-		// TODO_SMF_DEPRECATE
 		guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
 			return nil
 		}
@@ -954,8 +942,8 @@ internal extension UIImage {
 
 internal extension UIViewController {
 
+	@available(*, deprecated, message: "Use 'setCloseButton(withConfiguration:)' instead.")
 	func setCloseButton() {
-		// TODO_SMF_DEPRECATE
 		guard let config = FolioReader.shared.readerContainer?.readerConfig else {
 			return
 		}
