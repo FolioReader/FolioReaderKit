@@ -88,7 +88,6 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     }
 
     required public init?(coder aDecoder: NSCoder) {
-		// TODO_SMF_QUESTION: is that ok? do 'we' really support NSCoding? 
         fatalError("This class doesn't support NSCoding.")
     }
     

@@ -55,10 +55,9 @@ enum MediaOverlayStyle: Int {
     /// Called when reader did closed.
     ///
     /// - Parameter folioReader: The FolioReader instance
-    @objc optional func folioReaderDidClosed(_ folioReader: FolioReader)
+    @objc optional func folioReaderDidClose(_ folioReader: FolioReader)
 
 	// TODO_SMF_CHECK: make sure the following deprecated functions still work... or not.:
-	// TODO_SMF_QUESTION: ask the main developer(s) for that.
 	// TODO_SMF_DOC: new function signature change
 	@objc optional func folioReaderDidClosed()
 }
@@ -337,7 +336,7 @@ extension FolioReader {
         self.isReaderReady = false
         self.readerAudioPlayer?.stop(immediate: true)
         self.defaults.set(0, forKey: kCurrentTOCMenu)
-        self.delegate?.folioReaderDidClosed?(self)
+        self.delegate?.folioReaderDidClose?(self)
 		self.delegate?.folioReaderDidClosed?()
     }
 }
@@ -429,8 +428,6 @@ extension FolioReader {
 // MARK: - Application State
 
 extension FolioReader {
-
-	// TODO_SMF_DEPRECATE and find a replacement for those functions.
 
 	/// Called when the application will resign active
 	open class func applicationWillResignActive() {
