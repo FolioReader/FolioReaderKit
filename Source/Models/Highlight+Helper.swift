@@ -205,24 +205,24 @@ extension Highlight {
 
 extension Highlight {
 
+	@available(*, deprecated, message: "Shared instance removed. Use a local instance instead.")
 	private static var readerConfig : FolioReaderConfig {
-		// TODO_SMF_DEPRECATE
 		return FolioReader.shared.readerContainer!.readerConfig
 	}
 
 	/// Save a Highlight with completion block
 	///
 	/// - Parameter completion: Completion block
+	@available(*, deprecated, message: "Use 'persist(withConfiguration:completion:)' instead.")
 	public func persist(_ completion: Completion? = nil) {
-		// TODO_SMF_DEPRECATE
 		self.persist(withConfiguration: Highlight.readerConfig, completion: completion)
 	}
 
 	/// Return all Highlights
 	///
 	/// - Returns: Return all Highlights
+	@available(*, deprecated, message: "Use 'all(withConfiguration:)' instead.")
 	public static func all() -> [Highlight] {
-		// TODO_SMF_DEPRECATE
 		return Highlight.all(withConfiguration: Highlight.readerConfig)
 	}
 
@@ -232,8 +232,8 @@ extension Highlight {
 	///   - bookId: Book ID
 	///   - page: Page number
 	/// - Returns: Return a list of Highlights
+	@available(*, deprecated, message: "Use 'allByBookId(withConfiguration:bookId:andPage:)' instead.")
 	public static func allByBookId(_ bookId: String, andPage page: NSNumber? = nil) -> [Highlight] {
-		// TODO_SMF_DEPRECATE
 		return Highlight.allByBookId(withConfiguration: Highlight.readerConfig, bookId: bookId, andPage: page)
 	}
 
@@ -242,22 +242,22 @@ extension Highlight {
 	/// - Parameters:
 	///   - highlightId: The ID to be removed
 	///   - type: The `HighlightStyle`
+	@available(*, deprecated, message: "Use 'updateById(withConfiguration:highlightId:type:)' instead.")
 	public static func updateById(_ highlightId: String, type: HighlightStyle) {
-		// TODO_SMF_DEPRECATE: deprecate
 		Highlight.updateById(withConfiguration: Highlight.readerConfig, highlightId: highlightId, type: type)
 	}
 
 	/// Remove a Highlight by ID
 	///
 	/// - Parameter highlightId: The ID to be removed
+	@available(*, deprecated, message: "Use 'removeById(withConfiguration:highlightId:)' instead.")
 	public static func removeById(_ highlightId: String) {
-		// TODO_SMF_DEPRECATE
 		Highlight.removeById(withConfiguration: Highlight.readerConfig, highlightId: highlightId)
 	}
 
 	/// Remove a Highlight
+	@available(*, deprecated, message: "Use 'remove(withConfiguration:)' instead.")
 	public func remove() {
-		// TODO_SMF_DEPRECATE
 		self.remove(withConfiguration: Highlight.readerConfig)
 	}
 
@@ -265,8 +265,8 @@ extension Highlight {
 	///
 	/// - Parameter highlightId: The ID to be removed
 	/// - Returns: The removed id
+	@available(*, deprecated, message: "Use 'removeFromHTMLById(withinPage:highlightId:)' instead.")
 	@discardableResult public static func removeFromHTMLById(_ highlightId: String) -> String? {
-		// TODO_SMF_DEPRECATE
 		let page = FolioReader.shared.readerCenter?.currentPage
 		return self.removeFromHTMLById(withinPage: page, highlightId: highlightId)
 	}
