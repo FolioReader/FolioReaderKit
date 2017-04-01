@@ -104,7 +104,6 @@ class ViewController		: UIViewController {
 
 		let readerConfiguration = self.readerConfiguration(forEpub: epub)
         let folioReaderContainer = FolioReader.presentReader(parentViewController: self, withEpubPath: bookPath, andConfig: readerConfiguration, shouldRemoveEpub: false)
-
 		epub.retain(folioReaderContainer: folioReaderContainer)
     }
 

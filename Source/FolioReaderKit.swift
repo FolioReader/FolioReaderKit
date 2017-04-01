@@ -57,7 +57,8 @@ enum MediaOverlayStyle: Int {
     /// - Parameter folioReader: The FolioReader instance
     @objc optional func folioReaderDidClose(_ folioReader: FolioReader)
 
-	// TODO_SMF_CHECK: make sure the following deprecated functions still work... or not.
+	/// Called when reader did closed.
+	@available(*, deprecated, message: "Use 'folioReaderDidClose(_ folioReader: FolioReader)' instead.")
 	@objc optional func folioReaderDidClosed()
 }
 
