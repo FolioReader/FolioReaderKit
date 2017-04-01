@@ -386,7 +386,7 @@ open class FolioReaderAudioPlayer: NSObject {
 			return
 		}
 
-		// TODO_SMF_QUESTION: the previous code mde it possible for `href` to be an empty string. Was that valid? should this logic be kept?
+		// TODO_SMF_QUESTION: the previous code made it possible for `href` to be an empty string. Was that valid? should this logic be kept?
 		self.playText(href, text: sentence)
     }
     

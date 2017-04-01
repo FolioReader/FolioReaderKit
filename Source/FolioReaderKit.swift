@@ -282,7 +282,7 @@ extension FolioReader {
 
 extension FolioReader {
 
-	// TODO_SMF_QUESTION: this used the shared instance before and ignore the parameter.
+	// TODO_SMF_QUESTION: the `getCoverImage` function used the shared instance before and ignored the parameter.
 	// Should we properly implement the parameter or change the API to use the current FolioReader?
 
 	/**
