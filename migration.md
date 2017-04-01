@@ -22,12 +22,16 @@ class func getCoverImage(_ epubPath: String, unzipPath: String? = nil) -> UIImag
 ```
 
 The functions to be called within the AppDelegate methods have been deprecated.
-There is no direct replacement, use `saveReaderState` on a `FolioReaderContainer` object instead.
+There is no direct replacement, use `saveReaderState()` on a `FolioReaderContainer` object instead.
 
 Deprecated:
 ```
 class func applicationWillResignActive()
 class func applicationWillTerminate()
+```
+Replaced by on `FolioReaderContainer` class:
+```
+open func saveReaderState()
 ```
 
 ### Class: FolioReaderDelegate
