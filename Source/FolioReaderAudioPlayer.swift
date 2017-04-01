@@ -372,10 +372,10 @@ open class FolioReaderAudioPlayer: NSObject {
 		let playbackActiveClass = self.book.playbackActiveClass()
 		guard let sentence = currentPage.webView.js("getSentenceWithIndex('\(playbackActiveClass)')") else {
 			if (readerCenter.isLastPage() == true) {
-				// TODO_SMF_CHECK: when do this happen?
+				// TODO_SMF_CHECK: when does this happen?
 				self.stop()
 			} else {
-				// TODO_SMF_CHECK: when do this happen?
+				// TODO_SMF_CHECK: when does this happen?
 				readerCenter.changePageToNext()
 			}
 
