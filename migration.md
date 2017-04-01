@@ -21,6 +21,15 @@ The function `getCoverImage` now has an extra parameter indicating the unzip pat
 class func getCoverImage(_ epubPath: String, unzipPath: String? = nil) -> UIImage?
 ```
 
+The functions to be called within the AppDelegate methods have been deprecated.
+There is no direct replacement, use `saveReaderState` on a `FolioReaderContainer` object instead.
+
+Deprecated:
+```
+class func applicationWillResignActive()
+class func applicationWillTerminate()
+```
+
 ### Class: FolioReaderDelegate
 
 The function `folioReaderDidClosed` has been renamed `folioReaderDidClose`.

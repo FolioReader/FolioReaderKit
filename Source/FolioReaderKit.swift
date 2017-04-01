@@ -414,18 +414,16 @@ extension FolioReader {
 
 // MARK: - Application State
 
-@available(*, deprecated, message: "Use 'saveReaderState' on a FolioReaderContainer object instead.")
+@available(*, deprecated, message: "Use 'saveReaderState()' on a FolioReaderContainer object instead.")
 extension FolioReader {
 
 	/// Called when the application will resign active
 	open class func applicationWillResignActive() {
-		// TODO_DOC: no replacement required. Call `aFolioReader.saveReaderState()` instead
 		FolioReader.shared.saveReaderState()
 	}
 
 	/// Called when the application will terminate
 	open class func applicationWillTerminate() {
-		// TODO_DOC: no replacement required. Call `aFolioReader.saveReaderState()` instead
 		FolioReader.shared.saveReaderState()
 	}
 }
