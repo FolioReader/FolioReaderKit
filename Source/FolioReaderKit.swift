@@ -57,8 +57,7 @@ enum MediaOverlayStyle: Int {
     /// - Parameter folioReader: The FolioReader instance
     @objc optional func folioReaderDidClose(_ folioReader: FolioReader)
 
-	// TODO_SMF_CHECK: make sure the following deprecated functions still work... or not.:
-	// TODO_SMF_DOC: new function signature change
+	// TODO_SMF_CHECK: make sure the following deprecated functions still work... or not.
 	@objc optional func folioReaderDidClosed()
 }
 
@@ -127,7 +126,6 @@ extension FolioReader {
 	/// - Returns: The new and presented FolioReaderContainer instance.
 	open class func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated:
 		Bool = true) -> FolioReaderContainer {
-		// TODO_SMF_DOC
 		let folioReader = FolioReader()
 		let readerContainer = FolioReaderContainer(withConfig: config, folioReader: folioReader, epubPath: epubPath, removeEpub: shouldRemoveEpub)
 		folioReader.readerContainer = readerContainer
@@ -290,7 +288,6 @@ extension FolioReader {
 	/**
 	Read Cover Image and Return an `UIImage`
 	*/
-	// TODO_SMF_DOC: new function signature change
 	open class func getCoverImage(_ epubPath: String, unzipPath: String? = nil) -> UIImage? {
 		return FREpubParser().parseCoverImage(epubPath, unzipPath: unzipPath)
 	}
@@ -436,19 +433,12 @@ extension FolioReader {
 
 @available(*, deprecated, message: "Shared instance removed. Use a local instance instead.")
 func isNight<T> (_ f: T, _ l: T) -> T {
-	// TODO_SMF_DOC: notify change
-    return (FolioReader.shared.nightMode == true ? f : l)
+	return FolioReader.shared.isNight(f, l)
 }
 
 // MARK: - Scroll Direction Functions
 
 @available(*, deprecated, message: "Shared instance removed. Use a local instance instead.")
 func isDirection<T> (_ vertical: T, _ horizontal: T, _ horizontalContentVertical: T? = nil) -> T {
-	// TODO_SMF_DOC: notify change
-	let direction = (FolioReader.shared.readerContainer!.readerConfig.scrollDirection)
-	switch direction {
-	case .vertical, .defaultVertical: 		return vertical
-	case .horizontal: 						return horizontal
-	case .horizontalWithVerticalContent: 	return (horizontalContentVertical ?? vertical)
-	}
+	return FolioReader.shared.readerContainer!.readerConfig.isDirection(vertical, horizontal, horizontalContentVertical)
 }
