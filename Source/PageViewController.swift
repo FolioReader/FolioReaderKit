@@ -15,8 +15,7 @@ class PageViewController: UIPageViewController {
     var segmentedControlItems = [String]()
     var viewControllerOne: UIViewController!
     var viewControllerTwo: UIViewController!
-    var index = FolioReader.defaults.integer(forKey: kCurrentTOCMenu)
-
+	var index : Int
 	fileprivate var readerConfig 	: FolioReaderConfig
 	fileprivate var folioReader		: FolioReader
 
@@ -25,6 +24,7 @@ class PageViewController: UIPageViewController {
 	init(folioReader: FolioReader, readerConfig: FolioReaderConfig) {
 		self.folioReader = folioReader
 		self.readerConfig = readerConfig
+		self.index = self.folioReader.currentMenuIndex
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         
         self.edgesForExtendedLayout = UIRectEdge()
@@ -83,10 +83,10 @@ class PageViewController: UIPageViewController {
     // MARK: - Segmented control changes
     
     func didSwitchMenu(_ sender: UISegmentedControl) {
-        index = sender.selectedSegmentIndex
-        let direction: UIPageViewControllerNavigationDirection = index == 0 ? .reverse : .forward
+        self.index = sender.selectedSegmentIndex
+        let direction: UIPageViewControllerNavigationDirection = (index == 0 ? .reverse : .forward)
         setViewControllers([viewList[index]], direction: direction, animated: true, completion: nil)
-        FolioReader.defaults.set(index, forKey: kCurrentTOCMenu)
+        self.folioReader.currentMenuIndex = index
     }
     
     // MARK: - Status Bar

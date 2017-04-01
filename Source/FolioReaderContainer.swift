@@ -42,8 +42,11 @@ open class FolioReaderContainer		: UIViewController {
 		self.book = FRBook()
 
 		super.init(nibName: nil, bundle: Bundle.frameworkBundle())
-		
-		self.initialization()
+
+		self.folioReader.readerContainer = self
+		if (self.epubPath != "") {
+			self.initialization()
+		}
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -68,7 +71,7 @@ open class FolioReaderContainer		: UIViewController {
         FontBlaster.blast(bundle: Bundle.frameworkBundle())
 
         // Register initial defaults
-        FolioReader.defaults.register(defaults: [
+		self.folioReader.register(defaults: [
             kCurrentFontFamily: FolioReaderFont.andada.rawValue,
             kNightMode: false,
             kCurrentFontSize: 2,
