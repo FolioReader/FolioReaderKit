@@ -22,7 +22,7 @@ class FolioReaderAddHighlightNote: UIViewController {
         configureNotification()
 
         let titleAttrs = [NSForegroundColorAttributeName: readerConfig.tintColor]
-        let save = UIBarButtonItem(title: "Salvar", style: .plain, target: self, action: #selector(saveNote(_:)))
+        let save = UIBarButtonItem(title: readerConfig.localizedSave, style: .plain, target: self, action: #selector(saveNote(_:)))
         save.setTitleTextAttributes(titleAttrs, for: UIControlState())
         navigationItem.rightBarButtonItem = save
         

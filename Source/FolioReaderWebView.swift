@@ -234,8 +234,8 @@ open class FolioReaderWebView: UIWebView {
         let menuController = UIMenuController.shared
         
 		let highlightItem = UIMenuItem(title: readerConfig.localizedHighlightMenu, action: #selector(highlight(_:)))
-        let highlightNoteItem = UIMenuItem(title: "Nota", action: #selector(highlightWithNote(_:)))
-        let editNoteItem = UIMenuItem(title: "Nota", action: #selector(updateHighlightNote(_:)))
+        let highlightNoteItem = UIMenuItem(title: readerConfig.localizedHighLightNote, action: #selector(highlightWithNote(_:)))
+        let editNoteItem = UIMenuItem(title: readerConfig.localizedHighLightNote, action: #selector(updateHighlightNote(_:)))
 		let playAudioItem = UIMenuItem(title: readerConfig.localizedPlayMenu, action: #selector(play(_:)))
 		let defineItem = UIMenuItem(title: readerConfig.localizedDefineMenu, action: #selector(define(_:)))
         

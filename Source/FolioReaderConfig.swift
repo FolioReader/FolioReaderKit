@@ -205,4 +205,6 @@ open class FolioReaderConfig: NSObject {
     open var localizedTakePhoto = NSLocalizedString("Take Photo", comment: "")
     open var localizedShareImageQuote = NSLocalizedString("Share image quote", comment: "")
     open var localizedShareTextQuote = NSLocalizedString("Share text quote", comment: "")
+    open var localizedSave = NSLocalizedString("Save", comment: "")
+    open var localizedHighLightNote = NSLocalizedString("Note", comment: "")
 }
