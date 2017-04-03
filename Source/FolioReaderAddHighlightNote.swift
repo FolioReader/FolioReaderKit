@@ -11,6 +11,7 @@ class FolioReaderAddHighlightNote: UIViewController {
     var highlight : Highlight!
     var highlightSaved = false
     var editHighlight = false
+    var resizedTextView = false;
     
     override func viewDidLoad() {
         
@@ -66,6 +67,7 @@ class FolioReaderAddHighlightNote: UIViewController {
         scrollView.frame = view.bounds
         containerView.frame = view.bounds
         scrollView.contentSize = view.bounds.size
+        resizedTextView = false;
     }
     
     func prepareScrollView(){
@@ -234,8 +236,11 @@ extension FolioReaderAddHighlightNote: UITextViewDelegate {
         
         textView.frame.size.height = textView.frame.height + 30
         
-        if textView.text.characters.count > 0 {
+        if resizedTextView {
             scrollView.scrollRectToVisible(textView.frame, animated: true)
+        }
+        else{
+            resizedTextView = true
         }
         
         return true
