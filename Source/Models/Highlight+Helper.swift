@@ -87,6 +87,7 @@ extension Highlight {
 	///   - readerConfig: Current folio reader configuration.
 	///   - completion: Completion block.
 	public func persist(withConfiguration readerConfig: FolioReaderConfig, completion: Completion? = nil) {
+		// TODO_SMF_DOC
 		do {
 			let realm = try Realm(configuration: readerConfig.realmConfiguration)
 			realm.beginWrite()
@@ -103,6 +104,7 @@ extension Highlight {
 	///
 	/// - Parameter readerConfig: Current folio reader configuration.
 	public func remove(withConfiguration readerConfig: FolioReaderConfig) {
+		// TODO_SMF_DOC
 		do {
 			let realm = try Realm(configuration: readerConfig.realmConfiguration)
 			realm.beginWrite()
@@ -119,6 +121,7 @@ extension Highlight {
 	///   - readerConfig: Current folio reader configuration.
 	///   - highlightId: The ID to be removed
 	public static func removeById(withConfiguration readerConfig: FolioReaderConfig, highlightId: String) {
+		// TODO_SMF_DOC
 		var highlight: Highlight?
 		let predicate = NSPredicate(format:"highlightId = %@", highlightId)
 
@@ -138,6 +141,7 @@ extension Highlight {
 	///   - highlightId: The ID to be removed
 	///   - type: The `HighlightStyle`
 	public static func updateById(withConfiguration readerConfig: FolioReaderConfig, highlightId: String, type: HighlightStyle) {
+		// TODO_SMF_DOC
 		var highlight: Highlight?
 		let predicate = NSPredicate(format:"highlightId = %@", highlightId)
 		do {
@@ -162,6 +166,7 @@ extension Highlight {
 	///   - page: Page number
 	/// - Returns: Return a list of Highlights
 	public static func allByBookId(withConfiguration readerConfig: FolioReaderConfig, bookId: String, andPage page: NSNumber? = nil) -> [Highlight] {
+		// TODO_SMF_DOC
 		var highlights: [Highlight]?
 		var predicate = NSPredicate(format: "bookId = %@", bookId)
 		if let page = page {
@@ -183,6 +188,7 @@ extension Highlight {
 	/// - Parameter readerConfig: - readerConfig: Current folio reader configuration.
 	/// - Returns: Return all Highlights
 	public static func all(withConfiguration readerConfig: FolioReaderConfig) -> [Highlight] {
+		// TODO_SMF_DOC
 		var highlights: [Highlight]?
 		do {
 			let realm = try Realm(configuration: readerConfig.realmConfiguration)
@@ -254,40 +260,59 @@ extension Highlight {
 		// TODO_SMF_DEPRECATE
 		self.remove(withConfiguration: Highlight.readerConfig)
 	}
+
+	/// Remove a Highlight from HTML by ID
+	///
+	/// - Parameter highlightId: The ID to be removed
+	/// - Returns: The removed id
+	@discardableResult public static func removeFromHTMLById(_ highlightId: String) -> String? {
+		// TODO_SMF_DEPRECATE
+		let page = FolioReader.shared.readerCenter?.currentPage
+		return self.removeFromHTMLById(withinPage: page, highlightId: highlightId)
+	}
 }
 
 // MARK: - HTML Methods
 
 extension Highlight {
 
+	public struct MatchingHighlight {
+		var text: String
+		var id: String
+		var startOffset: String
+		var endOffset: String
+		var bookId: String
+		var currentPage: Int
+	}
+
 	/**
 	Match a highlight on string.
 	*/
-	public static func matchHighlight(_ text: String, andId id: String, startOffset: String, endOffset: String) -> Highlight? {
-		let pattern = "<highlight id=\"\(id)\" onclick=\".*?\" class=\"(.*?)\">((.|\\s)*?)</highlight>"
+	public static func matchHighlight(_ matchingHighlight: MatchingHighlight) -> Highlight? {
+		let pattern = "<highlight id=\"\(matchingHighlight.id)\" onclick=\".*?\" class=\"(.*?)\">((.|\\s)*?)</highlight>"
 		let regex = try? NSRegularExpression(pattern: pattern, options: [])
-		let matches = regex?.matches(in: text, options: [], range: NSRange(location: 0, length: text.utf16.count))
-		let str = (text as NSString)
+		let matches = regex?.matches(in: matchingHighlight.text, options: [], range: NSRange(location: 0, length: matchingHighlight.text.utf16.count))
+		let str = (matchingHighlight.text as NSString)
 
 		let mapped = matches?.map { (match) -> Highlight in
 			var contentPre = str.substring(with: NSRange(location: match.range.location-kHighlightRange, length: kHighlightRange))
 			var contentPost = str.substring(with: NSRange(location: match.range.location + match.range.length, length: kHighlightRange))
 
 			// Normalize string before save
-			contentPre 	= Highlight.subString(ofContent: contentPre, fromRangeOfString: ">", withPattern: "((?=[^>]*$)(.|\\s)*$)")
+			contentPre = Highlight.subString(ofContent: contentPre, fromRangeOfString: ">", withPattern: "((?=[^>]*$)(.|\\s)*$)")
 			contentPost = Highlight.subString(ofContent: contentPost, fromRangeOfString: "<", withPattern: "^((.|\\s)*?)(?=<)")
 
 			let highlight = Highlight()
-			highlight.highlightId = id
+			highlight.highlightId = matchingHighlight.id
 			highlight.type = HighlightStyle.styleForClass(str.substring(with: match.rangeAt(1))).rawValue
 			highlight.date = Foundation.Date()
 			highlight.content = Highlight.removeSentenceSpam(str.substring(with: match.rangeAt(2)))
 			highlight.contentPre = Highlight.removeSentenceSpam(contentPre)
 			highlight.contentPost = Highlight.removeSentenceSpam(contentPost)
-			highlight.page = currentPageNumber
-			highlight.bookId = (kBookId as NSString).deletingPathExtension
-			highlight.startOffset = (Int(startOffset) ?? -1)
-			highlight.endOffset = (Int(endOffset) ?? -1)
+			highlight.page = matchingHighlight.currentPage
+			highlight.bookId = matchingHighlight.bookId
+			highlight.startOffset = (Int(matchingHighlight.startOffset) ?? -1)
+			highlight.endOffset = (Int(matchingHighlight.endOffset) ?? -1)
 
 			return highlight
 		}
@@ -296,7 +321,6 @@ extension Highlight {
 	}
 
 	private static func subString(ofContent content: String, fromRangeOfString rangeString: String, withPattern pattern: String) -> String {
-
 		var updatedContent = content
 		if updatedContent.range(of: rangeString) != nil {
 			let regex = try? NSRegularExpression(pattern: pattern, options: [])
@@ -310,15 +334,15 @@ extension Highlight {
 		return updatedContent
 	}
 
-	/**
-	Remove a Highlight from HTML by ID
-
-	- parameter highlightId: The ID to be removed
-	- returns: The removed id
-	*/
-	@discardableResult public static func removeFromHTMLById(_ highlightId: String) -> String? {
-		// TODO_SMF: remove call to FolioReader.shared.readerCenter
-		guard let currentPage = FolioReader.shared.readerCenter?.currentPage else { return nil }
+	/// Remove a Highlight from HTML by ID
+	///
+	/// - Parameters:
+	///   - page: The page containing the HTML.
+	///   - highlightId: The ID to be removed
+	/// - Returns: The removed id
+	@discardableResult public static func removeFromHTMLById(withinPage page: FolioReaderPage?, highlightId: String) -> String? {
+		// TODO_SMF_DOC
+		guard let currentPage = page else { return nil }
 
 		if let removedId = currentPage.webView.js("removeHighlightById('\(highlightId)')") {
 			return removedId

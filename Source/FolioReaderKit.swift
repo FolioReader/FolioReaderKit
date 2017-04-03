@@ -21,9 +21,7 @@ internal let kCurrentScrollDirection = "com.folioreader.kCurrentScrollDirection"
 internal let kNightMode = "com.folioreader.kNightMode"
 internal let kCurrentTOCMenu = "com.folioreader.kCurrentTOCMenu"
 internal let kHighlightRange = 30
-
-// TODO_SMF: remove kBookId
-internal var kBookId: String!
+internal let kReuseCellIdentifier = "com.folioreader.Cell.ReuseIdentifier"
 
 /// Defines the media overlay and TTS selection
 ///
@@ -46,18 +44,17 @@ enum MediaOverlayStyle: Int {
 
 /// FolioReader actions delegate
 @objc public protocol FolioReaderDelegate: class {
-    
-    /**
-     Did finished loading book.
-     
-     - parameter folioReader: The FolioReader instance
-     - parameter book:        The Book instance
-     */
+
+    /// Did finished loading book.
+    ///
+    /// - Parameters:
+    ///   - folioReader: The FolioReader instance
+    ///   - book: The Book instance
     @objc optional func folioReader(_ folioReader: FolioReader, didFinishedLoading book: FRBook)
-    
-    /**
-     Called when reader did closed.
-     */
+
+    /// Called when reader did closed.
+    ///
+    /// - Parameter folioReader: The FolioReader instance
     @objc optional func folioReaderDidClosed(_ folioReader: FolioReader)
 
 	// TODO_SMF_CHECK: make sure the following deprecated functions still work... or not.:
@@ -87,7 +84,7 @@ open class FolioReader: NSObject {
 		return self.readerContainer?.centerViewController
 	}
 
-	// TODO_SMF: remove/rename static UserDefaults object.
+	// TODO_SMF: USERDEFAULT
 	class var defaults 				: UserDefaults {
 		return UserDefaults.standard
 	}
@@ -129,19 +126,34 @@ open class FolioReader: NSObject {
         }
     }
 
-    /// Check current font name
+    /// Check current font name. Default .andada
     open var currentFont: FolioReaderFont {
-		get { return FolioReaderFont(rawValue: FolioReader.defaults.value(forKey: kCurrentFontFamily) as! Int)! }
+		get {
+			guard
+				let rawValue = FolioReader.defaults.value(forKey: kCurrentFontFamily) as? Int,
+				let font = FolioReaderFont(rawValue: rawValue) else {
+					return .andada
+			}
+
+			return font
+		}
         set (font) {
             FolioReader.defaults.setValue(font.rawValue, forKey: kCurrentFontFamily)
 			_ = self.readerCenter?.currentPage?.webView.js("setFontName('\(font.cssIdentifier)')")
         }
     }
     
-    /// Check current font size
+    /// Check current font size. Default .m
     open var currentFontSize: FolioReaderFontSize {
-		// TODO_SMF: remove unwrap
-		get { return FolioReaderFontSize(rawValue: FolioReader.defaults.value(forKey: kCurrentFontSize) as! Int)! }
+		get {
+			guard
+				let rawValue = FolioReader.defaults.value(forKey: kCurrentFontSize) as? Int,
+				let size = FolioReaderFontSize(rawValue: rawValue) else {
+					return .m
+			}
+
+			return size
+		}
         set (value) {
             FolioReader.defaults.setValue(value.rawValue, forKey: kCurrentFontSize)
 
@@ -153,37 +165,48 @@ open class FolioReader: NSObject {
         }
     }
 
-    /// Check current audio rate, the speed of speech voice
+    /// Check current audio rate, the speed of speech voice. Default 0
     var currentAudioRate: Int {
-		// TODO_SMF: remove unwrap
-        get { return FolioReader.defaults.value(forKey: kCurrentAudioRate) as! Int }
+        get { return (FolioReader.defaults.value(forKey: kCurrentAudioRate) as? Int ?? 0) }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentAudioRate)
         }
     }
 
-    /// Check the current highlight style
+    /// Check the current highlight style.Default 0
     var currentHighlightStyle: Int {
-		// TODO_SMF: remove unwrap
-        get { return FolioReader.defaults.value(forKey: kCurrentHighlightStyle) as! Int }
+        get { return (FolioReader.defaults.value(forKey: kCurrentHighlightStyle) as? Int ?? 0) }
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentHighlightStyle)
         }
     }
     
     /// Check the current Media Overlay or TTS style
-    static var currentMediaOverlayStyle: MediaOverlayStyle {
-		// TODO_SMF: remove unwrap
-        get { return MediaOverlayStyle(rawValue: FolioReader.defaults.value(forKey: kCurrentMediaOverlayStyle) as! Int)! }
+    var currentMediaOverlayStyle: MediaOverlayStyle {
+        get {
+			guard
+				let rawValue = FolioReader.defaults.value(forKey: kCurrentMediaOverlayStyle) as? Int,
+				let style = MediaOverlayStyle(rawValue: rawValue) else {
+					return MediaOverlayStyle.default
+			}
+
+			return style
+		}
         set (value) {
             FolioReader.defaults.setValue(value.rawValue, forKey: kCurrentMediaOverlayStyle)
         }
     }
     
-    /// Check the current scroll direction
+    /// Check the current scroll direction. Default .defaultVertical
     open var currentScrollDirection: Int {
-		// TODO_SMF: remove unwrap
-        get { return FolioReader.defaults.value(forKey: kCurrentScrollDirection) as! Int }
+        get {
+			// TODO_SMF_CHECK: when do this happen?
+			guard let value = FolioReader.defaults.value(forKey: kCurrentScrollDirection) as? Int else {
+				return FolioReaderScrollDirection.defaultVertical.rawValue
+			}
+
+			return value
+		}
         set (value) {
             FolioReader.defaults.setValue(value, forKey: kCurrentScrollDirection)
 
@@ -191,67 +214,76 @@ open class FolioReader: NSObject {
 			self.readerCenter?.setScrollDirection(direction)
         }
     }
+}
 
-    // MARK: - Get Cover Image
-    
-    /**
-     Read Cover Image and Return an `UIImage`
-     */
-	// TODO_SMF_DOC: new function signature change
-    open class func getCoverImage(_ epubPath: String, unzipPath: String? = nil) -> UIImage? {
-		// TODO_SMF_QUESTION: this used the shared instance before and ignore the parameter.
-		// Should we properly implement the parameter or change the API to use the current FolioReader?
-        return FREpubParser().parseCoverImage(epubPath, unzipPath: unzipPath)
-    }
+// MARK: - Present Folio Reader
 
-    // MARK: - Get Title
-    open class func getTitle(_ epubPath: String) -> String? {
-        return FREpubParser().parseTitle(epubPath)
-    }
+extension FolioReader {
 
-    open class func getAuthorName(_ epubPath: String) -> String? {
-        return FREpubParser().parseAuthorName(epubPath)
-    }
-
-    // MARK: - Present Folio Reader
-    
     /**
      Present a Folio Reader for a Parent View Controller.
      */
-    open class func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated: Bool = true) -> FolioReader {
+    open class func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated:
+		Bool = true) -> FolioReaderContainer {
+		// TODO_SMF_DOC
 		let folioReader = FolioReader()
 		let readerContainer = FolioReaderContainer(withConfig: config, folioReader: folioReader, epubPath: epubPath, removeEpub: shouldRemoveEpub)
 		folioReader.readerContainer = readerContainer
         parentViewController.present(readerContainer, animated: animated, completion: nil)
+		// TODO_SMF_DOC
 		FolioReader.shared = folioReader
-		return folioReader
+		return readerContainer
     }
+}
+
+// MARK: - Image Cover
+
+extension FolioReader {
+
+	// TODO_SMF_QUESTION: this used the shared instance before and ignore the parameter.
+	// Should we properly implement the parameter or change the API to use the current FolioReader?
+
+	/**
+	Read Cover Image and Return an `UIImage`
+	*/
+	// TODO_SMF_DOC: new function signature change
+	open class func getCoverImage(_ epubPath: String, unzipPath: String? = nil) -> UIImage? {
+		return FREpubParser().parseCoverImage(epubPath, unzipPath: unzipPath)
+	}
+
+	open class func getTitle(_ epubPath: String) -> String? {
+		return FREpubParser().parseTitle(epubPath)
+	}
+
+	open class func getAuthorName(_ epubPath: String) -> String? {
+		return FREpubParser().parseAuthorName(epubPath)
+	}
 }
 
 // MARK: - Exit, save and close FolioReader
 
 extension FolioReader {
 
-    /**
-     Save Reader state, book, page and scroll are saved
-     */
+    /// Save Reader state, book, page and scroll offset.
     open func saveReaderState() {
         guard self.isReaderOpen else { return }
         
-        if let currentPage = self.readerCenter?.currentPage {
-            let position = [
-                "pageNumber": currentPageNumber,
-                "pageOffsetX": currentPage.webView.scrollView.contentOffset.x,
-                "pageOffsetY": currentPage.webView.scrollView.contentOffset.y
-            ] as [String : Any]
-            
-            FolioReader.defaults.set(position, forKey: kBookId)
-        }
-    }
-    
-    /**
-     Closes and save the reader current instance
-     */
+        guard
+			let bookId = self.readerContainer?.book.name,
+			let currentPage = self.readerCenter?.currentPage else {
+				return
+		}
+
+		let position = [
+			"pageNumber": (self.readerCenter?.currentPageNumber ?? 0),
+			"pageOffsetX": currentPage.webView.scrollView.contentOffset.x,
+			"pageOffsetY": currentPage.webView.scrollView.contentOffset.y
+			] as [String : Any]
+
+		FolioReader.defaults.set(position, forKey: bookId)
+	}
+
+    /// Closes and save the reader current instance.
     open func close() {
         self.saveReaderState()
         self.isReaderOpen = false
@@ -263,70 +295,86 @@ extension FolioReader {
     }
 }
 
-// MARK: - Public shared extension. All Deprecated function
+// MARK: - Public static functions. All Deprecated function
 
 extension FolioReader {
 
-	// TODO_SMF: temporal variable to build and run the current state. Should be completely remove.
+	// TODO_SMF_DEPRECATE
 	private static var _sharedInstance = FolioReader()
 	open static var shared : FolioReader {
 		get { return _sharedInstance }
 		set { _sharedInstance = newValue }
 	}
 
+	/// Check the current Media Overlay or TTS style
+	static var currentMediaOverlayStyle: MediaOverlayStyle {
+		// TODO_SMF_DEPRECATE
+		return FolioReader.shared.currentMediaOverlayStyle
+	}
+
 	/// Check if current theme is Night mode
 	open class var nightMode: Bool {
+		// TODO_SMF_DEPRECATE
 		get { return FolioReader.shared.nightMode }
 		set { FolioReader.shared.nightMode = newValue }
 	}
 
 	/// Check current font name
 	open class var currentFont: FolioReaderFont {
+		// TODO_SMF_DEPRECATE
 		get { return FolioReader.shared.currentFont }
 		set { FolioReader.shared.currentFont = newValue }
 	}
 
 	/// Check current font size
 	open class var currentFontSize: FolioReaderFontSize {
+		// TODO_SMF_DEPRECATE
 		get { return FolioReader.shared.currentFontSize }
 		set { FolioReader.shared.currentFontSize = newValue }
 	}
 
 	/// Check the current scroll direction
 	open class var currentScrollDirection: Int {
+		// TODO_SMF_DEPRECATE
 		get { return FolioReader.shared.currentScrollDirection }
 		set { FolioReader.shared.currentScrollDirection = newValue }
 	}
 
 	/// Check current audio rate, the speed of speech voice
 	open class var currentAudioRate: Int {
+		// TODO_SMF_DEPRECATE
 		get { return FolioReader.shared.currentAudioRate }
 		set { FolioReader.shared.currentAudioRate = newValue }
 	}
 
 	/// Check if reader is open and ready
 	open class var isReaderReady : Bool {
+		// TODO_SMF_DEPRECATE
 		return FolioReader.shared.isReaderReady
 	}
 
 	/// Save Reader state, book, page and scroll are saved
 	open class func saveReaderState() {
+		// TODO_SMF_DEPRECATE
 		FolioReader.shared.saveReaderState()
 	}
 
 	/// Closes and save the reader current instance
 	open class func close() {
+		// TODO_SMF_DEPRECATE
 		FolioReader.shared.close()
 	}
 
 	/// Check the current highlight style
 	open class var currentHighlightStyle: Int {
+		// TODO_SMF_DEPRECATE
 		get { return FolioReader.shared.currentHighlightStyle }
 		set { FolioReader.shared.currentHighlightStyle = newValue }
 	}
 
 	/// Check if layout needs to change to fit Right To Left
 	open class var needsRTLChange: Bool {
+		// TODO_SMF_DEPRECATE
 		return FolioReader.shared.needsRTLChange
 	}
 }
@@ -337,17 +385,17 @@ extension FolioReader {
 
 	// TODO_SMF_DEPRECATE and find a replacement for those functions.
 
-	/**
-	Called when the application will resign active
-	*/
+	/// Called when the application will resign active
 	open class func applicationWillResignActive() {
+		// TODO_SMF_DEPRECATE
+		// TODO_DOC: no replacement required. Call `aFolioReader.saveReaderState()` instead
 		FolioReader.shared.saveReaderState()
 	}
 
-	/**
-	Called when the application will terminate
-	*/
+	/// Called when the application will terminate
 	open class func applicationWillTerminate() {
+		// TODO_SMF_DEPRECATE
+		// TODO_DOC: no replacement required. Call `aFolioReader.saveReaderState()` instead
 		FolioReader.shared.saveReaderState()
 	}
 }
@@ -355,10 +403,8 @@ extension FolioReader {
 // MARK: - Global Functions
 
 func isNight<T> (_ f: T, _ l: T) -> T {
-	// TODO_SMF: remove fatal error
 	// TODO_SMF_DEPRECATE
 	// TODO_SMF_DOC: notify change
-	fatalError("should not use that function.")
     return (FolioReader.shared.nightMode == true ? f : l)
 }
 
@@ -366,9 +412,7 @@ func isNight<T> (_ f: T, _ l: T) -> T {
 
 func isDirection<T> (_ vertical: T, _ horizontal: T, _ horizontalContentVertical: T? = nil) -> T {
 	// TODO_SMF_DEPRECATE
-	// TODO_SMF: remove fatal error
 	// TODO_SMF_DOC: notify change
-	fatalError("should not use that function.")
 	let direction = (FolioReader.shared.readerContainer!.readerConfig.scrollDirection)
 	switch direction {
 	case .vertical, .defaultVertical: 		return vertical
@@ -578,25 +622,26 @@ internal extension UIColor {
         self.init(red:red, green:green, blue:blue, alpha:alpha)
     }
 
-    /**
-     Hex string of a UIColor instance.
+	//
+	/// Hex string of a UIColor instance.
+	///
+	/// from: https://github.com/yeahdongcn/UIColor-Hex-Swift
+	///
+	/// - Parameter includeAlpha: Whether the alpha should be included.
+	/// - Returns: Hexa string
+	func hexString(_ includeAlpha: Bool) -> String {
+		var r: CGFloat = 0
+		var g: CGFloat = 0
+		var b: CGFloat = 0
+		var a: CGFloat = 0
+		self.getRed(&r, green: &g, blue: &b, alpha: &a)
 
-     - parameter rgba: Whether the alpha should be included.
-     */
-    // from: https://github.com/yeahdongcn/UIColor-Hex-Swift
-    func hexString(_ includeAlpha: Bool) -> String {
-        var r: CGFloat = 0
-        var g: CGFloat = 0
-        var b: CGFloat = 0
-        var a: CGFloat = 0
-        self.getRed(&r, green: &g, blue: &b, alpha: &a)
-
-        if (includeAlpha) {
-            return String(format: "#%02X%02X%02X%02X", Int(r * 255), Int(g * 255), Int(b * 255), Int(a * 255))
-        } else {
-            return String(format: "#%02X%02X%02X", Int(r * 255), Int(g * 255), Int(b * 255))
-        }
-    }
+		if (includeAlpha == true) {
+			return String(format: "#%02X%02X%02X%02X", Int(r * 255), Int(g * 255), Int(b * 255), Int(a * 255))
+		} else {
+			return String(format: "#%02X%02X%02X", Int(r * 255), Int(g * 255), Int(b * 255))
+		}
+	}
 
     // MARK: - color shades
     // https://gist.github.com/mbigatti/c6be210a6bbc0ff25972
@@ -755,8 +800,6 @@ internal extension String {
     }
 }
 
-// TODO_SMF: split files into extension files
-
 internal extension UIImage {
 
 	convenience init?(readerImageNamed: String) {
@@ -866,9 +909,19 @@ internal extension UIImage {
 }
 
 internal extension UIViewController {
-    
-    func setCloseButton() {
-        let closeImage = UIImage(readerImageNamed: "icon-navbar-close")?.ignoreSystemTint()
+
+	func setCloseButton() {
+		// TODO_SMF_DEPRECATE
+		guard let config = FolioReader.shared.readerContainer?.readerConfig else {
+			return
+		}
+
+		self.setCloseButton(withConfiguration: config)
+	}
+
+    func setCloseButton(withConfiguration readerConfig: FolioReaderConfig) {
+		// TODO_SMF_DOC
+        let closeImage = UIImage(readerImageNamed: "icon-navbar-close")?.ignoreSystemTint(withConfiguration: readerConfig)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: closeImage, style: .plain, target: self, action: #selector(dismiss as (Void) -> Void))
     }
     

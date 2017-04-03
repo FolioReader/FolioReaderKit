@@ -12,28 +12,21 @@ import RealmSwift
 
 // MARK: - FolioReaderScrollDirection
 
-/**
- Defines the Reader scrolling direction
- */
+/// Defines the Reader scrolling direction
+///
+/// - vertical: Section and content scroll on vertical.
+/// - horizontal: Section and content scroll on horizontal.
+/// - horizontalWithVerticalContent: Sections scroll horizontal and content scroll on vertical.
+/// - defaultVertical: The default scroll direction, if not overridden; works as .vertical.
 public enum FolioReaderScrollDirection: Int {
-    
-    /// Section and content scroll on vertical
     case vertical
-    
-    /// Section and content scroll on horizontal
     case horizontal
-    
-    /// Sections scroll horizontal and content scroll on vertical
 	case horizontalWithVerticalContent
-
-    /// The default scroll direction, if not overridden; works as .vertical
     case defaultVertical
 
-    /**
-     The current scroll direction
-     
-     - returns: Returns `UICollectionViewScrollDirection`
-     */
+    /// The current scroll direction
+    ///
+    /// - Returns: Returns `UICollectionViewScrollDirection`
     func collectionViewScrollDirection() -> UICollectionViewScrollDirection {
         switch self {
         case .vertical, .defaultVertical:

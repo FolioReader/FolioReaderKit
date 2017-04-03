@@ -10,9 +10,11 @@ import UIKit
 import FolioReaderKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate			: UIResponder, UIApplicationDelegate {
 
-    var window: UIWindow?
+    var window				: UIWindow?
+	var standardEpub 		: FolioReaderContainer?
+	var audioEpub			: FolioReaderContainer?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -20,11 +22,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        FolioReader.applicationWillResignActive()
+		/// Save Reader state, book, page and scroll offset.
+		self.standardEpub?.saveReaderState()
+		self.audioEpub?.saveReaderState()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-        FolioReader.applicationWillTerminate()
+		/// Save Reader state, book, page and scroll offset.
+        self.standardEpub?.saveReaderState()
+		self.audioEpub?.saveReaderState()
     }
 }
-

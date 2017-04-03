@@ -38,8 +38,4 @@ class FolioReaderSharingProvider: UIActivityItemProvider {
 
         return text
     }
-    
-//    func activityViewController(activityViewController: UIActivityViewController, thumbnailImageForActivityType activityType: String?, suggestedSize size: CGSize) -> UIImage? {
-//
-//    }
 }
