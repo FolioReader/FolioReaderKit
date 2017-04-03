@@ -262,7 +262,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
         
         guard
 			let bookId = self.book.name,
-			let position = FolioReader.defaults.value(forKey: bookId) as? NSDictionary,
+			let position = self.readerContainer.folioReader.savedPositionForCurrentBook as? NSDictionary,
 			let pageNumber = position["pageNumber"] as? Int,
 			(pageNumber > 0) else {
 				self.currentPageNumber = 1
@@ -411,7 +411,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 
 	private func configure(readerPageCell cell: FolioReaderPage, atIndexPath indexPath: IndexPath) -> FolioReaderPage {
 
-		cell.setup(withReaderConfig: self.readerConfig, readerContainer: self.readerContainer)
+		cell.setup(withReaderContainer: self.readerContainer)
         cell.pageNumber = (indexPath as NSIndexPath).row+1
         cell.webView.scrollView.delegate = self
         cell.webView.setupScrollDirection()
@@ -1174,7 +1174,7 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
         
         if
 			let bookId = self.book.name,
-			let position = FolioReader.defaults.value(forKey: bookId) as? NSDictionary {
+			let position = self.readerContainer.folioReader.savedPositionForCurrentBook as? NSDictionary {
             let pageNumber = position["pageNumber"]! as! Int
 			let offset = self.readerConfig.isDirection(position["pageOffsetY"], position["pageOffsetX"]) as? CGFloat
 			let pageOffset = offset
