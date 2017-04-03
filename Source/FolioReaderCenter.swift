@@ -1114,17 +1114,20 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         present(nav, animated: true, completion: nil)
     }
     
-    
+    /**
+     Present add Highlight
+     */
     func presentAddHighlightNote(_ highlight: Highlight) {
         
-//        let quoteShare = FolioReaderQuoteShare(initWithText: string)
-//        let nav = UINavigationController(rootViewController: quoteShare)
-//        
-//        if isPad {
-//            nav.modalPresentationStyle = .formSheet
-//        }
-//        
-//        present(nav, animated: true, completion: nil)
+        let addHighlightView = FolioReaderAddHighlightNote.init(initWithHighlight: highlight)
+        
+        let nav = UINavigationController(rootViewController: addHighlightView)
+        
+        if isPad {
+            nav.modalPresentationStyle = .formSheet
+        }
+        
+        present(nav, animated: true, completion: nil)
     }
 }
 
