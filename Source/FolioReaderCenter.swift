@@ -951,7 +951,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         pointNow = scrollView.contentOffset
         
         if let currentPage = currentPage {
-            currentPage.webView.createMenu(options: true)
+            currentPage.webView.createMenu(options: true , haveNote :false)
             currentPage.webView.setMenuVisible(false)
         }
         
@@ -1117,9 +1117,10 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     /**
      Present add Highlight
      */
-    func presentAddHighlightNote(_ highlight: Highlight) {
+    func presentAddHighlightNote(_ highlight: Highlight , edit : Bool) {
         
         let addHighlightView = FolioReaderAddHighlightNote.init(initWithHighlight: highlight)
+        addHighlightView.editHighlight = edit
         
         let nav = UINavigationController(rootViewController: addHighlightView)
         

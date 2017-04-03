@@ -1,5 +1,6 @@
 
 import UIKit
+import RealmSwift
 
 class FolioReaderAddHighlightNote: UIViewController {
     
@@ -9,6 +10,7 @@ class FolioReaderAddHighlightNote: UIViewController {
     var containerView = UIView()
     var highlight : Highlight!
     var highlightSaved = false
+    var editHighlight = false
     
     override func viewDidLoad() {
         
@@ -52,7 +54,7 @@ class FolioReaderAddHighlightNote: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        if !self.highlightSaved {
+        if !self.highlightSaved && !editHighlight{
             guard let currentPage = FolioReader.shared.readerCenter?.currentPage else { return }
             currentPage.webView.js("removeThisHighlight()")
         }
@@ -115,6 +117,10 @@ class FolioReaderAddHighlightNote: UIViewController {
         textView.font = UIFont.boldSystemFont(ofSize: 15)
         containerView.addSubview(textView)
         
+        if editHighlight {
+            textView.text = highlight.noteForHighlight
+        }
+        
         leftConstraint = NSLayoutConstraint.init(item: textView!, attribute: .left, relatedBy: .equal,
                                                  toItem: containerView, attribute: .left,
                                                  multiplier: 1.0, constant: 20)
@@ -134,9 +140,10 @@ class FolioReaderAddHighlightNote: UIViewController {
         //UIlabel
         highlightLabel = UILabel()
         highlightLabel.translatesAutoresizingMaskIntoConstraints = false
-        highlightLabel.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur"
         highlightLabel.numberOfLines = 3
         highlightLabel.font = UIFont.systemFont(ofSize: 15)
+        highlightLabel.text = highlight.content.stripHtml().truncate(250, trailing: "...").stripLineBreaks()
+        
         containerView.addSubview(self.highlightLabel!)
         
         leftConstraint = NSLayoutConstraint.init(item: highlightLabel!, attribute: .left, relatedBy: .equal,
@@ -187,9 +194,23 @@ class FolioReaderAddHighlightNote: UIViewController {
     func saveNote(_ sender: UIBarButtonItem) {
         
         if textView.text != "" {
-            self.highlight.noteForHighlight = textView.text
-            self.highlight.persist()
-            highlightSaved = true
+            
+            if editHighlight {
+                
+                let realm = try! Realm(configuration: readerConfig.realmConfiguration)
+                realm.beginWrite()
+                
+                self.highlight.noteForHighlight = textView.text
+                highlightSaved = true
+                
+                try! realm.commitWrite()
+            }
+            else
+            {
+                self.highlight.noteForHighlight = textView.text
+                self.highlight.persist()
+                highlightSaved = true
+            }
         }
         
         dismiss()

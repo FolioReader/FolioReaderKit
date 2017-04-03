@@ -28,6 +28,7 @@ open class FolioReaderWebView: UIWebView {
 		} else {
 			if action == #selector(highlight(_:))
                 || action == #selector(highlightWithNote(_:))
+                || action == #selector(updateHighlightNote(_:))
 				|| (action == #selector(define(_:)) && isOneWord)
                 || (action == #selector(play(_:)) && (book.hasAudio() || readerConfig.enableTTS))
 				|| (action == #selector(share(_:)) && readerConfig.allowSharing)
@@ -87,7 +88,7 @@ open class FolioReaderWebView: UIWebView {
 
 	func colors(_ sender: UIMenuController?) {
 		isColors = true
-		createMenu(options: false)
+        createMenu(options: false, haveNote :false)
 		setMenuVisible(true)
 	}
 
@@ -111,7 +112,7 @@ open class FolioReaderWebView: UIWebView {
 
 			self.clearTextSelection()
 
-			createMenu(options: true)
+			createMenu(options: true , haveNote :false)
 			setMenuVisible(true, andRect: rect)
 
 			// Persist
@@ -128,7 +129,7 @@ open class FolioReaderWebView: UIWebView {
     
     func highlightWithNote(_ sender: UIMenuController?) {
         
-        let highlightAndReturn = js("highlightString('\(HighlightStyle.classForStyle(FolioReader.currentHighlightStyle))')")
+        let highlightAndReturn = js("highlightStringWithNote('\(HighlightStyle.classForStyle(FolioReader.currentHighlightStyle))')")
         let jsonData = highlightAndReturn?.data(using: String.Encoding.utf8)
         
         do {
@@ -140,7 +141,7 @@ open class FolioReaderWebView: UIWebView {
             
             self.clearTextSelection()
             
-            createMenu(options: true)
+            createMenu(options: true , haveNote :true)
             setMenuVisible(true, andRect: rect)
             
             // Persist
@@ -148,7 +149,7 @@ open class FolioReaderWebView: UIWebView {
             
             if let highlight = Highlight.matchHighlight(html, andId: dic["id"]!, startOffset: startOffset, endOffset: endOffset, noteForHighlight: nil) {
                 
-                FolioReader.shared.readerCenter?.presentAddHighlightNote(highlight)
+                FolioReader.shared.readerCenter?.presentAddHighlightNote(highlight, edit: false)
             }
         } catch {
             print("Could not receive JSON")
@@ -202,10 +203,19 @@ open class FolioReaderWebView: UIWebView {
 		}
 		colors(sender)
 	}
+    
+    func updateHighlightNote (_ sender: UIMenuController?) {
+    
+        if let highlightId = js("getHighlightId()") {
+            
+            let highlightNote = Highlight.getById(highlightId)
+            FolioReader.shared.readerCenter?.presentAddHighlightNote(highlightNote , edit: true)
+        }
+    }
 
 	// MARK: - Create and show menu
 
-	func createMenu(options: Bool) {
+    func createMenu(options: Bool , haveNote : Bool) {
 		guard readerConfig.useReaderMenuController else {
 			return
 		}
@@ -224,8 +234,8 @@ open class FolioReaderWebView: UIWebView {
         let menuController = UIMenuController.shared
         
 		let highlightItem = UIMenuItem(title: readerConfig.localizedHighlightMenu, action: #selector(highlight(_:)))
-        let geremias = UIMenuItem(title: "Nota", action: #selector(highlightWithNote(_:)))
-        
+        let highlightNoteItem = UIMenuItem(title: "Nota", action: #selector(highlightWithNote(_:)))
+        let editNoteItem = UIMenuItem(title: "Nota", action: #selector(updateHighlightNote(_:)))
 		let playAudioItem = UIMenuItem(title: readerConfig.localizedPlayMenu, action: #selector(play(_:)))
 		let defineItem = UIMenuItem(title: readerConfig.localizedDefineMenu, action: #selector(define(_:)))
         
@@ -259,6 +269,11 @@ open class FolioReaderWebView: UIWebView {
         // menu on existing highlight
         if isShare {
             menuItems = [colorsItem, removeItem]
+            
+            if haveNote {
+                menuItems.insert(editNoteItem, at: 1)
+            }
+            
             if readerConfig.allowSharing {
                 menuItems.append(shareItem)
             }
@@ -270,7 +285,7 @@ open class FolioReaderWebView: UIWebView {
             menuItems = [yellowItem, greenItem, blueItem, pinkItem, underlineItem]
         } else {
             // default menu
-            menuItems = [highlightItem, defineItem, geremias, shareItem]
+            menuItems = [highlightItem, defineItem, highlightNoteItem, shareItem]
             
             if book.hasAudio() || readerConfig.enableTTS {
                 menuItems.insert(playAudioItem, at: 0)

@@ -157,6 +157,28 @@ extension Highlight {
     }
     
     /**
+     Return a Highlights given ID
+     
+    - parameter highlightId: The ID to be removed
+     - parameter page:   Page number
+     
+     - returns: Return a list of Highlights
+     */
+    
+    public static func getById(_ highlightId: String) -> (Highlight) {
+        var highlight: Highlight?
+        let predicate = NSPredicate(format:"highlightId = %@", highlightId)
+        do {
+            let realm = try! Realm(configuration: readerConfig.realmConfiguration)
+            highlight = realm.objects(Highlight.self).filter(predicate).toArray(Highlight.self).first
+            return highlight!
+        } catch let error as NSError {
+            print("Error getting Highlight : \(error)")
+        }
+    }
+    
+    
+    /**
      Return a list of Highlights with a given ID
      
      - parameter bookId: Book ID
