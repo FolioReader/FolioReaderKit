@@ -74,7 +74,7 @@ open class FolioReader: NSObject {
     /// FolioReaderDelegate
     open weak var delegate			: FolioReaderDelegate?
 
-	// TODO_SMF_QUESTION: make those fileprivate (or internal) to avoid public access from other class?
+	// TODO_SMF_QUESTION: Should we make those `fileprivate` (or `internal`) to avoid public access from other class?
     open weak var readerContainer	: FolioReaderContainer?
     open weak var readerAudioPlayer	: FolioReaderAudioPlayer?
 	open weak var readerCenter		: FolioReaderCenter? {
@@ -283,8 +283,8 @@ extension FolioReader {
 
 extension FolioReader {
 
-	// TODO_SMF_QUESTION: the `getCoverImage` function used the shared instance before and ignored the parameter.
-	// Should we properly implement the parameter or change the API to use the current FolioReader?
+	// TODO_SMF_QUESTION: The static `getCoverImage` function used the shared instance before and ignored the `unzipPath` parameter.
+	// Should we properly implement the parameter (what has been done now) or should change the API to only use the current FolioReader instance?
 
 	/**
 	Read Cover Image and Return an `UIImage`
