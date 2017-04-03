@@ -2,9 +2,17 @@
 
 ## Introduction
 
---
+That new version introduce a new feature that allows you to have multiple instances of a `FolioReaderContainer` at the same time in your app.
+All instances now have their own stored informations and nothing is shared between them.
+
+Before, the library used a global static `FolioReader` that contained all relevant objects (ReaderContainer, ReaderConfig, AudioPlayer, etc).
+Even though this class is still used internaly, all of its static functions have been deprecated.
+
+You must now use the (same) functions of a local instance (from your code) instead.
 
 ## What changed?
+
+Here is the list of changes made to the `public` functions.
 
 ### Class: FolioReader
 
