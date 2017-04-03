@@ -186,9 +186,12 @@ class FolioReaderAddHighlightNote: UIViewController {
     
     func saveNote(_ sender: UIBarButtonItem) {
         
-        self.highlight.noteForHighlight = textView.text
-        self.highlight.persist()
-        highlightSaved = true
+        if textView.text != "" {
+            self.highlight.noteForHighlight = textView.text
+            self.highlight.persist()
+            highlightSaved = true
+        }
+        
         dismiss()
     }
 
