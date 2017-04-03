@@ -226,6 +226,9 @@ open class FolioReaderWebView: UIWebView {
             if readerConfig.allowSharing {
                 menuItems.append(shareItem)
             }
+            
+            isShare = false
+            
         } else if isColors {
             // menu for selecting highlight color
             menuItems = [yellowItem, greenItem, blueItem, pinkItem, underlineItem]
