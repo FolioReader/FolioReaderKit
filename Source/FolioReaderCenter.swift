@@ -641,6 +641,10 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func pageForOffset(_ offset: CGFloat, pageHeight height: CGFloat) -> Int {
+		guard (height != 0) else {
+			return 0
+		}
+
         let page = Int(ceil(offset / height))+1
         return page
     }
