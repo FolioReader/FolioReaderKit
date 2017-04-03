@@ -63,9 +63,7 @@ enum MediaOverlayStyle: Int {
 	@objc optional func folioReaderDidClosed()
 }
 
-/**
- Main Library class with some useful constants and methods
- */
+/// Main Library class with some useful constants and methods
 open class FolioReader: NSObject {
 
 	/// Internal init function to disable the creation of `FolioReader` objects outside the current scope.
@@ -84,17 +82,12 @@ open class FolioReader: NSObject {
 		return self.readerContainer?.centerViewController
 	}
 
-	// TODO_SMF: USERDEFAULT
-	class var defaults 				: UserDefaults {
-		return UserDefaults.standard
-	}
-
     /// Check if reader is open
     var isReaderOpen = false
     
     /// Check if reader is open and ready
     var isReaderReady = false
-    
+
     /// Check if layout needs to change to fit Right To Left
     var needsRTLChange: Bool {
         return (self.readerContainer?.book.spine.isRtl == true && self.readerContainer?.readerConfig.scrollDirection == .horizontal)
@@ -104,16 +97,64 @@ open class FolioReader: NSObject {
 		return (self.nightMode == true ? f : l)
 	}
 
+	/// UserDefault for the current ePub file.
+	fileprivate var defaults: FolioReaderUserDefaults {
+
+		guard
+			let path = self.readerContainer?.epubPath,
+			(path.isEmpty == false),
+			let identifier = (path as? NSString)?.lastPathComponent,
+			(identifier.isEmpty == false) else {
+				fatalError("invalid user default unique identifier")
+				return FolioReaderUserDefaults(withIdentifier: "")
+		}
+
+		return FolioReaderUserDefaults(withIdentifier: identifier)
+	}
+}
+
+// MARK: - Present Folio Reader
+
+extension FolioReader {
+
+	/// Present a Folio Reader Container modally on a Parent View Controller.
+	///
+	/// - Parameters:
+	///   - parentViewController: View Controller that will present the reader container.
+	///   - epubPath: String representing the path on the disk of the ePub file. Must not be nil nor empty string.
+	///   - config: FolioReader configuration.
+	///   - shouldRemoveEpub: Boolean to remove the epub or not. Default true.
+	///   - animated: Pass true to animate the presentation; otherwise, pass false.
+	/// - Returns: The new and presented FolioReaderContainer instance.
+	open class func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated:
+		Bool = true) -> FolioReaderContainer {
+		// TODO_SMF_DOC
+		let folioReader = FolioReader()
+		let readerContainer = FolioReaderContainer(withConfig: config, folioReader: folioReader, epubPath: epubPath, removeEpub: shouldRemoveEpub)
+		folioReader.readerContainer = readerContainer
+		parentViewController.present(readerContainer, animated: animated, completion: nil)
+		// TODO_SMF_DOC
+		FolioReader.shared = folioReader
+		return readerContainer
+	}
+}
+
+// MARK: -  Getters and setters for stored values
+
+extension FolioReader {
+
+	public func register(defaults: [String: Any]) {
+		self.defaults.register(defaults: defaults)
+	}
+
     /// Check if current theme is Night mode
     open var nightMode: Bool {
-        get { return FolioReader.defaults.bool(forKey: kNightMode) }
+        get { return self.defaults.bool(forKey: kNightMode) }
         set (value) {
-            FolioReader.defaults.set(value, forKey: kNightMode)
-			FolioReader.defaults.synchronize()
+            self.defaults.set(value, forKey: kNightMode)
 
 			if let readerCenter = self.readerCenter {
 				UIView.animate(withDuration: 0.6, animations: {
-					// TODO_SMF_CHECK: infinite loop?
 					_ = readerCenter.currentPage?.webView.js("nightMode(\(self.nightMode))")
 					readerCenter.pageIndicatorView?.reloadColors()
 					readerCenter.configureNavBar()
@@ -130,7 +171,7 @@ open class FolioReader: NSObject {
     open var currentFont: FolioReaderFont {
 		get {
 			guard
-				let rawValue = FolioReader.defaults.value(forKey: kCurrentFontFamily) as? Int,
+				let rawValue = self.defaults.value(forKey: kCurrentFontFamily) as? Int,
 				let font = FolioReaderFont(rawValue: rawValue) else {
 					return .andada
 			}
@@ -138,7 +179,7 @@ open class FolioReader: NSObject {
 			return font
 		}
         set (font) {
-            FolioReader.defaults.setValue(font.rawValue, forKey: kCurrentFontFamily)
+            self.defaults.set(font.rawValue, forKey: kCurrentFontFamily)
 			_ = self.readerCenter?.currentPage?.webView.js("setFontName('\(font.cssIdentifier)')")
         }
     }
@@ -147,7 +188,7 @@ open class FolioReader: NSObject {
     open var currentFontSize: FolioReaderFontSize {
 		get {
 			guard
-				let rawValue = FolioReader.defaults.value(forKey: kCurrentFontSize) as? Int,
+				let rawValue = self.defaults.value(forKey: kCurrentFontSize) as? Int,
 				let size = FolioReaderFontSize(rawValue: rawValue) else {
 					return .m
 			}
@@ -155,7 +196,7 @@ open class FolioReader: NSObject {
 			return size
 		}
         set (value) {
-            FolioReader.defaults.setValue(value.rawValue, forKey: kCurrentFontSize)
+            self.defaults.set(value.rawValue, forKey: kCurrentFontSize)
 
 			guard let currentPage = self.readerCenter?.currentPage else {
 				return
@@ -167,17 +208,17 @@ open class FolioReader: NSObject {
 
     /// Check current audio rate, the speed of speech voice. Default 0
     var currentAudioRate: Int {
-        get { return (FolioReader.defaults.value(forKey: kCurrentAudioRate) as? Int ?? 0) }
+        get { return self.defaults.integer(forKey: kCurrentAudioRate) }
         set (value) {
-            FolioReader.defaults.setValue(value, forKey: kCurrentAudioRate)
+            self.defaults.set(value, forKey: kCurrentAudioRate)
         }
     }
 
     /// Check the current highlight style.Default 0
     var currentHighlightStyle: Int {
-        get { return (FolioReader.defaults.value(forKey: kCurrentHighlightStyle) as? Int ?? 0) }
+        get { return self.defaults.integer(forKey: kCurrentHighlightStyle) }
         set (value) {
-            FolioReader.defaults.setValue(value, forKey: kCurrentHighlightStyle)
+            self.defaults.set(value, forKey: kCurrentHighlightStyle)
         }
     }
     
@@ -185,7 +226,7 @@ open class FolioReader: NSObject {
     var currentMediaOverlayStyle: MediaOverlayStyle {
         get {
 			guard
-				let rawValue = FolioReader.defaults.value(forKey: kCurrentMediaOverlayStyle) as? Int,
+				let rawValue = self.defaults.value(forKey: kCurrentMediaOverlayStyle) as? Int,
 				let style = MediaOverlayStyle(rawValue: rawValue) else {
 					return MediaOverlayStyle.default
 			}
@@ -193,7 +234,7 @@ open class FolioReader: NSObject {
 			return style
 		}
         set (value) {
-            FolioReader.defaults.setValue(value.rawValue, forKey: kCurrentMediaOverlayStyle)
+            self.defaults.set(value.rawValue, forKey: kCurrentMediaOverlayStyle)
         }
     }
     
@@ -201,39 +242,43 @@ open class FolioReader: NSObject {
     open var currentScrollDirection: Int {
         get {
 			// TODO_SMF_CHECK: when do this happen?
-			guard let value = FolioReader.defaults.value(forKey: kCurrentScrollDirection) as? Int else {
+			guard let value = self.defaults.integer(forKey: kCurrentScrollDirection) as? Int else {
 				return FolioReaderScrollDirection.defaultVertical.rawValue
 			}
 
 			return value
 		}
         set (value) {
-            FolioReader.defaults.setValue(value, forKey: kCurrentScrollDirection)
+            self.defaults.set(value, forKey: kCurrentScrollDirection)
 
 			let direction = (FolioReaderScrollDirection(rawValue: currentScrollDirection) ?? .defaultVertical)
 			self.readerCenter?.setScrollDirection(direction)
         }
     }
-}
 
-// MARK: - Present Folio Reader
+	open var currentMenuIndex: Int {
+		get { return self.defaults.integer(forKey: kCurrentTOCMenu) }
+		set (value) {
+			self.defaults.set(value, forKey: kCurrentTOCMenu)
+		}
+	}
 
-extension FolioReader {
+	open var savedPositionForCurrentBook: [String: Any]? {
+		get {
+			guard let bookId = self.readerContainer?.book.name else {
+				return nil
+			}
 
-    /**
-     Present a Folio Reader for a Parent View Controller.
-     */
-    open class func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated:
-		Bool = true) -> FolioReaderContainer {
-		// TODO_SMF_DOC
-		let folioReader = FolioReader()
-		let readerContainer = FolioReaderContainer(withConfig: config, folioReader: folioReader, epubPath: epubPath, removeEpub: shouldRemoveEpub)
-		folioReader.readerContainer = readerContainer
-        parentViewController.present(readerContainer, animated: animated, completion: nil)
-		// TODO_SMF_DOC
-		FolioReader.shared = folioReader
-		return readerContainer
-    }
+			return self.defaults.value(forKey: bookId) as? [String : Any]
+		}
+		set {
+			guard let bookId = self.readerContainer?.book.name else {
+				return
+			}
+
+			self.defaults.set(newValue, forKey: bookId)
+		}
+	}
 }
 
 // MARK: - Image Cover
@@ -266,7 +311,9 @@ extension FolioReader {
 
     /// Save Reader state, book, page and scroll offset.
     open func saveReaderState() {
-        guard self.isReaderOpen else { return }
+        guard (self.isReaderOpen == true) else {
+			return
+		}
         
         guard
 			let bookId = self.readerContainer?.book.name,
@@ -280,7 +327,7 @@ extension FolioReader {
 			"pageOffsetY": currentPage.webView.scrollView.contentOffset.y
 			] as [String : Any]
 
-		FolioReader.defaults.set(position, forKey: bookId)
+		self.savedPositionForCurrentBook = position
 	}
 
     /// Closes and save the reader current instance.
@@ -289,7 +336,7 @@ extension FolioReader {
         self.isReaderOpen = false
         self.isReaderReady = false
         self.readerAudioPlayer?.stop(immediate: true)
-        FolioReader.defaults.set(0, forKey: kCurrentTOCMenu)
+        self.defaults.set(0, forKey: kCurrentTOCMenu)
         self.delegate?.folioReaderDidClosed?(self)
 		self.delegate?.folioReaderDidClosed?()
     }

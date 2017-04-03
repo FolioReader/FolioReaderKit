@@ -40,11 +40,16 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     fileprivate var shouldShowBar = true
     fileprivate var menuIsVisible = false
 
-	fileprivate var readerConfig	: FolioReaderConfig
 	fileprivate var readerContainer	: FolioReaderContainer
+
+	fileprivate var readerConfig	: FolioReaderConfig {
+		return readerContainer.readerConfig
+	}
+
 	fileprivate var book			: FRBook {
 		return self.readerContainer.book
 	}
+
 	fileprivate var folioReader		: FolioReader {
 		return self.readerContainer.folioReader
 	}
@@ -53,14 +58,12 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
 	public override init(frame: CGRect) {
 		// Init explicit attributes with a default value. The `setup` function MUST be called to configure the current object with valid attributes.
-		self.readerConfig = FolioReaderConfig()
-		self.readerContainer = FolioReaderContainer(withConfig: self.readerConfig, folioReader: FolioReader(), epubPath: "")
+		self.readerContainer = FolioReaderContainer(withConfig: FolioReaderConfig(), folioReader: FolioReader(), epubPath: "")
 
 		super.init(frame: frame)
 	}
 
-	public func setup(withReaderConfig readerConfig: FolioReaderConfig, readerContainer: FolioReaderContainer) {
-		self.readerConfig = readerConfig
+	public func setup(withReaderContainer readerContainer: FolioReaderContainer) {
 		self.readerContainer = readerContainer
 
         self.backgroundColor = UIColor.clear

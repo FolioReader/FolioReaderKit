@@ -32,7 +32,7 @@ open class FolioReaderContainer		: UIViewController {
 	/// - Parameters:
 	///   - config: Current Folio Reader configuration
 	///   - folioReader: Current instance of the FolioReader kit.
-	///   - path: The ePub path on system
+	///   - path: The ePub path on system. Must not be nil nor empty string.
 	///   - removeEpub:  Should delete the original file after unzip? Default to `true` so the ePub will be unziped only once.
 	public init(withConfig config: FolioReaderConfig, folioReader: FolioReader, epubPath path: String, removeEpub: Bool = true) {
 		self.readerConfig = config
@@ -42,8 +42,14 @@ open class FolioReaderContainer		: UIViewController {
 		self.book = FRBook()
 
 		super.init(nibName: nil, bundle: Bundle.frameworkBundle())
-		
-		self.initialization()
+
+		// Configure the folio reader.
+		self.folioReader.readerContainer = self
+
+		// Initialize the default reader options.
+		if (self.epubPath != "") {
+			self.initialization()
+		}
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -59,6 +65,7 @@ open class FolioReaderContainer		: UIViewController {
 
 		super.init(coder: aDecoder)
 
+		// Configure the folio reader.
 		self.folioReader.readerContainer = self
     }
 
@@ -68,7 +75,7 @@ open class FolioReaderContainer		: UIViewController {
         FontBlaster.blast(bundle: Bundle.frameworkBundle())
 
         // Register initial defaults
-        FolioReader.defaults.register(defaults: [
+		self.folioReader.register(defaults: [
             kCurrentFontFamily: FolioReaderFont.andada.rawValue,
             kNightMode: false,
             kCurrentFontSize: 2,
@@ -84,7 +91,7 @@ open class FolioReaderContainer		: UIViewController {
     ///
     /// - Parameters:
     ///   - config: Current Folio Reader configuration
-    ///   - path: The ePub path on system
+    ///   - path: The ePub path on system. Must not be nil nor empty string.
     ///   - removeEpub: Should delete the original file after unzip? Default to `true` so the ePub will be unziped only once.
     open func setupConfig(_ config: FolioReaderConfig, epubPath path: String, removeEpub: Bool = true) {
         self.readerConfig = config
