@@ -115,7 +115,8 @@ open class FolioReaderWebView: UIWebView {
 
 			// Persist
 			let html = js("getHTML()")
-			if let highlight = Highlight.matchHighlight(html, andId: dic["id"]!, startOffset: startOffset, endOffset: endOffset) {
+
+            if let highlight = Highlight.matchHighlight(html, andId: dic["id"]!, startOffset: startOffset, endOffset: endOffset, noteForHighlight: nil) {
 				highlight.persist()
 			}
 		} catch {
