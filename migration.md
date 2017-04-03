@@ -5,7 +5,7 @@
 That new version introduce a new feature that allows you to have multiple instances of a `FolioReaderContainer` at the same time in your app.
 All instances now have their own stored informations and nothing is shared between them.
 
-Before, the library used a global static `FolioReader` that contained all relevant objects (ReaderContainer, ReaderConfig, AudioPlayer, etc).
+Before, the library used a global static `FolioReader` that contained all relevant objects (`ReaderContainer`, `ReaderConfig`, `AudioPlayer`, etc).
 Even though this class is still used internaly, all of its static functions have been deprecated.
 
 You must now use the (same) functions of a local instance (from your code) instead.
@@ -16,7 +16,7 @@ Here is the list of changes made to the `public` functions.
 
 ### Class: FolioReader
 
-The function `presentReader` now returns the presented FolioReaderContainer instance.
+The function `presentReader` now returns the presented `FolioReaderContainer` instance.
 It also initialise the depcrecated shared instance in order to support the previous versions of the library.
 
 ```
@@ -28,6 +28,8 @@ The function `getCoverImage` now has an extra parameter indicating the unzip pat
 ```
 class func getCoverImage(_ epubPath: String, unzipPath: String? = nil) -> UIImage?
 ```
+
+#### AppDelegate
 
 The functions to be called within the AppDelegate methods have been deprecated.
 There is no direct replacement, use `saveReaderState()` on a `FolioReaderContainer` object instead.
@@ -42,10 +44,42 @@ Replaced by on `FolioReaderContainer` class:
 open func saveReaderState()
 ```
 
+#### Deprecated static functions
+
+All class/static functions have been deprecated and replaced by instance functions. Nor the static functions or the shared instances should be used anymore.
+
+List of all deprecated `FolioReader` static attributes and functions:
+
+```
+open static var shared : FolioReader
+static var currentMediaOverlayStyle: MediaOverlayStyle
+open class var nightMode: Bool
+open class var currentFont: FolioReaderFont
+open class var currentFontSize: FolioReaderFontSize
+open class var currentScrollDirection: Int
+open class var currentAudioRate: Int
+open class var isReaderReady : Bool
+open class func saveReaderState()
+open class func close()
+open class var currentHighlightStyle: Int
+open class var needsRTLChange: Bool
+
+open class func applicationWillResignActive()
+open class func applicationWillTerminate()
+```
+
+### Class: FolioReaderContainer
+
+The public `init` function now takes an extra `FolioReader` instance as parameter.
+
+```
+public init(withConfig config: FolioReaderConfig, folioReader: FolioReader, epubPath path: String, removeEpub: Bool = true)
+```
+
 ### Class: FolioReaderDelegate
 
 The function `folioReaderDidClosed` has been renamed `folioReaderDidClose`.
-It also has a new FolioReader parameter.
+It also has a new `FolioReader parameter.
 
 ```
 func folioReaderDidClose(_ folioReader: FolioReader)
@@ -53,7 +87,7 @@ func folioReaderDidClose(_ folioReader: FolioReader)
 
 ### Class: Highlight
 
-The following functions now need a FolioReaderConfig object as parameter:
+The following functions now need a `FolioReaderConfig` object as parameter:
 
 ```
 public static func all(withConfiguration readerConfig: FolioReaderConfig) -> [Highlight]
@@ -94,7 +128,7 @@ UIViewController.setCloseButton(withConfiguration readerConfig: FolioReaderConfi
 
 ### Class: none
 
-The following functions have been deprecated and replaced by functions within the FolioReader and the FolioReaderConfig classes.
+The following functions have been deprecated and replaced by functions within the `FolioReader` and the `FolioReaderConfig` classes.
 
 ```
 func isNight<T> (_ f: T, _ l: T) -> T
