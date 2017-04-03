@@ -97,12 +97,34 @@ class FolioReaderHighlightList: UITableViewController {
         highlightLabel.sizeToFit()
         highlightLabel.frame = CGRect(x: 20, y: 46, width: view.frame.width-40, height: highlightLabel.frame.height)
         
+        if let note = highlight.noteForHighlight{
+            
+            var noteLabel: UILabel!
+            if cell.contentView.viewWithTag(432) == nil {
+                noteLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width-40, height: 0))
+                noteLabel.tag = 432
+                noteLabel.font = UIFont.systemFont(ofSize: 14)
+                noteLabel.autoresizingMask = UIViewAutoresizing.flexibleWidth
+                noteLabel.numberOfLines = 3
+                noteLabel.textColor = UIColor.gray
+                cell.contentView.addSubview(noteLabel)
+            } else {
+                noteLabel = cell.contentView.viewWithTag(432) as! UILabel
+            }
+            
+            noteLabel.text = note
+            noteLabel.sizeToFit()
+            noteLabel.frame = CGRect(x: 20, y: 46 + highlightLabel.frame.height + 10, width: view.frame.width-40, height: noteLabel.frame.height)
+        }
+        
         cell.layoutMargins = UIEdgeInsets.zero
         cell.preservesSuperviewLayoutMargins = false
         return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+        var totalSize : CGFloat
         let highlight = highlights[(indexPath as NSIndexPath).row]
         
         let cleanString = highlight.content.stripHtml().truncate(250, trailing: "...").stripLineBreaks()
@@ -117,7 +139,27 @@ class FolioReaderHighlightList: UITableViewController {
             options: [NSStringDrawingOptions.usesLineFragmentOrigin, NSStringDrawingOptions.usesFontLeading],
             context: nil)
         
-        return s.size.height + 66
+        totalSize =  s.size.height + 66
+        
+        if let note = highlight.noteForHighlight{
+            
+            var noteLabel = UILabel()
+            noteLabel.frame = CGRect(x: 20, y: 46 , width: view.frame.width-40, height: CGFloat.greatestFiniteMagnitude)
+            noteLabel.text = note
+            noteLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
+            noteLabel.numberOfLines = 0
+            noteLabel.font = UIFont.systemFont(ofSize: 14)
+            
+            noteLabel.sizeToFit()
+            totalSize = totalSize + noteLabel.frame.height
+        }
+        
+        
+
+        
+//        return s.size.height + 66
+        
+        return totalSize
     }
     
     // MARK: - Table view delegate

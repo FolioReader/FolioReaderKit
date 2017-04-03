@@ -125,7 +125,14 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 		if highlights.count > 0 {
 			for item in highlights {
 				let style = HighlightStyle.classForStyle(item.type)
-				let tag = "<highlight id=\"\(item.highlightId!)\" onclick=\"callHighlightURL(this);\" class=\"\(style)\">\(item.content!)</highlight>"
+                var tag : String
+                
+                if let note = item.noteForHighlight{
+                    tag = "<highlight id=\"\(item.highlightId!)\" onclick=\"callHighlightWithNoteURL(this);\" class=\"\(style)\">\(item.content!)</highlight>"
+                }else{
+                    tag = "<highlight id=\"\(item.highlightId!)\" onclick=\"callHighlightURL(this);\" class=\"\(style)\">\(item.content!)</highlight>"
+                }
+                
 				var locator = item.contentPre + item.content
                 locator += item.contentPost
 				locator = Highlight.removeSentenceSpam(locator) /// Fix for Highlights
@@ -173,7 +180,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         
         UIView.animate(withDuration: 0.2, animations: {webView.alpha = 1}, completion: { finished in
             webView.isColors = false
-            self.webView.createMenu(options: false)
+            self.webView.createMenu(options: false , haveNote :false)
         }) 
 
         delegate?.pageDidLoad?(self)
@@ -193,12 +200,26 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
             guard let decoded = url.absoluteString.removingPercentEncoding else { return false }
             let rect = CGRectFromString(decoded.substring(from: decoded.index(decoded.startIndex, offsetBy: 12)))
             
-            webView.createMenu(options: true)
+            webView.createMenu(options: true , haveNote :false)
             webView.setMenuVisible(true, andRect: rect)
             menuIsVisible = true
             
             return false
-        } else if url.scheme == "play-audio" {
+            
+        } else if url.scheme == "highlight-with-note" {
+            
+            shouldShowBar = false
+            
+            guard let decoded = url.absoluteString.removingPercentEncoding else { return false }
+            let rect = CGRectFromString(decoded.substring(from: decoded.index(decoded.startIndex, offsetBy: 12)))
+            
+            webView.createMenu(options: true , haveNote :true)
+            webView.setMenuVisible(true, andRect: rect)
+            menuIsVisible = true
+            
+            return false
+        
+        }else if url.scheme == "play-audio" {
 
             guard let decoded = url.absoluteString.removingPercentEncoding else { return false }
             let playID = decoded.substring(from: decoded.index(decoded.startIndex, offsetBy: 13))
@@ -446,13 +467,13 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     override open func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		if UIMenuController.shared.menuItems?.count == 0 {
             webView.isColors = false
-            webView.createMenu(options: false)
+            webView.createMenu(options: false , haveNote :false)
         }
         
         if !webView.isShare && !webView.isColors {
             if let result = webView.js("getSelectedText()") , result.components(separatedBy: " ").count == 1 {
                 webView.isOneWord = true
-                webView.createMenu(options: false)
+                webView.createMenu(options: false , haveNote :false)
             } else {
                 webView.isOneWord = false
             }

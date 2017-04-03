@@ -21,6 +21,7 @@ open class Highlight: Object {
     open dynamic var type: Int = 0
     open dynamic var startOffset: Int = -1
     open dynamic var endOffset: Int = -1
+    open dynamic var noteForHighlight: String?
     
     override open class func primaryKey()-> String {
         return "highlightId"
