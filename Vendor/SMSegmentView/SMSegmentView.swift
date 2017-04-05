@@ -178,7 +178,15 @@ class SMSegmentView: UIView, SMSegmentDelegate {
     
     func addSegmentWithTitle(_ title: String?, onSelectionImage: UIImage?, offSelectionImage: UIImage?) {
         
-        let segment = SMSegment(separatorWidth: self.separatorWidth, verticalMargin: self.segmentVerticalMargin, onSelectionColour: self.segmentOnSelectionColour, offSelectionColour: self.segmentOffSelectionColour, onSelectionTextColour: self.segmentOnSelectionTextColour, offSelectionTextColour: self.segmentOffSelectionTextColour, titleFont: self.segmentTitleFont)
+        let segment = SMSegment(
+            separatorWidth: self.separatorWidth,
+            verticalMargin: self.segmentVerticalMargin,
+            onSelectionColour: self.segmentOnSelectionColour,
+            offSelectionColour: self.segmentOffSelectionColour,
+            onSelectionTextColour: self.segmentOnSelectionTextColour,
+            offSelectionTextColour: self.segmentOffSelectionTextColour,
+            titleFont: self.segmentTitleFont
+        )
         segment.index = self.segments.count
         self.segments.append(segment)
         self.updateFrameForSegments()

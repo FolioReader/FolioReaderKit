@@ -62,8 +62,14 @@ class ViewController: UIViewController {
         let epubName = epubSampleFiles[index];
         let bookPath = Bundle.main.path(forResource: epubName, ofType: "epub")
         
-        if let image = FolioReader.getCoverImage(bookPath!) {
-            button.setBackgroundImage(image, for: .normal)
+        do {
+            if let image = try FolioReader.getCoverImage(bookPath!) {
+                button.setBackgroundImage(image, for: .normal)
+            }
+        } catch let e as FolioReaderError {
+            print(e.localizedDescription)
+        } catch {
+            print("Unkown error")
         }
     }
 }

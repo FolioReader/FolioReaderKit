@@ -28,6 +28,34 @@ internal let kCurrentTOCMenu = "com.folioreader.kCurrentTOCMenu"
 internal let kHighlightRange = 30
 internal var kBookId: String!
 
+public struct FolioReaderError: Error {
+    enum ErrorKind {
+        case BookNotAvailable
+        case ErrorInContainer
+        case ErrorInOpf
+        case AuthorNameNotAvailable
+        case CoverNotAvailable
+        case TitleNotAvailable
+    }
+    
+    let kind: ErrorKind
+    
+    var localizedDescription: String {
+        switch self.kind {
+        case .BookNotAvailable:
+            return "Book not found"
+        case .ErrorInContainer, .ErrorInOpf:
+            return "Invalid book format"
+        case .AuthorNameNotAvailable:
+            return "Author name not available"
+        case .CoverNotAvailable:
+            return "Cover image not available"
+        case .TitleNotAvailable:
+            return "Book title not available"
+        }
+    }
+}
+
 /**
  Defines the media overlay and TTS selection
  
@@ -185,18 +213,18 @@ open class FolioReader: NSObject {
     /**
      Read Cover Image and Return an `UIImage`
      */
-    open class func getCoverImage(_ epubPath: String) -> UIImage? {
-        return FREpubParser().parseCoverImage(epubPath)
+    open class func getCoverImage(_ epubPath: String) throws -> UIImage? {
+        return try FREpubParser().parseCoverImage(epubPath)
     }
 
 
     // MARK: - Get Title
-    open class func getTitle(_ epubPath: String) -> String? {
-        return FREpubParser().parseTitle(epubPath)
+    open class func getTitle(_ epubPath: String) throws -> String? {
+        return try FREpubParser().parseTitle(epubPath)
     }
 
-    open class func getAuthorName(_ epubPath: String) -> String? {
-        return FREpubParser().parseAuthorName(epubPath)
+    open class func getAuthorName(_ epubPath: String) throws -> String? {
+        return try FREpubParser().parseAuthorName(epubPath)
     }
 
     // MARK: - Present Folio Reader
