@@ -81,7 +81,7 @@ class FRResources: NSObject {
         guard let id = id else { return nil }
         
         for resource in resources.values {
-            if resource.id == id {
+            if let resourceID = resource.id, resourceID == id {
                 return resource
             }
         }
@@ -104,7 +104,7 @@ class FRResources: NSObject {
         guard let id = id else { return false }
         
         for resource in resources.values {
-            if resource.id == id {
+            if let resourceID = resource.id, resourceID == id {
                 return true
             }
         }
