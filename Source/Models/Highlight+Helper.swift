@@ -104,10 +104,13 @@ extension Highlight {
     /// - Parameter readerConfig: Current folio reader configuration.
     public func remove(withConfiguration readerConfig: FolioReaderConfig) {
         do {
-            let realm = try Realm(configuration: readerConfig.realmConfiguration)
-            realm.beginWrite()
-            realm.delete(self)
-            try realm.commitWrite()
+            guard let realm = try? Realm(configuration: readerConfig.realmConfiguration) else {
+                return
+            }
+            try realm.write {
+                realm.delete(self)
+                try realm.commitWrite()
+            }
         } catch let error as NSError {
             print("Error on remove highlight: \(error)")
         }
@@ -148,6 +151,7 @@ extension Highlight {
             highlight?.type = type.hashValue
 
             try realm.commitWrite()
+            
         } catch let error as NSError {
             print("Error on updateById: \(error)")
         }

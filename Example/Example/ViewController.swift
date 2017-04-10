@@ -110,12 +110,19 @@ class ViewController: UIViewController {
     private func setCover(_ button: UIButton?, index: Int) {
         guard
             let epub = Epub(rawValue: index),
-            let bookPath = epub.bookPath,
-            let image = FolioReader.getCoverImage(bookPath) else {
+            let bookPath = epub.bookPath else {
                 return
         }
-        
-        button?.setBackgroundImage(image, for: .normal)
+
+        do {
+            if let image = try FolioReader.getCoverImage(bookPath) {
+                button.setBackgroundImage(image, for: .normal)
+            }
+        } catch let e as FolioReaderError {
+            print(e.localizedDescription)
+        } catch {
+            print("Unkown error")
+        }
     }
 }
 
@@ -127,7 +134,7 @@ extension ViewController {
         guard let epub = Epub(rawValue: sender.tag) else {
             return
         }
-        
+
         self.open(epub: epub)
     }
 }

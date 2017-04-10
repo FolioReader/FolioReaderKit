@@ -194,7 +194,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
         let direction: ScrollDirection = self.folioReader.needsRTLChange ? .positive(withConfiguration: self.readerConfig) : .negative(withConfiguration: self.readerConfig)
 
-        if (self.folioReader.readerCenter?.pageScrollDirection == direction && self.folioReader.readerCenter?.isScrolling == true && self.readerConfig.scrollDirection != .horizontalWithVerticalContent) {
+        if (self.folioReader.readerCenter?.pageScrollDirection == direction && self.readerConfig.scrollDirection != .horizontalWithVerticalContent) {
             scrollPageToBottom()
         }
 

@@ -151,26 +151,31 @@ open class FolioReaderContainer     : UIViewController {
 
         DispatchQueue.global(qos: .userInitiated).async {
 
-            guard let parsedBook = FREpubParser().readEpub(epubPath: self.epubPath, removeEpub: self.shouldRemoveEpub) else {
-                self.errorOnLoad = true
-                return
-            }
-
-            self.book = parsedBook
-            self.folioReader.isReaderOpen = true
-
-            // Reload data
-            DispatchQueue.main.async(execute: {
-
-                // Add audio player if needed
-                if (self.book.hasAudio() == true || self.readerConfig.enableTTS == true) {
-                    self.addAudioPlayer()
+            do {
+                guard let parsedBook = try FREpubParser().readEpub(epubPath: self.epubPath, removeEpub: self.shouldRemoveEpub) else {
+                    self.errorOnLoad = true
+                    return
                 }
 
-                self.centerViewController?.reloadData()
-                self.folioReader.isReaderReady = true
-                self.folioReader.delegate?.folioReader?(self.folioReader, didFinishedLoading: self.book)
-            })
+                self.book = parsedBook
+                self.folioReader.isReaderOpen = true
+
+                // Reload data
+                DispatchQueue.main.async(execute: {
+
+                    // Add audio player if needed
+                    if (self.book.hasAudio() == true || self.readerConfig.enableTTS == true) {
+                        self.addAudioPlayer()
+                    }
+                    self.centerViewController?.reloadData()
+                    self.folioReader.isReaderReady = true
+                    self.folioReader.delegate?.folioReader?(self.folioReader, didFinishedLoading: self.book)
+                })
+            } catch let e as FolioReaderError {
+                self.alert(message: e.localizedDescription)
+            } catch {
+                self.alert(message: "Unknown Error")
+            }
         }
     }
 
@@ -208,4 +213,20 @@ open class FolioReaderContainer     : UIViewController {
     override open var preferredStatusBarStyle: UIStatusBarStyle {
         return self.folioReader.isNight(.lightContent, .default)
     }
+}
+
+extension FolioReaderContainer {
+    func alert(message: String) {
+         let alertController = UIAlertController(
+            title: "Error",
+            message: message,
+            preferredStyle: UIAlertControllerStyle.alert
+        )
+        let action = UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel) { [weak self]
+            (result : UIAlertAction) -> Void in
+            self?.dismiss()
+        }
+        alertController.addAction(action)
+        self.present(alertController, animated: true, completion: nil)
+   }
 }
