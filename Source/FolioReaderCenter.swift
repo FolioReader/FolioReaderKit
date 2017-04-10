@@ -600,11 +600,6 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
         self.nextPageNumber = (((self.currentPageNumber + 1) <= totalPages) ? (self.currentPageNumber + 1) : self.currentPageNumber)
 
-        //        // Set navigation title
-        //        if let chapterName = getCurrentChapterName() {
-        //            title = chapterName
-        //        } else { title = ""}
-
         // Set pages
         guard let currentPage = currentPage else {
             completion?()
