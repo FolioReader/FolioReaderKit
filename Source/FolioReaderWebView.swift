@@ -14,14 +14,16 @@ open class FolioReaderWebView: UIWebView {
     var isShare 					= false
     var isOneWord 					= false
 
-    fileprivate var readerConfig	: FolioReaderConfig {
+    fileprivate var readerConfig: FolioReaderConfig {
         return self.readerContainer.readerConfig
     }
-    fileprivate var readerContainer	: FolioReaderContainer
-    fileprivate var book			: FRBook {
+
+    fileprivate var readerContainer : FolioReaderContainer
+
+    fileprivate var book: FRBook {
         return self.readerContainer.book
     }
-    fileprivate var folioReader		: FolioReader {
+    fileprivate var folioReader: FolioReader {
         return self.readerContainer.folioReader
     }
 
