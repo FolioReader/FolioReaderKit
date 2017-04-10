@@ -284,7 +284,6 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
     private func transformViewForRTL(_ view: UIView?) {
         if (self.readerContainer.folioReader.needsRTLChange == true) {
-            // TODO_SMF_CHECK: when does this happen?
             view?.transform = CGAffineTransform(scaleX: -1, y: 1)
         } else {
             view?.transform = CGAffineTransform.identity
@@ -828,16 +827,12 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
                 let resource = item.resource,
                 (resource == reference.resource),
                 let title = item.title else {
-                    // TODO_SMF_CHECK: check if this really works fine (or if it was working anyway).
-                    // Select text -> share.
-                    return nil
+                    continue
             }
 
-            // TODO_SMF_CHECK: when does this happen?
             return title
         }
 
-        // TODO_SMF_CHECK: when does this happen?
         return nil
     }
 
