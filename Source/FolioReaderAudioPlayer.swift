@@ -129,8 +129,6 @@ open class FolioReaderAudioPlayer: NSObject {
         } else {
             stopSynthesizer(immediate: immediate, completion: nil)
         }
-
-        //        UIApplication.sharedApplication().idleTimerDisabled = false
     }
 
     func stopSynthesizer(immediate: Bool = false, completion: (() -> Void)? = nil) {
@@ -150,8 +148,6 @@ open class FolioReaderAudioPlayer: NSObject {
                 synthesizer.pauseSpeaking(at: .word)
             }
         }
-
-        //        UIApplication.sharedApplication().idleTimerDisabled = false
     }
 
     func togglePlay() {
@@ -165,8 +161,6 @@ open class FolioReaderAudioPlayer: NSObject {
         } else {
             self.readCurrentSentence()
         }
-
-        //        UIApplication.sharedApplication().idleTimerDisabled = true
     }
 
     func isPlaying() -> Bool {
