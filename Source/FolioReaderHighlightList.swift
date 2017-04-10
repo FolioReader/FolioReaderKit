@@ -8,22 +8,22 @@
 
 import UIKit
 
-class FolioReaderHighlightList		: UITableViewController {
+class FolioReaderHighlightList: UITableViewController {
 
-	fileprivate var highlights		= [Highlight]()
-	fileprivate var readerConfig 	: FolioReaderConfig
-	fileprivate var folioReader 	: FolioReader
+    fileprivate var highlights      = [Highlight]()
+    fileprivate var readerConfig    : FolioReaderConfig
+    fileprivate var folioReader     : FolioReader
 
-	init(folioReader: FolioReader, readerConfig: FolioReaderConfig) {
-		self.readerConfig = readerConfig
-		self.folioReader = folioReader
+    init(folioReader: FolioReader, readerConfig: FolioReaderConfig) {
+        self.readerConfig = readerConfig
+        self.folioReader = folioReader
 
-		super.init(style: UITableViewStyle.plain)
-	}
+        super.init(style: UITableViewStyle.plain)
+    }
 
-	required init?(coder aDecoder: NSCoder) {
-		fatalError("init with coder not supported")
-	}
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init with coder not supported")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,12 +33,12 @@ class FolioReaderHighlightList		: UITableViewController {
         self.tableView.backgroundColor = self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, self.readerConfig.menuBackgroundColor)
         self.tableView.separatorColor = self.folioReader.isNight(self.readerConfig.nightModeSeparatorColor, self.readerConfig.menuSeparatorColor)
 
-		guard let bookId = (self.folioReader.readerContainer?.book.name as? NSString)?.deletingPathExtension else {
-			self.highlights = []
-			return
-		}
+        guard let bookId = (self.folioReader.readerContainer?.book.name as? NSString)?.deletingPathExtension else {
+            self.highlights = []
+            return
+        }
 
-		self.highlights = Highlight.allByBookId(withConfiguration: self.readerConfig, bookId: bookId)
+        self.highlights = Highlight.allByBookId(withConfiguration: self.readerConfig, bookId: bookId)
     }
 
     // MARK: - Table view data source
@@ -52,16 +52,16 @@ class FolioReaderHighlightList		: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: kReuseCellIdentifier, for: indexPath) 
+        let cell = tableView.dequeueReusableCell(withIdentifier: kReuseCellIdentifier, for: indexPath)
         cell.backgroundColor = UIColor.clear
 
         let highlight = highlights[(indexPath as NSIndexPath).row]
-        
+
         // Format date
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = self.readerConfig.localizedHighlightsDateFormat
         let dateString = dateFormatter.string(from: highlight.date)
-        
+
         // Date
         var dateLabel: UILabel!
         if cell.contentView.viewWithTag(456) == nil {
@@ -73,11 +73,11 @@ class FolioReaderHighlightList		: UITableViewController {
         } else {
             dateLabel = cell.contentView.viewWithTag(456) as! UILabel
         }
-        
+
         dateLabel.text = dateString.uppercased()
         dateLabel.textColor = self.folioReader.isNight(UIColor(white: 5, alpha: 0.3), UIColor.lightGray)
         dateLabel.frame = CGRect(x: 20, y: 20, width: view.frame.width-40, height: dateLabel.frame.height)
-        
+
         // Text
         let cleanString = highlight.content.stripHtml().truncate(250, trailing: "...").stripLineBreaks()
         let text = NSMutableAttributedString(string: cleanString)
@@ -85,11 +85,11 @@ class FolioReaderHighlightList		: UITableViewController {
         let paragraph = NSMutableParagraphStyle()
         paragraph.lineSpacing = 3
         let textColor = self.folioReader.isNight(self.readerConfig.menuTextColor, UIColor.black)
-        
+
         text.addAttribute(NSParagraphStyleAttributeName, value: paragraph, range: range)
         text.addAttribute(NSFontAttributeName, value: UIFont(name: "Avenir-Light", size: 16)!, range: range)
         text.addAttribute(NSForegroundColorAttributeName, value: textColor, range: range)
-        
+
         if (highlight.type == HighlightStyle.underline.rawValue) {
             text.addAttribute(NSBackgroundColorAttributeName, value: UIColor.clear, range: range)
             text.addAttribute(NSUnderlineColorAttributeName, value: HighlightStyle.colorForStyle(highlight.type, nightMode: self.folioReader.nightMode), range: range)
@@ -97,7 +97,7 @@ class FolioReaderHighlightList		: UITableViewController {
         } else {
             text.addAttribute(NSBackgroundColorAttributeName, value: HighlightStyle.colorForStyle(highlight.type, nightMode: self.folioReader.nightMode), range: range)
         }
-        
+
         // Text
         var highlightLabel: UILabel!
         if cell.contentView.viewWithTag(123) == nil {
@@ -110,19 +110,19 @@ class FolioReaderHighlightList		: UITableViewController {
         } else {
             highlightLabel = cell.contentView.viewWithTag(123) as! UILabel
         }
- 
+
         highlightLabel.attributedText = text
         highlightLabel.sizeToFit()
         highlightLabel.frame = CGRect(x: 20, y: 46, width: view.frame.width-40, height: highlightLabel.frame.height)
-        
+
         cell.layoutMargins = UIEdgeInsets.zero
         cell.preservesSuperviewLayoutMargins = false
         return cell
     }
-    
+
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let highlight = highlights[(indexPath as NSIndexPath).row]
-        
+
         let cleanString = highlight.content.stripHtml().truncate(250, trailing: "...").stripLineBreaks()
         let text = NSMutableAttributedString(string: cleanString)
         let range = NSRange(location: 0, length: text.length)
@@ -130,35 +130,35 @@ class FolioReaderHighlightList		: UITableViewController {
         paragraph.lineSpacing = 3
         text.addAttribute(NSParagraphStyleAttributeName, value: paragraph, range: range)
         text.addAttribute(NSFontAttributeName, value: UIFont(name: "Avenir-Light", size: 16)!, range: range)
-        
+
         let s = text.boundingRect(with: CGSize(width: view.frame.width-40, height: CGFloat.greatestFiniteMagnitude),
-            options: [NSStringDrawingOptions.usesLineFragmentOrigin, NSStringDrawingOptions.usesFontLeading],
-            context: nil)
-        
+                                  options: [NSStringDrawingOptions.usesLineFragmentOrigin, NSStringDrawingOptions.usesFontLeading],
+                                  context: nil)
+
         return s.size.height + 66
     }
-    
+
     // MARK: - Table view delegate
-    
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		guard let highlight = highlights[safe: (indexPath as NSIndexPath).row] else {
-			return
-		}
+        guard let highlight = highlights[safe: (indexPath as NSIndexPath).row] else {
+            return
+        }
 
         self.folioReader.readerCenter?.changePageWith(page: highlight.page, andFragment: highlight.highlightId)
         self.dismiss()
     }
-    
+
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let highlight = highlights[(indexPath as NSIndexPath).row]
 
             if (highlight.page == self.folioReader.readerCenter?.currentPageNumber),
-				let page = self.folioReader.readerCenter?.currentPage {
-					Highlight.removeFromHTMLById(withinPage: page, highlightId: highlight.highlightId) // Remove from HTML
+                let page = self.folioReader.readerCenter?.currentPage {
+                Highlight.removeFromHTMLById(withinPage: page, highlightId: highlight.highlightId) // Remove from HTML
             }
-            
-			highlight.remove(withConfiguration: self.readerConfig) // Remove from Database
+
+            highlight.remove(withConfiguration: self.readerConfig) // Remove from Database
             highlights.remove(at: (indexPath as NSIndexPath).row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
