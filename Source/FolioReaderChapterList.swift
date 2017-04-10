@@ -23,11 +23,11 @@ import UIKit
 
 class FolioReaderChapterList: UITableViewController {
 
-    weak var delegate				: FolioReaderChapterListDelegate?
-    fileprivate var tocItems		= [FRTocReference]()
-    fileprivate var book 			: FRBook
-    fileprivate var readerConfig 	: FolioReaderConfig
-    fileprivate var folioReader 	: FolioReader
+    weak var delegate               : FolioReaderChapterListDelegate?
+    fileprivate var tocItems        = [FRTocReference]()
+    fileprivate var book            : FRBook
+    fileprivate var readerConfig    : FolioReaderConfig
+    fileprivate var folioReader     : FolioReader
 
     init(folioReader: FolioReader, readerConfig: FolioReaderConfig, book: FRBook, delegate: FolioReaderChapterListDelegate?) {
         self.readerConfig = readerConfig
