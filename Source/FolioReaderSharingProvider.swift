@@ -9,10 +9,10 @@
 import UIKit
 
 class FolioReaderSharingProvider: UIActivityItemProvider {
-    var subject: String
-    var text: String
-    var html: String?
-    var image: UIImage?
+    var subject     : String
+    var text        : String
+    var html        : String?
+    var image       : UIImage?
 
     init(subject: String, text: String, html: String? = nil, image: UIImage? = nil) {
         self.subject = subject
@@ -31,15 +31,11 @@ class FolioReaderSharingProvider: UIActivityItemProvider {
         if let html = html , activityType == UIActivityType.mail {
             return html
         }
-        
+
         if let image = image , activityType == UIActivityType.postToFacebook {
             return image
         }
 
         return text
     }
-    
-//    func activityViewController(activityViewController: UIActivityViewController, thumbnailImageForActivityType activityType: String?, suggestedSize size: CGSize) -> UIImage? {
-//
-//    }
 }

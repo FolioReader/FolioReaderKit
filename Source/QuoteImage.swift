@@ -12,10 +12,10 @@ import UIKit
  Defines a custom Quote image, can be a square `UIImage`, solid `UIColor` or `CAGradientLayer`.
  */
 public struct QuoteImage {
-    public var image: UIImage!
-    public var alpha: CGFloat!
-    public var textColor: UIColor!
-    public var backgroundColor: UIColor!
+    public var image            : UIImage!
+    public var alpha            : CGFloat!
+    public var textColor        : UIColor!
+    public var backgroundColor  : UIColor!
     
     /**
      Quote image from `UIImage`
