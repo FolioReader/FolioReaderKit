@@ -13,7 +13,6 @@ public enum FolioReaderFont: Int {
     case lato
     case lora
     case raleway
-    case openSans
 
     public static func folioReaderFont(fontName: String) -> FolioReaderFont? {
         var font: FolioReaderFont?
