@@ -88,7 +88,6 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
     }
 
     required public init?(coder aDecoder: NSCoder) {
-		// TODO_SMF_QUESTION: is that ok? do 'we' really support NSCoding? 
         fatalError("This class doesn't support NSCoding.")
     }
     
@@ -277,7 +276,7 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 
 	private func transformViewForRTL(_ view: UIView?) {
 		if (self.readerContainer.folioReader.needsRTLChange == true) {
-			// TODO_SMF_CHECK: when do this happen?
+			// TODO_SMF_CHECK: when does this happen?
 			view?.transform = CGAffineTransform(scaleX: -1, y: 1)
 		} else {
 			view?.transform = CGAffineTransform.identity
@@ -831,11 +830,11 @@ open class FolioReaderCenter		: UIViewController, UICollectionViewDelegate, UICo
 					return nil
 			}
 
-			// TODO_SMF_CHECK: when do this happen?
+			// TODO_SMF_CHECK: when does this happen?
 			return title
 		}
 
-		// TODO_SMF_CHECK: when do this happen?
+		// TODO_SMF_CHECK: when does this happen?
 		return nil
 	}
 

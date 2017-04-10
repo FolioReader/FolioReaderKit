@@ -249,7 +249,7 @@ open class FolioReaderAudioPlayer: NSObject {
     @discardableResult fileprivate func _playFragment(_ smil: FRSmilElement?) -> Bool {
 
         guard let smil = smil else {
-			// TODO_SMF_QUESTION: disable log?
+			// TODO_SMF_QUESTION: What about the log that the library prints in the console? shouldn’t we disable it? use another library for that or some compiler flags?
             print("no more parallel audio to play")
             self.stop()
             return false
@@ -372,10 +372,10 @@ open class FolioReaderAudioPlayer: NSObject {
 		let playbackActiveClass = self.book.playbackActiveClass()
 		guard let sentence = currentPage.webView.js("getSentenceWithIndex('\(playbackActiveClass)')") else {
 			if (readerCenter.isLastPage() == true) {
-				// TODO_SMF_CHECK: when do this happen?
+				// TODO_SMF_CHECK: when does this happen?
 				self.stop()
 			} else {
-				// TODO_SMF_CHECK: when do this happen?
+				// TODO_SMF_CHECK: when does this happen?
 				readerCenter.changePageToNext()
 			}
 
@@ -386,7 +386,7 @@ open class FolioReaderAudioPlayer: NSObject {
 			return
 		}
 
-		// TODO_SMF_QUESTION: the previous code mde it possible for `href` to be an empty string. Was that valid? should this logic be kept?
+		// TODO_SMF_QUESTION: The previous code made it possible to call `playText` with the parameter `href` being an empty string. Was that valid? should this logic be kept?
 		self.playText(href, text: sentence)
     }
     

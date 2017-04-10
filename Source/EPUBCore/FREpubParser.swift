@@ -30,7 +30,6 @@ class FREpubParser			: NSObject, SSZipArchiveDelegate {
     ///   - unzipPath: Path to unzip the compressed epub.
     /// - Returns: An UIImage object
     func parseCoverImage(_ epubPath: String, unzipPath: String? = nil) -> UIImage? {
-		// TODO_SMF_DOC: new function signature change
         guard
 			let book = readEpub(epubPath: epubPath, removeEpub: false, unzipPath: unzipPath),
 			let coverImage = book.coverImage else {

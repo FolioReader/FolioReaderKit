@@ -87,7 +87,6 @@ extension Highlight {
 	///   - readerConfig: Current folio reader configuration.
 	///   - completion: Completion block.
 	public func persist(withConfiguration readerConfig: FolioReaderConfig, completion: Completion? = nil) {
-		// TODO_SMF_DOC
 		do {
 			let realm = try Realm(configuration: readerConfig.realmConfiguration)
 			realm.beginWrite()
@@ -104,7 +103,6 @@ extension Highlight {
 	///
 	/// - Parameter readerConfig: Current folio reader configuration.
 	public func remove(withConfiguration readerConfig: FolioReaderConfig) {
-		// TODO_SMF_DOC
 		do {
 			let realm = try Realm(configuration: readerConfig.realmConfiguration)
 			realm.beginWrite()
@@ -121,7 +119,6 @@ extension Highlight {
 	///   - readerConfig: Current folio reader configuration.
 	///   - highlightId: The ID to be removed
 	public static func removeById(withConfiguration readerConfig: FolioReaderConfig, highlightId: String) {
-		// TODO_SMF_DOC
 		var highlight: Highlight?
 		let predicate = NSPredicate(format:"highlightId = %@", highlightId)
 
@@ -141,7 +138,6 @@ extension Highlight {
 	///   - highlightId: The ID to be removed
 	///   - type: The `HighlightStyle`
 	public static func updateById(withConfiguration readerConfig: FolioReaderConfig, highlightId: String, type: HighlightStyle) {
-		// TODO_SMF_DOC
 		var highlight: Highlight?
 		let predicate = NSPredicate(format:"highlightId = %@", highlightId)
 		do {
@@ -166,7 +162,6 @@ extension Highlight {
 	///   - page: Page number
 	/// - Returns: Return a list of Highlights
 	public static func allByBookId(withConfiguration readerConfig: FolioReaderConfig, bookId: String, andPage page: NSNumber? = nil) -> [Highlight] {
-		// TODO_SMF_DOC
 		var highlights: [Highlight]?
 		var predicate = NSPredicate(format: "bookId = %@", bookId)
 		if let page = page {
@@ -188,7 +183,6 @@ extension Highlight {
 	/// - Parameter readerConfig: - readerConfig: Current folio reader configuration.
 	/// - Returns: Return all Highlights
 	public static func all(withConfiguration readerConfig: FolioReaderConfig) -> [Highlight] {
-		// TODO_SMF_DOC
 		var highlights: [Highlight]?
 		do {
 			let realm = try Realm(configuration: readerConfig.realmConfiguration)
@@ -205,24 +199,24 @@ extension Highlight {
 
 extension Highlight {
 
+	@available(*, deprecated, message: "Shared instance removed. Use a local instance instead.")
 	private static var readerConfig : FolioReaderConfig {
-		// TODO_SMF_DEPRECATE
 		return FolioReader.shared.readerContainer!.readerConfig
 	}
 
 	/// Save a Highlight with completion block
 	///
 	/// - Parameter completion: Completion block
+	@available(*, deprecated, message: "Use 'persist(withConfiguration:completion:)' instead.")
 	public func persist(_ completion: Completion? = nil) {
-		// TODO_SMF_DEPRECATE
 		self.persist(withConfiguration: Highlight.readerConfig, completion: completion)
 	}
 
 	/// Return all Highlights
 	///
 	/// - Returns: Return all Highlights
+	@available(*, deprecated, message: "Use 'all(withConfiguration:)' instead.")
 	public static func all() -> [Highlight] {
-		// TODO_SMF_DEPRECATE
 		return Highlight.all(withConfiguration: Highlight.readerConfig)
 	}
 
@@ -232,8 +226,8 @@ extension Highlight {
 	///   - bookId: Book ID
 	///   - page: Page number
 	/// - Returns: Return a list of Highlights
+	@available(*, deprecated, message: "Use 'allByBookId(withConfiguration:bookId:andPage:)' instead.")
 	public static func allByBookId(_ bookId: String, andPage page: NSNumber? = nil) -> [Highlight] {
-		// TODO_SMF_DEPRECATE
 		return Highlight.allByBookId(withConfiguration: Highlight.readerConfig, bookId: bookId, andPage: page)
 	}
 
@@ -242,22 +236,22 @@ extension Highlight {
 	/// - Parameters:
 	///   - highlightId: The ID to be removed
 	///   - type: The `HighlightStyle`
+	@available(*, deprecated, message: "Use 'updateById(withConfiguration:highlightId:type:)' instead.")
 	public static func updateById(_ highlightId: String, type: HighlightStyle) {
-		// TODO_SMF_DEPRECATE: deprecate
 		Highlight.updateById(withConfiguration: Highlight.readerConfig, highlightId: highlightId, type: type)
 	}
 
 	/// Remove a Highlight by ID
 	///
 	/// - Parameter highlightId: The ID to be removed
+	@available(*, deprecated, message: "Use 'removeById(withConfiguration:highlightId:)' instead.")
 	public static func removeById(_ highlightId: String) {
-		// TODO_SMF_DEPRECATE
 		Highlight.removeById(withConfiguration: Highlight.readerConfig, highlightId: highlightId)
 	}
 
 	/// Remove a Highlight
+	@available(*, deprecated, message: "Use 'remove(withConfiguration:)' instead.")
 	public func remove() {
-		// TODO_SMF_DEPRECATE
 		self.remove(withConfiguration: Highlight.readerConfig)
 	}
 
@@ -265,8 +259,8 @@ extension Highlight {
 	///
 	/// - Parameter highlightId: The ID to be removed
 	/// - Returns: The removed id
+	@available(*, deprecated, message: "Use 'removeFromHTMLById(withinPage:highlightId:)' instead.")
 	@discardableResult public static func removeFromHTMLById(_ highlightId: String) -> String? {
-		// TODO_SMF_DEPRECATE
 		let page = FolioReader.shared.readerCenter?.currentPage
 		return self.removeFromHTMLById(withinPage: page, highlightId: highlightId)
 	}
@@ -341,7 +335,6 @@ extension Highlight {
 	///   - highlightId: The ID to be removed
 	/// - Returns: The removed id
 	@discardableResult public static func removeFromHTMLById(withinPage page: FolioReaderPage?, highlightId: String) -> String? {
-		// TODO_SMF_DOC
 		guard let currentPage = page else { return nil }
 
 		if let removedId = currentPage.webView.js("removeHighlightById('\(highlightId)')") {

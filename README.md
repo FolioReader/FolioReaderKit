@@ -103,7 +103,7 @@ import FolioReaderKit
 func open(sender: AnyObject) {
     let config = FolioReaderConfig()
     let bookPath = Bundle.main.path(forResource: "book", ofType: "epub")
-    FolioReader.presentReader(parentViewController: self, withEpubPath: bookPath!, andConfig: config)
+    let myReaderContainer = FolioReader.presentReader(parentViewController: self, withEpubPath: bookPath!, andConfig: config)
 }
 ```
 
@@ -112,10 +112,10 @@ You can also use your own FolioReader View Controller like this.
 ```swift
 let config = FolioReaderConfig()
 let bookPath = Bundle.main.path(forResource: "book", ofType: "epub")
-let epubVC = FolioReaderContainer(withConfig: config, epubPath: bookPath!, removeEpub: true)
+let myReaderContainer = FolioReaderContainer(withConfig: config, epubPath: bookPath!, removeEpub: true)
 
-// Present the epubVC view controller like every other UIViewController instance
-present(epubVC, animated: true, completion: nil)
+// Present the myReaderContainer view controller like every other UIViewController instance
+present(myReaderContainer, animated: true, completion: nil)
 ```
 
 In your `AppDelegate` call `applicationWillResignActive` and `applicationWillTerminate`. This will save the reader state even if you kill the app.
@@ -124,11 +124,11 @@ In your `AppDelegate` call `applicationWillResignActive` and `applicationWillTer
 import FolioReaderKit
 
 func applicationWillResignActive(_ application: UIApplication) {
-    FolioReader.applicationWillResignActive()
+    myReaderContainer.saveReaderState()
 }
 
 func applicationWillTerminate(_ application: UIApplication) {
-    FolioReader.applicationWillTerminate()
+    myReaderContainer.saveReaderState()
 }
 ```
 
