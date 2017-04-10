@@ -171,6 +171,9 @@ open class FolioReaderConfig: NSObject {
     /// Use the readers `UIMenuController` which enables the highlighting etc. The default is `true`. If set to false it's possible to modify the shared `UIMenuController` for yourself. Note: This doesn't disable the text selection in the web view.
     open var useReaderMenuController    = true
 
+    /// Used to distinguish between multiple or different reader instances. The content of the user defaults (font settings etc.) depends on this identifier. The default is `nil`.
+    open var identifier                 : String?
+
     /// Localizes Highlight date format. This is a `dateFormat` from `NSDateFormatter`, so be careful 🤔
     open var localizedHighlightsDateFormat      = "MMM dd, YYYY | HH:mm"
     open var localizedHighlightMenu             = NSLocalizedString("Highlight", comment: "")
@@ -199,6 +202,11 @@ open class FolioReaderConfig: NSObject {
     open var localizedShareImageQuote           = NSLocalizedString("Share image quote", comment: "")
     open var localizedShareTextQuote            = NSLocalizedString("Share text quote", comment: "")
 
+    public convenience init(withIdentifier identifier: String) {
+        self.init()
+
+        self.identifier = identifier
+    }
 
     /**
      Simplify attibution of values based on direction, basically is to avoid too much usage of `switch`,
