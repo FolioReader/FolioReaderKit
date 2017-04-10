@@ -11,7 +11,7 @@ import UIKit
 class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureRecognizerDelegate {
 
     var menuView                    : UIView!
-    var	playPauseBtn                : UIButton!
+    var playPauseBtn                : UIButton!
     var styleOptionBtns             = [UIButton]()
     var viewDidAppear               = false
 
