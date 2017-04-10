@@ -22,9 +22,6 @@ xcuserdata/
 *.xcuserstate
 *.DS_Store
 
-## SMF Specific
-.swiftlint.yml
-
 ## Obj-C/Swift specific
 *.hmap
 *.ipa
