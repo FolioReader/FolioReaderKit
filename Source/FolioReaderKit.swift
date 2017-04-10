@@ -266,7 +266,6 @@ extension FolioReader {
     /// Check the current scroll direction. Default .defaultVertical
     open var currentScrollDirection: Int {
         get {
-            // TODO_SMF_CHECK: when does this happen?
             guard let value = self.defaults.integer(forKey: kCurrentScrollDirection) as? Int else {
                 return FolioReaderScrollDirection.defaultVertical.rawValue
             }

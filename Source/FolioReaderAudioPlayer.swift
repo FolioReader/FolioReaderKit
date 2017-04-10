@@ -356,7 +356,6 @@ open class FolioReaderAudioPlayer: NSObject {
     // MARK: TTS Sentence
 
     func speakSentence() {
-        // TODO_SMF_CHECK: does it work fine?
         guard
             let readerCenter = self.folioReader.readerCenter,
             let currentPage = readerCenter.currentPage else {
@@ -366,10 +365,8 @@ open class FolioReaderAudioPlayer: NSObject {
         let playbackActiveClass = self.book.playbackActiveClass()
         guard let sentence = currentPage.webView.js("getSentenceWithIndex('\(playbackActiveClass)')") else {
             if (readerCenter.isLastPage() == true) {
-                // TODO_SMF_CHECK: when does this happen?
                 self.stop()
             } else {
-                // TODO_SMF_CHECK: when does this happen?
                 readerCenter.changePageToNext()
             }
 

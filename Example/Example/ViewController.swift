@@ -116,7 +116,7 @@ class ViewController: UIViewController {
 
         do {
             if let image = try FolioReader.getCoverImage(bookPath) {
-                button.setBackgroundImage(image, for: .normal)
+                button?.setBackgroundImage(image, for: .normal)
             }
         } catch let e as FolioReaderError {
             print(e.localizedDescription)
