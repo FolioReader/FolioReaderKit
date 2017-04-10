@@ -9,94 +9,94 @@
 import UIKit
 
 public enum FolioReaderFont: Int {
-	case andada = 0
-	case lato
-	case lora
-	case raleway
+    case andada = 0
+    case lato
+    case lora
+    case raleway
 
-	public static func folioReaderFont(fontName: String) -> FolioReaderFont? {
-		var font: FolioReaderFont?
-		switch fontName {
-		case "andada"		: font = .andada
-		case "lato"			: font = .lato
-		case "lora"			: font = .lora
-		case "raleway"		: font = .raleway
-		default 			: break
-		}
-		return font
-	}
+    public static func folioReaderFont(fontName: String) -> FolioReaderFont? {
+        var font: FolioReaderFont?
+        switch fontName {
+        case "andada"       : font = .andada
+        case "lato"         : font = .lato
+        case "lora"         : font = .lora
+        case "raleway"      : font = .raleway
+        default             : break
+        }
+        return font
+    }
 
-	public var cssIdentifier: String {
-		switch self {
-		case .andada	: return "andada"
-		case .lato		: return "lato"
-		case .lora		: return "lora"
-		case .raleway	: return "raleway"
-		}
-	}
+    public var cssIdentifier: String {
+        switch self {
+        case .andada    : return "andada"
+        case .lato      : return "lato"
+        case .lora      : return "lora"
+        case .raleway   : return "raleway"
+        }
+    }
 }
 
 public enum FolioReaderFontSize: Int {
-	case xs = 0
-	case s
-	case m
-	case l
-	case xl
+    case xs = 0
+    case s
+    case m
+    case l
+    case xl
 
-	public static func folioReaderFontSize(fontSizeStringRepresentation: String) -> FolioReaderFontSize? {
-		var fontSize: FolioReaderFontSize?
-		switch fontSizeStringRepresentation {
-		case "textSizeOne"		: fontSize = .xs
-		case "textSizeTwo"		: fontSize = .s
-		case "textSizeThree"	: fontSize = .m
-		case "textSizeFour"		: fontSize = .l
-		case "textSizeFive"		: fontSize = .xl
-		default 				: break
-		}
-		return fontSize
-	}
+    public static func folioReaderFontSize(fontSizeStringRepresentation: String) -> FolioReaderFontSize? {
+        var fontSize: FolioReaderFontSize?
+        switch fontSizeStringRepresentation {
+        case "textSizeOne"      : fontSize = .xs
+        case "textSizeTwo"      : fontSize = .s
+        case "textSizeThree"    : fontSize = .m
+        case "textSizeFour"     : fontSize = .l
+        case "textSizeFive"     : fontSize = .xl
+        default                 : break
+        }
+        return fontSize
+    }
 
-	public var cssIdentifier: String {
-		switch self {
-		case .xs	: return "textSizeOne"
-		case .s		: return "textSizeTwo"
-		case .m		: return "textSizeThree"
-		case .l		: return "textSizeFour"
-		case .xl	: return "textSizeFive"
-		}
-	}
+    public var cssIdentifier: String {
+        switch self {
+        case .xs    : return "textSizeOne"
+        case .s     : return "textSizeTwo"
+        case .m     : return "textSizeThree"
+        case .l     : return "textSizeFour"
+        case .xl    : return "textSizeFive"
+        }
+    }
 }
 
-class FolioReaderFontsMenu			: UIViewController, SMSegmentViewDelegate, UIGestureRecognizerDelegate {
-    
-    var menuView					: UIView!
+class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRecognizerDelegate {
 
-	fileprivate var readerConfig 	: FolioReaderConfig
-	fileprivate var folioReader 	: FolioReader
+    var menuView                    : UIView!
 
-	init(folioReader: FolioReader, readerConfig: FolioReaderConfig) {
-		self.readerConfig = readerConfig
-		self.folioReader = folioReader
+    fileprivate var readerConfig    : FolioReaderConfig
+    fileprivate var folioReader     : FolioReader
 
-		super.init(nibName: nil, bundle: nil)
-	}
+    init(folioReader: FolioReader, readerConfig: FolioReaderConfig) {
+        self.readerConfig = readerConfig
+        self.folioReader = folioReader
 
-	required init?(coder aDecoder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         self.view.backgroundColor = UIColor.clear
-        
+
         // Tap gesture
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(FolioReaderFontsMenu.tapGesture))
         tapGesture.numberOfTapsRequired = 1
         tapGesture.delegate = self
         view.addGestureRecognizer(tapGesture)
-        
+
         // Menu view
         let visibleHeight: CGFloat = self.readerConfig.canChangeScrollDirection ? 222 : 170
         menuView = UIView(frame: CGRect(x: 0, y: view.frame.height-visibleHeight, width: view.frame.width, height: view.frame.height))
@@ -110,33 +110,33 @@ class FolioReaderFontsMenu			: UIViewController, SMSegmentViewDelegate, UIGestur
         menuView.layer.rasterizationScale = UIScreen.main.scale
         menuView.layer.shouldRasterize = true
         view.addSubview(menuView)
-        
+
         let normalColor = UIColor(white: 0.5, alpha: 0.7)
         let selectedColor = self.readerConfig.tintColor
         let sun = UIImage(readerImageNamed: "icon-sun")
         let moon = UIImage(readerImageNamed: "icon-moon")
         let fontSmall = UIImage(readerImageNamed: "icon-font-small")
         let fontBig = UIImage(readerImageNamed: "icon-font-big")
-        
+
         let sunNormal = sun?.imageTintColor(normalColor)?.withRenderingMode(.alwaysOriginal)
         let moonNormal = moon?.imageTintColor(normalColor)?.withRenderingMode(.alwaysOriginal)
         let fontSmallNormal = fontSmall?.imageTintColor(normalColor)?.withRenderingMode(.alwaysOriginal)
         let fontBigNormal = fontBig?.imageTintColor(normalColor)?.withRenderingMode(.alwaysOriginal)
-        
+
         let sunSelected = sun?.imageTintColor(selectedColor)?.withRenderingMode(.alwaysOriginal)
         let moonSelected = moon?.imageTintColor(selectedColor)?.withRenderingMode(.alwaysOriginal)
-        
+
         // Day night mode
         let dayNight = SMSegmentView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 55),
-            separatorColour: self.readerConfig.nightModeSeparatorColor,
-            separatorWidth: 1,
-            segmentProperties:  [
-                keySegmentTitleFont: UIFont(name: "Avenir-Light", size: 17)!,
-                keySegmentOnSelectionColour: UIColor.clear,
-                keySegmentOffSelectionColour: UIColor.clear,
-                keySegmentOnSelectionTextColour: selectedColor,
-                keySegmentOffSelectionTextColour: normalColor,
-                keyContentVerticalMargin: 17 as AnyObject
+                                     separatorColour: self.readerConfig.nightModeSeparatorColor,
+                                     separatorWidth: 1,
+                                     segmentProperties:  [
+                                        keySegmentTitleFont: UIFont(name: "Avenir-Light", size: 17)!,
+                                        keySegmentOnSelectionColour: UIColor.clear,
+                                        keySegmentOffSelectionColour: UIColor.clear,
+                                        keySegmentOnSelectionTextColour: selectedColor,
+                                        keySegmentOffSelectionTextColour: normalColor,
+                                        keyContentVerticalMargin: 17 as AnyObject
             ])
         dayNight.delegate = self
         dayNight.tag = 1
@@ -144,8 +144,8 @@ class FolioReaderFontsMenu			: UIViewController, SMSegmentViewDelegate, UIGestur
         dayNight.addSegmentWithTitle(self.readerConfig.localizedFontMenuNight, onSelectionImage: moonSelected, offSelectionImage: moonNormal)
         dayNight.selectSegmentAtIndex(self.folioReader.nightMode.hashValue)
         menuView.addSubview(dayNight)
-        
-        
+
+
         // Separator
         let line = UIView(frame: CGRect(x: 0, y: dayNight.frame.height+dayNight.frame.origin.y, width: view.frame.width, height: 1))
         line.backgroundColor = self.readerConfig.nightModeSeparatorColor
@@ -153,14 +153,14 @@ class FolioReaderFontsMenu			: UIViewController, SMSegmentViewDelegate, UIGestur
 
         // Fonts adjust
         let fontName = SMSegmentView(frame: CGRect(x: 15, y: line.frame.height+line.frame.origin.y, width: view.frame.width-30, height: 55),
-            separatorColour: UIColor.clear,
-            separatorWidth: 0,
-            segmentProperties:  [
-                keySegmentOnSelectionColour: UIColor.clear,
-                keySegmentOffSelectionColour: UIColor.clear,
-                keySegmentOnSelectionTextColour: selectedColor,
-                keySegmentOffSelectionTextColour: normalColor,
-                keyContentVerticalMargin: 17 as AnyObject
+                                     separatorColour: UIColor.clear,
+                                     separatorWidth: 0,
+                                     segmentProperties:  [
+                                        keySegmentOnSelectionColour: UIColor.clear,
+                                        keySegmentOffSelectionColour: UIColor.clear,
+                                        keySegmentOnSelectionTextColour: selectedColor,
+                                        keySegmentOffSelectionTextColour: normalColor,
+                                        keyContentVerticalMargin: 17 as AnyObject
             ])
         fontName.delegate = self
         fontName.tag = 2
@@ -173,78 +173,78 @@ class FolioReaderFontsMenu			: UIViewController, SMSegmentViewDelegate, UIGestur
         fontName.segments[2].titleFont = UIFont(name: "Lora-Regular", size: 18)!
         fontName.segments[3].titleFont = UIFont(name: "Raleway-Regular", size: 18)!
 
-		fontName.selectSegmentAtIndex(self.folioReader.currentFont.rawValue)
+        fontName.selectSegmentAtIndex(self.folioReader.currentFont.rawValue)
         menuView.addSubview(fontName)
-        
+
         // Separator 2
         let line2 = UIView(frame: CGRect(x: 0, y: fontName.frame.height+fontName.frame.origin.y, width: view.frame.width, height: 1))
         line2.backgroundColor = self.readerConfig.nightModeSeparatorColor
         menuView.addSubview(line2)
-        
+
         // Font slider size
         let slider = HADiscreteSlider(frame: CGRect(x: 60, y: line2.frame.origin.y+2, width: view.frame.width-120, height: 55))
         slider.tickStyle = ComponentStyle.rounded
         slider.tickCount = 5
         slider.tickSize = CGSize(width: 8, height: 8)
-        
+
         slider.thumbStyle = ComponentStyle.rounded
         slider.thumbSize = CGSize(width: 28, height: 28)
         slider.thumbShadowOffset = CGSize(width: 0, height: 2)
         slider.thumbShadowRadius = 3
         slider.thumbColor = selectedColor
-        
+
         slider.backgroundColor = UIColor.clear
         slider.tintColor = self.readerConfig.nightModeSeparatorColor
         slider.minimumValue = 0
         slider.value = CGFloat(self.folioReader.currentFontSize.rawValue)
         slider.addTarget(self, action: #selector(FolioReaderFontsMenu.sliderValueChanged(_:)), for: UIControlEvents.valueChanged)
-        
+
         // Force remove fill color
         slider.layer.sublayers?.forEach({ layer in
             layer.backgroundColor = UIColor.clear.cgColor
         })
-        
+
         menuView.addSubview(slider)
-        
+
         // Font icons
         let fontSmallView = UIImageView(frame: CGRect(x: 20, y: line2.frame.origin.y+14, width: 30, height: 30))
         fontSmallView.image = fontSmallNormal
         fontSmallView.contentMode = UIViewContentMode.center
         menuView.addSubview(fontSmallView)
-        
+
         let fontBigView = UIImageView(frame: CGRect(x: view.frame.width-50, y: line2.frame.origin.y+14, width: 30, height: 30))
         fontBigView.image = fontBigNormal
         fontBigView.contentMode = UIViewContentMode.center
         menuView.addSubview(fontBigView)
-        
+
         // Only continues if user can change scroll direction
         guard (self.readerConfig.canChangeScrollDirection == true) else {
-			return
-		}
-        
+            return
+        }
+
         // Separator 3
         let line3 = UIView(frame: CGRect(x: 0, y: line2.frame.origin.y+56, width: view.frame.width, height: 1))
         line3.backgroundColor = self.readerConfig.nightModeSeparatorColor
         menuView.addSubview(line3)
-        
+
         let vertical = UIImage(readerImageNamed: "icon-menu-vertical")
         let horizontal = UIImage(readerImageNamed: "icon-menu-horizontal")
         let verticalNormal = vertical?.imageTintColor(normalColor)?.withRenderingMode(.alwaysOriginal)
         let horizontalNormal = horizontal?.imageTintColor(normalColor)?.withRenderingMode(.alwaysOriginal)
         let verticalSelected = vertical?.imageTintColor(selectedColor)?.withRenderingMode(.alwaysOriginal)
         let horizontalSelected = horizontal?.imageTintColor(selectedColor)?.withRenderingMode(.alwaysOriginal)
-        
+
         // Layout direction
         let layoutDirection = SMSegmentView(frame: CGRect(x: 0, y: line3.frame.origin.y, width: view.frame.width, height: 55),
-                                     separatorColour: self.readerConfig.nightModeSeparatorColor,
-                                     separatorWidth: 1,
-                                     segmentProperties:  [
-                                        keySegmentTitleFont: UIFont(name: "Avenir-Light", size: 17)!,
-                                        keySegmentOnSelectionColour: UIColor.clear,
-                                        keySegmentOffSelectionColour: UIColor.clear,
-                                        keySegmentOnSelectionTextColour: selectedColor,
-                                        keySegmentOffSelectionTextColour: normalColor,
-                                        keyContentVerticalMargin: 17 as AnyObject
+                                            separatorColour: self.readerConfig.nightModeSeparatorColor,
+                                            separatorWidth: 1,
+                                            segmentProperties:  [
+                                                keySegmentTitleFont: UIFont(name: "Avenir-Light", size: 17)!,
+                                                keySegmentOnSelectionColour: UIColor.clear,
+                                                keySegmentOffSelectionColour: UIColor.clear,
+                                                keySegmentOnSelectionTextColour: selectedColor,
+                                                keySegmentOffSelectionTextColour: normalColor,
+                                                keyContentVerticalMargin: 17 as AnyObject
             ])
         layoutDirection.delegate = self
         layoutDirection.tag = 3
@@ -260,30 +260,30 @@ class FolioReaderFontsMenu			: UIViewController, SMSegmentViewDelegate, UIGestur
         layoutDirection.selectSegmentAtIndex(scrollDirection?.rawValue ?? 0)
         menuView.addSubview(layoutDirection)
     }
-    
+
     // MARK: - SMSegmentView delegate
-    
+
     func segmentView(_ segmentView: SMSegmentView, didSelectSegmentAtIndex index: Int) {
         guard (self.folioReader.readerCenter?.currentPage) != nil else { return }
-        
+
         if segmentView.tag == 1 {
 
-			self.folioReader.nightMode = Bool(index == 1)
+            self.folioReader.nightMode = Bool(index == 1)
 
-			UIView.animate(withDuration: 0.6, animations: {
-				self.menuView.backgroundColor = (self.folioReader.nightMode ? self.readerConfig.nightModeBackground : UIColor.white)
-			})
+            UIView.animate(withDuration: 0.6, animations: {
+                self.menuView.backgroundColor = (self.folioReader.nightMode ? self.readerConfig.nightModeBackground : UIColor.white)
+            })
 
-		} else if segmentView.tag == 2 {
+        } else if segmentView.tag == 2 {
 
-			self.folioReader.currentFont = FolioReaderFont(rawValue: index)!
+            self.folioReader.currentFont = FolioReaderFont(rawValue: index)!
 
         }  else if segmentView.tag == 3 {
 
-			guard self.folioReader.currentScrollDirection != index else {
-				return
-			}
-            
+            guard self.folioReader.currentScrollDirection != index else {
+                return
+            }
+
             self.folioReader.currentScrollDirection = index
         }
     }
@@ -292,12 +292,12 @@ class FolioReaderFontsMenu			: UIViewController, SMSegmentViewDelegate, UIGestur
     
     func sliderValueChanged(_ sender: HADiscreteSlider) {
         guard
-			(self.folioReader.readerCenter?.currentPage != nil),
-			let fontSize = FolioReaderFontSize(rawValue: Int(sender.value)) else {
-			return
-		}
-
-		self.folioReader.currentFontSize = fontSize
+            (self.folioReader.readerCenter?.currentPage != nil),
+            let fontSize = FolioReaderFontSize(rawValue: Int(sender.value)) else {
+                return
+        }
+        
+        self.folioReader.currentFontSize = fontSize
     }
     
     // MARK: - Gestures

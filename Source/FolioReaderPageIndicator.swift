@@ -17,15 +17,15 @@ class FolioReaderPageIndicator: UIView {
         didSet { self.reloadViewWithPage(self.currentPage) }
     }
 
-	fileprivate var readerConfig	: FolioReaderConfig
-	fileprivate var folioReader		: FolioReader
+    fileprivate var readerConfig    : FolioReaderConfig
+    fileprivate var folioReader     : FolioReader
 
-	init(frame: CGRect, readerConfig: FolioReaderConfig, folioReader: FolioReader) {
-		self.readerConfig = readerConfig
-		self.folioReader = folioReader
+    init(frame: CGRect, readerConfig: FolioReaderConfig, folioReader: FolioReader) {
+        self.readerConfig = readerConfig
+        self.folioReader = folioReader
 
         super.init(frame: frame)
-        
+
         let color = self.folioReader.isNight(self.readerConfig.nightModeBackground, UIColor.white)
         backgroundColor = color
         layer.shadowColor = color.cgColor
@@ -35,67 +35,67 @@ class FolioReaderPageIndicator: UIView {
         layer.shadowPath = UIBezierPath(rect: bounds).cgPath
         layer.rasterizationScale = UIScreen.main.scale
         layer.shouldRasterize = true
-        
+
         pagesLabel = UILabel(frame: CGRect.zero)
         pagesLabel.font = UIFont(name: "Avenir-Light", size: 10)!
         pagesLabel.textAlignment = NSTextAlignment.right
         addSubview(pagesLabel)
-        
+
         minutesLabel = UILabel(frame: CGRect.zero)
         minutesLabel.font = UIFont(name: "Avenir-Light", size: 10)!
         minutesLabel.textAlignment = NSTextAlignment.right
-//        minutesLabel.alpha = 0
+        //        minutesLabel.alpha = 0
         addSubview(minutesLabel)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("storyboards are incompatible with truth and beauty")
     }
-    
+
     func reloadView(updateShadow: Bool) {
         minutesLabel.sizeToFit()
         pagesLabel.sizeToFit()
-        
+
         let fullW = pagesLabel.frame.width + minutesLabel.frame.width
         minutesLabel.frame.origin = CGPoint(x: frame.width/2-fullW/2, y: 2)
         pagesLabel.frame.origin = CGPoint(x: minutesLabel.frame.origin.x+minutesLabel.frame.width, y: 2)
-        
+
         if updateShadow {
             layer.shadowPath = UIBezierPath(rect: bounds).cgPath
-			self.reloadColors()
+            self.reloadColors()
         }
     }
 
-	func reloadColors() {
-		let color = self.folioReader.isNight(self.readerConfig.nightModeBackground, UIColor.white)
-		backgroundColor = color
+    func reloadColors() {
+        let color = self.folioReader.isNight(self.readerConfig.nightModeBackground, UIColor.white)
+        backgroundColor = color
 
-		// Animate the shadow color change
-		let animation = CABasicAnimation(keyPath: "shadowColor")
-		let currentColor = UIColor(cgColor: layer.shadowColor!)
-		animation.fromValue = currentColor.cgColor
-		animation.toValue = color.cgColor
-		animation.fillMode = kCAFillModeForwards
-		animation.isRemovedOnCompletion = false
-		animation.duration = 0.6
-		animation.delegate = self
-		animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-		layer.add(animation, forKey: "shadowColor")
+        // Animate the shadow color change
+        let animation = CABasicAnimation(keyPath: "shadowColor")
+        let currentColor = UIColor(cgColor: layer.shadowColor!)
+        animation.fromValue = currentColor.cgColor
+        animation.toValue = color.cgColor
+        animation.fillMode = kCAFillModeForwards
+        animation.isRemovedOnCompletion = false
+        animation.duration = 0.6
+        animation.delegate = self
+        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+        layer.add(animation, forKey: "shadowColor")
 
-		minutesLabel.textColor = self.folioReader.isNight(UIColor(white: 1, alpha: 0.3), UIColor(white: 0, alpha: 0.6))
-		pagesLabel.textColor = self.folioReader.isNight(UIColor(white: 1, alpha: 0.6), UIColor(white: 0, alpha: 0.9))
-	}
+        minutesLabel.textColor = self.folioReader.isNight(UIColor(white: 1, alpha: 0.3), UIColor(white: 0, alpha: 0.6))
+        pagesLabel.textColor = self.folioReader.isNight(UIColor(white: 1, alpha: 0.6), UIColor(white: 0, alpha: 0.9))
+    }
 
     fileprivate func reloadViewWithPage(_ page: Int) {
         let pagesRemaining = self.folioReader.needsRTLChange ? totalPages-(totalPages-page+1) : totalPages-page
-        
+
         if pagesRemaining == 1 {
             pagesLabel.text = " " + self.readerConfig.localizedReaderOnePageLeft
         } else {
             pagesLabel.text = " \(pagesRemaining) " + self.readerConfig.localizedReaderManyPagesLeft
         }
-        
-        
+
+
         let minutesRemaining = Int(ceil(CGFloat((pagesRemaining * totalMinutes)/totalPages)))
         if minutesRemaining > 1 {
             minutesLabel.text = "\(minutesRemaining) " + self.readerConfig.localizedReaderManyMinutes+" ·"
@@ -104,7 +104,7 @@ class FolioReaderPageIndicator: UIView {
         } else {
             minutesLabel.text = self.readerConfig.localizedReaderLessThanOneMinute+" ·"
         }
-        
+
         reloadView(updateShadow: false)
     }
 }
