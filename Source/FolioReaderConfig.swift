@@ -223,9 +223,9 @@ open class FolioReaderConfig: NSObject {
      */
     func isDirection<T> (_ vertical: T, _ horizontal: T, _ horizontalContentVertical: T? = nil) -> T {
         switch self.scrollDirection {
-        case .vertical, .defaultVertical: 		return vertical
-        case .horizontal: 						return horizontal
-        case .horizontalWithVerticalContent: 	return (horizontalContentVertical ?? vertical)
+        case .vertical, .defaultVertical:       return vertical
+        case .horizontal:                       return horizontal
+        case .horizontalWithVerticalContent:    return (horizontalContentVertical ?? vertical)
         }
     }
 }
