@@ -53,6 +53,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     var recentlyScrolledDelay               = 2.0 // 2 second delay until we clear recentlyScrolled
     var recentlyScrolledTimer               : Timer!
     var scrollScrubber                      : ScrollScrubber?
+    var activityIndicator                   = UIActivityIndicatorView()
     var isScrolling                         = false
     var pageScrollDirection                 = ScrollDirection()
     var nextPageNumber                      : Int = 0
@@ -138,6 +139,14 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         collectionView.decelerationRate = UIScrollViewDecelerationRateFast
         enableScrollBetweenChapters(scrollEnabled: true)
         view.addSubview(collectionView)
+        
+        // Activity Indicator
+        self.activityIndicator.activityIndicatorViewStyle = .gray
+        self.activityIndicator.hidesWhenStopped = true
+        self.activityIndicator = UIActivityIndicatorView(frame: CGRect(x: self.view.frame.width/2, y: self.view.frame.height/2, width: 30, height: 30))
+        self.activityIndicator.backgroundColor = UIColor.gray
+        self.view.addSubview(self.activityIndicator)
+        self.view.bringSubview(toFront: self.activityIndicator)
 
         if #available(iOS 10.0, *) {
             collectionView.isPrefetchingEnabled = false

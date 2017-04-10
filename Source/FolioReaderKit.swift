@@ -23,6 +23,34 @@ internal let kCurrentTOCMenu                    = "com.folioreader.kCurrentTOCMe
 internal let kHighlightRange                    = 30
 internal let kReuseCellIdentifier               = "com.folioreader.Cell.ReuseIdentifier"
 
+public struct FolioReaderError: Error {
+    enum ErrorKind {
+        case BookNotAvailable
+        case ErrorInContainer
+        case ErrorInOpf
+        case AuthorNameNotAvailable
+        case CoverNotAvailable
+        case TitleNotAvailable
+    }
+
+    let kind: ErrorKind
+
+    var localizedDescription: String {
+        switch self.kind {
+        case .BookNotAvailable:
+            return "Book not found"
+        case .ErrorInContainer, .ErrorInOpf:
+            return "Invalid book format"
+        case .AuthorNameNotAvailable:
+            return "Author name not available"
+        case .CoverNotAvailable:
+            return "Cover image not available"
+        case .TitleNotAvailable:
+            return "Book title not available"
+        }
+    }
+}
+
 /// Defines the media overlay and TTS selection
 ///
 /// - `default`: The background is colored
@@ -288,16 +316,16 @@ extension FolioReader {
     /**
      Read Cover Image and Return an `UIImage`
      */
-    open class func getCoverImage(_ epubPath: String, unzipPath: String? = nil) -> UIImage? {
-        return FREpubParser().parseCoverImage(epubPath, unzipPath: unzipPath)
+    open class func getCoverImage(_ epubPath: String, unzipPath: String? = nil) throws -> UIImage? {
+        return try FREpubParser().parseCoverImage(epubPath, unzipPath: unzipPath)
     }
 
-    open class func getTitle(_ epubPath: String) -> String? {
-        return FREpubParser().parseTitle(epubPath)
+    open class func getTitle(_ epubPath: String) throws -> String? {
+        return try FREpubParser().parseTitle(epubPath)
     }
 
-    open class func getAuthorName(_ epubPath: String) -> String? {
-        return FREpubParser().parseAuthorName(epubPath)
+    open class func getAuthorName(_ epubPath: String) throws-> String? {
+        return try FREpubParser().parseAuthorName(epubPath)
     }
 }
 

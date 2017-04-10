@@ -13,6 +13,7 @@ public enum FolioReaderFont: Int {
     case lato
     case lora
     case raleway
+    case openSans
 
     public static func folioReaderFont(fontName: String) -> FolioReaderFont? {
         var font: FolioReaderFont?
@@ -164,10 +165,12 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
             ])
         fontName.delegate = self
         fontName.tag = 2
+
         fontName.addSegmentWithTitle("Andada", onSelectionImage: nil, offSelectionImage: nil)
         fontName.addSegmentWithTitle("Lato", onSelectionImage: nil, offSelectionImage: nil)
         fontName.addSegmentWithTitle("Lora", onSelectionImage: nil, offSelectionImage: nil)
         fontName.addSegmentWithTitle("Raleway", onSelectionImage: nil, offSelectionImage: nil)
+
         fontName.segments[0].titleFont = UIFont(name: "Andada-Regular", size: 18)!
         fontName.segments[1].titleFont = UIFont(name: "Lato-Regular", size: 18)!
         fontName.segments[2].titleFont = UIFont(name: "Lora-Regular", size: 18)!

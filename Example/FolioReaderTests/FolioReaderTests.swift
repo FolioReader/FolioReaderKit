@@ -19,8 +19,14 @@ class FolioReaderTests: QuickSpec {
             beforeEach {
                 let path = Bundle(for: type(of: self)).path(forResource: "The Silver Chair", ofType: "epub")!
                 subject = FREpubParser()
-                let book = subject.readEpub(epubPath: path)
-                print(book?.tableOfContents.first?.title)
+                do {
+                    let book = try subject.readEpub(epubPath: path)
+                    print(book!.tableOfContents.first!.title)
+                } catch let e as FolioReaderError {
+                    print(e.localizedDescription)
+                } catch {
+                    print("Unknown error")
+                }
             }
 
             it("correctly parses a properly formatted document") {
