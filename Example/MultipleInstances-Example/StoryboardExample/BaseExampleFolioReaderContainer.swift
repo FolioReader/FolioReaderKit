@@ -11,9 +11,9 @@ import FolioReaderKit
 
 class BaseExampleFolioReaderContainer: FolioReaderContainer {
 
-    var readerIdentifier: String {
+    var exampleReaderConfig: FolioReaderConfig {
         // To be implented by subclasses
-        return ""
+        return FolioReaderConfig()
     }
 
     var bookTitle: String {
@@ -24,9 +24,7 @@ class BaseExampleFolioReaderContainer: FolioReaderContainer {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
 
-        let config = FolioReaderConfig(withIdentifier: self.readerIdentifier)
-        config.scrollDirection = .horizontalWithVerticalContent
-        config.shouldHideNavigationOnTap = false
+        let config = self.exampleReaderConfig
 
         // Print the chapter ID if one was clicked
         // A chapter in "The Silver Chair" looks like this "<section class="chapter" title="Chapter I" epub:type="chapter" id="id70364673704880">"

@@ -31,4 +31,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.epubReaderTwo?.saveReaderState()
     }
 }
-

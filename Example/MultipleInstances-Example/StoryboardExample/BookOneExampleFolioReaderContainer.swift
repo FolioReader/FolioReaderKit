@@ -11,13 +11,16 @@ import FolioReaderKit
 
 class BookOneExampleFolioReaderContainer: BaseExampleFolioReaderContainer {
 
-    override var readerIdentifier: String {
-        return "reader_one"
+    override var exampleReaderConfig: FolioReaderConfig {
+        let config = FolioReaderConfig(withIdentifier: "STORYBOARD_READER_ONE")
+        config.scrollDirection = .horizontalWithVerticalContent
+        config.shouldHideNavigationOnTap = false
+
+        return config
     }
 
     override var bookTitle: String {
         return "The Silver Chair"
-//    return "The Adventures Of Sherlock Holmes - Adventure I"
     }
 
     required init?(coder aDecoder: NSCoder) {

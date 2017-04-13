@@ -12,6 +12,10 @@
 		1A42C28F1C0E3882000F2137 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A42C28E1C0E3882000F2137 /* ViewController.swift */; };
 		1A42C2921C0E3883000F2137 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A42C2901C0E3883000F2137 /* Main.storyboard */; };
 		1A42C2A21C0E3A8D000F2137 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A42C2A01C0E3A8D000F2137 /* LaunchScreen.storyboard */; };
+		3A8E86F71E9F80CB00CD844C /* CodeExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8E86F21E9F80CB00CD844C /* CodeExampleViewController.swift */; };
+		3A8E86F81E9F80CB00CD844C /* BaseExampleFolioReaderContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8E86F41E9F80CB00CD844C /* BaseExampleFolioReaderContainer.swift */; };
+		3A8E86F91E9F80CB00CD844C /* BookOneExampleFolioReaderContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8E86F51E9F80CB00CD844C /* BookOneExampleFolioReaderContainer.swift */; };
+		3A8E86FA1E9F80CB00CD844C /* BookTwoExampleFolioReaderContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8E86F61E9F80CB00CD844C /* BookTwoExampleFolioReaderContainer.swift */; };
 		3AAA8B861E9BB8B700A47E5A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAA8B7E1E9BB8B700A47E5A /* AppDelegate.swift */; };
 		3AAA8B881E9BB8B700A47E5A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3AAA8B801E9BB8B700A47E5A /* LaunchScreen.storyboard */; };
 		3AAA8B891E9BB8B700A47E5A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3AAA8B821E9BB8B700A47E5A /* Main.storyboard */; };
@@ -19,7 +23,6 @@
 		3AAA8B951E9BB8CD00A47E5A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAA8B8D1E9BB8CD00A47E5A /* AppDelegate.swift */; };
 		3AAA8B971E9BB8CD00A47E5A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3AAA8B8F1E9BB8CD00A47E5A /* LaunchScreen.storyboard */; };
 		3AAA8B981E9BB8CD00A47E5A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3AAA8B911E9BB8CD00A47E5A /* Main.storyboard */; };
-		3AAA8B991E9BB8CD00A47E5A /* BaseExampleFolioReaderContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAA8B931E9BB8CD00A47E5A /* BaseExampleFolioReaderContainer.swift */; };
 		3AAA8BA01E9BB94B00A47E5A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3AAA8B9C1E9BB94B00A47E5A /* Assets.xcassets */; };
 		3AAA8BA11E9BB94B00A47E5A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3AAA8B9C1E9BB94B00A47E5A /* Assets.xcassets */; };
 		3AAA8BA21E9BB94B00A47E5A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3AAA8B9C1E9BB94B00A47E5A /* Assets.xcassets */; };
@@ -31,8 +34,6 @@
 		3AAA8BA81E9BB94B00A47E5A /* The Silver Chair.epub in Resources */ = {isa = PBXBuildFile; fileRef = 3AAA8B9F1E9BB94B00A47E5A /* The Silver Chair.epub */; };
 		3AAA8BA91E9BBFAF00A47E5A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E3C4A3E1C3C6708009CBC8C /* MediaPlayer.framework */; };
 		3AAA8BAA1E9BBFB700A47E5A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E3C4A3E1C3C6708009CBC8C /* MediaPlayer.framework */; };
-		3AF7C1C51E9BC85E00C29927 /* BookOneExampleFolioReaderContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF7C1C31E9BC85E00C29927 /* BookOneExampleFolioReaderContainer.swift */; };
-		3AF7C1C61E9BC85E00C29927 /* BookTwoExampleFolioReaderContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF7C1C41E9BC85E00C29927 /* BookTwoExampleFolioReaderContainer.swift */; };
 		6E3C4A3F1C3C6708009CBC8C /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E3C4A3E1C3C6708009CBC8C /* MediaPlayer.framework */; };
 		C143E5BE0CD376A99AD08747 /* Pods_Storyboard_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44C24A346E8730FB52DC197B /* Pods_Storyboard_Example.framework */; };
 		CA10C1341C572A4B0049165D /* FolioReaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA10C1331C572A4B0049165D /* FolioReaderTests.swift */; };
@@ -63,6 +64,10 @@
 		1D4790507F22E69298DC06E1 /* Pods-StoryboardExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StoryboardExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-StoryboardExample/Pods-StoryboardExample.release.xcconfig"; sourceTree = "<group>"; };
 		27131F41E20F15F72AAF7176 /* Pods_FolioReaderTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FolioReaderTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		318E62E766AB854BE290FB53 /* Pods_StoryboardExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_StoryboardExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A8E86F21E9F80CB00CD844C /* CodeExampleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeExampleViewController.swift; sourceTree = "<group>"; };
+		3A8E86F41E9F80CB00CD844C /* BaseExampleFolioReaderContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseExampleFolioReaderContainer.swift; sourceTree = "<group>"; };
+		3A8E86F51E9F80CB00CD844C /* BookOneExampleFolioReaderContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookOneExampleFolioReaderContainer.swift; sourceTree = "<group>"; };
+		3A8E86F61E9F80CB00CD844C /* BookTwoExampleFolioReaderContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookTwoExampleFolioReaderContainer.swift; sourceTree = "<group>"; };
 		3AAA8B7A1E9BB78B00A47E5A /* MultipleInstance-Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MultipleInstance-Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AAA8B7E1E9BB8B700A47E5A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3AAA8B811E9BB8B700A47E5A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -72,13 +77,10 @@
 		3AAA8B8D1E9BB8CD00A47E5A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3AAA8B901E9BB8CD00A47E5A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3AAA8B921E9BB8CD00A47E5A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		3AAA8B931E9BB8CD00A47E5A /* BaseExampleFolioReaderContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseExampleFolioReaderContainer.swift; sourceTree = "<group>"; };
 		3AAA8B941E9BB8CD00A47E5A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3AAA8B9C1E9BB94B00A47E5A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3AAA8B9E1E9BB94B00A47E5A /* The Adventures Of Sherlock Holmes - Adventure I.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "The Adventures Of Sherlock Holmes - Adventure I.epub"; sourceTree = "<group>"; };
 		3AAA8B9F1E9BB94B00A47E5A /* The Silver Chair.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "The Silver Chair.epub"; sourceTree = "<group>"; };
-		3AF7C1C31E9BC85E00C29927 /* BookOneExampleFolioReaderContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookOneExampleFolioReaderContainer.swift; sourceTree = "<group>"; };
-		3AF7C1C41E9BC85E00C29927 /* BookTwoExampleFolioReaderContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookTwoExampleFolioReaderContainer.swift; sourceTree = "<group>"; };
 		3CE90B4095B5C7E6237EEBDD /* Pods-FolioReaderTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FolioReaderTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FolioReaderTests/Pods-FolioReaderTests.debug.xcconfig"; sourceTree = "<group>"; };
 		44C24A346E8730FB52DC197B /* Pods_Storyboard_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Storyboard_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C8EADB52E1D834750CD7D23 /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
@@ -173,6 +175,24 @@
 			path = Example;
 			sourceTree = "<group>";
 		};
+		3A8E86F11E9F80CB00CD844C /* CodeExample */ = {
+			isa = PBXGroup;
+			children = (
+				3A8E86F21E9F80CB00CD844C /* CodeExampleViewController.swift */,
+			);
+			path = CodeExample;
+			sourceTree = "<group>";
+		};
+		3A8E86F31E9F80CB00CD844C /* StoryboardExample */ = {
+			isa = PBXGroup;
+			children = (
+				3A8E86F41E9F80CB00CD844C /* BaseExampleFolioReaderContainer.swift */,
+				3A8E86F51E9F80CB00CD844C /* BookOneExampleFolioReaderContainer.swift */,
+				3A8E86F61E9F80CB00CD844C /* BookTwoExampleFolioReaderContainer.swift */,
+			);
+			path = StoryboardExample;
+			sourceTree = "<group>";
+		};
 		3AAA8B7D1E9BB8B700A47E5A /* Storyboard-Example */ = {
 			isa = PBXGroup;
 			children = (
@@ -189,11 +209,10 @@
 			isa = PBXGroup;
 			children = (
 				3AAA8B8D1E9BB8CD00A47E5A /* AppDelegate.swift */,
+				3A8E86F11E9F80CB00CD844C /* CodeExample */,
+				3A8E86F31E9F80CB00CD844C /* StoryboardExample */,
 				3AAA8B8F1E9BB8CD00A47E5A /* LaunchScreen.storyboard */,
 				3AAA8B911E9BB8CD00A47E5A /* Main.storyboard */,
-				3AF7C1C31E9BC85E00C29927 /* BookOneExampleFolioReaderContainer.swift */,
-				3AF7C1C41E9BC85E00C29927 /* BookTwoExampleFolioReaderContainer.swift */,
-				3AAA8B931E9BB8CD00A47E5A /* BaseExampleFolioReaderContainer.swift */,
 				3AAA8B941E9BB8CD00A47E5A /* Info.plist */,
 			);
 			path = "MultipleInstances-Example";
@@ -366,8 +385,7 @@
 						};
 					};
 					3AAA8B671E9BB78B00A47E5A = {
-						DevelopmentTeam = JZ2H644EU7;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 					CA10C1301C572A4B0049165D = {
 						CreatedOnToolsVersion = 7.3;
@@ -692,10 +710,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A8E86F81E9F80CB00CD844C /* BaseExampleFolioReaderContainer.swift in Sources */,
+				3A8E86FA1E9F80CB00CD844C /* BookTwoExampleFolioReaderContainer.swift in Sources */,
 				3AAA8B951E9BB8CD00A47E5A /* AppDelegate.swift in Sources */,
-				3AF7C1C51E9BC85E00C29927 /* BookOneExampleFolioReaderContainer.swift in Sources */,
-				3AAA8B991E9BB8CD00A47E5A /* BaseExampleFolioReaderContainer.swift in Sources */,
-				3AF7C1C61E9BC85E00C29927 /* BookTwoExampleFolioReaderContainer.swift in Sources */,
+				3A8E86F91E9F80CB00CD844C /* BookOneExampleFolioReaderContainer.swift in Sources */,
+				3A8E86F71E9F80CB00CD844C /* CodeExampleViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -911,14 +930,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = JZ2H644EU7;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "MultipleInstances-Example/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.folioreader.example.multipleinstances;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a1d6229b-0668-42d4-8bcc-478409703306";
-				PROVISIONING_PROFILE_SPECIFIER = "SMF Enterprise Wildcard DEBUG";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 2;
 			};

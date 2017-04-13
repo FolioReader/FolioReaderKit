@@ -11,8 +11,12 @@ import FolioReaderKit
 
 class BookTwoExampleFolioReaderContainer: BaseExampleFolioReaderContainer {
 
-    override var readerIdentifier: String {
-        return "reader_two"
+    override var exampleReaderConfig: FolioReaderConfig {
+        let config = FolioReaderConfig(withIdentifier: "STORYBOARD_READER_TWO")
+        config.scrollDirection = .vertical
+        config.shouldHideNavigationOnTap = false
+
+        return config
     }
 
     override var bookTitle: String {
