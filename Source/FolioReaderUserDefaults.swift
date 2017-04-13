@@ -20,11 +20,15 @@ class FolioReaderUserDefaults {
     }
 
     init(withIdentifier identifier: String?) {
-        self.identifier = identifier
+        if let _identifier = identifier {
+            self.identifier = "folioreader.userdefaults.identifier.\(_identifier)"
+        } else {
+            self.identifier = nil
+        }
 
         guard
-            let identifier = identifier,
-            let defaults = UserDefaults.standard.value(forKey: identifier) as? [String: Any] else {
+            let prefixedIdentifier = self.identifier,
+            let defaults = UserDefaults.standard.value(forKey: prefixedIdentifier) as? [String: Any] else {
                 return
         }
 
@@ -87,7 +91,7 @@ extension FolioReaderUserDefaults {
             return
         }
 
-        for (key, value) in defaults {
+        for (key, value) in defaults where (self.userDefaults[key] == nil) {
             self.userDefaults[key] = value
         }
 
