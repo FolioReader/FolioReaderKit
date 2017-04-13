@@ -125,17 +125,7 @@ open class FolioReader: NSObject {
 
     /// UserDefault for the current ePub file.
     fileprivate var defaults: FolioReaderUserDefaults {
-
-        guard
-            let path = self.readerContainer?.epubPath,
-            (path.isEmpty == false),
-            let identifier = (path as? NSString)?.lastPathComponent,
-            (identifier.isEmpty == false) else {
-                fatalError("invalid user default unique identifier")
-                return FolioReaderUserDefaults(withIdentifier: "")
-        }
-
-        return FolioReaderUserDefaults(withIdentifier: identifier)
+        return FolioReaderUserDefaults(withIdentifier: self.readerContainer?.readerConfig.identifier)
     }
 }
 
