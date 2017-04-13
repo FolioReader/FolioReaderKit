@@ -179,6 +179,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+        configureNavBar()
+
         // Update pages
         pagesForCurrentPage(currentPage)
         pageIndicatorView?.reloadView(updateShadow: true)
