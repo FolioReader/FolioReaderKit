@@ -1174,7 +1174,7 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
         if
             let bookId = self.book.name,
             let position = self.readerContainer.folioReader.savedPositionForCurrentBook as? NSDictionary {
-            let pageNumber = position["pageNumber"]! as! Int
+            let pageNumber = position["pageNumber"] as? Int
             let offset = self.readerConfig.isDirection(position["pageOffsetY"], position["pageOffsetX"]) as? CGFloat
             let pageOffset = offset
             
