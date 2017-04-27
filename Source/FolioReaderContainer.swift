@@ -68,8 +68,8 @@ open class FolioReaderContainer     : UIViewController {
         // Configure the folio reader.
         self.folioReader.readerContainer = self
 
-		// Set the shared instance to support old version.
-		FolioReader.shared = self.folioReader
+        // Set the shared instance to support old version.
+        FolioReader.shared = self.folioReader
     }
 
     /// Common Initialization
@@ -103,8 +103,8 @@ open class FolioReaderContainer     : UIViewController {
         self.epubPath = path
         self.shouldRemoveEpub = removeEpub
 
-		// Set the shared instance to support old version.
-		FolioReader.shared = self.folioReader
+        // Set the shared instance to support old version.
+        FolioReader.shared = self.folioReader
     }
 
     // MARK: - View life cicle
