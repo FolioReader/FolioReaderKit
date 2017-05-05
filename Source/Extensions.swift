@@ -53,7 +53,7 @@ extension CGPoint {
     }
 
     func forDirection(withConfiguration readerConfig: FolioReaderConfig) -> CGFloat {
-        return readerConfig.isDirection(self.y, self.x, self.y)
+        return readerConfig.isDirection(self.y, self.x, self.x)
     }
 }
 

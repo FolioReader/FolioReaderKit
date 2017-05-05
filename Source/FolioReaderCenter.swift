@@ -661,7 +661,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             let last = indexPaths.last! as IndexPath
 
             switch self.pageScrollDirection {
-            case .up:
+            case .up, .left:
                 if (first as NSIndexPath).compare(last) == .orderedAscending {
                     indexPath = last
                 } else {
