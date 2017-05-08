@@ -454,6 +454,6 @@ func isNight<T> (_ f: T, _ l: T) -> T {
 // MARK: - Scroll Direction Functions
 
 @available(*, deprecated, message: "Shared instance removed. Use a local instance instead.")
-func isDirection<T> (_ vertical: T, _ horizontal: T, _ horizontalContentVertical: T? = nil) -> T {
+func isDirection<T> (_ vertical: T, _ horizontal: T, _ horizontalContentVertical: T) -> T {
     return FolioReader.shared.readerContainer!.readerConfig.isDirection(vertical, horizontal, horizontalContentVertical)
 }

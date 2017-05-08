@@ -52,8 +52,8 @@ extension CGPoint {
         return self.forDirection(withConfiguration: readerConfig)
     }
 
-    func forDirection(withConfiguration readerConfig: FolioReaderConfig) -> CGFloat {
-        return readerConfig.isDirection(self.y, self.x, self.x)
+    func forDirection(withConfiguration readerConfig: FolioReaderConfig, scrollType: ScrollType = .page) -> CGFloat {
+		return readerConfig.isDirection(self.y, self.x, ((scrollType == .page) ? self.y : self.x))
     }
 }
 
@@ -112,8 +112,8 @@ extension ScrollDirection {
         return self.negative(withConfiguration: readerConfig)
     }
 
-    static func negative(withConfiguration readerConfig: FolioReaderConfig) -> ScrollDirection {
-        return readerConfig.isDirection(.down, .right, .right)
+	static func negative(withConfiguration readerConfig: FolioReaderConfig, scrollType: ScrollType = .page) -> ScrollDirection {
+		return readerConfig.isDirection(.down, .right, ((scrollType == .page) ? .down : .right))
     }
 
     @available(*, deprecated, message: "Use 'positive(withConfiguration:)' instead.")
@@ -125,8 +125,8 @@ extension ScrollDirection {
         return self.positive(withConfiguration: readerConfig)
     }
 
-    static func positive(withConfiguration readerConfig: FolioReaderConfig) -> ScrollDirection {
-        return readerConfig.isDirection(.up, .left, .left)
+    static func positive(withConfiguration readerConfig: FolioReaderConfig, scrollType: ScrollType = .page) -> ScrollDirection {
+        return readerConfig.isDirection(.up, .left, ((scrollType == .page) ? .up : .left))
     }
 }
 
