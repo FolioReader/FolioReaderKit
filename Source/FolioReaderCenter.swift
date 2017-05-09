@@ -1025,10 +1025,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
                 let webViewPage = pageForOffset(contentOffset, pageHeight: pageSize)
 
-                if (readerConfig.scrollDirection == .horizontalWithVerticalContent),
-                    let cell = ((scrollView.superview as? UIWebView)?.delegate as? FolioReaderPage) {
-
-                    let currentIndexPathRow = cell.pageNumber - 1
+				if (readerConfig.scrollDirection == .horizontalWithVerticalContent) {
+                    let currentIndexPathRow = (page.pageNumber - 1)
 
                     // if the cell reload doesn't save the top position offset
                     if let oldOffSet = self.currentWebViewScrollPositions[currentIndexPathRow], (abs(oldOffSet.y - scrollView.contentOffset.y) > 100) {
@@ -1064,14 +1062,17 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         self.isScrolling = false
 
-        if (readerConfig.scrollDirection == .horizontalWithVerticalContent),
-            let cell = ((scrollView.superview as? UIWebView)?.delegate as? FolioReaderPage) {
-				let currentIndexPathRow = cell.pageNumber - 1
-				self.currentWebViewScrollPositions[currentIndexPathRow] = scrollView.contentOffset
-        }
+
 
 		// Perform the page after a short delay as the collection view hasn't completed it's transition if this method is called (the index paths aren't right during fast scrolls).
 		delay(0.2, closure: { [weak self] in
+
+			if (self?.readerConfig.scrollDirection == .horizontalWithVerticalContent),
+				let cell = ((scrollView.superview as? UIWebView)?.delegate as? FolioReaderPage) {
+				let currentIndexPathRow = cell.pageNumber - 1
+				self?.currentWebViewScrollPositions[currentIndexPathRow] = scrollView.contentOffset
+			}
+
 			if (scrollView is UICollectionView) {
 				if self?.totalPages > 0 {
 					self?.updateCurrentPage()
