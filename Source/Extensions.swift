@@ -52,8 +52,8 @@ extension CGPoint {
         return self.forDirection(withConfiguration: readerConfig)
     }
 
-    func forDirection(withConfiguration readerConfig: FolioReaderConfig) -> CGFloat {
-        return readerConfig.isDirection(self.y, self.x, self.x)
+    func forDirection(withConfiguration readerConfig: FolioReaderConfig, scrollType: ScrollType = .page) -> CGFloat {
+        return readerConfig.isDirection(self.y, self.x, ((scrollType == .page) ? self.y : self.x))
     }
 }
 
@@ -112,8 +112,8 @@ extension ScrollDirection {
         return self.negative(withConfiguration: readerConfig)
     }
 
-    static func negative(withConfiguration readerConfig: FolioReaderConfig) -> ScrollDirection {
-        return readerConfig.isDirection(.down, .right, .right)
+    static func negative(withConfiguration readerConfig: FolioReaderConfig, scrollType: ScrollType = .page) -> ScrollDirection {
+        return readerConfig.isDirection(.down, .right, ((scrollType == .page) ? .down : .right))
     }
 
     @available(*, deprecated, message: "Use 'positive(withConfiguration:)' instead.")
@@ -125,8 +125,8 @@ extension ScrollDirection {
         return self.positive(withConfiguration: readerConfig)
     }
 
-    static func positive(withConfiguration readerConfig: FolioReaderConfig) -> ScrollDirection {
-        return readerConfig.isDirection(.up, .left, .left)
+    static func positive(withConfiguration readerConfig: FolioReaderConfig, scrollType: ScrollType = .page) -> ScrollDirection {
+        return readerConfig.isDirection(.up, .left, ((scrollType == .page) ? .up : .left))
     }
 }
 
@@ -514,16 +514,16 @@ internal extension UIViewController {
             })
         }
     }
-    
+
     // MARK: - NavigationBar
-    
+
     func setTransparentNavigation() {
         let navBar = self.navigationController?.navigationBar
         navBar?.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navBar?.hideBottomHairline()
         navBar?.isTranslucent = true
     }
-    
+
     func setTranslucentNavigation(_ translucent: Bool = true, color: UIColor, tintColor: UIColor = UIColor.white, titleColor: UIColor = UIColor.black, andFont font: UIFont = UIFont.systemFont(ofSize: 17)) {
         let navBar = self.navigationController?.navigationBar
         navBar?.setBackgroundImage(UIImage.imageWithColor(color), for: UIBarMetrics.default)
@@ -535,22 +535,22 @@ internal extension UIViewController {
 }
 
 internal extension UINavigationBar {
-    
+
     func hideBottomHairline() {
         let navigationBarImageView = hairlineImageViewInNavigationBar(self)
         navigationBarImageView!.isHidden = true
     }
-    
+
     func showBottomHairline() {
         let navigationBarImageView = hairlineImageViewInNavigationBar(self)
         navigationBarImageView!.isHidden = false
     }
-    
+
     fileprivate func hairlineImageViewInNavigationBar(_ view: UIView) -> UIImageView? {
         if view.isKind(of: UIImageView.self) && view.bounds.height <= 1.0 {
             return (view as! UIImageView)
         }
-        
+
         let subviews = (view.subviews)
         for subview: UIView in subviews {
             if let imageView: UIImageView = hairlineImageViewInNavigationBar(subview) {
@@ -562,17 +562,17 @@ internal extension UINavigationBar {
 }
 
 extension UINavigationController {
-    
+
     open override var preferredStatusBarStyle : UIStatusBarStyle {
         guard let viewController = visibleViewController else { return .default }
         return viewController.preferredStatusBarStyle
     }
-    
+
     open override var supportedInterfaceOrientations : UIInterfaceOrientationMask {
         guard let viewController = visibleViewController else { return .portrait }
         return viewController.supportedInterfaceOrientations
     }
-    
+
     open override var shouldAutorotate : Bool {
         guard let viewController = visibleViewController else { return false }
         return viewController.shouldAutorotate

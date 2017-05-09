@@ -299,7 +299,7 @@ extension FolioReader {
 
 extension FolioReader {
 
-    // TODO_SMF_QUESTION: The static `getCoverImage` function used the shared instance before and ignored the `unzipPath` parameter.
+    // TODO QUESTION: The static `getCoverImage` function used the shared instance before and ignored the `unzipPath` parameter.
     // Should we properly implement the parameter (what has been done now) or should change the API to only use the current FolioReader instance?
 
     /**
@@ -410,18 +410,18 @@ extension FolioReader {
     open class func saveReaderState() {
         FolioReader.shared.saveReaderState()
     }
-    
+
     /// Closes and save the reader current instance
     open class func close() {
         FolioReader.shared.close()
     }
-    
+
     /// Check the current highlight style
     open class var currentHighlightStyle: Int {
         get { return FolioReader.shared.currentHighlightStyle }
         set { FolioReader.shared.currentHighlightStyle = newValue }
     }
-    
+
     /// Check if layout needs to change to fit Right To Left
     open class var needsRTLChange: Bool {
         return FolioReader.shared.needsRTLChange
@@ -432,12 +432,12 @@ extension FolioReader {
 
 @available(*, deprecated, message: "Use 'saveReaderState()' on a FolioReaderContainer object instead.")
 extension FolioReader {
-    
+
     /// Called when the application will resign active
     open class func applicationWillResignActive() {
         FolioReader.shared.saveReaderState()
     }
-    
+
     /// Called when the application will terminate
     open class func applicationWillTerminate() {
         FolioReader.shared.saveReaderState()
@@ -454,6 +454,6 @@ func isNight<T> (_ f: T, _ l: T) -> T {
 // MARK: - Scroll Direction Functions
 
 @available(*, deprecated, message: "Shared instance removed. Use a local instance instead.")
-func isDirection<T> (_ vertical: T, _ horizontal: T, _ horizontalContentVertical: T? = nil) -> T {
+func isDirection<T> (_ vertical: T, _ horizontal: T, _ horizontalContentVertical: T) -> T {
     return FolioReader.shared.readerContainer!.readerConfig.isDirection(vertical, horizontal, horizontalContentVertical)
 }

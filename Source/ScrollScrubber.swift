@@ -28,6 +28,12 @@ func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
     }
 }
 
+enum ScrollType: Int {
+    case page
+    // `chapter` is only for the collection view if vertical with horizontal content is used
+    case chapter
+}
+
 enum ScrollDirection: Int {
     case none
     case right
@@ -107,7 +113,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
 
     func sliderChange(_ slider:UISlider) {
         let movePosition = (height() * CGFloat(slider.value))
-        let offset = self.readerContainer.readerConfig.isDirection(CGPoint(x: 0, y: movePosition), CGPoint(x: movePosition, y: 0))
+        let offset = self.readerContainer.readerConfig.isDirection(CGPoint(x: 0, y: movePosition), CGPoint(x: movePosition, y: 0), CGPoint(x: 0, y: movePosition))
         scrollView()?.setContentOffset(offset, animated: false)
     }
 

@@ -123,9 +123,9 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
         return CGRect(
             x: bounds.origin.x,
-            y: self.readerConfig.isDirection(bounds.origin.y + navTotal, bounds.origin.y + navTotal + paddingTop),
+            y: self.readerConfig.isDirection(bounds.origin.y + navTotal, bounds.origin.y + navTotal + paddingTop, bounds.origin.y + navTotal),
             width: bounds.width,
-            height: self.readerConfig.isDirection(bounds.height - navTotal, bounds.height - navTotal - paddingTop - paddingBottom)
+            height: self.readerConfig.isDirection(bounds.height - navTotal, bounds.height - navTotal - paddingTop - paddingBottom, bounds.height - navTotal)
         )
     }
 
@@ -398,7 +398,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
      - parameter animated: Enable or not scrolling animation
      */
     open func scrollPageToOffset(_ offset: CGFloat, animated: Bool) {
-        let pageOffsetPoint = self.readerConfig.isDirection(CGPoint(x: 0, y: offset), CGPoint(x: offset, y: 0))
+        let pageOffsetPoint = self.readerConfig.isDirection(CGPoint(x: 0, y: offset), CGPoint(x: offset, y: 0), CGPoint(x: 0, y: offset))
         webView.scrollView.setContentOffset(pageOffsetPoint, animated: animated)
     }
 
@@ -497,7 +497,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
         return super.canPerformAction(action, withSender: sender)
     }
-    
+
     // MARK: ColorView fix for horizontal layout
     func refreshPageMode() {
         if (self.folioReader.nightMode == true) {
@@ -511,9 +511,9 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
             colorView.frame = CGRect.zero
         }
     }
-    
+
     // MARK: - Class based click listener
-    
+
     fileprivate func setupClassBasedOnClickListeners() {
         
         for listener in self.readerConfig.classBasedOnClickListeners {
