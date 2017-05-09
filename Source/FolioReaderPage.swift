@@ -497,7 +497,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
         return super.canPerformAction(action, withSender: sender)
     }
-    
+
     // MARK: ColorView fix for horizontal layout
     func refreshPageMode() {
         if (self.folioReader.nightMode == true) {
@@ -511,9 +511,9 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
             colorView.frame = CGRect.zero
         }
     }
-    
+
     // MARK: - Class based click listener
-    
+
     fileprivate func setupClassBasedOnClickListeners() {
         
         for listener in self.readerConfig.classBasedOnClickListeners {

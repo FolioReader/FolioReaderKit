@@ -410,18 +410,18 @@ extension FolioReader {
     open class func saveReaderState() {
         FolioReader.shared.saveReaderState()
     }
-    
+
     /// Closes and save the reader current instance
     open class func close() {
         FolioReader.shared.close()
     }
-    
+
     /// Check the current highlight style
     open class var currentHighlightStyle: Int {
         get { return FolioReader.shared.currentHighlightStyle }
         set { FolioReader.shared.currentHighlightStyle = newValue }
     }
-    
+
     /// Check if layout needs to change to fit Right To Left
     open class var needsRTLChange: Bool {
         return FolioReader.shared.needsRTLChange
@@ -432,12 +432,12 @@ extension FolioReader {
 
 @available(*, deprecated, message: "Use 'saveReaderState()' on a FolioReaderContainer object instead.")
 extension FolioReader {
-    
+
     /// Called when the application will resign active
     open class func applicationWillResignActive() {
         FolioReader.shared.saveReaderState()
     }
-    
+
     /// Called when the application will terminate
     open class func applicationWillTerminate() {
         FolioReader.shared.saveReaderState()

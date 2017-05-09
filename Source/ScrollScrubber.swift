@@ -29,9 +29,9 @@ func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 }
 
 enum ScrollType: Int {
-	case page
-	// `chapter` is only for the collection view if vertical with horizontal content is used
-	case chapter
+    case page
+    // `chapter` is only for the collection view if vertical with horizontal content is used
+    case chapter
 }
 
 enum ScrollDirection: Int {
