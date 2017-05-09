@@ -299,7 +299,7 @@ extension FolioReader {
 
 extension FolioReader {
 
-    // TODO_SMF_QUESTION: The static `getCoverImage` function used the shared instance before and ignored the `unzipPath` parameter.
+    // TODO QUESTION: The static `getCoverImage` function used the shared instance before and ignored the `unzipPath` parameter.
     // Should we properly implement the parameter (what has been done now) or should change the API to only use the current FolioReader instance?
 
     /**
