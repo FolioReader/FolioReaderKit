@@ -11,9 +11,9 @@ import Foundation
 class FolioReaderUserDefaults {
 
     /// User Defaults which are dependend on an identifier. If no identifier is given the default standard user defaults are used.
-    fileprivate var userDefaults    = [String: Any]()
+    fileprivate var userDefaults = [String: Any]()
 
-    fileprivate var identifier      : String?
+    fileprivate var identifier: String?
 
     fileprivate var useStandardUserDefaultsDirectly: Bool {
         return (self.identifier == nil)

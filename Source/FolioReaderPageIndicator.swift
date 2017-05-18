@@ -17,8 +17,8 @@ class FolioReaderPageIndicator: UIView {
         didSet { self.reloadViewWithPage(self.currentPage) }
     }
 
-    fileprivate var readerConfig    : FolioReaderConfig
-    fileprivate var folioReader     : FolioReader
+    fileprivate var readerConfig: FolioReaderConfig
+    fileprivate var folioReader: FolioReader
 
     init(frame: CGRect, readerConfig: FolioReaderConfig, folioReader: FolioReader) {
         self.readerConfig = readerConfig

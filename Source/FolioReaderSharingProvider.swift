@@ -9,10 +9,10 @@
 import UIKit
 
 class FolioReaderSharingProvider: UIActivityItemProvider {
-    var subject     : String
-    var text        : String
-    var html        : String?
-    var image       : UIImage?
+    var subject: String
+    var text: String
+    var html: String?
+    var image: UIImage?
 
     init(subject: String, text: String, html: String? = nil, image: UIImage? = nil) {
         self.subject = subject

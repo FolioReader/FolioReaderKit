@@ -10,7 +10,7 @@ import UIKit
 
 class FolioReaderChapterListCell: UITableViewCell {
 
-    var indexLabel 			: UILabel?
+    var indexLabel: UILabel?
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

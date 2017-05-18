@@ -35,6 +35,9 @@
 		3AAA8BA91E9BBFAF00A47E5A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E3C4A3E1C3C6708009CBC8C /* MediaPlayer.framework */; };
 		3AAA8BAA1E9BBFB700A47E5A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E3C4A3E1C3C6708009CBC8C /* MediaPlayer.framework */; };
 		6E3C4A3F1C3C6708009CBC8C /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E3C4A3E1C3C6708009CBC8C /* MediaPlayer.framework */; };
+		751F8CF61ECD20110050A2CF /* Epub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751F8CF51ECD20110050A2CF /* Epub.swift */; };
+		751F8CF71ECD20110050A2CF /* Epub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751F8CF51ECD20110050A2CF /* Epub.swift */; };
+		751F8CF81ECD20110050A2CF /* Epub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751F8CF51ECD20110050A2CF /* Epub.swift */; };
 		C143E5BE0CD376A99AD08747 /* Pods_Storyboard_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44C24A346E8730FB52DC197B /* Pods_Storyboard_Example.framework */; };
 		CA10C1341C572A4B0049165D /* FolioReaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA10C1331C572A4B0049165D /* FolioReaderTests.swift */; };
 		CAF233291C57E1F400CB930C /* SharingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF233281C57E1F400CB930C /* SharingProviderTests.swift */; };
@@ -86,6 +89,7 @@
 		5C8EADB52E1D834750CD7D23 /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
 		6E3C4A3E1C3C6708009CBC8C /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		751CA93A8AFDADE43FB75F6B /* Pods-Storyboard-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Storyboard-Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Storyboard-Example/Pods-Storyboard-Example.debug.xcconfig"; sourceTree = "<group>"; };
+		751F8CF51ECD20110050A2CF /* Epub.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Epub.swift; sourceTree = "<group>"; };
 		843E2EEC2F784021400961A9 /* Pods_MultipleInstance_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MultipleInstance_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E1BE6465444C567F5D1B8E6 /* Pods-FolioReaderTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FolioReaderTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FolioReaderTests/Pods-FolioReaderTests.release.xcconfig"; sourceTree = "<group>"; };
 		C4F8C36D75B15390CDB07BF1 /* Pods-MultipleInstance-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MultipleInstance-Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-MultipleInstance-Example/Pods-MultipleInstance-Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -223,6 +227,7 @@
 			children = (
 				3AAA8B9C1E9BB94B00A47E5A /* Assets.xcassets */,
 				3AAA8B9D1E9BB94B00A47E5A /* Sample eBooks */,
+				751F8CF51ECD20110050A2CF /* Epub.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -701,6 +706,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				751F8CF61ECD20110050A2CF /* Epub.swift in Sources */,
 				1A42C28F1C0E3882000F2137 /* ViewController.swift in Sources */,
 				1A42C28D1C0E3882000F2137 /* AppDelegate.swift in Sources */,
 			);
@@ -713,6 +719,7 @@
 				3A8E86F81E9F80CB00CD844C /* BaseExampleFolioReaderContainer.swift in Sources */,
 				3A8E86FA1E9F80CB00CD844C /* BookTwoExampleFolioReaderContainer.swift in Sources */,
 				3AAA8B951E9BB8CD00A47E5A /* AppDelegate.swift in Sources */,
+				751F8CF81ECD20110050A2CF /* Epub.swift in Sources */,
 				3A8E86F91E9F80CB00CD844C /* BookOneExampleFolioReaderContainer.swift in Sources */,
 				3A8E86F71E9F80CB00CD844C /* CodeExampleViewController.swift in Sources */,
 			);
@@ -731,6 +738,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				751F8CF71ECD20110050A2CF /* Epub.swift in Sources */,
 				3AAA8B861E9BB8B700A47E5A /* AppDelegate.swift in Sources */,
 				3AAA8B8A1E9BB8B700A47E5A /* ExampleFolioReaderContainer.swift in Sources */,
 			);

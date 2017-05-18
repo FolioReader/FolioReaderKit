@@ -9,23 +9,23 @@
 import UIKit
 
 class FolioReaderQuoteShare: UIViewController {
-    var quoteText                   : String!
-    var filterImage                 : UIView!
-    var imageView                   : UIImageView!
-    var quoteLabel                  : UILabel!
-    var titleLabel                  : UILabel!
-    var authorLabel                 : UILabel!
-    var logoImageView               : UIImageView!
-    var collectionView              : UICollectionView!
-    let collectionViewLayout        = UICollectionViewFlowLayout()
-    let itemSize: CGFloat           = 90
-    var dataSource                  = [QuoteImage]()
-    let imagePicker                 = UIImagePickerController()
-    var selectedIndex               = 0
+    var quoteText: String!
+    var filterImage: UIView!
+    var imageView: UIImageView!
+    var quoteLabel: UILabel!
+    var titleLabel: UILabel!
+    var authorLabel: UILabel!
+    var logoImageView: UIImageView!
+    var collectionView: UICollectionView!
+    let collectionViewLayout = UICollectionViewFlowLayout()
+    let itemSize: CGFloat = 90
+    var dataSource = [QuoteImage]()
+    let imagePicker = UIImagePickerController()
+    var selectedIndex = 0
 
-    fileprivate var book            : FRBook
-    fileprivate var folioReader     : FolioReader
-    fileprivate var readerConfig    : FolioReaderConfig
+    fileprivate var book: FRBook
+    fileprivate var folioReader: FolioReader
+    fileprivate var readerConfig: FolioReaderConfig
 
     // MARK: Init
 

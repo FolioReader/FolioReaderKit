@@ -10,8 +10,8 @@
 import UIKit
 
 struct FRSmilFile {
-    var resource        : FRResource
-    var data            = [FRSmilElement]()
+    var resource: FRResource
+    var data = [FRSmilElement]()
 
     init(resource: FRResource){
         self.resource = resource;

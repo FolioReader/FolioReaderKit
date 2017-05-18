@@ -47,20 +47,20 @@ enum ScrollDirection: Int {
 }
 
 class ScrollScrubber: NSObject, UIScrollViewDelegate {
-    weak var delegate                   : FolioReaderCenter!
-    var showSpeed                       = 0.6
-    var hideSpeed                       = 0.6
-    var hideDelay                       = 1.0
+    weak var delegate: FolioReaderCenter!
+    var showSpeed = 0.6
+    var hideSpeed = 0.6
+    var hideDelay = 1.0
 
-    var visible                         = false
-    var usingSlider                     = false
-    var slider                          : UISlider!
-    var hideTimer                       : Timer!
-    var scrollStart                     : CGFloat!
-    var scrollDelta                     : CGFloat!
-    var scrollDeltaTimer                : Timer!
+    var visible = false
+    var usingSlider = false
+    var slider: UISlider!
+    var hideTimer: Timer!
+    var scrollStart: CGFloat!
+    var scrollDelta: CGFloat!
+    var scrollDeltaTimer: Timer!
 
-    fileprivate var readerContainer     : FolioReaderContainer
+    fileprivate var readerContainer: FolioReaderContainer
 
     var frame: CGRect {
         didSet {

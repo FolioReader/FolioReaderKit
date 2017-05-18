@@ -10,13 +10,13 @@ import UIKit
 
 class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureRecognizerDelegate {
 
-    var menuView                    : UIView!
-    var playPauseBtn                : UIButton!
-    var styleOptionBtns             = [UIButton]()
-    var viewDidAppear               = false
+    var menuView: UIView!
+    var playPauseBtn: UIButton!
+    var styleOptionBtns = [UIButton]()
+    var viewDidAppear = false
 
-    fileprivate var readerConfig    : FolioReaderConfig
-    fileprivate var folioReader     : FolioReader
+    fileprivate var readerConfig: FolioReaderConfig
+    fileprivate var folioReader: FolioReader
 
     init(folioReader: FolioReader, readerConfig: FolioReaderConfig) {
         self.readerConfig = readerConfig
