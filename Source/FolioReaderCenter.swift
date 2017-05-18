@@ -103,7 +103,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         self.totalPages = self.book.spine.spineReferences.count
 
         // Loading indicator
-        let style: UIActivityIndicatorViewStyle = self.readerContainer.folioReader.isNight(UIActivityIndicatorViewStyle.white, UIActivityIndicatorViewStyle.gray)
+        let style: UIActivityIndicatorViewStyle = self.readerContainer.folioReader.isNight(.white, .gray)
         loadingView = UIActivityIndicatorView(activityIndicatorStyle: style)
         loadingView.hidesWhenStopped = true
         loadingView.startAnimating()
@@ -374,8 +374,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             return
         }
 
-        let shouldHide = (!self.navigationController!.isNavigationBarHidden)
-        if (shouldHide == false) {
+        let shouldHide = !self.navigationController!.isNavigationBarHidden
+        if shouldHide == false {
             self.configureNavBar()
         }
 

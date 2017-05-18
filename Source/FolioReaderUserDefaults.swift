@@ -22,8 +22,6 @@ class FolioReaderUserDefaults {
     init(withIdentifier identifier: String?) {
         if let _identifier = identifier {
             self.identifier = "folioreader.userdefaults.identifier.\(_identifier)"
-        } else {
-            self.identifier = nil
         }
 
         guard

@@ -47,7 +47,7 @@ open class FolioReaderContainer     : UIViewController {
         self.folioReader.readerContainer = self
 
         // Initialize the default reader options.
-        if (self.epubPath != "") {
+        if self.epubPath != "" {
             self.initialization()
         }
     }

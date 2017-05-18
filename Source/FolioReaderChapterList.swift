@@ -83,7 +83,7 @@ class FolioReaderChapterList: UITableViewController {
                 let duration = self.book.durationFor("#"+mediaOverlay)
 
                 if let durationFormatted = (duration != nil ? duration : "")?.clockTimeToMinutesString() {
-                    let text = (cell.indexLabel?.text ?? "")
+                    let text = cell.indexLabel?.text ?? ""
                     cell.indexLabel?.text = text + (duration != nil ? (" - " + durationFormatted) : "")
                 }
             }
