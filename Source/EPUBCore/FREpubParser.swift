@@ -16,12 +16,12 @@ import AEXML
 
 class FREpubParser: NSObject, SSZipArchiveDelegate {
 
-    let book                            = FRBook()
-    var bookBasePath                    : String!
-    var resourcesBasePath               : String!
-    var shouldRemoveEpub                = true
+    let book = FRBook()
+    var bookBasePath: String!
+    var resourcesBasePath: String!
+    var shouldRemoveEpub = true
 
-    fileprivate var epubPathToRemove    : String?
+    fileprivate var epubPathToRemove: String?
 
     /// Parse the Cover Image from an epub file.
     ///

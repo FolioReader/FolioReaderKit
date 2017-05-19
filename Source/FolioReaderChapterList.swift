@@ -23,11 +23,11 @@ import UIKit
 
 class FolioReaderChapterList: UITableViewController {
 
-    weak var delegate               : FolioReaderChapterListDelegate?
-    fileprivate var tocItems        = [FRTocReference]()
-    fileprivate var book            : FRBook
-    fileprivate var readerConfig    : FolioReaderConfig
-    fileprivate var folioReader     : FolioReader
+    weak var delegate: FolioReaderChapterListDelegate?
+    fileprivate var tocItems = [FRTocReference]()
+    fileprivate var book: FRBook
+    fileprivate var readerConfig: FolioReaderConfig
+    fileprivate var folioReader: FolioReader
 
     init(folioReader: FolioReader, readerConfig: FolioReaderConfig, book: FRBook, delegate: FolioReaderChapterListDelegate?) {
         self.readerConfig = readerConfig
@@ -83,7 +83,7 @@ class FolioReaderChapterList: UITableViewController {
                 let duration = self.book.durationFor("#"+mediaOverlay)
 
                 if let durationFormatted = (duration != nil ? duration : "")?.clockTimeToMinutesString() {
-                    let text = (cell.indexLabel?.text ?? "")
+                    let text = cell.indexLabel?.text ?? ""
                     cell.indexLabel?.text = text + (duration != nil ? (" - " + durationFormatted) : "")
                 }
             }

@@ -12,23 +12,23 @@ import MediaPlayer
 
 open class FolioReaderAudioPlayer: NSObject {
 
-    var isTextToSpeech          = false
-    var synthesizer             : AVSpeechSynthesizer!
-    var playing                 = false
-    var player                  : AVAudioPlayer?
-    var currentHref             : String!
-    var currentFragment         : String!
-    var currentSmilFile         : FRSmilFile!
-    var currentAudioFile        : String!
-    var currentBeginTime        : Double!
-    var currentEndTime          : Double!
-    var playingTimer            : Timer!
-    var registeredCommands      = false
-    var completionHandler       : () -> Void = {}
-    var utteranceRate           : Float = 0
+    var isTextToSpeech = false
+    var synthesizer: AVSpeechSynthesizer!
+    var playing = false
+    var player: AVAudioPlayer?
+    var currentHref: String!
+    var currentFragment: String!
+    var currentSmilFile: FRSmilFile!
+    var currentAudioFile: String!
+    var currentBeginTime: Double!
+    var currentEndTime: Double!
+    var playingTimer: Timer!
+    var registeredCommands = false
+    var completionHandler: () -> Void = {}
+    var utteranceRate: Float = 0
 
-    fileprivate var book 		: FRBook
-    fileprivate var folioReader	: FolioReader
+    fileprivate var book: FRBook
+    fileprivate var folioReader: FolioReader
 
     // MARK: Init
 

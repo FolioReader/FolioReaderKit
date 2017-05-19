@@ -97,22 +97,22 @@ open class FolioReader: NSObject {
     internal override init() { }
 
     /// Custom unzip path
-    open var unzipPath				: String?
+    open var unzipPath: String?
 
     /// FolioReaderDelegate
-    open weak var delegate			: FolioReaderDelegate?
+    open weak var delegate: FolioReaderDelegate?
 
-    open weak var readerContainer	: FolioReaderContainer?
-    open weak var readerAudioPlayer	: FolioReaderAudioPlayer?
-    open weak var readerCenter		: FolioReaderCenter? {
+    open weak var readerContainer: FolioReaderContainer?
+    open weak var readerAudioPlayer: FolioReaderAudioPlayer?
+    open weak var readerCenter: FolioReaderCenter? {
         return self.readerContainer?.centerViewController
     }
 
     /// Check if reader is open
-    var isReaderOpen                = false
+    var isReaderOpen = false
 
     /// Check if reader is open and ready
-    var isReaderReady               = false
+    var isReaderReady = false
 
     /// Check if layout needs to change to fit Right To Left
     var needsRTLChange: Bool {

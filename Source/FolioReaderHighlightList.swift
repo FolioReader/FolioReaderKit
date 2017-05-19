@@ -10,9 +10,9 @@ import UIKit
 
 class FolioReaderHighlightList: UITableViewController {
 
-    fileprivate var highlights      = [Highlight]()
-    fileprivate var readerConfig    : FolioReaderConfig
-    fileprivate var folioReader     : FolioReader
+    fileprivate var highlights = [Highlight]()
+    fileprivate var readerConfig: FolioReaderConfig
+    fileprivate var folioReader: FolioReader
 
     init(folioReader: FolioReader, readerConfig: FolioReaderConfig) {
         self.readerConfig = readerConfig

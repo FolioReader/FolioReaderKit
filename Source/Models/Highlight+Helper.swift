@@ -275,12 +275,12 @@ extension Highlight {
 extension Highlight {
 
     public struct MatchingHighlight {
-        var text            : String
-        var id              : String
-        var startOffset     : String
-        var endOffset       : String
-        var bookId          : String
-        var currentPage     : Int
+        var text: String
+        var id: String
+        var startOffset: String
+        var endOffset: String
+        var bookId: String
+        var currentPage: Int
     }
 
     /**

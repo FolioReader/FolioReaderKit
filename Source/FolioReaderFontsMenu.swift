@@ -17,21 +17,21 @@ public enum FolioReaderFont: Int {
     public static func folioReaderFont(fontName: String) -> FolioReaderFont? {
         var font: FolioReaderFont?
         switch fontName {
-        case "andada"       : font = .andada
-        case "lato"         : font = .lato
-        case "lora"         : font = .lora
-        case "raleway"      : font = .raleway
-        default             : break
+        case "andada": font = .andada
+        case "lato": font = .lato
+        case "lora": font = .lora
+        case "raleway": font = .raleway
+        default: break
         }
         return font
     }
 
     public var cssIdentifier: String {
         switch self {
-        case .andada    : return "andada"
-        case .lato      : return "lato"
-        case .lora      : return "lora"
-        case .raleway   : return "raleway"
+        case .andada: return "andada"
+        case .lato: return "lato"
+        case .lora: return "lora"
+        case .raleway: return "raleway"
         }
     }
 }
@@ -46,33 +46,33 @@ public enum FolioReaderFontSize: Int {
     public static func folioReaderFontSize(fontSizeStringRepresentation: String) -> FolioReaderFontSize? {
         var fontSize: FolioReaderFontSize?
         switch fontSizeStringRepresentation {
-        case "textSizeOne"      : fontSize = .xs
-        case "textSizeTwo"      : fontSize = .s
-        case "textSizeThree"    : fontSize = .m
-        case "textSizeFour"     : fontSize = .l
-        case "textSizeFive"     : fontSize = .xl
-        default                 : break
+        case "textSizeOne": fontSize = .xs
+        case "textSizeTwo": fontSize = .s
+        case "textSizeThree": fontSize = .m
+        case "textSizeFour": fontSize = .l
+        case "textSizeFive": fontSize = .xl
+        default: break
         }
         return fontSize
     }
 
     public var cssIdentifier: String {
         switch self {
-        case .xs    : return "textSizeOne"
-        case .s     : return "textSizeTwo"
-        case .m     : return "textSizeThree"
-        case .l     : return "textSizeFour"
-        case .xl    : return "textSizeFive"
+        case .xs: return "textSizeOne"
+        case .s: return "textSizeTwo"
+        case .m: return "textSizeThree"
+        case .l: return "textSizeFour"
+        case .xl: return "textSizeFive"
         }
     }
 }
 
 class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRecognizerDelegate {
 
-    var menuView                    : UIView!
+    var menuView: UIView!
 
-    fileprivate var readerConfig    : FolioReaderConfig
-    fileprivate var folioReader     : FolioReader
+    fileprivate var readerConfig: FolioReaderConfig
+    fileprivate var folioReader: FolioReader
 
     init(folioReader: FolioReader, readerConfig: FolioReaderConfig) {
         self.readerConfig = readerConfig

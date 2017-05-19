@@ -10,14 +10,14 @@ import UIKit
 
 class PageViewController: UIPageViewController {
 
-    var segmentedControl            : UISegmentedControl!
-    var viewList                    = [UIViewController]()
-    var segmentedControlItems       = [String]()
-    var viewControllerOne           : UIViewController!
-    var viewControllerTwo           : UIViewController!
-    var index                       : Int
-    fileprivate var readerConfig    : FolioReaderConfig
-    fileprivate var folioReader     : FolioReader
+    var segmentedControl: UISegmentedControl!
+    var viewList = [UIViewController]()
+    var segmentedControlItems = [String]()
+    var viewControllerOne: UIViewController!
+    var viewControllerTwo: UIViewController!
+    var index: Int
+    fileprivate var readerConfig: FolioReaderConfig
+    fileprivate var folioReader: FolioReader
 
     // MARK: Init
 

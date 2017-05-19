@@ -34,23 +34,23 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     weak var delegate: FolioReaderPageDelegate?
 
     /// The index of the current page. Note: The index start at 1!
-    open var pageNumber             : Int!
-    var webView                     : FolioReaderWebView!
-    fileprivate var colorView       : UIView!
-    fileprivate var shouldShowBar   = true
-    fileprivate var menuIsVisible   = false
+    open var pageNumber: Int!
+    var webView: FolioReaderWebView!
+    fileprivate var colorView: UIView!
+    fileprivate var shouldShowBar = true
+    fileprivate var menuIsVisible = false
 
-    fileprivate var readerContainer	: FolioReaderContainer
+    fileprivate var readerContainer: FolioReaderContainer
 
-    fileprivate var readerConfig	: FolioReaderConfig {
+    fileprivate var readerConfig: FolioReaderConfig {
         return readerContainer.readerConfig
     }
 
-    fileprivate var book			: FRBook {
+    fileprivate var book: FRBook {
         return self.readerContainer.book
     }
 
-    fileprivate var folioReader		: FolioReader {
+    fileprivate var folioReader: FolioReader {
         return self.readerContainer.folioReader
     }
 

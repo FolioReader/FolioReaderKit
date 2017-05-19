@@ -14,9 +14,9 @@ import UIKit
  Examples of mediatypes are image/gif, text/css and application/xhtml+xml
  */
 struct MediaType {
-    var name                : String
-    var defaultExtension    : String!
-    var extensions          : [String]!
+    var name: String
+    var defaultExtension: String!
+    var extensions: [String]!
 
     init(name: String, defaultExtension: String) {
         self.name = name

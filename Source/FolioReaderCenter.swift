@@ -30,51 +30,51 @@ import ZFDragableModalTransition
 open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
 
     /// This delegate receives the events from the current `FolioReaderPage`s delegate.
-    open weak var delegate                  : FolioReaderCenterDelegate?
+    open weak var delegate: FolioReaderCenterDelegate?
 
     /// This delegate receives the events from current page
-    open weak var pageDelegate              : FolioReaderPageDelegate?
+    open weak var pageDelegate: FolioReaderPageDelegate?
 
-    open var readerContainer                : FolioReaderContainer
+    open var readerContainer: FolioReaderContainer
 
     /// The current visible page on reader
-    open fileprivate(set) var currentPage   : FolioReaderPage?
+    open fileprivate(set) var currentPage: FolioReaderPage?
 
-    var collectionView                      : UICollectionView!
-    let collectionViewLayout                = UICollectionViewFlowLayout()
-    var loadingView                         :UIActivityIndicatorView!
-    var pages                               : [String]!
-    var totalPages                          : Int = 0
-    var tempFragment                        : String?
-    var animator                            : ZFModalTransitionAnimator!
-    var pageIndicatorView                   : FolioReaderPageIndicator?
-    var pageIndicatorHeight                 : CGFloat = 20
-    var recentlyScrolled                    = false
-    var recentlyScrolledDelay               = 2.0 // 2 second delay until we clear recentlyScrolled
-    var recentlyScrolledTimer               : Timer!
-    var scrollScrubber                      : ScrollScrubber?
-    var activityIndicator                   = UIActivityIndicatorView()
-    var isScrolling                         = false
-    var pageScrollDirection                 = ScrollDirection()
-    var nextPageNumber                      : Int = 0
-    var previousPageNumber                  : Int = 0
-    var currentPageNumber                   : Int = 0
-    var pageWidth                           : CGFloat = 0.0
-    var pageHeight                          : CGFloat = 0.0
+    var collectionView: UICollectionView!
+    let collectionViewLayout = UICollectionViewFlowLayout()
+    var loadingView: UIActivityIndicatorView!
+    var pages: [String]!
+    var totalPages: Int = 0
+    var tempFragment: String?
+    var animator: ZFModalTransitionAnimator!
+    var pageIndicatorView: FolioReaderPageIndicator?
+    var pageIndicatorHeight: CGFloat = 20
+    var recentlyScrolled = false
+    var recentlyScrolledDelay = 2.0 // 2 second delay until we clear recentlyScrolled
+    var recentlyScrolledTimer: Timer!
+    var scrollScrubber: ScrollScrubber?
+    var activityIndicator = UIActivityIndicatorView()
+    var isScrolling = false
+    var pageScrollDirection = ScrollDirection()
+    var nextPageNumber: Int = 0
+    var previousPageNumber: Int = 0
+    var currentPageNumber: Int = 0
+    var pageWidth: CGFloat = 0.0
+    var pageHeight: CGFloat = 0.0
 
-    fileprivate var screenBounds                    : CGRect!
-    fileprivate var pointNow                        = CGPoint.zero
-    fileprivate var pageOffsetRate                  : CGFloat = 0
-    fileprivate var tempReference                   : FRTocReference?
-    fileprivate var isFirstLoad                     = true
-    fileprivate var currentWebViewScrollPositions   = [Int: CGPoint]()
-    fileprivate var currentOrientation              : UIInterfaceOrientation?
+    fileprivate var screenBounds: CGRect!
+    fileprivate var pointNow = CGPoint.zero
+    fileprivate var pageOffsetRate: CGFloat = 0
+    fileprivate var tempReference: FRTocReference?
+    fileprivate var isFirstLoad = true
+    fileprivate var currentWebViewScrollPositions = [Int: CGPoint]()
+    fileprivate var currentOrientation: UIInterfaceOrientation?
 
-    fileprivate var book : FRBook {
+    fileprivate var book: FRBook {
         return self.readerContainer.book
     }
 
-    fileprivate var readerConfig : FolioReaderConfig {
+    fileprivate var readerConfig: FolioReaderConfig {
         return self.readerContainer.readerConfig
     }
 
@@ -103,7 +103,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         self.totalPages = self.book.spine.spineReferences.count
 
         // Loading indicator
-        let style: UIActivityIndicatorViewStyle = self.readerContainer.folioReader.isNight(UIActivityIndicatorViewStyle.white, UIActivityIndicatorViewStyle.gray)
+        let style: UIActivityIndicatorViewStyle = self.readerContainer.folioReader.isNight(.white, .gray)
         loadingView = UIActivityIndicatorView(activityIndicatorStyle: style)
         loadingView.hidesWhenStopped = true
         loadingView.startAnimating()
@@ -374,8 +374,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             return
         }
 
-        let shouldHide = (!self.navigationController!.isNavigationBarHidden)
-        if (shouldHide == false) {
+        let shouldHide = !self.navigationController!.isNavigationBarHidden
+        if shouldHide == false {
             self.configureNavBar()
         }
 

@@ -9,40 +9,13 @@
 import UIKit
 import FolioReaderKit
 
-enum Epub: Int {
-    case bookOne = 0
-    case bookTwo
-
-    var name: String {
-        switch self {
-        case .bookOne:      return "The Silver Chair" // standard eBook
-        case .bookTwo:      return "The Adventures Of Sherlock Holmes - Adventure I" // audio-eBook
-        }
-    }
+extension Epub {
 
     var readerIdentifier: String {
         switch self {
         case .bookOne:      return "READER_ONE"
         case .bookTwo:      return "READER_TWO"
         }
-    }
-
-    var shouldHideNavigationOnTap: Bool {
-        switch self {
-        case .bookOne:      return false
-        case .bookTwo:      return true
-        }
-    }
-
-    var scrollDirection: FolioReaderScrollDirection {
-        switch self {
-        case .bookOne:      return .vertical
-        case .bookTwo:      return .horizontal
-        }
-    }
-
-    var bookPath: String? {
-        return Bundle.main.path(forResource: self.name, ofType: "epub")
     }
 
     func retain(folioReaderContainer: FolioReaderContainer) {
@@ -57,8 +30,8 @@ enum Epub: Int {
 
 class CodeExampleViewController: UIViewController {
 
-    @IBOutlet var bookOne   : UIButton?
-    @IBOutlet var bookTwo   : UIButton?
+    @IBOutlet weak var bookOne: UIButton?
+    @IBOutlet weak var bookTwo: UIButton?
 
     override func viewDidLoad() {
         super.viewDidLoad()

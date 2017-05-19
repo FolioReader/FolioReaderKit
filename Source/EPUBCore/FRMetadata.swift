@@ -12,9 +12,9 @@ import UIKit
  Represents one of the authors of the book.
  */
 struct Author {
-    var name        : String!
-    var role        : String!
-    var fileAs      : String!
+    var name: String!
+    var role: String!
+    var fileAs: String!
 
     init(name: String, role: String, fileAs: String) {
         self.name = name
@@ -27,9 +27,9 @@ struct Author {
  A Book's identifier.
  */
 struct Identifier {
-    var id          : String?
-    var scheme      : String?
-    var value       : String?
+    var id: String?
+    var scheme: String?
+    var value: String?
 
     init(id: String?, scheme: String?, value: String?) {
         self.id = id
@@ -42,8 +42,8 @@ struct Identifier {
  A date and his event.
  */
 struct Date {
-    var date        : String!
-    var event       : String!
+    var date: String!
+    var event: String!
 
     init(date: String, event: String!) {
         self.date = date
@@ -55,12 +55,12 @@ struct Date {
  A metadata tag data.
  */
 struct Meta {
-    var name        : String?
-    var content     : String?
-    var id          : String?
-    var property    : String?
-    var value       : String?
-    var refines     : String?
+    var name: String?
+    var content: String?
+    var id: String?
+    var property: String?
+    var value: String?
+    var refines: String?
 
     init(name: String, content: String) {
         self.name = name
@@ -84,18 +84,18 @@ struct Meta {
  Manages book metadata.
  */
 class FRMetadata: NSObject {
-    var creators            = [Author]()
-    var contributors        = [Author]()
-    var dates               = [Date]()
-    var language            = "en-US"
-    var titles              = [String]()
-    var identifiers         = [Identifier]()
-    var subjects            = [String]()
-    var descriptions        = [String]()
-    var publishers          = [String]()
-    var format              = FRMediaType.EPUB.name
-    var rights              = [String]()
-    var metaAttributes      = [Meta]()
+    var creators = [Author]()
+    var contributors = [Author]()
+    var dates = [Date]()
+    var language = "en-US"
+    var titles = [String]()
+    var identifiers = [Identifier]()
+    var subjects = [String]()
+    var descriptions = [String]()
+    var publishers = [String]()
+    var format = FRMediaType.EPUB.name
+    var rights = [String]()
+    var metaAttributes = [Meta]()
 
     /**
      Find a book unique identifier by ID

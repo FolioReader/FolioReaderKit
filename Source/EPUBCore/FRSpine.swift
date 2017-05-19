@@ -9,8 +9,8 @@
 import UIKit
 
 struct Spine {
-    var linear          : Bool!
-    var resource        : FRResource!
+    var linear: Bool!
+    var resource: FRResource!
 
     init(resource: FRResource, linear: Bool = true) {
         self.resource = resource
@@ -19,8 +19,8 @@ struct Spine {
 }
 
 class FRSpine: NSObject {
-    var pageProgressionDirection        : String?
-    var spineReferences                 = [Spine]()
+    var pageProgressionDirection: String?
+    var spineReferences = [Spine]()
 
     var isRtl: Bool {
         if let pageProgressionDirection = pageProgressionDirection , pageProgressionDirection == "rtl" {
