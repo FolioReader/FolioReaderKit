@@ -71,7 +71,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
 
     var menuView: UIView!
 
-	fileprivate var readerConfig: FolioReaderConfig
+    fileprivate var readerConfig: FolioReaderConfig
     fileprivate var folioReader: FolioReader
 
     init(folioReader: FolioReader, readerConfig: FolioReaderConfig) {
