@@ -361,32 +361,27 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     }
 
     open func handleTapGesture(_ recognizer: UITapGestureRecognizer) {
-        //        webView.setMenuVisible(false)
 
-        if	let _navigationController = self.folioReader.readerCenter?.navigationController , _navigationController.isNavigationBarHidden {
-            let menuIsVisibleRef = menuIsVisible
+        if let _navigationController = self.folioReader.readerCenter?.navigationController, (_navigationController.isNavigationBarHidden == true) {
 
             let selected = webView.js("getSelectedText()")
+			guard (selected == nil || selected?.isEmpty == true) else {
+				return
+			}
 
-            if selected == nil || selected!.characters.count == 0 {
-                let seconds = 0.4
-                let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
-                let dispatchTime = DispatchTime.now() + Double(Int64(delay)) / Double(NSEC_PER_SEC)
+			let delay = 0.4 * Double(NSEC_PER_SEC) // 0.4 seconds * nanoseconds per seconds
+			let dispatchTime = (DispatchTime.now() + (Double(Int64(delay)) / Double(NSEC_PER_SEC)))
+			DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
 
-                DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
+				if (self.shouldShowBar == true && self.menuIsVisible == false) {
+					self.folioReader.readerCenter?.toggleBars()
+				}
+			})
 
-                    if self.shouldShowBar && !menuIsVisibleRef {
-                        self.folioReader.readerCenter?.toggleBars()
-                    }
-                    self.shouldShowBar = true
-                })
-            }
-        } else if self.readerConfig.shouldHideNavigationOnTap == true {
+        } else if (self.readerConfig.shouldHideNavigationOnTap == true) {
             self.folioReader.readerCenter?.hideBars()
+			self.menuIsVisible = false
         }
-
-        // Reset menu
-        menuIsVisible = false
     }
 
     // MARK: - Public scroll postion setter

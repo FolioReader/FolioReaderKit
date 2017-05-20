@@ -393,9 +393,9 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             if (shouldShowIndicator == true) {
                 self.pageIndicatorView?.minutesLabel.alpha = (shouldHide == true ? 0 : 1)
             }
-        })
-
-        self.navigationController?.setNavigationBarHidden(shouldHide, animated: true)
+		}, completion: { (finished: Bool) in
+			self.navigationController?.setNavigationBarHidden(shouldHide, animated: true)
+		})
     }
 
     // MARK: UICollectionViewDataSource
