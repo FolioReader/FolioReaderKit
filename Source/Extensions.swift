@@ -113,7 +113,7 @@ extension ScrollDirection {
     }
 
     static func negative(withConfiguration readerConfig: FolioReaderConfig, scrollType: ScrollType = .page) -> ScrollDirection {
-        return readerConfig.isDirection(.down, .right, ((scrollType == .page) ? .down : .right))
+        return readerConfig.isDirection(.down, .right, .right)//((scrollType == .page) ? .down : .right))
     }
 
     @available(*, deprecated, message: "Use 'positive(withConfiguration:)' instead.")
@@ -126,7 +126,7 @@ extension ScrollDirection {
     }
 
     static func positive(withConfiguration readerConfig: FolioReaderConfig, scrollType: ScrollType = .page) -> ScrollDirection {
-        return readerConfig.isDirection(.up, .left, ((scrollType == .page) ? .up : .left))
+        return readerConfig.isDirection(.up, .left, .left)//((scrollType == .page) ? .up : .left))
     }
 }
 
