@@ -38,7 +38,7 @@ class ViewController: UIViewController {
 
     private func readerConfiguration(forEpub epub: Epub) -> FolioReaderConfig {
 
-        let config = FolioReaderConfig()
+		let config = FolioReaderConfig(withIdentifier: epub.readerIdentifier)
         config.shouldHideNavigationOnTap = epub.shouldHideNavigationOnTap
         config.scrollDirection = epub.scrollDirection
 

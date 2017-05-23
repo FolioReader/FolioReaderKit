@@ -37,4 +37,11 @@ enum Epub: Int {
 	var bookPath: String? {
 		return Bundle.main.path(forResource: self.name, ofType: "epub")
 	}
+
+	var readerIdentifier: String {
+		switch self {
+		case .bookOne:      return "READER_ONE"
+		case .bookTwo:      return "READER_TWO"
+		}
+	}
 }
