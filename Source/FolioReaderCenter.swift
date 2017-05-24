@@ -393,9 +393,9 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             if (shouldShowIndicator == true) {
                 self.pageIndicatorView?.minutesLabel.alpha = (shouldHide == true ? 0 : 1)
             }
+        }, completion: { (finished: Bool) in
+            self.navigationController?.setNavigationBarHidden(shouldHide, animated: true)
         })
-
-        self.navigationController?.setNavigationBarHidden(shouldHide, animated: true)
     }
 
     // MARK: UICollectionViewDataSource
@@ -1013,7 +1013,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         scrollScrubber?.scrollViewDidScroll(scrollView)
 
         let isCollectionScrollView = (scrollView is UICollectionView)
-        let scrollType : ScrollType = ((isCollectionScrollView == true) ? .chapter : .page)
+        let scrollType: ScrollType = ((isCollectionScrollView == true) ? .chapter : .page)
 
         // Update current reading page
         if (isCollectionScrollView == false), let page = currentPage {
@@ -1042,27 +1042,29 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             }
         }
 
+        self.updatePageScrollDirection(inScrollView: scrollView, forScrollType: scrollType)
+    }
+
+    private func updatePageScrollDirection(inScrollView scrollView: UIScrollView, forScrollType scrollType: ScrollType) {
+
         let scrollViewContentOffsetForDirection = scrollView.contentOffset.forDirection(withConfiguration: self.readerConfig, scrollType: scrollType)
         let pointNowForDirection = pointNow.forDirection(withConfiguration: self.readerConfig, scrollType: scrollType)
+        // The movement is either positive or negative. This happens if the page change isn't completed. Toggle to the other scroll direction then.
+        let isCurrentlyPositive = (self.pageScrollDirection == .left || self.pageScrollDirection == .up)
+
         if (scrollViewContentOffsetForDirection < pointNowForDirection) {
             self.pageScrollDirection = .negative(withConfiguration: self.readerConfig, scrollType: scrollType)
         } else if (scrollViewContentOffsetForDirection > pointNowForDirection) {
             self.pageScrollDirection = .positive(withConfiguration: self.readerConfig, scrollType: scrollType)
+        } else if (isCurrentlyPositive == true) {
+            self.pageScrollDirection = .negative(withConfiguration: self.readerConfig, scrollType: scrollType)
         } else {
-            // The movement is either positive or negative. This happens if the page change isn't completed. Toggle to the other scroll direction then.
-            let isCurrentlyPositive = (self.pageScrollDirection == .left || self.pageScrollDirection == .up)
-            if (isCurrentlyPositive == true) {
-                self.pageScrollDirection = .negative(withConfiguration: self.readerConfig, scrollType: scrollType)
-            } else {
-                self.pageScrollDirection = .positive(withConfiguration: self.readerConfig, scrollType: scrollType)
-            }
+            self.pageScrollDirection = .positive(withConfiguration: self.readerConfig, scrollType: scrollType)
         }
     }
 
     open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         self.isScrolling = false
-
-
 
         // Perform the page after a short delay as the collection view hasn't completed it's transition if this method is called (the index paths aren't right during fast scrolls).
         delay(0.2, closure: { [weak self] in
