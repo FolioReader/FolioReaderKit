@@ -210,11 +210,11 @@ open class FolioReaderContainer     : UIViewController {
     override open var prefersStatusBarHidden: Bool {
         return (self.readerConfig.shouldHideNavigationOnTap == false ? false : self.shouldHideStatusBar)
     }
-    
+
     override open var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
         return UIStatusBarAnimation.slide
     }
-    
+
     override open var preferredStatusBarStyle: UIStatusBarStyle {
         return self.folioReader.isNight(.lightContent, .default)
     }
@@ -222,7 +222,7 @@ open class FolioReaderContainer     : UIViewController {
 
 extension FolioReaderContainer {
     func alert(message: String) {
-         let alertController = UIAlertController(
+        let alertController = UIAlertController(
             title: "Error",
             message: message,
             preferredStyle: UIAlertControllerStyle.alert
@@ -233,5 +233,5 @@ extension FolioReaderContainer {
         }
         alertController.addAction(action)
         self.present(alertController, animated: true, completion: nil)
-   }
+    }
 }

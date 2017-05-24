@@ -393,9 +393,9 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             if (shouldShowIndicator == true) {
                 self.pageIndicatorView?.minutesLabel.alpha = (shouldHide == true ? 0 : 1)
             }
-		}, completion: { (finished: Bool) in
-			self.navigationController?.setNavigationBarHidden(shouldHide, animated: true)
-		})
+        }, completion: { (finished: Bool) in
+            self.navigationController?.setNavigationBarHidden(shouldHide, animated: true)
+        })
     }
 
     // MARK: UICollectionViewDataSource
@@ -1042,24 +1042,24 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             }
         }
 
-		self.updatePageScrollDirection(inScrollView: scrollView, forScrollType: scrollType)
-	}
+        self.updatePageScrollDirection(inScrollView: scrollView, forScrollType: scrollType)
+    }
 
-	private func updatePageScrollDirection(inScrollView scrollView: UIScrollView, forScrollType scrollType: ScrollType) {
+    private func updatePageScrollDirection(inScrollView scrollView: UIScrollView, forScrollType scrollType: ScrollType) {
 
         let scrollViewContentOffsetForDirection = scrollView.contentOffset.forDirection(withConfiguration: self.readerConfig, scrollType: scrollType)
         let pointNowForDirection = pointNow.forDirection(withConfiguration: self.readerConfig, scrollType: scrollType)
-		// The movement is either positive or negative. This happens if the page change isn't completed. Toggle to the other scroll direction then.
-		let isCurrentlyPositive = (self.pageScrollDirection == .left || self.pageScrollDirection == .up)
+        // The movement is either positive or negative. This happens if the page change isn't completed. Toggle to the other scroll direction then.
+        let isCurrentlyPositive = (self.pageScrollDirection == .left || self.pageScrollDirection == .up)
 
-		if (scrollViewContentOffsetForDirection < pointNowForDirection) {
+        if (scrollViewContentOffsetForDirection < pointNowForDirection) {
             self.pageScrollDirection = .negative(withConfiguration: self.readerConfig, scrollType: scrollType)
         } else if (scrollViewContentOffsetForDirection > pointNowForDirection) {
             self.pageScrollDirection = .positive(withConfiguration: self.readerConfig, scrollType: scrollType)
         } else if (isCurrentlyPositive == true) {
-			self.pageScrollDirection = .negative(withConfiguration: self.readerConfig, scrollType: scrollType)
-		} else {
-			self.pageScrollDirection = .positive(withConfiguration: self.readerConfig, scrollType: scrollType)
+            self.pageScrollDirection = .negative(withConfiguration: self.readerConfig, scrollType: scrollType)
+        } else {
+            self.pageScrollDirection = .positive(withConfiguration: self.readerConfig, scrollType: scrollType)
         }
     }
 

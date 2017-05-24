@@ -192,11 +192,11 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
         let direction: ScrollDirection = self.folioReader.needsRTLChange ? .positive(withConfiguration: self.readerConfig) : .negative(withConfiguration: self.readerConfig)
 
-		if (self.folioReader.readerCenter?.pageScrollDirection == direction &&
-			self.folioReader.readerCenter?.isScrolling == true &&
-			self.readerConfig.scrollDirection != .horizontalWithVerticalContent) {
-			scrollPageToBottom()
-		}
+        if (self.folioReader.readerCenter?.pageScrollDirection == direction &&
+            self.folioReader.readerCenter?.isScrolling == true &&
+            self.readerConfig.scrollDirection != .horizontalWithVerticalContent) {
+            scrollPageToBottom()
+        }
 
         UIView.animate(withDuration: 0.2, animations: {webView.alpha = 1}, completion: { finished in
             webView.isColors = false
@@ -367,22 +367,22 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         if let _navigationController = self.folioReader.readerCenter?.navigationController, (_navigationController.isNavigationBarHidden == true) {
 
             let selected = webView.js("getSelectedText()")
-			guard (selected == nil || selected?.isEmpty == true) else {
-				return
-			}
+            guard (selected == nil || selected?.isEmpty == true) else {
+                return
+            }
 
-			let delay = 0.4 * Double(NSEC_PER_SEC) // 0.4 seconds * nanoseconds per seconds
-			let dispatchTime = (DispatchTime.now() + (Double(Int64(delay)) / Double(NSEC_PER_SEC)))
-			DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
+            let delay = 0.4 * Double(NSEC_PER_SEC) // 0.4 seconds * nanoseconds per seconds
+            let dispatchTime = (DispatchTime.now() + (Double(Int64(delay)) / Double(NSEC_PER_SEC)))
+            DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
 
-				if (self.shouldShowBar == true && self.menuIsVisible == false) {
-					self.folioReader.readerCenter?.toggleBars()
-				}
-			})
+                if (self.shouldShowBar == true && self.menuIsVisible == false) {
+                    self.folioReader.readerCenter?.toggleBars()
+                }
+            })
 
         } else if (self.readerConfig.shouldHideNavigationOnTap == true) {
             self.folioReader.readerCenter?.hideBars()
-			self.menuIsVisible = false
+            self.menuIsVisible = false
         }
     }
 
@@ -508,9 +508,9 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
             colorView.frame = CGRect.zero
         }
     }
-
+    
     // MARK: - Class based click listener
-
+    
     fileprivate func setupClassBasedOnClickListeners() {
         
         for listener in self.readerConfig.classBasedOnClickListeners {
