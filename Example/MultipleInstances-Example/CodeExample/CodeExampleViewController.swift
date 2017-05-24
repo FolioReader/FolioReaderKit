@@ -11,13 +11,6 @@ import FolioReaderKit
 
 extension Epub {
 
-    var readerIdentifier: String {
-        switch self {
-        case .bookOne:      return "READER_ONE"
-        case .bookTwo:      return "READER_TWO"
-        }
-    }
-
     func retain(folioReaderContainer: FolioReaderContainer) {
         let appDelegate = (UIApplication.shared.delegate as? AppDelegate)
 
