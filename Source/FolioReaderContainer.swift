@@ -10,8 +10,7 @@ import UIKit
 import FontBlaster
 
 /// Reader container
-open class FolioReaderContainer     : UIViewController {
-
+open class FolioReaderContainer: UIViewController {
     var centerNavigationController: UINavigationController?
     var centerViewController: FolioReaderCenter?
     var audioPlayer: FolioReaderAudioPlayer?
@@ -19,11 +18,12 @@ open class FolioReaderContainer     : UIViewController {
     var shouldRemoveEpub = true
     var epubPath: String
     var book: FRBook
+
     // Mark those property as public so they can accessed from other classes/subclasses.
     public var readerConfig: FolioReaderConfig
     public var folioReader: FolioReader
 
-    fileprivate var errorOnLoad     = false
+    fileprivate var errorOnLoad = false
 
     // MARK: - Init
 

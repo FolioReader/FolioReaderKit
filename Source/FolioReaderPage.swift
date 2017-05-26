@@ -30,28 +30,30 @@ import JSQWebViewController
 }
 
 open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate {
-
     weak var delegate: FolioReaderPageDelegate?
+    weak var readerContainer: FolioReaderContainer?
 
     /// The index of the current page. Note: The index start at 1!
     open var pageNumber: Int!
     var webView: FolioReaderWebView!
+
     fileprivate var colorView: UIView!
     fileprivate var shouldShowBar = true
     fileprivate var menuIsVisible = false
 
-    fileprivate var readerContainer: FolioReaderContainer
-
     fileprivate var readerConfig: FolioReaderConfig {
+        guard let readerContainer = readerContainer else { return FolioReaderConfig() }
         return readerContainer.readerConfig
     }
 
     fileprivate var book: FRBook {
-        return self.readerContainer.book
+        guard let readerContainer = readerContainer else { return FRBook() }
+        return readerContainer.book
     }
 
     fileprivate var folioReader: FolioReader {
-        return self.readerContainer.folioReader
+        guard let readerContainer = readerContainer else { return FolioReader() }
+        return self.readerContainer!.folioReader
     }
 
     // MARK: - View life cicle
@@ -59,25 +61,23 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     public override init(frame: CGRect) {
         // Init explicit attributes with a default value. The `setup` function MUST be called to configure the current object with valid attributes.
         self.readerContainer = FolioReaderContainer(withConfig: FolioReaderConfig(), folioReader: FolioReader(), epubPath: "")
-
         super.init(frame: frame)
+        self.backgroundColor = UIColor.clear
+
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshPageMode), name: NSNotification.Name(rawValue: "needRefreshPageMode"), object: nil)
     }
 
     public func setup(withReaderContainer readerContainer: FolioReaderContainer) {
         self.readerContainer = readerContainer
-
-        self.backgroundColor = UIColor.clear
-
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshPageMode), name: NSNotification.Name(rawValue: "needRefreshPageMode"), object: nil)
+        guard let readerContainer = self.readerContainer else { return }
 
         if webView == nil {
-            webView = FolioReaderWebView(frame: webViewFrame(), readerContainer: self.readerContainer)
+            webView = FolioReaderWebView(frame: webViewFrame(), readerContainer: readerContainer)
             webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             webView.dataDetectorTypes = .link
             webView.scrollView.showsVerticalScrollIndicator = false
             webView.scrollView.showsHorizontalScrollIndicator = false
             webView.backgroundColor = UIColor.clear
-
             self.contentView.addSubview(webView)
         }
         webView.delegate = self
@@ -104,6 +104,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
     deinit {
         webView.scrollView.delegate = nil
+        webView.delegate = nil
         NotificationCenter.default.removeObserver(self)
     }
 

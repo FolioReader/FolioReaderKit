@@ -68,7 +68,6 @@ public enum FolioReaderFontSize: Int {
 }
 
 class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRecognizerDelegate {
-
     var menuView: UIView!
 
     fileprivate var readerConfig: FolioReaderConfig

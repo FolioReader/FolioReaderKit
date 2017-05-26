@@ -14,17 +14,21 @@ open class FolioReaderWebView: UIWebView {
     var isShare = false
     var isOneWord = false
 
-    fileprivate var readerConfig: FolioReaderConfig {
-        return self.readerContainer.readerConfig
-    }
+    fileprivate weak var readerContainer: FolioReaderContainer?
 
-    fileprivate var readerContainer : FolioReaderContainer
+    fileprivate var readerConfig: FolioReaderConfig {
+        guard let readerContainer = readerContainer else { return FolioReaderConfig() }
+        return readerContainer.readerConfig
+    }
 
     fileprivate var book: FRBook {
-        return self.readerContainer.book
+        guard let readerContainer = readerContainer else { return FRBook() }
+        return readerContainer.book
     }
+
     fileprivate var folioReader: FolioReader {
-        return self.readerContainer.folioReader
+        guard let readerContainer = readerContainer else { return FolioReader() }
+        return self.readerContainer!.folioReader
     }
 
     override init(frame: CGRect) {
@@ -150,7 +154,7 @@ open class FolioReaderWebView: UIWebView {
                     return
             }
 
-            let pageNumber = (self.readerContainer.folioReader.readerCenter?.currentPageNumber ?? 0)
+            let pageNumber = folioReader.readerCenter?.currentPageNumber ?? 0
             let match = Highlight.MatchingHighlight(text: html, id: identifier, startOffset: startOffset, endOffset: endOffset, bookId: bookId, currentPage: pageNumber)
             let highlight = Highlight.matchHighlight(match)
             highlight?.persist(withConfiguration: self.readerConfig)
@@ -161,7 +165,6 @@ open class FolioReaderWebView: UIWebView {
     }
 
     func define(_ sender: UIMenuController?) {
-
         guard let selectedText = js("getSelectedText()") else {
             return
         }
@@ -171,7 +174,8 @@ open class FolioReaderWebView: UIWebView {
 
         let vc = UIReferenceLibraryViewController(term: selectedText)
         vc.view.tintColor = self.readerConfig.tintColor
-        self.readerContainer.show(vc, sender: nil)
+        guard let readerContainer = readerContainer else { return }
+        readerContainer.show(vc, sender: nil)
     }
 
     func play(_ sender: UIMenuController?) {
