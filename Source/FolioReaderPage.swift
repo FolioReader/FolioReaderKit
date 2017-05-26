@@ -88,6 +88,10 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
             webView.scrollView.addSubview(colorView)
         }
 
+        // Remove all gestures before adding new one
+        webView.gestureRecognizers?.forEach({ gesture in
+            webView.removeGestureRecognizer(gesture)
+        })
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:)))
         tapGestureRecognizer.numberOfTapsRequired = 1
         tapGestureRecognizer.delegate = self

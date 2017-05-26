@@ -383,7 +383,6 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     private func updateBarsStatus(_ shouldHide: Bool, shouldShowIndicator: Bool = false) {
-
         self.readerContainer.shouldHideStatusBar = shouldHide
 
         UIView.animate(withDuration: 0.25, animations: {
@@ -391,11 +390,10 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
             // Show minutes indicator
             if (shouldShowIndicator == true) {
-                self.pageIndicatorView?.minutesLabel.alpha = (shouldHide == true ? 0 : 1)
+                self.pageIndicatorView?.minutesLabel.alpha = shouldHide ? 0 : 1
             }
-        }, completion: { (finished: Bool) in
-            self.navigationController?.setNavigationBarHidden(shouldHide, animated: true)
         })
+        self.navigationController?.setNavigationBarHidden(shouldHide, animated: true)
     }
 
     // MARK: UICollectionViewDataSource
