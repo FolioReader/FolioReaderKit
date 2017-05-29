@@ -1,9 +1,9 @@
 //
 //  AppDelegate.swift
-//  Example
+//  StoryboardExample
 //
-//  Created by Heberti Almeida on 08/04/15.
-//  Copyright (c) 2015 Folio Reader. All rights reserved.
+//  Created by Panajotis Maroungas on 18/08/16.
+//  Copyright © 2016 FolioReader. All rights reserved.
 //
 
 import UIKit
@@ -13,8 +13,7 @@ import FolioReaderKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var standardEpub: FolioReaderContainer?
-    var audioEpub: FolioReaderContainer?
+    var epubReader: FolioReaderContainer?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -22,14 +21,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        /// Save Reader state, book, page and scroll offset.
-        self.standardEpub?.saveReaderState()
-        self.audioEpub?.saveReaderState()
+        self.epubReader?.saveReaderState()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-        /// Save Reader state, book, page and scroll offset.
-        self.standardEpub?.saveReaderState()
-        self.audioEpub?.saveReaderState()
+        self.epubReader?.saveReaderState()
     }
 }
+

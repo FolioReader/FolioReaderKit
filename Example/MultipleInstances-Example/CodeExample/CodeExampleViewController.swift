@@ -1,9 +1,9 @@
 //
-//  ViewController.swift
+//  CodeExampleViewController.swift
 //  Example
 //
-//  Created by Heberti Almeida on 08/04/15.
-//  Copyright (c) 2015 Folio Reader. All rights reserved.
+//  Created by Hans Seiffert on 14/04/17.
+//  Copyright (c) 2017 Folio Reader. All rights reserved.
 //
 
 import UIKit
@@ -11,17 +11,24 @@ import FolioReaderKit
 
 extension Epub {
 
+    var readerIdentifier: String {
+        switch self {
+        case .bookOne:      return "READER_ONE"
+        case .bookTwo:      return "READER_TWO"
+        }
+    }
+
     func retain(folioReaderContainer: FolioReaderContainer) {
         let appDelegate = (UIApplication.shared.delegate as? AppDelegate)
 
         switch self {
-        case .bookOne: appDelegate?.standardEpub = folioReaderContainer
-        case .bookTwo: appDelegate?.audioEpub = folioReaderContainer
+        case .bookOne: appDelegate?.epubReaderOne = folioReaderContainer
+        case .bookTwo: appDelegate?.epubReaderTwo = folioReaderContainer
         }
     }
 }
 
-class ViewController: UIViewController {
+class CodeExampleViewController: UIViewController {
 
     @IBOutlet weak var bookOne: UIButton?
     @IBOutlet weak var bookTwo: UIButton?
@@ -38,21 +45,9 @@ class ViewController: UIViewController {
 
     private func readerConfiguration(forEpub epub: Epub) -> FolioReaderConfig {
 
-        let config = FolioReaderConfig()
+        let config = FolioReaderConfig(withIdentifier: epub.readerIdentifier)
         config.shouldHideNavigationOnTap = epub.shouldHideNavigationOnTap
         config.scrollDirection = epub.scrollDirection
-
-        // See more at FolioReaderConfig.swift
-        //        config.canChangeScrollDirection = false
-        //        config.enableTTS = false
-        //        config.allowSharing = false
-        //        config.tintColor = UIColor.blueColor()
-        //        config.toolBarTintColor = UIColor.redColor()
-        //        config.toolBarBackgroundColor = UIColor.purpleColor()
-        //        config.menuTextColor = UIColor.brownColor()
-        //        config.menuBackgroundColor = UIColor.lightGrayColor()
-        //        config.hidePageIndicator = true
-        //        config.realmConfiguration = Realm.Configuration(fileURL: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("highlights.realm"))
 
         // Custom sharing quote background
         config.quoteCustomBackgrounds = []
@@ -101,8 +96,8 @@ class ViewController: UIViewController {
 
 // MARK: - IBAction
 
-extension ViewController {
-    
+extension CodeExampleViewController {
+
     @IBAction func didOpen(_ sender: AnyObject) {
         guard let epub = Epub(rawValue: sender.tag) else {
             return

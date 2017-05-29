@@ -35,7 +35,7 @@ class FRSmilElement: NSObject {
 
     /**
      Returns array of Strings if `epub:type` attribute is set. An array is returned as there can be multiple types specified, seperated by a whitespace
-    */
+     */
     func getType() -> [String]! {
         let type = getAttribute("epub:type", defaultVal: "")
         return type!.components(separatedBy: " ")
@@ -46,9 +46,9 @@ class FRSmilElement: NSObject {
 
      **Example**
 
-         epub:type="bodymatter chapter"
-         isType("bodymatter") -> true
-    */
+     epub:type="bodymatter chapter"
+     isType("bodymatter") -> true
+     */
     func isType(_ aType:String) -> Bool {
         return getType().contains(aType)
     }

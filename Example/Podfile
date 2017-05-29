@@ -16,8 +16,12 @@ target 'Example' do
   shared_pods
 end
 
-target 'StoryboardExample' do
+target 'Storyboard-Example' do
 	shared_pods
+end
+
+target 'MultipleInstance-Example' do
+    shared_pods
 end
 
 target 'FolioReaderTests' do
