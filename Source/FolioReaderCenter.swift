@@ -83,7 +83,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
     fileprivate var folioReader: FolioReader {
         guard let readerContainer = readerContainer else { return FolioReader() }
-        return self.readerContainer!.folioReader
+        return readerContainer.folioReader
     }
 
     // MARK: - Init
