@@ -60,7 +60,17 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     var scrollDelta: CGFloat!
     var scrollDeltaTimer: Timer!
 
-    fileprivate var readerContainer: FolioReaderContainer
+    fileprivate weak var readerContainer: FolioReaderContainer?
+
+    fileprivate var readerConfig: FolioReaderConfig {
+        guard let readerContainer = readerContainer else { return FolioReaderConfig() }
+        return readerContainer.readerConfig
+    }
+
+    fileprivate var folioReader: FolioReader {
+        guard let readerContainer = readerContainer else { return FolioReader() }
+        return readerContainer.folioReader
+    }
 
     var frame: CGRect {
         didSet {
@@ -82,7 +92,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
 
         // less obtrusive knob and fixes jump: http://stackoverflow.com/a/22301039/484780
         let thumbImg = UIImage(readerImageNamed: "knob")
-        let thumbImgColor = thumbImg?.imageTintColor(self.readerContainer.readerConfig.tintColor)?.withRenderingMode(.alwaysOriginal)
+        let thumbImgColor = thumbImg?.imageTintColor(readerConfig.tintColor)?.withRenderingMode(.alwaysOriginal)
         slider.setThumbImage(thumbImgColor, for: UIControlState())
         slider.setThumbImage(thumbImgColor, for: .selected)
         slider.setThumbImage(thumbImgColor, for: .highlighted)
@@ -94,9 +104,8 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     }
 
     func reloadColors() {
-        let readerConfig = self.readerContainer.readerConfig
         slider.minimumTrackTintColor = readerConfig.tintColor
-        slider.maximumTrackTintColor = self.readerContainer.folioReader.isNight(readerConfig.nightModeSeparatorColor, readerConfig.menuSeparatorColor)
+        slider.maximumTrackTintColor = folioReader.isNight(readerConfig.nightModeSeparatorColor, readerConfig.menuSeparatorColor)
     }
 
     // MARK: - slider events
@@ -113,7 +122,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
 
     func sliderChange(_ slider:UISlider) {
         let movePosition = (height() * CGFloat(slider.value))
-        let offset = self.readerContainer.readerConfig.isDirection(CGPoint(x: 0, y: movePosition), CGPoint(x: movePosition, y: 0), CGPoint(x: 0, y: movePosition))
+        let offset = readerConfig.isDirection(CGPoint(x: 0, y: movePosition), CGPoint(x: movePosition, y: 0), CGPoint(x: 0, y: movePosition))
         scrollView()?.setContentOffset(offset, animated: false)
     }
 
@@ -176,12 +185,11 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
         }
 
         if scrollStart == nil {
-            scrollStart = scrollView.contentOffset.forDirection(withConfiguration: self.readerContainer.readerConfig)
+            scrollStart = scrollView.contentOffset.forDirection(withConfiguration: readerConfig)
         }
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let readerConfig = self.readerContainer.readerConfig
         guard (readerConfig.scrollDirection == .vertical ||
             readerConfig.scrollDirection == .defaultVertical ||
             readerConfig.scrollDirection == .horizontalWithVerticalContent) else {
@@ -194,11 +202,10 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
 
         if (slider.alpha > 0) {
             self.show()
-
         } else if delegate.currentPage != nil && scrollStart != nil {
-            scrollDelta = scrollView.contentOffset.forDirection(withConfiguration: self.readerContainer.readerConfig) - scrollStart
+            scrollDelta = scrollView.contentOffset.forDirection(withConfiguration: readerConfig) - scrollStart
 
-            guard let pageHeight = self.readerContainer.folioReader.readerCenter?.pageHeight,
+            guard let pageHeight = folioReader.readerCenter?.pageHeight,
                 (scrollDeltaTimer == nil && scrollDelta > (pageHeight * 0.2 ) || (scrollDelta * -1) > (pageHeight * 0.2)) else {
                     return
             }
@@ -223,10 +230,9 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
             scrollDeltaTimer = nil
         }
 
-        scrollStart = (scrollView()?.contentOffset.forDirection(withConfiguration: self.readerContainer.readerConfig) ?? 0)
+        scrollStart = (scrollView()?.contentOffset.forDirection(withConfiguration: readerConfig) ?? 0)
         scrollDelta = 0
     }
-
 
     func setSliderVal() {
         slider.value = Float(scrollTop() / height())
@@ -241,7 +247,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     fileprivate func height() -> CGFloat {
         guard
             let currentPage = delegate.currentPage,
-            let pageHeight = self.readerContainer.folioReader.readerCenter?.pageHeight else {
+            let pageHeight = folioReader.readerCenter?.pageHeight else {
                 return 0
         }
 
@@ -252,7 +258,6 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
         guard let currentPage = delegate.currentPage else {
             return 0
         }
-        
-        return currentPage.webView.scrollView.contentOffset.forDirection(withConfiguration: self.readerContainer.readerConfig)
+        return currentPage.webView.scrollView.contentOffset.forDirection(withConfiguration: readerConfig)
     }
 }
