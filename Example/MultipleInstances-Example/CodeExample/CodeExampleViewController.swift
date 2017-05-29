@@ -9,22 +9,12 @@
 import UIKit
 import FolioReaderKit
 
-extension Epub {
-
-    func retain(folioReaderContainer: FolioReaderContainer) {
-        let appDelegate = (UIApplication.shared.delegate as? AppDelegate)
-
-        switch self {
-        case .bookOne: appDelegate?.epubReaderOne = folioReaderContainer
-        case .bookTwo: appDelegate?.epubReaderTwo = folioReaderContainer
-        }
-    }
-}
-
 class CodeExampleViewController: UIViewController {
 
     @IBOutlet weak var bookOne: UIButton?
     @IBOutlet weak var bookTwo: UIButton?
+    var epubReaderOne = FolioReader()
+    var epubReaderTwo = FolioReader()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,8 +54,12 @@ class CodeExampleViewController: UIViewController {
         }
 
         let readerConfiguration = self.readerConfiguration(forEpub: epub)
-        let folioReaderContainer = FolioReader.presentReader(parentViewController: self, withEpubPath: bookPath, andConfig: readerConfiguration, shouldRemoveEpub: false)
-        epub.retain(folioReaderContainer: folioReaderContainer)
+        switch epub {
+        case .bookOne:
+            epubReaderOne.presentReader(parentViewController: self, withEpubPath: bookPath, andConfig: readerConfiguration, shouldRemoveEpub: false)
+        case .bookTwo:
+            epubReaderTwo.presentReader(parentViewController: self, withEpubPath: bookPath, andConfig: readerConfiguration, shouldRemoveEpub: false)
+        }
     }
     
     private func setCover(_ button: UIButton?, index: Int) {

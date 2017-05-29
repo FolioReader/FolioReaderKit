@@ -192,11 +192,6 @@ open class FolioReaderContainer: UIViewController {
         }
     }
 
-    /// Save Reader state, book, page and scroll offset.
-    open func saveReaderState() {
-        self.folioReader.saveReaderState()
-    }
-
     /**
      Initialize the media player
      */

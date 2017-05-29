@@ -11,17 +11,17 @@ import UIKit
 
 // MARK: - Internal constants
 
-internal let kApplicationDocumentsDirectory     = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-internal let kCurrentFontFamily                 = "com.folioreader.kCurrentFontFamily"
-internal let kCurrentFontSize                   = "com.folioreader.kCurrentFontSize"
-internal let kCurrentAudioRate                  = "com.folioreader.kCurrentAudioRate"
-internal let kCurrentHighlightStyle             = "com.folioreader.kCurrentHighlightStyle"
-internal let kCurrentMediaOverlayStyle          = "com.folioreader.kMediaOverlayStyle"
-internal let kCurrentScrollDirection            = "com.folioreader.kCurrentScrollDirection"
-internal let kNightMode                         = "com.folioreader.kNightMode"
-internal let kCurrentTOCMenu                    = "com.folioreader.kCurrentTOCMenu"
-internal let kHighlightRange                    = 30
-internal let kReuseCellIdentifier               = "com.folioreader.Cell.ReuseIdentifier"
+internal let kApplicationDocumentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+internal let kCurrentFontFamily = "com.folioreader.kCurrentFontFamily"
+internal let kCurrentFontSize = "com.folioreader.kCurrentFontSize"
+internal let kCurrentAudioRate = "com.folioreader.kCurrentAudioRate"
+internal let kCurrentHighlightStyle = "com.folioreader.kCurrentHighlightStyle"
+internal let kCurrentMediaOverlayStyle = "com.folioreader.kMediaOverlayStyle"
+internal let kCurrentScrollDirection = "com.folioreader.kCurrentScrollDirection"
+internal let kNightMode = "com.folioreader.kNightMode"
+internal let kCurrentTOCMenu = "com.folioreader.kCurrentTOCMenu"
+internal let kHighlightRange = 30
+internal let kReuseCellIdentifier = "com.folioreader.Cell.ReuseIdentifier"
 
 public struct FolioReaderError: Error {
     enum ErrorKind {
@@ -93,8 +93,11 @@ enum MediaOverlayStyle: Int {
 /// Main Library class with some useful constants and methods
 open class FolioReader: NSObject {
 
-    /// Internal init function to disable the creation of `FolioReader` objects outside the current scope.
-    internal override init() { }
+    public override init() { }
+
+    deinit {
+        removeObservers()
+    }
 
     /// Custom unzip path
     open var unzipPath: String?
@@ -127,9 +130,22 @@ open class FolioReader: NSObject {
     fileprivate var defaults: FolioReaderUserDefaults {
         return FolioReaderUserDefaults(withIdentifier: self.readerContainer?.readerConfig.identifier)
     }
+
+    // Add necessary observers
+    fileprivate func addObservers() {
+        removeObservers()
+        NotificationCenter.default.addObserver(self, selector: #selector(saveReaderState), name: .UIApplicationWillResignActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(saveReaderState), name: .UIApplicationWillTerminate, object: nil)
+    }
+
+    /// Remove necessary observers
+    fileprivate func removeObservers() {
+        NotificationCenter.default.removeObserver(self, name: .UIApplicationWillResignActive, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .UIApplicationWillTerminate, object: nil)
+    }
 }
 
-// MARK: - Present Folio Reader
+// MARK: - Present FolioReader
 
 extension FolioReader {
 
@@ -141,16 +157,15 @@ extension FolioReader {
     ///   - config: FolioReader configuration.
     ///   - shouldRemoveEpub: Boolean to remove the epub or not. Default true.
     ///   - animated: Pass true to animate the presentation; otherwise, pass false.
-    /// - Returns: The new and presented FolioReaderContainer instance.
-    open class func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated:
-        Bool = true) -> FolioReaderContainer {
-        let folioReader = FolioReader()
-        let readerContainer = FolioReaderContainer(withConfig: config, folioReader: folioReader, epubPath: epubPath, removeEpub: shouldRemoveEpub)
-        folioReader.readerContainer = readerContainer
+    open func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated:
+        Bool = true) {
+        var readerContainer = FolioReaderContainer(withConfig: config, folioReader: self, epubPath: epubPath, removeEpub: shouldRemoveEpub)
+        self.readerContainer = readerContainer
         parentViewController.present(readerContainer, animated: animated, completion: nil)
+        addObservers()
+
         // Set the shared instance to support old version.
-        FolioReader.shared = folioReader
-        return readerContainer
+        FolioReader.shared = self
     }
 }
 
@@ -324,14 +339,12 @@ extension FolioReader {
 
     /// Save Reader state, book, page and scroll offset.
     open func saveReaderState() {
-        guard (self.isReaderOpen == true) else {
+        guard isReaderOpen else {
             return
         }
 
-        guard
-            let bookId = self.readerContainer?.book.name,
-            let currentPage = self.readerCenter?.currentPage else {
-                return
+        guard let bookId = self.readerContainer?.book.name, let currentPage = self.readerCenter?.currentPage else {
+            return
         }
 
         let position = [
@@ -407,6 +420,7 @@ extension FolioReader {
     }
 
     /// Save Reader state, book, page and scroll are saved
+    @available(*, deprecated, message: "You no longer need to call `saveReaderState` for `applicationWillResignActive` and `applicationWillTerminate`. FolioReader Already handle that.")
     open class func saveReaderState() {
         FolioReader.shared.saveReaderState()
     }
@@ -425,22 +439,6 @@ extension FolioReader {
     /// Check if layout needs to change to fit Right To Left
     open class var needsRTLChange: Bool {
         return FolioReader.shared.needsRTLChange
-    }
-}
-
-// MARK: - Application State
-
-@available(*, deprecated, message: "Use 'saveReaderState()' on a FolioReaderContainer object instead.")
-extension FolioReader {
-
-    /// Called when the application will resign active
-    open class func applicationWillResignActive() {
-        FolioReader.shared.saveReaderState()
-    }
-
-    /// Called when the application will terminate
-    open class func applicationWillTerminate() {
-        FolioReader.shared.saveReaderState()
     }
 }
 

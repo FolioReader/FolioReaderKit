@@ -25,7 +25,5 @@ class BookOneExampleFolioReaderContainer: BaseExampleFolioReaderContainer {
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-
-        (UIApplication.shared.delegate as? AppDelegate)?.epubReaderOne = self
     }
 }

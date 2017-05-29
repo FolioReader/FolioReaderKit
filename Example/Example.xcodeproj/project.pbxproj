@@ -201,9 +201,9 @@
 			isa = PBXGroup;
 			children = (
 				3AAA8B7E1E9BB8B700A47E5A /* AppDelegate.swift */,
+				3AAA8B841E9BB8B700A47E5A /* ExampleFolioReaderContainer.swift */,
 				3AAA8B801E9BB8B700A47E5A /* LaunchScreen.storyboard */,
 				3AAA8B821E9BB8B700A47E5A /* Main.storyboard */,
-				3AAA8B841E9BB8B700A47E5A /* ExampleFolioReaderContainer.swift */,
 				3AAA8B851E9BB8B700A47E5A /* Info.plist */,
 			);
 			path = "Storyboard-Example";
@@ -390,6 +390,7 @@
 						};
 					};
 					3AAA8B671E9BB78B00A47E5A = {
+						DevelopmentTeam = 32F2T8EJ6G;
 						ProvisioningStyle = Automatic;
 					};
 					CA10C1301C572A4B0049165D = {
@@ -938,7 +939,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 32F2T8EJ6G;
 				INFOPLIST_FILE = "MultipleInstances-Example/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -959,7 +960,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 32F2T8EJ6G;
 				INFOPLIST_FILE = "MultipleInstances-Example/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
