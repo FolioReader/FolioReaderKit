@@ -31,15 +31,11 @@ class FolioReaderSharingProvider: UIActivityItemProvider {
         if let html = html , activityType == UIActivityType.mail {
             return html
         }
-        
+
         if let image = image , activityType == UIActivityType.postToFacebook {
             return image
         }
 
         return text
     }
-    
-//    func activityViewController(activityViewController: UIActivityViewController, thumbnailImageForActivityType activityType: String?, suggestedSize size: CGSize) -> UIImage? {
-//
-//    }
 }

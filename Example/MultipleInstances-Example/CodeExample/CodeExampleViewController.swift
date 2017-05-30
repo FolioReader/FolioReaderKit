@@ -1,19 +1,20 @@
 //
-//  ViewController.swift
+//  CodeExampleViewController.swift
 //  Example
 //
-//  Created by Heberti Almeida on 08/04/15.
-//  Copyright (c) 2015 Folio Reader. All rights reserved.
+//  Created by Hans Seiffert on 14/04/17.
+//  Copyright (c) 2017 Folio Reader. All rights reserved.
 //
 
 import UIKit
 import FolioReaderKit
 
-class ViewController: UIViewController {
+class CodeExampleViewController: UIViewController {
 
     @IBOutlet weak var bookOne: UIButton?
     @IBOutlet weak var bookTwo: UIButton?
-    let folioReader = FolioReader()
+    var epubReaderOne = FolioReader()
+    var epubReaderTwo = FolioReader()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,21 +27,10 @@ class ViewController: UIViewController {
     }
 
     private func readerConfiguration(forEpub epub: Epub) -> FolioReaderConfig {
+
         let config = FolioReaderConfig(withIdentifier: epub.readerIdentifier)
         config.shouldHideNavigationOnTap = epub.shouldHideNavigationOnTap
         config.scrollDirection = epub.scrollDirection
-
-        // See more at FolioReaderConfig.swift
-//        config.canChangeScrollDirection = false
-//        config.enableTTS = false
-//        config.allowSharing = false
-//        config.tintColor = UIColor.blueColor()
-//        config.toolBarTintColor = UIColor.redColor()
-//        config.toolBarBackgroundColor = UIColor.purpleColor()
-//        config.menuTextColor = UIColor.brownColor()
-//        config.menuBackgroundColor = UIColor.lightGrayColor()
-//        config.hidePageIndicator = true
-//        config.realmConfiguration = Realm.Configuration(fileURL: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("highlights.realm"))
 
         // Custom sharing quote background
         config.quoteCustomBackgrounds = []
@@ -58,14 +48,20 @@ class ViewController: UIViewController {
     }
 
     fileprivate func open(epub: Epub) {
+
         guard let bookPath = epub.bookPath else {
             return
         }
 
         let readerConfiguration = self.readerConfiguration(forEpub: epub)
-        folioReader.presentReader(parentViewController: self, withEpubPath: bookPath, andConfig: readerConfiguration, shouldRemoveEpub: false)
+        switch epub {
+        case .bookOne:
+            epubReaderOne.presentReader(parentViewController: self, withEpubPath: bookPath, andConfig: readerConfiguration, shouldRemoveEpub: false)
+        case .bookTwo:
+            epubReaderTwo.presentReader(parentViewController: self, withEpubPath: bookPath, andConfig: readerConfiguration, shouldRemoveEpub: false)
+        }
     }
-
+    
     private func setCover(_ button: UIButton?, index: Int) {
         guard
             let epub = Epub(rawValue: index),
@@ -87,8 +83,8 @@ class ViewController: UIViewController {
 
 // MARK: - IBAction
 
-extension ViewController {
-    
+extension CodeExampleViewController {
+
     @IBAction func didOpen(_ sender: AnyObject) {
         guard let epub = Epub(rawValue: sender.tag) else {
             return

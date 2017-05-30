@@ -1,8 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A319" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1217" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,6 +23,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="76c-NV-rFk">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <connections>
                                     <segue destination="ohM-0F-lQn" kind="embed" id="GwJ-h1-STP"/>
                                 </connections>
@@ -29,12 +33,12 @@
                         <constraints>
                             <constraint firstItem="76c-NV-rFk" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="80" id="0D6-Fj-fwv"/>
                             <constraint firstItem="76c-NV-rFk" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="1FY-cA-fGb"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="76c-NV-rFk" secondAttribute="bottom" constant="200" id="8t2-cj-MBZ"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="76c-NV-rFk" secondAttribute="bottom" id="8t2-cj-MBZ"/>
                             <constraint firstItem="76c-NV-rFk" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="N9R-fw-Ou2"/>
-                            <constraint firstItem="76c-NV-rFk" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="50" id="NRZ-uj-OHl"/>
+                            <constraint firstItem="76c-NV-rFk" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="NRZ-uj-OHl"/>
                             <constraint firstItem="76c-NV-rFk" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="100" id="Oo2-Kp-m9H"/>
                             <constraint firstItem="76c-NV-rFk" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="100" id="QPp-IK-WD4"/>
-                            <constraint firstAttribute="trailing" secondItem="76c-NV-rFk" secondAttribute="trailing" constant="50" id="ZS5-v1-RfB"/>
+                            <constraint firstAttribute="trailing" secondItem="76c-NV-rFk" secondAttribute="trailing" id="ZS5-v1-RfB"/>
                             <constraint firstItem="76c-NV-rFk" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="20" id="aFJ-E1-Z7h"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="76c-NV-rFk" secondAttribute="bottom" constant="100" id="bTg-k8-90V"/>
                             <constraint firstItem="76c-NV-rFk" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="hhc-EW-4bw"/>
@@ -67,7 +71,7 @@
                         <viewControllerLayoutGuide type="bottom" id="hph-6f-D8P"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="ICb-Up-C2B">
-                        <rect key="frame" x="0.0" y="0.0" width="275" height="467"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>

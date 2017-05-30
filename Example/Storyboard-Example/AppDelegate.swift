@@ -1,9 +1,9 @@
 //
 //  AppDelegate.swift
-//  Example
+//  StoryboardExample
 //
-//  Created by Heberti Almeida on 08/04/15.
-//  Copyright (c) 2015 Folio Reader. All rights reserved.
+//  Created by Panajotis Maroungas on 18/08/16.
+//  Copyright © 2016 FolioReader. All rights reserved.
 //
 
 import UIKit
@@ -17,3 +17,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 }
+
