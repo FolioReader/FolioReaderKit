@@ -2,7 +2,7 @@
 
 ## Introduction
 
-That new version introduce a new feature that allows you to have multiple instances of a `FolioReaderContainer` at the same time in your app.
+That new version introduce a new feature that allows you to have multiple instances of a `FolioReader` at the same time in your app.
 All instances now have their own stored informations and nothing is shared between them.
 
 Before, the library used a global static `FolioReader` that contained all relevant objects (`ReaderContainer`, `ReaderConfig`, `AudioPlayer`, etc).
@@ -16,13 +16,6 @@ Here is the list of changes made to the `public` functions.
 
 ### Class: FolioReader
 
-The function `presentReader` now returns the presented `FolioReaderContainer` instance.
-It also initialise the depcrecated shared instance in order to support the previous versions of the library.
-
-```
-class func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated: Bool = true) -> FolioReaderContainer
-```
-
 The function `getCoverImage` now has an extra parameter indicating the unzip path for the epub.
 
 ```
@@ -32,17 +25,7 @@ class func getCoverImage(_ epubPath: String, unzipPath: String? = nil) -> UIImag
 #### AppDelegate
 
 The functions to be called within the AppDelegate methods have been deprecated.
-There is no direct replacement, use `saveReaderState()` on a `FolioReaderContainer` object instead.
-
-Deprecated:
-```
-class func applicationWillResignActive()
-class func applicationWillTerminate()
-```
-Replaced by on `FolioReaderContainer` class:
-```
-open func saveReaderState()
-```
+Before you needed to save the reader state on `applicationWillResignActive` and `applicationWillTerminate`, now it is internally handled and simplify the integration.
 
 #### Deprecated static functions
 
@@ -63,10 +46,13 @@ open class func saveReaderState()
 open class func close()
 open class var currentHighlightStyle: Int
 open class var needsRTLChange: Bool
-
-open class func applicationWillResignActive()
-open class func applicationWillTerminate()
 ```
+
+It is possible to access all this attributes throught the instance object:
+```swift
+let folioReader = FolioReader()
+folioReader.nightMode
+``` 
 
 ### Class: FolioReaderContainer
 
