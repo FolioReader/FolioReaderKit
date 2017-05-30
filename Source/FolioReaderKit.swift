@@ -56,7 +56,7 @@ public struct FolioReaderError: Error {
 /// - `default`: The background is colored
 /// - underline: The underlined is colored
 /// - textColor: The text is colored
-enum MediaOverlayStyle: Int {
+public enum MediaOverlayStyle: Int {
     case `default`
     case underline
     case textColor
@@ -237,7 +237,7 @@ extension FolioReader {
     }
 
     /// Check current audio rate, the speed of speech voice. Default 0
-    var currentAudioRate: Int {
+    open var currentAudioRate: Int {
         get { return self.defaults.integer(forKey: kCurrentAudioRate) }
         set (value) {
             self.defaults.set(value, forKey: kCurrentAudioRate)
@@ -245,7 +245,7 @@ extension FolioReader {
     }
 
     /// Check the current highlight style.Default 0
-    var currentHighlightStyle: Int {
+    open var currentHighlightStyle: Int {
         get { return self.defaults.integer(forKey: kCurrentHighlightStyle) }
         set (value) {
             self.defaults.set(value, forKey: kCurrentHighlightStyle)
@@ -253,14 +253,12 @@ extension FolioReader {
     }
 
     /// Check the current Media Overlay or TTS style
-    var currentMediaOverlayStyle: MediaOverlayStyle {
+    open var currentMediaOverlayStyle: MediaOverlayStyle {
         get {
-            guard
-                let rawValue = self.defaults.value(forKey: kCurrentMediaOverlayStyle) as? Int,
+            guard let rawValue = self.defaults.value(forKey: kCurrentMediaOverlayStyle) as? Int,
                 let style = MediaOverlayStyle(rawValue: rawValue) else {
-                    return MediaOverlayStyle.default
+                return MediaOverlayStyle.default
             }
-
             return style
         }
         set (value) {
@@ -297,14 +295,12 @@ extension FolioReader {
             guard let bookId = self.readerContainer?.book.name else {
                 return nil
             }
-
             return self.defaults.value(forKey: bookId) as? [String : Any]
         }
         set {
             guard let bookId = self.readerContainer?.book.name else {
                 return
             }
-
             self.defaults.set(newValue, forKey: bookId)
         }
     }
