@@ -2,7 +2,42 @@
 
 ## [Unreleased](https://github.com/FolioReader/FolioReaderKit/tree/HEAD)
 
-[Full Changelog](https://github.com/FolioReader/FolioReaderKit/compare/1.0.0...HEAD)
+[Full Changelog](https://github.com/FolioReader/FolioReaderKit/compare/1.1.0...HEAD)
+
+**Implemented enhancements:**
+
+- Crash if "Cannot read container.xml" [\#164](https://github.com/FolioReader/FolioReaderKit/issues/164)
+- Support multiple instances of the FolioReader [\#140](https://github.com/FolioReader/FolioReaderKit/issues/140)
+
+**Fixed bugs:**
+
+- Bug at scroll to next chapter in horizontal mode [\#173](https://github.com/FolioReader/FolioReaderKit/issues/173)
+- Crash if "Cannot read container.xml" [\#164](https://github.com/FolioReader/FolioReaderKit/issues/164)
+
+**Closed issues:**
+
+- Epub file does not exist [\#240](https://github.com/FolioReader/FolioReaderKit/issues/240)
+- Highlight a sentence when double click a word in a sentence [\#234](https://github.com/FolioReader/FolioReaderKit/issues/234)
+- \[FolioReaderKit.FolioReaderCenter respondsToSelector:\]: message sent to deallocated instance 0x7fb6f6188a00 [\#217](https://github.com/FolioReader/FolioReaderKit/issues/217)
+- Epub file does not exist. [\#216](https://github.com/FolioReader/FolioReaderKit/issues/216)
+- Tap "Aa" button app crashed [\#215](https://github.com/FolioReader/FolioReaderKit/issues/215)
+- Loading 2 epubs at the same time for language learners [\#214](https://github.com/FolioReader/FolioReaderKit/issues/214)
+- Page Flip [\#209](https://github.com/FolioReader/FolioReaderKit/issues/209)
+- Update Podfile description [\#205](https://github.com/FolioReader/FolioReaderKit/issues/205)
+- Crashing After Highlight [\#186](https://github.com/FolioReader/FolioReaderKit/issues/186)
+- return readerConfig.shouldHideNavigationOnTap == false ? false : shouldHideStatusBar [\#169](https://github.com/FolioReader/FolioReaderKit/issues/169)
+
+**Merged pull requests:**
+
+- Map scroll directions to actual segment indices in fonts menu [\#238](https://github.com/FolioReader/FolioReaderKit/pull/238) ([ianyh](https://github.com/ianyh))
+- Issue/140 [\#237](https://github.com/FolioReader/FolioReaderKit/pull/237) ([tschob](https://github.com/tschob))
+- Fixed crash caused by resource.id set to nil. [\#228](https://github.com/FolioReader/FolioReaderKit/pull/228) ([SolomiyaN](https://github.com/SolomiyaN))
+- Fix not working ClassBasedOnClickListener schemes [\#223](https://github.com/FolioReader/FolioReaderKit/pull/223) ([tschob](https://github.com/tschob))
+- Fixed issue \#164, \#186 and \#173 [\#219](https://github.com/FolioReader/FolioReaderKit/pull/219) ([PravinNagargoje](https://github.com/PravinNagargoje))
+- Add possibility to specify custom Realm Configuration [\#204](https://github.com/FolioReader/FolioReaderKit/pull/204) ([revolter](https://github.com/revolter))
+
+## [1.1.0](https://github.com/FolioReader/FolioReaderKit/tree/1.1.0) (2017-01-10)
+[Full Changelog](https://github.com/FolioReader/FolioReaderKit/compare/1.0.0...1.1.0)
 
 **Fixed bugs:**
 
