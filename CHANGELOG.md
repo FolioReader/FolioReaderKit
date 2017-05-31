@@ -1,8 +1,7 @@
 # Change Log
 
-## [Unreleased](https://github.com/FolioReader/FolioReaderKit/tree/HEAD)
-
-[Full Changelog](https://github.com/FolioReader/FolioReaderKit/compare/1.1.0...HEAD)
+## [1.2.0](https://github.com/FolioReader/FolioReaderKit/tree/1.2.0) (2017-05-31)
+[Full Changelog](https://github.com/FolioReader/FolioReaderKit/compare/1.1.0...1.2.0)
 
 **Implemented enhancements:**
 
