@@ -134,7 +134,7 @@ Checkout [Example](/Example) and [API Documentation](http://cocoadocs.org/docset
 Current state: [![CocoaPods](https://img.shields.io/cocoapods/metrics/doc-percent/FolioReaderKit.svg?maxAge=86400)](http://cocoadocs.org/docsets/FolioReaderKit)
 
 You can always use the header-doc. (use **alt+click** in Xcode)
-<img src="https://d2ppvlu71ri8gs.cloudfront.net/items/3x3l0h002u3X2n1P0H3e/Screen%20Shot%202017-05-30%20at%2011.46.45%20PM.png" width="521px"/>
+<img src="https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/header-doc.png" width="521px"/>
 
 ### Migration
 If you are migrating to a newer version check out [MIGRATION](/MIGRATION.md) and [CHANGELOG](/CHANGELOG.md).
