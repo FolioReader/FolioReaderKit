@@ -73,6 +73,12 @@ public enum MediaOverlayStyle: Int {
 /// FolioReader actions delegate
 @objc public protocol FolioReaderDelegate: class {
 
+    /// Dismissed because an error occured.
+    ///
+    /// - Parameters:
+    ///   - error: The occured error
+    @objc optional func folioReader(_ folioReader: FolioReader, encounteredError error: Error)
+
     /// Did finished loading book.
     ///
     /// - Parameters:
