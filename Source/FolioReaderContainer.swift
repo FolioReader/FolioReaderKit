@@ -166,7 +166,7 @@ open class FolioReaderContainer: UIViewController {
                 self.folioReader.isReaderOpen = true
 
                 // Reload data
-                DispatchQueue.main.async(execute: {
+                DispatchQueue.main.async {
 
                     // Add audio player if needed
                     if (self.book.hasAudio() == true || self.readerConfig.enableTTS == true) {
@@ -175,7 +175,7 @@ open class FolioReaderContainer: UIViewController {
                     self.centerViewController?.reloadData()
                     self.folioReader.isReaderReady = true
                     self.folioReader.delegate?.folioReader?(self.folioReader, didFinishedLoading: self.book)
-                })
+                }
             } catch let e as FolioReaderError {
                 self.alert(message: e.localizedDescription)
             } catch {
