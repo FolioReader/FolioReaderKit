@@ -157,7 +157,7 @@ open class FolioReaderAudioPlayer: NSObject {
     func play() {
         if (self.book.hasAudio() == true) {
             guard let currentPage = self.folioReader.readerCenter?.currentPage else { return }
-            currentPage.webView.js("playAudio()")
+            currentPage.webView?.js("playAudio()")
         } else {
             self.readCurrentSentence()
         }
@@ -363,7 +363,7 @@ open class FolioReaderAudioPlayer: NSObject {
         }
 
         let playbackActiveClass = self.book.playbackActiveClass()
-        guard let sentence = currentPage.webView.js("getSentenceWithIndex('\(playbackActiveClass)')") else {
+        guard let sentence = currentPage.webView?.js("getSentenceWithIndex('\(playbackActiveClass)')") else {
             if (readerCenter.isLastPage() == true) {
                 self.stop()
             } else {
@@ -391,7 +391,7 @@ open class FolioReaderAudioPlayer: NSObject {
             if synthesizer.isSpeaking {
                 stopSynthesizer(immediate: false, completion: {
                     if let currentPage = self.folioReader.readerCenter?.currentPage {
-                        currentPage.webView.js("resetCurrentSentenceIndex()")
+                        currentPage.webView?.js("resetCurrentSentenceIndex()")
                     }
                     self.speakSentence()
                 })

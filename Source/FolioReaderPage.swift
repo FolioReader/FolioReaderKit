@@ -35,7 +35,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
     /// The index of the current page. Note: The index start at 1!
     open var pageNumber: Int!
-    var webView: FolioReaderWebView!
+    var webView: FolioReaderWebView?
 
     fileprivate var colorView: UIView!
     fileprivate var shouldShowBar = true
@@ -73,29 +73,29 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
         if webView == nil {
             webView = FolioReaderWebView(frame: webViewFrame(), readerContainer: readerContainer)
-            webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            webView.dataDetectorTypes = .link
-            webView.scrollView.showsVerticalScrollIndicator = false
-            webView.scrollView.showsHorizontalScrollIndicator = false
-            webView.backgroundColor = .clear
-            self.contentView.addSubview(webView)
+            webView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            webView?.dataDetectorTypes = .link
+            webView?.scrollView.showsVerticalScrollIndicator = false
+            webView?.scrollView.showsHorizontalScrollIndicator = false
+            webView?.backgroundColor = .clear
+            self.contentView.addSubview(webView!)
         }
-        webView.delegate = self
+        webView?.delegate = self
 
         if colorView == nil {
             colorView = UIView()
             colorView.backgroundColor = self.readerConfig.nightModeBackground
-            webView.scrollView.addSubview(colorView)
+            webView?.scrollView.addSubview(colorView)
         }
 
         // Remove all gestures before adding new one
-        webView.gestureRecognizers?.forEach({ gesture in
-            webView.removeGestureRecognizer(gesture)
+        webView?.gestureRecognizers?.forEach({ gesture in
+            webView?.removeGestureRecognizer(gesture)
         })
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:)))
         tapGestureRecognizer.numberOfTapsRequired = 1
         tapGestureRecognizer.delegate = self
-        webView.addGestureRecognizer(tapGestureRecognizer)
+        webView?.addGestureRecognizer(tapGestureRecognizer)
     }
 
     required public init?(coder aDecoder: NSCoder) {
@@ -103,16 +103,16 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     }
 
     deinit {
-        webView.scrollView.delegate = nil
-        webView.delegate = nil
+        webView?.scrollView.delegate = nil
+        webView?.delegate = nil
         NotificationCenter.default.removeObserver(self)
     }
 
     override open func layoutSubviews() {
         super.layoutSubviews()
 
-        webView.setupScrollDirection()
-        webView.frame = webViewFrame()
+        webView?.setupScrollDirection()
+        webView?.frame = webViewFrame()
     }
 
     func webViewFrame() -> CGRect {
@@ -138,8 +138,8 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         // Insert the stored highlights to the HTML
         let tempHtmlContent = htmlContentWithInsertHighlights(htmlContent)
         // Load the html into the webview
-        webView.alpha = 0
-        webView.loadHTMLString(tempHtmlContent, baseURL: baseURL)
+        webView?.alpha = 0
+        webView?.loadHTMLString(tempHtmlContent, baseURL: baseURL)
     }
 
     // MARK: - Highlights
@@ -205,7 +205,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
         UIView.animate(withDuration: 0.2, animations: {webView.alpha = 1}, completion: { finished in
             webView.isColors = false
-            self.webView.createMenu(options: false)
+            self.webView?.createMenu(options: false)
         })
 
         delegate?.pageDidLoad?(self)
@@ -358,7 +358,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         if gestureRecognizer.view is FolioReaderWebView {
             if otherGestureRecognizer is UILongPressGestureRecognizer {
                 if UIMenuController.shared.isMenuVisible {
-                    webView.setMenuVisible(false)
+                    webView?.setMenuVisible(false)
                 }
                 return false
             }
@@ -371,7 +371,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
         if let _navigationController = self.folioReader.readerCenter?.navigationController, (_navigationController.isNavigationBarHidden == true) {
 
-            let selected = webView.js("getSelectedText()")
+            let selected = webView?.js("getSelectedText()")
             guard (selected == nil || selected?.isEmpty == true) else {
                 return
             }
@@ -401,13 +401,14 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
      */
     open func scrollPageToOffset(_ offset: CGFloat, animated: Bool) {
         let pageOffsetPoint = self.readerConfig.isDirection(CGPoint(x: 0, y: offset), CGPoint(x: offset, y: 0), CGPoint(x: 0, y: offset))
-        webView.scrollView.setContentOffset(pageOffsetPoint, animated: animated)
+        webView?.scrollView.setContentOffset(pageOffsetPoint, animated: animated)
     }
 
     /**
      Scrolls the page to bottom
      */
     open func scrollPageToBottom() {
+        guard let webView = webView else { return }
         let bottomOffset = self.readerConfig.isDirection(
             CGPoint(x: 0, y: webView.scrollView.contentSize.height - webView.scrollView.bounds.height),
             CGPoint(x: webView.scrollView.contentSize.width - webView.scrollView.bounds.width, y: 0),
@@ -415,9 +416,9 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         )
 
         if bottomOffset.forDirection(withConfiguration: self.readerConfig) >= 0 {
-            DispatchQueue.main.async(execute: {
-                self.webView.scrollView.setContentOffset(bottomOffset, animated: false)
-            })
+            DispatchQueue.main.async {
+                self.webView?.scrollView.setContentOffset(bottomOffset, animated: false)
+            }
         }
     }
 
@@ -457,7 +458,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
      */
     func getAnchorOffset(_ anchor: String) -> CGFloat {
         let horizontal = self.readerConfig.scrollDirection == .horizontal
-        if let strOffset = webView.js("getAnchorOffset('\(anchor)', \(horizontal.description))") {
+        if let strOffset = webView?.js("getAnchorOffset('\(anchor)', \(horizontal.description))") {
             return CGFloat((strOffset as NSString).floatValue)
         }
 
@@ -477,12 +478,14 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         }
 
         let playbackActiveClass = self.book.playbackActiveClass()
-        currentPage.webView.js("audioMarkID('\(playbackActiveClass)','\(identifier)')")
+        currentPage.webView?.js("audioMarkID('\(playbackActiveClass)','\(identifier)')")
     }
 
     // MARK: UIMenu visibility
 
     override open func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        guard let webView = webView else { return false }
+
         if UIMenuController.shared.menuItems?.count == 0 {
             webView.isColors = false
             webView.createMenu(options: false)
@@ -502,6 +505,8 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
     // MARK: ColorView fix for horizontal layout
     func refreshPageMode() {
+        guard let webView = webView else { return }
+
         if (self.folioReader.nightMode == true) {
             // omit create webView and colorView
             let script = "document.documentElement.offsetHeight"
@@ -517,9 +522,8 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     // MARK: - Class based click listener
     
     fileprivate func setupClassBasedOnClickListeners() {
-        
         for listener in self.readerConfig.classBasedOnClickListeners {
-            self.webView.js("addClassBasedOnClickListener(\"\(listener.schemeName)\", \"\(listener.querySelector)\", \"\(listener.attributeName)\", \"\(listener.selectAll)\")");
+            self.webView?.js("addClassBasedOnClickListener(\"\(listener.schemeName)\", \"\(listener.querySelector)\", \"\(listener.attributeName)\", \"\(listener.selectAll)\")");
         }
     }
     
@@ -531,6 +535,6 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
      - returns: The result of running the JavaScript script passed in the script parameter, or nil if the script fails.
      */
     open func performJavaScript(_ javaScriptCode: String) -> String? {
-        return webView.js(javaScriptCode)
+        return webView?.js(javaScriptCode)
     }
 }

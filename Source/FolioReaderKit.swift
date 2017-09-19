@@ -185,7 +185,7 @@ extension FolioReader {
 
             if let readerCenter = self.readerCenter {
                 UIView.animate(withDuration: 0.6, animations: {
-                    _ = readerCenter.currentPage?.webView.js("nightMode(\(self.nightMode))")
+                    _ = readerCenter.currentPage?.webView?.js("nightMode(\(self.nightMode))")
                     readerCenter.pageIndicatorView?.reloadColors()
                     readerCenter.configureNavBar()
                     readerCenter.scrollScrubber?.reloadColors()
@@ -210,7 +210,7 @@ extension FolioReader {
         }
         set (font) {
             self.defaults.set(font.rawValue, forKey: kCurrentFontFamily)
-            _ = self.readerCenter?.currentPage?.webView.js("setFontName('\(font.cssIdentifier)')")
+            _ = self.readerCenter?.currentPage?.webView?.js("setFontName('\(font.cssIdentifier)')")
         }
     }
 
@@ -232,7 +232,7 @@ extension FolioReader {
                 return
             }
 
-            currentPage.webView.js("setFontSize('\(currentFontSize.cssIdentifier)')")
+            currentPage.webView?.js("setFontSize('\(currentFontSize.cssIdentifier)')")
         }
     }
 
@@ -339,14 +339,16 @@ extension FolioReader {
             return
         }
 
-        guard let bookId = self.readerContainer?.book.name, let currentPage = self.readerCenter?.currentPage else {
+        guard let bookId = self.readerContainer?.book.name,
+            let currentPage = self.readerCenter?.currentPage,
+            let webView = currentPage.webView else {
             return
         }
 
         let position = [
             "pageNumber": (self.readerCenter?.currentPageNumber ?? 0),
-            "pageOffsetX": currentPage.webView.scrollView.contentOffset.x,
-            "pageOffsetY": currentPage.webView.scrollView.contentOffset.y
+            "pageOffsetX": webView.scrollView.contentOffset.x,
+            "pageOffsetY": webView.scrollView.contentOffset.y
             ] as [String : Any]
 
         self.savedPositionForCurrentBook = position

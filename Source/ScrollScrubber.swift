@@ -47,7 +47,7 @@ enum ScrollDirection: Int {
 }
 
 class ScrollScrubber: NSObject, UIScrollViewDelegate {
-    weak var delegate: FolioReaderCenter!
+    weak var delegate: FolioReaderCenter?
     var showSpeed = 0.6
     var hideSpeed = 0.6
     var hideDelay = 1.0
@@ -202,7 +202,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
 
         if (slider.alpha > 0) {
             self.show()
-        } else if delegate.currentPage != nil && scrollStart != nil {
+        } else if delegate?.currentPage != nil && scrollStart != nil {
             scrollDelta = scrollView.contentOffset.forDirection(withConfiguration: readerConfig) - scrollStart
 
             guard let pageHeight = folioReader.readerCenter?.pageHeight,
@@ -241,23 +241,23 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     // MARK: - utility methods
 
     fileprivate func scrollView() -> UIScrollView? {
-        return delegate.currentPage?.webView.scrollView
+        return delegate?.currentPage?.webView?.scrollView
     }
 
     fileprivate func height() -> CGFloat {
-        guard
-            let currentPage = delegate.currentPage,
-            let pageHeight = folioReader.readerCenter?.pageHeight else {
+        guard let currentPage = delegate?.currentPage,
+            let pageHeight = folioReader.readerCenter?.pageHeight,
+            let webView = currentPage.webView else {
                 return 0
         }
 
-        return (currentPage.webView.scrollView.contentSize.height - pageHeight + 44)
+        return webView.scrollView.contentSize.height - pageHeight + 44
     }
     
     fileprivate func scrollTop() -> CGFloat {
-        guard let currentPage = delegate.currentPage else {
+        guard let currentPage = delegate?.currentPage, let webView = currentPage.webView else {
             return 0
         }
-        return currentPage.webView.scrollView.contentOffset.forDirection(withConfiguration: readerConfig)
+        return webView.scrollView.contentOffset.forDirection(withConfiguration: readerConfig)
     }
 }
