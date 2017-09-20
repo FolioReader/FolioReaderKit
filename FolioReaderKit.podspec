@@ -29,7 +29,7 @@ Pod::Spec.new do |s|
   s.public_header_files = 'Source/*.h'
 
   s.libraries  = "z"
-  s.dependency 'SSZipArchive', '~> 1.8'
+  s.dependency 'SSZipArchive', '~> 2.0'
   s.dependency 'MenuItemKit', '2.0'
   s.dependency 'ZFDragableModalTransition', '~> 0.6'
   s.dependency 'AEXML', '4.0'
