@@ -216,6 +216,23 @@ open class FolioReaderContainer: UIViewController {
 }
 
 extension FolioReaderContainer {
+    func alert(error: Error) {
+        let message = error.localizedDescription
+        let alertController = UIAlertController(
+            title: "Error",
+            message: message,
+            preferredStyle: UIAlertControllerStyle.alert
+        )
+        let action = UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel) { [weak self]
+            (result : UIAlertAction) -> Void in
+            self?.dismiss()
+            guard let fr = self?.folioReader else { return }
+            fr.delegate?.folioReader?(fr, encounteredError: error)
+        }
+        alertController.addAction(action)
+        self.present(alertController, animated: true, completion: nil)
+    }
+
     func alert(message: String) {
         let alertController = UIAlertController(
             title: "Error",
