@@ -59,10 +59,20 @@ class FolioReaderPageIndicator: UIView {
         let fullW = pagesLabel.frame.width + minutesLabel.frame.width
         
         let screenHeight = UIScreen.main.bounds.height * 3
-        let offset = screenHeight == 2436 || screenHeight == 1125 ? CGFloat(-20) : CGFloat(2) // iPhone X support
+        var yoffset      = CGFloat(2)
+        var xoffset      = frame.width / 2 - fullW / 2
         
-        minutesLabel.frame.origin = CGPoint(x: frame.width/2-fullW/2, y: offset)
-        pagesLabel.frame.origin = CGPoint(x: minutesLabel.frame.origin.x+minutesLabel.frame.width, y: offset)
+        if screenHeight == 2436 {
+            // iPhone X portrait
+            yoffset = -20
+        } else if screenHeight == 1125 {
+            // iPhone X landscape
+            xoffset = 62
+            yoffset = -10
+        }
+        
+        minutesLabel.frame.origin = CGPoint(x: xoffset, y: yoffset)
+        pagesLabel.frame.origin = CGPoint(x: minutesLabel.frame.origin.x+minutesLabel.frame.width, y: yoffset)
 
         if updateShadow {
             layer.shadowPath = UIBezierPath(rect: bounds).cgPath
