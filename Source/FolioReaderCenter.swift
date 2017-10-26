@@ -1030,7 +1030,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     open func scrollViewDidScroll(_ scrollView: UIScrollView) {
 
         if (navigationController?.isNavigationBarHidden == false) {
-            self.toggleBars()
+            //TODO: Temporary commented string becaouse of iOS11 bug
+//            self.toggleBars()
         }
 
         scrollScrubber?.scrollViewDidScroll(scrollView)
