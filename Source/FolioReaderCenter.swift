@@ -280,13 +280,13 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
         var rightBarIcons = [UIBarButtonItem]()
 
-        if (self.readerConfig.allowSharing == true) {
-            rightBarIcons.append(UIBarButtonItem(image: shareIcon, style: .plain, target: self, action:#selector(shareChapter(_:))))
-        }
-
-        if (self.book.hasAudio() == true || self.readerConfig.enableTTS == true) {
-            rightBarIcons.append(UIBarButtonItem(image: audioIcon, style: .plain, target: self, action:#selector(presentPlayerMenu(_:))))
-        }
+//        if (self.readerConfig.allowSharing == true) {
+//            rightBarIcons.append(UIBarButtonItem(image: shareIcon, style: .plain, target: self, action:#selector(shareChapter(_:))))
+//        }
+//
+//        if (self.book.hasAudio() == true || self.readerConfig.enableTTS == true) {
+//            rightBarIcons.append(UIBarButtonItem(image: audioIcon, style: .plain, target: self, action:#selector(presentPlayerMenu(_:))))
+//        }
 
         let font = UIBarButtonItem(image: fontIcon, style: .plain, target: self, action: #selector(presentFontsMenu))
         font.width = space
