@@ -246,7 +246,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     func configureNavBar() {
-        let navBackground = folioReader.isNight(self.readerConfig.nightModeMenuBackground, UIColor.white)
+        let navBackground = folioReader.isNight(self.readerConfig.nightModeMenuBackground, self.readerConfig.dayModeMenuBackground)
         let tintColor = readerConfig.tintColor
         let navText = folioReader.isNight(UIColor.white, UIColor.black)
         let font = UIFont(name: "Avenir-Light", size: 17)!
@@ -274,14 +274,14 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         let menu = UIBarButtonItem(image: closeIcon, style: .plain, target: self, action:#selector(closeReader(_:)))
         let toc = UIBarButtonItem(image: tocIcon, style: .plain, target: self, action:#selector(presentChapterList(_:)))
 
-        navigationItem.leftBarButtonItems = [menu, toc]
+        navigationItem.leftBarButtonItems = [menu]
 
         var rightBarIcons = [UIBarButtonItem]()
 
         let font = UIBarButtonItem(image: fontIcon, style: .plain, target: self, action: #selector(presentFontsMenu))
         font.width = space
 
-        rightBarIcons.append(contentsOf: [font])
+        rightBarIcons.append(contentsOf: [font, toc])
         navigationItem.rightBarButtonItems = rightBarIcons
     }
 

@@ -11,6 +11,7 @@ import UIKit
 open class FolioReaderBottomBar: UIView {
 
     var slider = UISlider()
+    var separator = UIView()
     override open var tintColor: UIColor! {
         didSet {
             slider.tintColor = tintColor
@@ -30,25 +31,32 @@ open class FolioReaderBottomBar: UIView {
     
     func setHidden(_ hidden: Bool, animated: Bool) {
         UIView.animate(withDuration: 0.3) {
-            self.alpha = hidden ? 0 : 0.8
+            self.alpha = hidden ? 0 : 1
         }
     }
     
     func setup() {
         
+        // Separator
+        separator = UIView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 0.5))
+        separator.backgroundColor = #colorLiteral(red: 0.8431372549, green: 0.8431372549, blue: 0.8431372549, alpha: 1)
+        addSubview(separator)
+        
         // Slider
         slider.translatesAutoresizingMaskIntoConstraints = false
-        slider.tintColor = .green
+        slider.tintColor = #colorLiteral(red: 0.2196078431, green: 0.6039215686, blue: 0.3254901961, alpha: 1)
         slider.addTarget(self, action: #selector(sliderChangedValue(sender:)), for: .touchUpInside)
+        slider.setThumbImage(#imageLiteral(resourceName: "slider-thumb"), for: .normal)
         
         addSubview(slider)
         
         // Configure contraints
         var constraints = [NSLayoutConstraint]()
-        let views = ["slider" : slider] as [String : Any]
+        let views = ["slider" : slider, "separator" : separator] as [String : Any]
         
         constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[slider]-20-|", options: [], metrics: nil, views: views)
-        constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[slider]|", options: [], metrics: nil, views: views)
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[separator]|", options: [], metrics: nil, views: views)
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[separator(0.5)]-[slider]-10-|", options: [], metrics: nil, views: views)
         
         self.addConstraints(constraints)
         
