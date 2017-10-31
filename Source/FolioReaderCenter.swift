@@ -266,8 +266,6 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     func configureNavBarButtons() {
 
         // Navbar buttons
-        let shareIcon = UIImage(readerImageNamed: "icon-navbar-share")?.ignoreSystemTint(withConfiguration: self.readerConfig)
-        let audioIcon = UIImage(readerImageNamed: "icon-navbar-tts")?.ignoreSystemTint(withConfiguration: self.readerConfig) //man-speech-icon
         let closeIcon = UIImage(readerImageNamed: "icon-navbar-close")?.ignoreSystemTint(withConfiguration: self.readerConfig)
         let tocIcon = UIImage(readerImageNamed: "icon-navbar-toc")?.ignoreSystemTint(withConfiguration: self.readerConfig)
         let fontIcon = UIImage(readerImageNamed: "icon-navbar-font")?.ignoreSystemTint(withConfiguration: self.readerConfig)
@@ -279,14 +277,6 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         navigationItem.leftBarButtonItems = [menu, toc]
 
         var rightBarIcons = [UIBarButtonItem]()
-
-//        if (self.readerConfig.allowSharing == true) {
-//            rightBarIcons.append(UIBarButtonItem(image: shareIcon, style: .plain, target: self, action:#selector(shareChapter(_:))))
-//        }
-//
-//        if (self.book.hasAudio() == true || self.readerConfig.enableTTS == true) {
-//            rightBarIcons.append(UIBarButtonItem(image: audioIcon, style: .plain, target: self, action:#selector(presentPlayerMenu(_:))))
-//        }
 
         let font = UIBarButtonItem(image: fontIcon, style: .plain, target: self, action: #selector(presentFontsMenu))
         font.width = space
