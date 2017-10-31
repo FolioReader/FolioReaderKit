@@ -267,9 +267,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
         // Navbar buttons
         let closeIcon = UIImage(readerImageNamed: "icon-navbar-close")?.ignoreSystemTint(withConfiguration: self.readerConfig)
-        let tocIcon = UIImage(readerImageNamed: "icon-navbar-toc")?.ignoreSystemTint(withConfiguration: self.readerConfig)
-        let fontIcon = UIImage(readerImageNamed: "icon-navbar-font")?.ignoreSystemTint(withConfiguration: self.readerConfig)
-        let space = 70 as CGFloat
+        let tocIcon = UIImage(readerImageNamed: "menu")?.ignoreSystemTint(withConfiguration: self.readerConfig)
+        let fontIcon = UIImage(readerImageNamed: "font")?.ignoreSystemTint(withConfiguration: self.readerConfig)
 
         let menu = UIBarButtonItem(image: closeIcon, style: .plain, target: self, action:#selector(closeReader(_:)))
         let toc = UIBarButtonItem(image: tocIcon, style: .plain, target: self, action:#selector(presentChapterList(_:)))
@@ -279,7 +278,6 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         var rightBarIcons = [UIBarButtonItem]()
 
         let font = UIBarButtonItem(image: fontIcon, style: .plain, target: self, action: #selector(presentFontsMenu))
-        font.width = space
 
         rightBarIcons.append(contentsOf: [font, toc])
         navigationItem.rightBarButtonItems = rightBarIcons
