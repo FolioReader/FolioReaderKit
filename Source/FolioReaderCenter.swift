@@ -268,6 +268,10 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
         rightBarIcons.append(contentsOf: [font])
         navigationItem.rightBarButtonItems = rightBarIcons
+        
+        if(self.readerConfig.displayTitle){
+            navigationItem.title = book.title()
+        }
     }
 
     func reloadData() {
