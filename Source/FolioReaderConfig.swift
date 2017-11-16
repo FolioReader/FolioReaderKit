@@ -140,6 +140,9 @@ open class FolioReaderConfig: NSObject {
 
     /// Enable TTS (Text To Speech)
     open var enableTTS = true
+    
+    /// Display book title in navbar
+    open var displayTitle = false
 
     // hide the page indicator
     open var hidePageIndicator = false

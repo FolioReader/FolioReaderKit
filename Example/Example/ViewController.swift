@@ -33,6 +33,7 @@ class ViewController: UIViewController {
         // See more at FolioReaderConfig.swift
 //        config.canChangeScrollDirection = false
 //        config.enableTTS = false
+//        config.displayTitle = true
 //        config.allowSharing = false
 //        config.tintColor = UIColor.blueColor()
 //        config.toolBarTintColor = UIColor.redColor()
