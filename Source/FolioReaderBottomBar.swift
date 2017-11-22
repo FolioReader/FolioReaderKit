@@ -46,7 +46,7 @@ open class FolioReaderBottomBar: UIView {
         slider.translatesAutoresizingMaskIntoConstraints = false
         slider.tintColor = #colorLiteral(red: 0.2196078431, green: 0.6039215686, blue: 0.3254901961, alpha: 1)
         slider.addTarget(self, action: #selector(sliderChangedValue(sender:)), for: .touchUpInside)
-        slider.setThumbImage(#imageLiteral(resourceName: "slider-thumb"), for: .normal)
+        slider.setThumbImage(UIImage(readerImageNamed: "slider-thumb"), for: .normal)
         
         addSubview(slider)
         
