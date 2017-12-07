@@ -367,7 +367,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         return false
     }
 
-    open func handleTapGesture(_ recognizer: UITapGestureRecognizer) {
+    @objc open func handleTapGesture(_ recognizer: UITapGestureRecognizer) {
 
         if let _navigationController = self.folioReader.readerCenter?.navigationController, (_navigationController.isNavigationBarHidden == true) {
 
@@ -504,7 +504,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     }
 
     // MARK: ColorView fix for horizontal layout
-    func refreshPageMode() {
+    @objc func refreshPageMode() {
         guard let webView = webView else { return }
 
         if (self.folioReader.nightMode == true) {

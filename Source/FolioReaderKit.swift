@@ -334,7 +334,7 @@ extension FolioReader {
 extension FolioReader {
 
     /// Save Reader state, book, page and scroll offset.
-    open func saveReaderState() {
+    @objc open func saveReaderState() {
         guard isReaderOpen else {
             return
         }

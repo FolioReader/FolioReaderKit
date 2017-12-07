@@ -302,9 +302,9 @@ extension Highlight {
 
             let highlight = Highlight()
             highlight.highlightId = matchingHighlight.id
-            highlight.type = HighlightStyle.styleForClass(str.substring(with: match.rangeAt(1))).rawValue
+            highlight.type = HighlightStyle.styleForClass(str.substring(with: match.range(at: 1))).rawValue
             highlight.date = Foundation.Date()
-            highlight.content = Highlight.removeSentenceSpam(str.substring(with: match.rangeAt(2)))
+            highlight.content = Highlight.removeSentenceSpam(str.substring(with: match.range(at: 2)))
             highlight.contentPre = Highlight.removeSentenceSpam(contentPre)
             highlight.contentPost = Highlight.removeSentenceSpam(contentPost)
             highlight.page = matchingHighlight.currentPage
@@ -367,7 +367,7 @@ extension Highlight {
             
             var newLocator = ""
             matches?.forEach({ (match: NSTextCheckingResult) in
-                newLocator += str.substring(with: match.rangeAt(1))
+                newLocator += str.substring(with: match.range(at: 1))
             })
             
             if (matches?.count > 0 && newLocator.isEmpty == false) {

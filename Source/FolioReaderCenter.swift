@@ -869,7 +869,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     /**
      Sharing chapter method.
      */
-    func shareChapter(_ sender: UIBarButtonItem) {
+    @objc func shareChapter(_ sender: UIBarButtonItem) {
         guard let currentPage = currentPage else { return }
 
         if let chapterText = currentPage.webView?.js("getBodyText()") {
@@ -1089,7 +1089,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         RunLoop.current.add(recentlyScrolledTimer, forMode: RunLoopMode.commonModes)
     }
 
-    func clearRecentlyScrolled() {
+    @objc func clearRecentlyScrolled() {
         if(recentlyScrolledTimer != nil) {
             recentlyScrolledTimer.invalidate()
             recentlyScrolledTimer = nil
@@ -1104,7 +1104,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
     // MARK: NavigationBar Actions
 
-    func closeReader(_ sender: UIBarButtonItem) {
+    @objc func closeReader(_ sender: UIBarButtonItem) {
         dismiss()
         folioReader.close()
     }
@@ -1112,7 +1112,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     /**
      Present chapter list
      */
-    func presentChapterList(_ sender: UIBarButtonItem) {
+    @objc func presentChapterList(_ sender: UIBarButtonItem) {
         folioReader.saveReaderState()
 
         let chapter = FolioReaderChapterList(folioReader: folioReader, readerConfig: readerConfig, book: book, delegate: self)
@@ -1130,7 +1130,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     /**
      Present fonts and settings menu
      */
-    func presentFontsMenu() {
+    @objc func presentFontsMenu() {
         folioReader.saveReaderState()
         hideBars()
 
@@ -1152,7 +1152,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     /**
      Present audio player menu
      */
-    func presentPlayerMenu(_ sender: UIBarButtonItem) {
+    @objc func presentPlayerMenu(_ sender: UIBarButtonItem) {
         folioReader.saveReaderState()
         hideBars()
 

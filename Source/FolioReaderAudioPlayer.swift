@@ -136,7 +136,7 @@ open class FolioReaderAudioPlayer: NSObject {
         completion?()
     }
 
-    func pause() {
+    @objc func pause() {
         playing = false
 
         if !isTextToSpeech {
@@ -150,11 +150,11 @@ open class FolioReaderAudioPlayer: NSObject {
         }
     }
 
-    func togglePlay() {
+    @objc func togglePlay() {
         isPlaying() ? pause() : play()
     }
 
-    func play() {
+    @objc func play() {
         if (self.book.hasAudio() == true) {
             guard let currentPage = self.folioReader.readerCenter?.currentPage else { return }
             currentPage.webView?.js("playAudio()")
@@ -205,13 +205,13 @@ open class FolioReaderAudioPlayer: NSObject {
         }
     }
 
-    func _autoPlayNextChapter() {
+    @objc func _autoPlayNextChapter() {
         // if user has stopped playing, dont play the next chapter
         if isPlaying() == false { return }
         playNextChapter()
     }
 
-    func playPrevChapter() {
+    @objc func playPrevChapter() {
         stopPlayerTimer()
         // Wait for "currentPage" to update, then request to play audio
         self.folioReader.readerCenter?.changePageToPrevious {
@@ -223,7 +223,7 @@ open class FolioReaderAudioPlayer: NSObject {
         }
     }
 
-    func playNextChapter() {
+    @objc func playNextChapter() {
         stopPlayerTimer()
         // Wait for "currentPage" to update, then request to play audio
         self.folioReader.readerCenter?.changePageToNext {
@@ -416,7 +416,7 @@ open class FolioReaderAudioPlayer: NSObject {
         }
     }
 
-    func playerTimerObserver() {
+    @objc func playerTimerObserver() {
         guard let player = player else { return }
 
         if currentEndTime != nil && currentEndTime > 0 && player.currentTime > currentEndTime {

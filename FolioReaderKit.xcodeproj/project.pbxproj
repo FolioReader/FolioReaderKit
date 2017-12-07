@@ -60,6 +60,10 @@
 		1A9590131D397BE900D56699 /* ScrollScrubber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A958F901D397BE900D56699 /* ScrollScrubber.swift */; };
 		1A9590151D397C1300D56699 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A9590141D397C1300D56699 /* Images.xcassets */; };
 		1A9590171D397CAF00D56699 /* FolioReaderKit.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 1A9590161D397CAF00D56699 /* FolioReaderKit.podspec */; };
+		3A27F08C1FD9BE5800D84A57 /* FolioReaderUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A27F08A1FD9BE5800D84A57 /* FolioReaderUserDefaults.swift */; };
+		3A27F08D1FD9BE5800D84A57 /* FolioReaderUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A27F08A1FD9BE5800D84A57 /* FolioReaderUserDefaults.swift */; };
+		3A27F08E1FD9BE5800D84A57 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A27F08B1FD9BE5800D84A57 /* Extensions.swift */; };
+		3A27F08F1FD9BE5800D84A57 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A27F08B1FD9BE5800D84A57 /* Extensions.swift */; };
 		3AD5EEB91D9433C100E42810 /* FolioReaderWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD5EEB81D9433C100E42810 /* FolioReaderWebView.swift */; };
 		B0D6990F1D035FA2003B4CCD /* FolioReaderKit.h in Headers */ = {isa = PBXBuildFile; fileRef = B0D6990E1D035FA2003B4CCD /* FolioReaderKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B0D699161D035FA2003B4CCD /* FolioReaderKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0D6990B1D035FA2003B4CCD /* FolioReaderKit.framework */; };
@@ -138,6 +142,8 @@
 		1A958F901D397BE900D56699 /* ScrollScrubber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollScrubber.swift; sourceTree = "<group>"; };
 		1A9590141D397C1300D56699 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		1A9590161D397CAF00D56699 /* FolioReaderKit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FolioReaderKit.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		3A27F08A1FD9BE5800D84A57 /* FolioReaderUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderUserDefaults.swift; sourceTree = "<group>"; };
+		3A27F08B1FD9BE5800D84A57 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		3AD5EEB81D9433C100E42810 /* FolioReaderWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolioReaderWebView.swift; sourceTree = "<group>"; };
 		B0D6990B1D035FA2003B4CCD /* FolioReaderKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FolioReaderKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0D6990E1D035FA2003B4CCD /* FolioReaderKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FolioReaderKit.h; sourceTree = "<group>"; };
@@ -196,6 +202,7 @@
 			isa = PBXGroup;
 			children = (
 				1A958F041D397BE900D56699 /* EPUBCore */,
+				3A27F08B1FD9BE5800D84A57 /* Extensions.swift */,
 				1A958F0F1D397BE900D56699 /* FolioReaderAudioPlayer.swift */,
 				1A958F101D397BE900D56699 /* FolioReaderCenter.swift */,
 				1A958F111D397BE900D56699 /* FolioReaderChapterList.swift */,
@@ -211,12 +218,13 @@
 				1A958F1B1D397BE900D56699 /* FolioReaderPlayerMenu.swift */,
 				1A65DDD61DA7450A0033C277 /* FolioReaderQuoteShare.swift */,
 				1A958F1C1D397BE900D56699 /* FolioReaderSharingProvider.swift */,
+				3A27F08A1FD9BE5800D84A57 /* FolioReaderUserDefaults.swift */,
 				3AD5EEB81D9433C100E42810 /* FolioReaderWebView.swift */,
+				1A958F1D1D397BE900D56699 /* Models */,
 				1A958F241D397BE900D56699 /* PageViewController.swift */,
 				1A65DDD41DA744410033C277 /* QuoteImage.swift */,
-				1A958F901D397BE900D56699 /* ScrollScrubber.swift */,
-				1A958F1D1D397BE900D56699 /* Models */,
 				1A958F251D397BE900D56699 /* Resources */,
+				1A958F901D397BE900D56699 /* ScrollScrubber.swift */,
 			);
 			path = Source;
 			sourceTree = SOURCE_ROOT;
@@ -556,6 +564,7 @@
 				3AD5EEB91D9433C100E42810 /* FolioReaderWebView.swift in Sources */,
 				1A958FA41D397BE900D56699 /* FolioReaderKit.swift in Sources */,
 				1A65DDD71DA7450A0033C277 /* FolioReaderQuoteShare.swift in Sources */,
+				3A27F08C1FD9BE5800D84A57 /* FolioReaderUserDefaults.swift in Sources */,
 				1A958FA21D397BE900D56699 /* FolioReaderHighlightList.swift in Sources */,
 				1A958FA71D397BE900D56699 /* FolioReaderPlayerMenu.swift in Sources */,
 				1A958F921D397BE900D56699 /* FREpubParser.swift in Sources */,
@@ -564,6 +573,7 @@
 				1A958FAD1D397BE900D56699 /* Highlight.swift in Sources */,
 				1A958F981D397BE900D56699 /* FRSmils.swift in Sources */,
 				1A958F971D397BE900D56699 /* FRSmilElement.swift in Sources */,
+				3A27F08E1FD9BE5800D84A57 /* Extensions.swift in Sources */,
 				1A958F9D1D397BE900D56699 /* FolioReaderChapterList.swift in Sources */,
 				1A958F951D397BE900D56699 /* FRResource.swift in Sources */,
 				1A958F9B1D397BE900D56699 /* FolioReaderAudioPlayer.swift in Sources */,
@@ -586,6 +596,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0D6991B1D035FA2003B4CCD /* FolioReaderKitTests.swift in Sources */,
+				3A27F08F1FD9BE5800D84A57 /* Extensions.swift in Sources */,
+				3A27F08D1FD9BE5800D84A57 /* FolioReaderUserDefaults.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -716,7 +728,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.folioreader.FolioReaderKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -740,7 +752,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.folioreader.FolioReaderKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
