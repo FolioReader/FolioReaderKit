@@ -81,7 +81,7 @@ class FolioReaderQuoteShare: UIViewController {
         quoteLabel.translatesAutoresizingMaskIntoConstraints = false
         quoteLabel.adjustsFontSizeToFitWidth = true
         quoteLabel.minimumScaleFactor = 0.3
-        quoteLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 100), for: .vertical)
+        quoteLabel.setContentCompressionResistancePriority(UILayoutPriority(100), for: .vertical)
         filterImage.addSubview(quoteLabel)
 
         var bookTitle = ""
@@ -104,7 +104,7 @@ class FolioReaderQuoteShare: UIViewController {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.8
-        titleLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 600), for: .vertical)
+        titleLabel.setContentCompressionResistancePriority(UILayoutPriority(600), for: .vertical)
         filterImage.addSubview(titleLabel)
 
         // Attributed author
