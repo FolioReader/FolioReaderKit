@@ -72,19 +72,19 @@ public enum MediaOverlayStyle: Int {
 
 /// FolioReader actions delegate
 @objc public protocol FolioReaderDelegate: class {
-
+    
     /// Did finished loading book.
     ///
     /// - Parameters:
     ///   - folioReader: The FolioReader instance
     ///   - book: The Book instance
     @objc optional func folioReader(_ folioReader: FolioReader, didFinishedLoading book: FRBook)
-
+    
     /// Called when reader did closed.
     ///
     /// - Parameter folioReader: The FolioReader instance
     @objc optional func folioReaderDidClose(_ folioReader: FolioReader)
-
+    
     /// Called when reader did closed.
     @available(*, deprecated, message: "Use 'folioReaderDidClose(_ folioReader: FolioReader)' instead.")
     @objc optional func folioReaderDidClosed()
@@ -104,7 +104,7 @@ open class FolioReader: NSObject {
 
     /// FolioReaderDelegate
     open weak var delegate: FolioReaderDelegate?
-
+    
     open weak var readerContainer: FolioReaderContainer?
     open weak var readerAudioPlayer: FolioReaderAudioPlayer?
     open weak var readerCenter: FolioReaderCenter? {

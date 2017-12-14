@@ -27,6 +27,13 @@ import JSQWebViewController
      - parameter page: The loaded page
      */
     @objc optional func pageDidLoad(_ page: FolioReaderPage)
+    
+    /**
+     Notifies that page receive tap gesture.
+     
+     - parameter recognizer: The tap recognizer
+     */
+    @objc optional func pageTap(_ recognizer: UITapGestureRecognizer)
 }
 
 open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate {
@@ -356,7 +363,6 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     // MARK: Gesture recognizer
 
     open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-
         if gestureRecognizer.view is FolioReaderWebView {
             if otherGestureRecognizer is UILongPressGestureRecognizer {
                 if UIMenuController.shared.isMenuVisible {
@@ -370,23 +376,23 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     }
 
     @objc open func handleTapGesture(_ recognizer: UITapGestureRecognizer) {
-
+        self.delegate?.pageTap?(recognizer)
+        
         if let _navigationController = self.folioReader.readerCenter?.navigationController, (_navigationController.isNavigationBarHidden == true) {
-
             let selected = webView?.js("getSelectedText()")
+            
             guard (selected == nil || selected?.isEmpty == true) else {
                 return
             }
 
             let delay = 0.4 * Double(NSEC_PER_SEC) // 0.4 seconds * nanoseconds per seconds
             let dispatchTime = (DispatchTime.now() + (Double(Int64(delay)) / Double(NSEC_PER_SEC)))
+            
             DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
-
                 if (self.shouldShowBar == true && self.menuIsVisible == false) {
                     self.folioReader.readerCenter?.toggleBars()
                 }
             })
-
         } else if (self.readerConfig.shouldHideNavigationOnTap == true) {
             self.folioReader.readerCenter?.hideBars()
             self.menuIsVisible = false
