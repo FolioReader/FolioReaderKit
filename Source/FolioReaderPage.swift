@@ -126,12 +126,14 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         let paddingTop: CGFloat = 20
         let paddingBottom: CGFloat = 30
 
-        return CGRect(
+        var frame = CGRect(
             x: bounds.origin.x,
             y: self.readerConfig.isDirection(bounds.origin.y + navTotal, bounds.origin.y + navTotal + paddingTop, bounds.origin.y + navTotal),
             width: bounds.width,
             height: self.readerConfig.isDirection(bounds.height - navTotal, bounds.height - navTotal - paddingTop - paddingBottom, bounds.height - navTotal)
         )
+        
+        return frame
     }
 
     func loadHTMLString(_ htmlContent: String!, baseURL: URL!) {

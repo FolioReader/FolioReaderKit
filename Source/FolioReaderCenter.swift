@@ -27,7 +27,7 @@ import ZFDragableModalTransition
 }
 
 /// The base reader class
-open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     /// This delegate receives the events from the current `FolioReaderPage`s delegate.
     open weak var delegate: FolioReaderCenterDelegate?
@@ -480,10 +480,11 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         return cell
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let size = CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+        return size
     }
-
+    
     // MARK: - Device rotation
 
     override open func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
