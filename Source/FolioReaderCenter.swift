@@ -123,7 +123,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     override open func viewDidLoad() {
         super.viewDidLoad()
 
-        screenBounds = self.view.frame
+        screenBounds = self.getScreenBounds()
+        
         setPageSize(UIApplication.shared.statusBarOrientation)
 
         // Layout
@@ -151,7 +152,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         // Activity Indicator
         self.activityIndicator.activityIndicatorViewStyle = .gray
         self.activityIndicator.hidesWhenStopped = true
-        self.activityIndicator = UIActivityIndicatorView(frame: CGRect(x: self.view.frame.width/2, y: self.view.frame.height/2, width: 30, height: 30))
+        self.activityIndicator = UIActivityIndicatorView(frame: CGRect(x: screenBounds.size.width/2, y: screenBounds.size.height/2, width: 30, height: 30))
         self.activityIndicator.backgroundColor = UIColor.gray
         self.view.addSubview(self.activityIndicator)
         self.view.bringSubview(toFront: self.activityIndicator)
@@ -198,7 +199,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     override open func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        screenBounds = view.frame
+        screenBounds = self.getScreenBounds()
         loadingView.center = view.center
 
         setPageSize(UIApplication.shared.statusBarOrientation)
@@ -222,7 +223,13 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     fileprivate func frameForPageIndicatorView() -> CGRect {
-        return CGRect(x: 0, y: view.frame.height-pageIndicatorHeight, width: view.frame.width, height: pageIndicatorHeight)
+        var bounds = CGRect(x: 0, y: screenBounds.size.height-pageIndicatorHeight, width: screenBounds.size.width, height: pageIndicatorHeight)
+        
+        if #available(iOS 11.0, *) {
+            bounds.size.height = bounds.size.height + view.safeAreaInsets.bottom
+        }
+        
+        return bounds
     }
 
     fileprivate func frameForScrollScrubber() -> CGRect {
@@ -481,7 +488,18 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let size = CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+        var size = CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+        
+        if #available(iOS 11.0, *) {
+            let orientation = UIDevice.current.orientation
+            
+            if orientation == .portrait || orientation == .portraitUpsideDown {
+                if readerConfig.scrollDirection == .horizontal {
+                    size.height = size.height - view.safeAreaInsets.bottom
+                }
+            }
+        }
+        
         return size
     }
     
@@ -501,7 +519,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             pageIndicatorFrame?.size.height = pageIndicatorHeight
 
             var scrollScrubberFrame = scrollScrubber?.slider.frame;
-            scrollScrubberFrame?.origin.x = ((screenBounds.size.height < screenBounds.size.width) ? (view.frame.width - 100) : (view.frame.height + 10))
+            scrollScrubberFrame?.origin.x = ((screenBounds.size.height < screenBounds.size.width) ? (screenBounds.size.width - 100) : (screenBounds.size.height + 10))
             scrollScrubberFrame?.size.height = ((screenBounds.size.height < screenBounds.size.width) ? (self.collectionView.frame.height - 100) : (self.collectionView.frame.width - 100))
 
             self.collectionView.collectionViewLayout.invalidateLayout()
@@ -577,21 +595,21 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     func setPageSize(_ orientation: UIInterfaceOrientation) {
         guard orientation.isPortrait else {
             if screenBounds.size.width > screenBounds.size.height {
-                self.pageWidth = self.view.frame.width
-                self.pageHeight = self.view.frame.height
+                self.pageWidth = screenBounds.size.width
+                self.pageHeight = screenBounds.size.height
             } else {
-                self.pageWidth = self.view.frame.height
-                self.pageHeight = self.view.frame.width
+                self.pageWidth = screenBounds.size.height
+                self.pageHeight = screenBounds.size.width
             }
             return
         }
 
         if screenBounds.size.width < screenBounds.size.height {
-            self.pageWidth = self.view.frame.width
-            self.pageHeight = self.view.frame.height
+            self.pageWidth = screenBounds.size.width
+            self.pageHeight = screenBounds.size.height
         } else {
-            self.pageWidth = self.view.frame.height
-            self.pageHeight = self.view.frame.width
+            self.pageWidth = screenBounds.size.height
+            self.pageHeight = screenBounds.size.width
         }
     }
 
@@ -1263,4 +1281,15 @@ extension FolioReaderCenter: FolioReaderChapterListDelegate {
             tempReference = nil
         }
     }
+    
+    func getScreenBounds() -> CGRect {
+        var bounds = view.frame
+        
+        if #available(iOS 11.0, *) {
+            bounds.size.height = bounds.size.height - view.safeAreaInsets.bottom
+        }
+        
+        return bounds
+    }
+    
 }

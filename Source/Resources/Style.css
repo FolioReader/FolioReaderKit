@@ -211,8 +211,6 @@ body {
 
 html.nightMode, html.nightMode body {
     background-color: #131313 !important;
-    padding: 0 0 -2px 0;
-    margin: 0 0 -2px 0;
 }
 
 .nightMode p, .nightMode div, .nightMode span:not(.epub-media-overlay-playing) {
