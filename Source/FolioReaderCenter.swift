@@ -41,7 +41,9 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     /// The current visible page on reader
     open fileprivate(set) var currentPage: FolioReaderPage?
 
-    var collectionView: UICollectionView!
+    /// The collection view with pages
+    open var collectionView: UICollectionView!
+    
     let collectionViewLayout = UICollectionViewFlowLayout()
     var loadingView: UIActivityIndicatorView!
     var pages: [String]!
