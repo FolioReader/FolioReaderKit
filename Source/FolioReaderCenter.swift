@@ -819,6 +819,17 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         completion?()
     }
 
+    public func getCurrentPageNumber() -> Int {
+        guard let page = currentPage, let webView = page.webView else { return 0 }
+        
+        let pageSize = readerConfig.isDirection(pageHeight, pageWidth, pageHeight)
+        
+        let pageOffSet = readerConfig.isDirection(webView.scrollView.contentOffset.x, webView.scrollView.contentOffset.x, webView.scrollView.contentOffset.y)
+        let webViewPage = pageForOffset(pageOffSet, pageHeight: pageSize)
+        
+        return webViewPage
+    }
+
     public func changePageItemToPrevious(_ completion: (() -> Void)? = nil) {
         // TODO: It was implemented for horizontal orientation.
         // Need check page orientation (v/h) and make correct calc for vertical
