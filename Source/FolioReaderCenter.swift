@@ -134,7 +134,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         collectionViewLayout.minimumLineSpacing = 0
         collectionViewLayout.minimumInteritemSpacing = 0
         collectionViewLayout.scrollDirection = .direction(withConfiguration: self.readerConfig)
-
+        
         let background = folioReader.isNight(self.readerConfig.nightModeBackground, UIColor.white)
         view.backgroundColor = background
 
@@ -795,6 +795,48 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         changePageWith(page: self.previousPageNumber, animated: true) { () -> Void in
             completion?()
         }
+    }
+    
+    public func changePageItemToNext(_ completion: (() -> Void)? = nil) {
+        // TODO: It was implemented for horizontal orientation.
+        // Need check page orientation (v/h) and make correct calc for vertical
+        if let cell = collectionView.cellForItem(at: getCurrentIndexPath()) as? FolioReaderPage {
+            let cellSize = cell.frame.size
+            
+            if let contentOffset = cell.webView?.scrollView.contentOffset {
+                let contentOffsetX = contentOffset.x + cellSize.width
+                
+                if let contentOffsetXLimit = cell.webView?.scrollView.contentSize.width {
+                    if contentOffsetX >= contentOffsetXLimit {
+                        changePageToNext(completion)
+                    } else {
+                        cell.scrollPageToOffset(contentOffsetX, animated: true)
+                    }
+                }
+            }
+        }
+        
+        completion?()
+    }
+
+    public func changePageItemToPrevious(_ completion: (() -> Void)? = nil) {
+        // TODO: It was implemented for horizontal orientation.
+        // Need check page orientation (v/h) and make correct calc for vertical
+        if let cell = collectionView.cellForItem(at: getCurrentIndexPath()) as? FolioReaderPage {
+            let cellSize = cell.frame.size
+            
+            if let contentOffset = cell.webView?.scrollView.contentOffset {
+                let contentOffsetX = contentOffset.x - cellSize.width
+                
+                if contentOffsetX < 0 {
+                    changePageToPrevious(completion)
+                } else {
+                    cell.scrollPageToOffset(contentOffsetX, animated: true)
+                }
+            }
+        }
+        
+        completion?()
     }
 
     /**
