@@ -785,13 +785,13 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         return (currentPageNumber == self.nextPageNumber)
     }
 
-    func changePageToNext(_ completion: (() -> Void)? = nil) {
+    public func changePageToNext(_ completion: (() -> Void)? = nil) {
         changePageWith(page: self.nextPageNumber, animated: true) { () -> Void in
             completion?()
         }
     }
 
-    func changePageToPrevious(_ completion: (() -> Void)? = nil) {
+    public func changePageToPrevious(_ completion: (() -> Void)? = nil) {
         changePageWith(page: self.previousPageNumber, animated: true) { () -> Void in
             completion?()
         }
