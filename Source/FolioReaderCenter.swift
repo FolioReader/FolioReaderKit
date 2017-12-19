@@ -826,7 +826,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         completion?()
     }
 
-    public func getCurrentPageNumber() -> Int {
+    public func getCurrentPageItemNumber() -> Int {
         guard let page = currentPage, let webView = page.webView else { return 0 }
         
         let pageSize = readerConfig.isDirection(pageHeight, pageWidth, pageHeight)
@@ -1151,7 +1151,6 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
         // Perform the page after a short delay as the collection view hasn't completed it's transition if this method is called (the index paths aren't right during fast scrolls).
         delay(0.2, closure: { [weak self] in
-
             if (self?.readerConfig.scrollDirection == .horizontalWithVerticalContent),
                 let cell = ((scrollView.superview as? UIWebView)?.delegate as? FolioReaderPage) {
                 let currentIndexPathRow = cell.pageNumber - 1
@@ -1159,8 +1158,13 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             }
 
             if (scrollView is UICollectionView) {
-                if self?.totalPages > 0 {
-                    self?.updateCurrentPage()
+                guard let instance = self else {
+                    return
+                }
+                
+                if instance.totalPages > 0 {
+                    instance.updateCurrentPage()
+                    instance.delegate?.pageItemChanged?(instance.getCurrentPageItemNumber())
                 }
             } else {
                 self?.scrollScrubber?.scrollViewDidEndDecelerating(scrollView)
