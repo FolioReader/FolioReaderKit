@@ -829,7 +829,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     public func getCurrentPageNumber() -> Int {
         guard let page = currentPage, let webView = page.webView else { return 0 }
         
-        let pageSize = readerConfig.isDirection(pageHeight, pageWidth, pageHeight)        
+        let pageSize = readerConfig.isDirection(pageHeight, pageWidth, pageHeight)
         let pageOffSet = readerConfig.isDirection(webView.scrollView.contentOffset.x, webView.scrollView.contentOffset.x, webView.scrollView.contentOffset.y)
         let webViewPage = pageForOffset(pageOffSet, pageHeight: pageSize)
         
