@@ -1278,8 +1278,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 extension FolioReaderCenter: FolioReaderPageDelegate {
 
     public func pageDidLoad(_ page: FolioReaderPage) {
-
-        if let bookId = self.book.name,
+        if self.readerConfig.loadSavedPositionForCurrentBook,
+            let bookId = self.book.name,
             let position = folioReader.savedPositionForCurrentBook as? NSDictionary {
             let pageNumber = position["pageNumber"] as? Int
             let offset = self.readerConfig.isDirection(position["pageOffsetY"], position["pageOffsetX"], position["pageOffsetY"]) as? CGFloat

@@ -144,9 +144,12 @@ open class FolioReaderConfig: NSObject {
     /// Display book title in navbar
     open var displayTitle = false
 
-    // hide the page indicator
+    /// Hide the page indicator
     open var hidePageIndicator = false
 
+    /// Go to saved position when open a book
+    open var loadSavedPositionForCurrentBook = true
+    
     // MARK: Quote image share
 
     /// Custom Quote logo
