@@ -10,17 +10,17 @@
 import UIKit
 
 open class FRBook: NSObject {
-    var resources = FRResources()
     var metadata = FRMetadata()
     var spine = FRSpine()
     var smils = FRSmils()
-    var opfResource: FRResource!
-    var tocResource: FRResource?
-    var coverImage: FRResource?
     var version: Double?
-    var uniqueIdentifier: String?
-    var name: String?
     
+    public var opfResource: FRResource!
+    public var tocResource: FRResource?
+    public var uniqueIdentifier: String?
+    public var coverImage: FRResource?
+    public var name: String?
+    public var resources = FRResources()
     public var tableOfContents: [FRTocReference]!
     public var flatTableOfContents: [FRTocReference]!
     
