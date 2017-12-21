@@ -14,33 +14,41 @@ open class FRBook: NSObject {
     var metadata = FRMetadata()
     var spine = FRSpine()
     var smils = FRSmils()
-    var tableOfContents: [FRTocReference]!
-    var flatTableOfContents: [FRTocReference]!
     var opfResource: FRResource!
     var tocResource: FRResource?
     var coverImage: FRResource?
     var version: Double?
     var uniqueIdentifier: String?
     var name: String?
-
-    func hasAudio() -> Bool {
+    
+    public var tableOfContents: [FRTocReference]! {
+        get {
+            return tableOfContents
+        }
+        set {
+            tableOfContents = newValue
+        }
+    }
+    
+    public var flatTableOfContents: [FRTocReference]! {
+        get {
+            return flatTableOfContents
+        }
+        set {
+            flatTableOfContents = newValue
+        }
+    }
+    
+    public func hasAudio() -> Bool {
         return smils.smils.count > 0 ? true : false
     }
 
-    func title() -> String? {
+    public func title() -> String? {
         return metadata.titles.first
     }
 
-    func authorName() -> String? {
+    public func authorName() -> String? {
         return metadata.creators.first?.name
-    }
-
-    func getTableOfContents() -> [FRTocReference] {
-        return tableOfContents
-    }
-
-    func getFlatTableOfContents() -> [FRTocReference] {
-        return flatTableOfContents
     }
 
     // MARK: - Media Overlay Metadata
