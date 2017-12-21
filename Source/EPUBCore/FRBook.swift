@@ -35,6 +35,14 @@ open class FRBook: NSObject {
         return metadata.creators.first?.name
     }
 
+    func getTableOfContents() -> [FRTocReference] {
+        return tableOfContents
+    }
+
+    func getFlatTableOfContents() -> [FRTocReference] {
+        return flatTableOfContents
+    }
+
     // MARK: - Media Overlay Metadata
     // http://www.idpf.org/epub/301/spec/epub-mediaoverlays.html#sec-package-metadata
 
