@@ -21,23 +21,8 @@ open class FRBook: NSObject {
     var uniqueIdentifier: String?
     var name: String?
     
-    public var tableOfContents: [FRTocReference]! {
-        get {
-            return tableOfContents
-        }
-        set {
-            tableOfContents = newValue
-        }
-    }
-    
-    public var flatTableOfContents: [FRTocReference]! {
-        get {
-            return flatTableOfContents
-        }
-        set {
-            flatTableOfContents = newValue
-        }
-    }
+    public var tableOfContents: [FRTocReference]!
+    public var flatTableOfContents: [FRTocReference]!
     
     public func hasAudio() -> Bool {
         return smils.smils.count > 0 ? true : false
