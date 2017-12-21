@@ -715,7 +715,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         )
     }
 
-    func changePageWith(page: Int, andFragment fragment: String, animated: Bool = false, completion: (() -> Void)? = nil) {
+    open func changePageWith(page: Int, andFragment fragment: String, animated: Bool = false, completion: (() -> Void)? = nil) {
         if (self.currentPageNumber == page) {
             if let currentPage = currentPage , fragment != "" {
                 currentPage.handleAnchor(fragment, avoidBeginningAnchors: true, animated: animated)
@@ -731,7 +731,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         }
     }
 
-    func changePageWith(href: String, animated: Bool = false, completion: (() -> Void)? = nil) {
+    open func changePageWith(href: String, animated: Bool = false, completion: (() -> Void)? = nil) {
         let item = findPageByHref(href)
         let indexPath = IndexPath(row: item, section: 0)
         changePageWith(indexPath: indexPath, animated: animated, completion: { () -> Void in
@@ -741,7 +741,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         })
     }
 
-    func changePageWith(href: String, andAudioMarkID markID: String) {
+    open func changePageWith(href: String, andAudioMarkID markID: String) {
         if recentlyScrolled { return } // if user recently scrolled, do not change pages or scroll the webview
         guard let currentPage = currentPage else { return }
 
@@ -759,7 +759,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         }
     }
 
-    func changePageWith(indexPath: IndexPath, animated: Bool = false, completion: (() -> Void)? = nil) {
+    open func changePageWith(indexPath: IndexPath, animated: Bool = false, completion: (() -> Void)? = nil) {
         guard indexPathIsValid(indexPath) else {
             print("ERROR: Attempt to scroll to invalid index path")
             completion?()
@@ -787,7 +787,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         return row <= rowCount
     }
 
-    func isLastPage() -> Bool{
+    open func isLastPage() -> Bool{
         return (currentPageNumber == self.nextPageNumber)
     }
 
