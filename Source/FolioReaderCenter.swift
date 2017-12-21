@@ -861,7 +861,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     /**
      Find a page by FRTocReference.
      */
-    func findPageByResource(_ reference: FRTocReference) -> Int {
+    public func findPageByResource(_ reference: FRTocReference) -> Int {
         var count = 0
         for item in self.book.spine.spineReferences {
             if let resource = reference.resource, item.resource == resource {
@@ -875,7 +875,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     /**
      Find a page by href.
      */
-    func findPageByHref(_ href: String) -> Int {
+    public func findPageByHref(_ href: String) -> Int {
         var count = 0
         for item in self.book.spine.spineReferences {
             if item.resource.href == href {
@@ -889,7 +889,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     /**
      Find and return the current chapter resource.
      */
-    func getCurrentChapter() -> FRResource? {
+    public func getCurrentChapter() -> FRResource? {
         for item in self.book.flatTableOfContents {
             if
                 let reference = self.book.spine.spineReferences[safe: (self.currentPageNumber - 1)],
@@ -904,7 +904,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     /**
      Find and return the current chapter name.
      */
-    func getCurrentChapterName() -> String? {
+    public func getCurrentChapterName() -> String? {
         for item in self.book.flatTableOfContents {
             guard
                 let reference = self.book.spine.spineReferences[safe: (self.currentPageNumber - 1)],
@@ -929,7 +929,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
      - parameter animated: En-/Disables the animation of the page change.
      - parameter completion: A Closure which is called if the page change is completed.
      */
-    open func changePageWith(page: Int, animated: Bool = false, completion: (() -> Void)? = nil) {
+    public func changePageWith(page: Int, animated: Bool = false, completion: (() -> Void)? = nil) {
         if page > 0 && page-1 < totalPages {
             let indexPath = IndexPath(row: page-1, section: 0)
             changePageWith(indexPath: indexPath, animated: animated, completion: { () -> Void in
