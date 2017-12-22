@@ -851,7 +851,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         
         if contentOffsetX < 0 {
             changePageToPrevious({
-                self.changePageItemToLast(completion)
+                self.changePageItemToLast(completion, animated: false)
             })
         } else {
             cell.scrollPageToOffset(contentOffsetX, animated: true)
@@ -860,7 +860,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         completion?()
     }
 
-    public func changePageItemToLast(_ completion: (() -> Void)? = nil) {
+    public func changePageItemToLast(_ completion: (() -> Void)? = nil, animated: Bool = true) {
         // TODO: It was implemented for horizontal orientation.
         // Need check page orientation (v/h) and make correct calc for vertical
         guard
@@ -882,7 +882,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             contentOffsetX = 0
         }
         
-        cell.scrollPageToOffset(contentOffsetX, animated: true)
+        cell.scrollPageToOffset(contentOffsetX, animated: animated)
         
         completion?()
     }
@@ -1222,8 +1222,9 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     // MARK: NavigationBar Actions
 
     @objc func closeReader(_ sender: UIBarButtonItem) {
-        dismiss()
-        folioReader.close()
+//        dismiss()
+//        folioReader.close()
+        changePageItemToPrevious()
     }
 
     /**
@@ -1339,8 +1340,6 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
             let offsetPoint = self.currentWebViewScrollPositions[page.pageNumber - 1] {
             page.webView?.scrollView.setContentOffset(offsetPoint, animated: false)
         }
-        
-        changePageItemToLast()
         
         // Pass the event to the centers `pageDelegate`
         pageDelegate?.pageDidLoad?(page)
