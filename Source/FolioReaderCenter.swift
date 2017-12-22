@@ -850,9 +850,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         let contentOffsetX = contentOffset.x - cellSize.width
         
         if contentOffsetX < 0 {
-            changePageToPrevious({
-                self.changePageItemToLast(completion, animated: false)
-            })
+            changePageToPrevious(completion)
         } else {
             cell.scrollPageToOffset(contentOffsetX, animated: true)
         }
@@ -1222,9 +1220,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     // MARK: NavigationBar Actions
 
     @objc func closeReader(_ sender: UIBarButtonItem) {
-//        dismiss()
-//        folioReader.close()
-        changePageItemToPrevious()
+        dismiss()
+        folioReader.close()
     }
 
     /**
