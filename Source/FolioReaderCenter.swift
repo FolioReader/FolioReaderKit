@@ -885,6 +885,37 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         completion?()
     }
 
+    public func changePageItem(to: Int, _ completion: (() -> Void)? = nil, animated: Bool = true) {
+        // TODO: It was implemented for horizontal orientation.
+        // Need check page orientation (v/h) and make correct calc for vertical
+        guard
+            let cell = collectionView.cellForItem(at: getCurrentIndexPath()) as? FolioReaderPage,
+            let contentOffset = cell.webView?.scrollView.contentOffset,
+            let contentSize = cell.webView?.scrollView.contentSize else {
+                completion?()
+                return
+        }
+        
+        let cellSize = cell.frame.size
+        var contentOffsetX: CGFloat = 0.0
+        
+        if contentSize.width > 0 && cellSize.width > 0 {
+            contentOffsetX = (cellSize.width * CGFloat(to)) - cellSize.width
+        }
+        
+        if contentOffsetX > contentSize.width {
+            contentOffsetX = contentSize.width - cellSize.width
+        }
+        
+        if contentOffsetX < 0 {
+            contentOffsetX = 0
+        }
+        
+        cell.scrollPageToOffset(contentOffsetX, animated: animated)
+        
+        completion?()
+    }
+
     /**
      Find a page by FRTocReference.
      */
@@ -1215,7 +1246,6 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     open func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         scrollScrubber?.scrollViewDidEndScrollingAnimation(scrollView)
     }
-
 
     // MARK: NavigationBar Actions
 
