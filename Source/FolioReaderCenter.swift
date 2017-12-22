@@ -858,7 +858,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         completion?()
     }
 
-    public func changePageItemToLast(_ completion: (() -> Void)? = nil, animated: Bool = true) {
+    public func changePageItemToLast(animated: Bool = true, _ completion: (() -> Void)? = nil) {
         // TODO: It was implemented for horizontal orientation.
         // Need check page orientation (v/h) and make correct calc for vertical
         guard
@@ -885,7 +885,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         completion?()
     }
 
-    public func changePageItem(to: Int, _ completion: (() -> Void)? = nil, animated: Bool = true) {
+    public func changePageItem(to: Int, animated: Bool = true, completion: (() -> Void)? = nil) {
         // TODO: It was implemented for horizontal orientation.
         // Need check page orientation (v/h) and make correct calc for vertical
         guard
