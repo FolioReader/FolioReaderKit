@@ -913,8 +913,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             contentOffsetX = 0
         }
         
-        UIView.animate(withDuration: animated ? 0.3 : 0, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
-            cell.scrollPageToOffset(contentOffsetX, animated: false)
+        UIView.animate(withDuration: 0.3, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
+            cell.scrollPageToOffset(contentOffsetX, animated: animated)
         }) { (finished: Bool) -> Void in
             completion?()
         }
