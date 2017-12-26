@@ -304,7 +304,7 @@ open class FolioReaderWebView: UIWebView {
     
     // MARK: - Java Script Bridge
     
-    @discardableResult func js(_ script: String) -> String? {
+    @discardableResult open func js(_ script: String) -> String? {
         let callback = self.stringByEvaluatingJavaScript(from: script)
         if callback!.isEmpty { return nil }
         return callback
