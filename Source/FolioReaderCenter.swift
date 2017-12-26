@@ -774,6 +774,12 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             completion?()
         }
     }
+    
+    open func changePageWith(href: String, pageItem: Int, animated: Bool = false, completion: (() -> Void)? = nil) {
+        changePageWith(href: href, animated: animated) {
+            self.changePageItem(to: pageItem)
+        }
+    }
 
     func indexPathIsValid(_ indexPath: IndexPath) -> Bool {
         let section = indexPath.section
