@@ -42,7 +42,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
     /// The index of the current page. Note: The index start at 1!
     open var pageNumber: Int!
-    var webView: FolioReaderWebView?
+    open var webView: FolioReaderWebView?
 
     fileprivate var colorView: UIView!
     fileprivate var shouldShowBar = true
