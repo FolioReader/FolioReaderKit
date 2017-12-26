@@ -115,7 +115,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         if (self.readerConfig.hideBars == true) {
             self.pageIndicatorHeight = 0
         }
-
+        
         self.totalPages = book.spine.spineReferences.count
 
         // Loading indicator
@@ -297,17 +297,19 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         self.configureNavBarButtons()
         self.setCollectionViewProgressiveDirection()
 
-        guard
-            let bookId = self.book.name,
-            let position = folioReader.savedPositionForCurrentBook as? NSDictionary,
-            let pageNumber = position["pageNumber"] as? Int,
-            (pageNumber > 0) else {
-                self.currentPageNumber = 1
-                return
-        }
+        if self.readerConfig.loadSavedPositionForCurrentBook {
+            guard
+                let bookId = self.book.name,
+                let position = folioReader.savedPositionForCurrentBook as? NSDictionary,
+                let pageNumber = position["pageNumber"] as? Int,
+                (pageNumber > 0) else {
+                    self.currentPageNumber = 1
+                    return
+            }
 
-        self.changePageWith(page: pageNumber)
-        self.currentPageNumber = pageNumber
+            self.changePageWith(page: pageNumber)
+            self.currentPageNumber = pageNumber
+        }
     }
 
     // MARK: Change page progressive direction
