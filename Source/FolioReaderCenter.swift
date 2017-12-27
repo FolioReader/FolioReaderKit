@@ -923,9 +923,10 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         UIView.animate(withDuration: animated ? 0.3 : 0, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
             cell.scrollPageToOffset(contentOffsetX, animated: animated)
         }) { (finished: Bool) -> Void in
-            self.updateCurrentPage()
-            self.delegate?.pageItemChanged?(self.getCurrentPageItemNumber())
-            completion?()
+            self.updateCurrentPage {
+                self.delegate?.pageItemChanged?(self.getCurrentPageItemNumber())
+                completion?()
+            }
         }
     }
 
