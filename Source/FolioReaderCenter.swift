@@ -900,6 +900,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             let cell = collectionView.cellForItem(at: getCurrentIndexPath()) as? FolioReaderPage,
             let contentOffset = cell.webView?.scrollView.contentOffset,
             let contentSize = cell.webView?.scrollView.contentSize else {
+                delegate?.pageItemChanged?(getCurrentPageItemNumber())
                 completion?()
                 return
         }
@@ -923,6 +924,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             cell.scrollPageToOffset(contentOffsetX, animated: animated)
         }) { (finished: Bool) -> Void in
             self.updateCurrentPage()
+            self.delegate?.pageItemChanged?(self.getCurrentPageItemNumber())
             completion?()
         }
     }
