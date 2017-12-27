@@ -654,6 +654,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         pagesForCurrentPage(currentPage)
 
         delegate?.pageDidAppear?(currentPage)
+        delegate?.pageItemChanged?(self.getCurrentPageItemNumber())
 
         completion?()
     }
@@ -924,7 +925,6 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             cell.scrollPageToOffset(contentOffsetX, animated: animated)
         }) { (finished: Bool) -> Void in
             self.updateCurrentPage {
-                self.delegate?.pageItemChanged?(self.getCurrentPageItemNumber())
                 completion?()
             }
         }
