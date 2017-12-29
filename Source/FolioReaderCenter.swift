@@ -974,6 +974,20 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     /**
+     Return the current chapter progress based on current chapter and total of chapters.
+     */
+    public func getCurrentChapterProgress() -> CGFloat {
+        let total = totalPages
+        let current = currentPageNumber
+        
+        if total == 0 {
+            return 0
+        }
+        
+        return CGFloat((100 * current) / total)
+    }
+
+    /**
      Find and return the current chapter name.
      */
     public func getCurrentChapterName() -> String? {
