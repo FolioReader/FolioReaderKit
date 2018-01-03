@@ -57,8 +57,22 @@ class FolioReaderPageIndicator: UIView {
         pagesLabel.sizeToFit()
 
         let fullW = pagesLabel.frame.width + minutesLabel.frame.width
-        minutesLabel.frame.origin = CGPoint(x: frame.width/2-fullW/2, y: 2)
-        pagesLabel.frame.origin = CGPoint(x: minutesLabel.frame.origin.x+minutesLabel.frame.width, y: 2)
+        
+        let screenHeight = UIScreen.main.bounds.height * 3
+        var yoffset      = CGFloat(2)
+        var xoffset      = frame.width / 2 - fullW / 2
+        
+        if screenHeight == 2436 {
+            // iPhone X portrait
+            yoffset = -20
+        } else if screenHeight == 1125 {
+            // iPhone X landscape
+            xoffset = 62
+            yoffset = -10
+        }
+        
+        minutesLabel.frame.origin = CGPoint(x: xoffset, y: yoffset)
+        pagesLabel.frame.origin = CGPoint(x: minutesLabel.frame.origin.x+minutesLabel.frame.width, y: yoffset)
 
         if updateShadow {
             layer.shadowPath = UIBezierPath(rect: bounds).cgPath
