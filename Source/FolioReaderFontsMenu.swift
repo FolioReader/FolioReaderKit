@@ -296,7 +296,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
     
     // MARK: - Font slider changed
     
-    func sliderValueChanged(_ sender: HADiscreteSlider) {
+    @objc func sliderValueChanged(_ sender: HADiscreteSlider) {
         guard
             (self.folioReader.readerCenter?.currentPage != nil),
             let fontSize = FolioReaderFontSize(rawValue: Int(sender.value)) else {
@@ -308,7 +308,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
     
     // MARK: - Gestures
     
-    func tapGesture() {
+    @objc func tapGesture() {
         dismiss()
         
         if (self.readerConfig.shouldHideNavigationOnTap == false) {

@@ -499,10 +499,10 @@ internal extension UIViewController {
 
     func setCloseButton(withConfiguration readerConfig: FolioReaderConfig) {
         let closeImage = UIImage(readerImageNamed: "icon-navbar-close")?.ignoreSystemTint(withConfiguration: readerConfig)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: closeImage, style: .plain, target: self, action: #selector(dismiss as (Void) -> Void))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: closeImage, style: .plain, target: self, action: #selector(dismiss as () -> Void))
     }
 
-    func dismiss() {
+    @objc func dismiss() {
         self.dismiss(nil)
     }
 
@@ -529,7 +529,7 @@ internal extension UIViewController {
         navBar?.showBottomHairline()
         navBar?.isTranslucent = translucent
         navBar?.tintColor = tintColor
-        navBar?.titleTextAttributes = [NSForegroundColorAttributeName: titleColor, NSFontAttributeName: font]
+        navBar?.titleTextAttributes = [NSAttributedStringKey.foregroundColor: titleColor, NSAttributedStringKey.font: font]
     }
 }
 

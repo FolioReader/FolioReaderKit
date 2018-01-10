@@ -26,8 +26,8 @@ class FolioReaderSharingProvider: UIActivityItemProvider {
     override func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivityType?) -> String {
         return subject
     }
-
-    override func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivityType) -> Any? {
+    
+    override func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivityType?) -> Any? {
         if let html = html , activityType == UIActivityType.mail {
             return html
         }

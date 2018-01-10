@@ -70,7 +70,7 @@ open class FolioReaderWebView: UIWebView {
 
     // MARK: - UIMenuController - Actions
 
-    func share(_ sender: UIMenuController) {
+    @objc func share(_ sender: UIMenuController) {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
         let shareImage = UIAlertAction(title: self.readerConfig.localizedShareImageQuote, style: .default, handler: { (action) -> Void in
@@ -128,7 +128,7 @@ open class FolioReaderWebView: UIWebView {
         setMenuVisible(false)
     }
 
-    func highlight(_ sender: UIMenuController?) {
+    @objc func highlight(_ sender: UIMenuController?) {
         let highlightAndReturn = js("highlightString('\(HighlightStyle.classForStyle(self.folioReader.currentHighlightStyle))')")
         let jsonData = highlightAndReturn?.data(using: String.Encoding.utf8)
 
@@ -164,7 +164,7 @@ open class FolioReaderWebView: UIWebView {
         }
     }
 
-    func define(_ sender: UIMenuController?) {
+    @objc func define(_ sender: UIMenuController?) {
         guard let selectedText = js("getSelectedText()") else {
             return
         }
@@ -178,7 +178,7 @@ open class FolioReaderWebView: UIWebView {
         readerContainer.show(vc, sender: nil)
     }
 
-    func play(_ sender: UIMenuController?) {
+    @objc func play(_ sender: UIMenuController?) {
         self.folioReader.readerAudioPlayer?.play()
 
         self.clearTextSelection()
@@ -304,7 +304,7 @@ open class FolioReaderWebView: UIWebView {
     
     // MARK: - Java Script Bridge
     
-    @discardableResult func js(_ script: String) -> String? {
+    @discardableResult open func js(_ script: String) -> String? {
         let callback = self.stringByEvaluatingJavaScript(from: script)
         if callback!.isEmpty { return nil }
         return callback

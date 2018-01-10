@@ -110,17 +110,17 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
 
     // MARK: - slider events
 
-    func sliderTouchDown(_ slider:UISlider) {
+    @objc func sliderTouchDown(_ slider:UISlider) {
         usingSlider = true
         show()
     }
 
-    func sliderTouchUp(_ slider:UISlider) {
+    @objc func sliderTouchUp(_ slider:UISlider) {
         usingSlider = false
         hideAfterDelay()
     }
 
-    func sliderChange(_ slider:UISlider) {
+    @objc func sliderChange(_ slider:UISlider) {
         let movePosition = (height() * CGFloat(slider.value))
         let offset = readerConfig.isDirection(CGPoint(x: 0, y: movePosition), CGPoint(x: movePosition, y: 0), CGPoint(x: 0, y: movePosition))
         scrollView()?.setContentOffset(offset, animated: false)
@@ -150,7 +150,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
     }
 
 
-    func hide() {
+    @objc func hide() {
         visible = false
         resetScrollDelta()
         UIView.animate(withDuration: hideSpeed, animations: {
@@ -224,7 +224,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
         RunLoop.current.add(scrollDeltaTimer, forMode: RunLoopMode.commonModes)
     }
 
-    func resetScrollDelta() {
+    @objc func resetScrollDelta() {
         if scrollDeltaTimer != nil {
             scrollDeltaTimer.invalidate()
             scrollDeltaTimer = nil

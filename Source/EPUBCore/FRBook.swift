@@ -10,28 +10,29 @@
 import UIKit
 
 open class FRBook: NSObject {
-    var resources = FRResources()
     var metadata = FRMetadata()
     var spine = FRSpine()
     var smils = FRSmils()
-    var tableOfContents: [FRTocReference]!
-    var flatTableOfContents: [FRTocReference]!
-    var opfResource: FRResource!
-    var tocResource: FRResource?
-    var coverImage: FRResource?
     var version: Double?
-    var uniqueIdentifier: String?
-    var name: String?
-
-    func hasAudio() -> Bool {
+    
+    public var opfResource: FRResource!
+    public var tocResource: FRResource?
+    public var uniqueIdentifier: String?
+    public var coverImage: FRResource?
+    public var name: String?
+    public var resources = FRResources()
+    public var tableOfContents: [FRTocReference]!
+    public var flatTableOfContents: [FRTocReference]!
+    
+    public func hasAudio() -> Bool {
         return smils.smils.count > 0 ? true : false
     }
 
-    func title() -> String? {
+    public func title() -> String? {
         return metadata.titles.first
     }
 
-    func authorName() -> String? {
+    public func authorName() -> String? {
         return metadata.creators.first?.name
     }
 
