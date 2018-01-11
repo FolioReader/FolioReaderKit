@@ -40,18 +40,18 @@ open class FRBook: NSObject {
     // http://www.idpf.org/epub/301/spec/epub-mediaoverlays.html#sec-package-metadata
 
     var duration: String? {
-        return metadata.findMetaByProperty("media:duration")
+        return metadata.find(byProperty: "media:duration")?.value
     }
 
     var activeClass: String {
-        guard let className = metadata.findMetaByProperty("media:active-class") else {
+        guard let className = metadata.find(byProperty: "media:active-class")?.value else {
             return "epub-media-overlay-active"
         }
         return className
     }
 
     var playbackActiveClass: String {
-        guard let className = metadata.findMetaByProperty("media:playback-active-class") else {
+        guard let className = metadata.find(byProperty: "media:playback-active-class")?.value else {
             return "epub-media-overlay-playing"
         }
         return className
@@ -82,6 +82,6 @@ open class FRBook: NSObject {
     
     // @NOTE: should "#" be automatically prefixed with the ID?
     func duration(for ID: String) -> String? {
-        return metadata.findMetaByProperty("media:duration", refinedBy: ID)
+        return metadata.find(byProperty: "media:duration", refinedBy: ID)?.value
     }
 }

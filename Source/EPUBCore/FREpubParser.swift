@@ -150,13 +150,13 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         book.metadata = readMetadata(xmlDoc.root["metadata"].children)
 
         // Read the book unique identifier
-        if let uniqueIdentifier = book.metadata.findIdentifierById(identifier) {
-            book.uniqueIdentifier = uniqueIdentifier
+        if let identifier = identifier, let uniqueIdentifier = book.metadata.find(identifierById: identifier) {
+            book.uniqueIdentifier = uniqueIdentifier.value
         }
 
         // Read the cover image
-        let coverImageId = book.metadata.findMetaByName("cover")
-        if let coverResource = book.resources.findById(coverImageId) {
+        let coverImageId = book.metadata.find(byName: "cover")?.content
+        if let coverImageId = coverImageId, let coverResource = book.resources.findById(coverImageId) {
             book.coverImage = coverResource
         } else if let coverResource = book.resources.findByProperty("cover-image") {
             book.coverImage = coverResource
