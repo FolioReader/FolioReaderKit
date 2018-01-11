@@ -171,7 +171,7 @@ open class FolioReaderContainer: UIViewController {
                 DispatchQueue.main.async {
 
                     // Add audio player if needed
-                    if (self.book.hasAudio() == true || self.readerConfig.enableTTS == true) {
+                    if self.book.hasAudio || self.readerConfig.enableTTS {
                         self.addAudioPlayer()
                     }
                     self.centerViewController?.reloadData()

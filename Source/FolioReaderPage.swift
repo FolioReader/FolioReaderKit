@@ -196,7 +196,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
         refreshPageMode()
 
-        if (self.readerConfig.enableTTS == true && self.book.hasAudio() == false) {
+        if self.readerConfig.enableTTS && !self.book.hasAudio {
             webView.js("wrappingSentencesWithinPTags()")
 
             if let audioPlayer = self.folioReader.readerAudioPlayer, (audioPlayer.isPlaying() == true) {
@@ -485,7 +485,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
             return
         }
 
-        let playbackActiveClass = self.book.playbackActiveClass()
+        let playbackActiveClass = self.book.playbackActiveClass
         currentPage.webView?.js("audioMarkID('\(playbackActiveClass)','\(identifier)')")
     }
 

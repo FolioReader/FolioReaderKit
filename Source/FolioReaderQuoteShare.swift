@@ -87,7 +87,7 @@ class FolioReaderQuoteShare: UIViewController {
         var bookTitle = ""
         var authorName = ""
 
-        if let title = self.book.title() {
+        if let title = self.book.title {
             bookTitle = title
         }
 
@@ -262,7 +262,7 @@ class FolioReaderQuoteShare: UIViewController {
         var shareItems = [AnyObject]()
 
         // Get book title
-        if let title = self.book.title() {
+        if let title = self.book.title {
             bookTitle = title
             subject += " “\(title)”"
         }

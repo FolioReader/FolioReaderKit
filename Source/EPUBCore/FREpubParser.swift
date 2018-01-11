@@ -39,14 +39,14 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     }
 
     func parseTitle(_ epubPath: String) throws -> String? {
-        guard let book = try readEpub(epubPath: epubPath, removeEpub: false), let title = book.title() else {
+        guard let book = try readEpub(epubPath: epubPath, removeEpub: false), let title = book.title else {
              throw FolioReaderError(kind: .TitleNotAvailable)
         }
         return title
     }
 
     func parseAuthorName(_ epubPath: String) throws -> String? {
-        guard let book = try readEpub(epubPath: epubPath, removeEpub: false), let authorName = book.authorName() else {
+        guard let book = try readEpub(epubPath: epubPath, removeEpub: false), let authorName = book.authorName else {
             throw FolioReaderError(kind: .AuthorNameNotAvailable)
         }
         return authorName
