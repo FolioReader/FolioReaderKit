@@ -155,7 +155,7 @@ open class FolioReaderAudioPlayer: NSObject {
     }
 
     @objc func play() {
-        if (self.book.hasAudio() == true) {
+        if book.hasAudio {
             guard let currentPage = self.folioReader.readerCenter?.currentPage else { return }
             currentPage.webView?.js("playAudio()")
         } else {
@@ -178,7 +178,7 @@ open class FolioReaderAudioPlayer: NSObject {
 
         self.stop()
 
-        let smilFile = self.book.smilFileForHref(href)
+        let smilFile = book.smilFile(forHref: href)
 
         // if no smil file for this href and the same href is being requested, we've hit the end. stop playing
         if smilFile == nil && currentHref != nil && href == currentHref {
@@ -308,7 +308,7 @@ open class FolioReaderAudioPlayer: NSObject {
      */
     fileprivate func nextAudioFragment() -> FRSmilElement? {
 
-        guard let smilFile = self.book.smilFileForHref(currentHref) else {
+        guard let smilFile = book.smilFile(forHref: currentHref) else {
             return nil
         }
 
@@ -362,7 +362,7 @@ open class FolioReaderAudioPlayer: NSObject {
                 return
         }
 
-        let playbackActiveClass = self.book.playbackActiveClass()
+        let playbackActiveClass = book.playbackActiveClass
         guard let sentence = currentPage.webView?.js("getSentenceWithIndex('\(playbackActiveClass)')") else {
             if (readerCenter.isLastPage() == true) {
                 self.stop()
@@ -441,7 +441,7 @@ open class FolioReaderAudioPlayer: NSObject {
         }
 
         // Get book title
-        if let title = self.book.title() {
+        if let title = self.book.title {
             songInfo[MPMediaItemPropertyAlbumTitle] = title as AnyObject?
         }
 

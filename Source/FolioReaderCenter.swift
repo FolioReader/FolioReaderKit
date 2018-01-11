@@ -274,7 +274,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             rightBarIcons.append(UIBarButtonItem(image: shareIcon, style: .plain, target: self, action:#selector(shareChapter(_:))))
         }
 
-        if (self.book.hasAudio() == true || self.readerConfig.enableTTS == true) {
+        if self.book.hasAudio || self.readerConfig.enableTTS {
             rightBarIcons.append(UIBarButtonItem(image: audioIcon, style: .plain, target: self, action:#selector(presentPlayerMenu(_:))))
         }
 
@@ -285,7 +285,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         navigationItem.rightBarButtonItems = rightBarIcons
         
         if(self.readerConfig.displayTitle){
-            navigationItem.title = book.title()
+            navigationItem.title = book.title
         }
     }
 
@@ -1051,7 +1051,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             var shareItems = [AnyObject]()
 
             // Get book title
-            if let title = self.book.title() {
+            if let title = self.book.title {
                 bookTitle = title
                 subject += " “\(title)”"
             }
@@ -1109,7 +1109,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         var shareItems = [AnyObject]()
 
         // Get book title
-        if let title = self.book.title() {
+        if let title = self.book.title {
             bookTitle = title
             subject += " “\(title)”"
         }
