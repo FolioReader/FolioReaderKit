@@ -9,8 +9,8 @@
 import UIKit
 
 struct Spine {
-    var linear: Bool!
-    var resource: FRResource!
+    var linear: Bool
+    var resource: FRResource
 
     init(resource: FRResource, linear: Bool = true) {
         self.resource = resource

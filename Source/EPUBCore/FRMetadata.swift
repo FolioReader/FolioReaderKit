@@ -62,18 +62,13 @@ struct Meta {
     var value: String?
     var refines: String?
 
-    init(name: String, content: String) {
+    init(name: String? = nil, content: String? = nil, id: String? = nil, property: String? = nil,
+         value: String? = nil, refines: String? = nil) {
         self.name = name
         self.content = content
-    }
-
-    init(id: String, property: String, value: String) {
         self.id = id
         self.property = property
         self.value = value
-    }
-
-    init(property: String, value: String, refines: String!) {
         self.property = property
         self.value = value
         self.refines = refines
