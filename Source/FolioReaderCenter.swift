@@ -145,6 +145,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = background
         collectionView.decelerationRate = UIScrollViewDecelerationRateFast
+        collectionView.scrollsToTop = false
         enableScrollBetweenChapters(scrollEnabled: true)
         view.addSubview(collectionView)
 
