@@ -159,7 +159,7 @@ open class FolioReaderContainer: UIViewController {
         DispatchQueue.global(qos: .userInitiated).async {
 
             do {
-                guard let parsedBook = try FREpubParser().readEpub(epubPath: self.epubPath, removeEpub: self.shouldRemoveEpub) else {
+                guard let parsedBook = try? FREpubParser().readEpub(epubPath: self.epubPath, removeEpub: self.shouldRemoveEpub) else {
                     self.errorOnLoad = true
                     return
                 }

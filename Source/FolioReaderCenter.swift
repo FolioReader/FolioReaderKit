@@ -457,9 +457,9 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         setPageProgressiveDirection(cell)
 
         // Configure the cell
-        guard let resource = self.book.spine.spineReferences[indexPath.row].resource,
-            var html = try? String(contentsOfFile: resource.fullHref, encoding: String.Encoding.utf8) else {
-                return cell
+        let resource = self.book.spine.spineReferences[indexPath.row].resource
+        guard var html = try? String(contentsOfFile: resource.fullHref, encoding: String.Encoding.utf8) else {
+            return cell
         }
 
         let mediaOverlayStyleColors = "\"\(self.readerConfig.mediaOverlayColor.hexString(false))\", \"\(self.readerConfig.mediaOverlayColor.highlightColor().hexString(false))\""
