@@ -96,6 +96,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         tapGestureRecognizer.numberOfTapsRequired = 1
         tapGestureRecognizer.delegate = self
         webView?.addGestureRecognizer(tapGestureRecognizer)
+        webView?.scrollView.scrollsToTop = false
     }
 
     required public init?(coder aDecoder: NSCoder) {
@@ -267,11 +268,8 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
                 if (hrefPage == pageNumber) {
                     // Handle internal #anchor
                     if anchorFromURL != nil {
-                        handleAnchor(anchorFromURL!, avoidBeginningAnchors: false, animated: true)
                         return false
                     }
-                } else {
-                    self.folioReader.readerCenter?.changePageWith(href: href, animated: true)
                 }
 
                 return false
