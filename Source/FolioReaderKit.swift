@@ -25,28 +25,31 @@ internal let kReuseCellIdentifier = "com.folioreader.Cell.ReuseIdentifier"
 
 public struct FolioReaderError: Error {
     enum ErrorKind {
-        case BookNotAvailable
-        case ErrorInContainer
-        case ErrorInOpf
-        case AuthorNameNotAvailable
-        case CoverNotAvailable
-        case TitleNotAvailable
+        case bookNotAvailable
+        case errorInContainer
+        case errorInOpf
+        case authorNameNotAvailable
+        case coverNotAvailable
+        case titleNotAvailable
+        case fullPathEmpty
     }
 
     let kind: ErrorKind
 
     var localizedDescription: String {
         switch self.kind {
-        case .BookNotAvailable:
+        case .bookNotAvailable:
             return "Book not found"
-        case .ErrorInContainer, .ErrorInOpf:
+        case .errorInContainer, .errorInOpf:
             return "Invalid book format"
-        case .AuthorNameNotAvailable:
+        case .authorNameNotAvailable:
             return "Author name not available"
-        case .CoverNotAvailable:
+        case .coverNotAvailable:
             return "Cover image not available"
-        case .TitleNotAvailable:
+        case .titleNotAvailable:
             return "Book title not available"
+        case .fullPathEmpty:
+            return "Book corrupted"
         }
     }
 }

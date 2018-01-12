@@ -15,8 +15,8 @@ import UIKit
  */
 struct MediaType {
     var name: String
-    var defaultExtension: String!
-    var extensions: [String]!
+    var defaultExtension: String
+    var extensions: [String]
 
     init(name: String, defaultExtension: String) {
         self.name = name
@@ -33,20 +33,20 @@ struct MediaType {
 
 // MARK: Equatable
 
-extension MediaType: Equatable {}
-
-/**
- Compare if two mediatypes are equal or different.
- */
-func ==(lhs: MediaType, rhs: MediaType) -> Bool {
-    return lhs.name == rhs.name && lhs.defaultExtension == rhs.defaultExtension
+extension MediaType: Equatable {
+    /**
+     Compare if two mediatypes are equal.
+     */
+    static func ==(lhs: MediaType, rhs: MediaType) -> Bool {
+        return lhs.name == rhs.name && lhs.defaultExtension == rhs.defaultExtension
+    }
 }
 
 
 /**
  Manages mediatypes that are used by epubs.
  */
-class FRMediaType: NSObject {
+struct FRMediaType {
     static var XHTML = MediaType(name: "application/xhtml+xml", defaultExtension: ".xhtml", extensions: [".htm", ".html", ".xhtml", ".xml"])
     static var EPUB = MediaType(name: "application/epub+zip", defaultExtension: ".epub")
     static var NCX = MediaType(name: "application/x-dtbncx+xml", defaultExtension: ".ncx")
@@ -87,16 +87,23 @@ class FRMediaType: NSObject {
 
      - returns: A know mediatype or create a new one.
      */
-    static func mediaTypeByName(_ name: String, fileName: String?) -> MediaType {
-        for mediatype in mediatypes {
-            if mediatype.name == name {
-                return mediatype
-            }
+    static func mediaType(byName name: String, fileName: String?) -> MediaType? {
+        if let mediatype = mediatypes.filter({ $0.name == name }).first {
+            return mediatype
         }
-        let ext = "."+URL(string: fileName ?? "")!.pathExtension
+        guard let fileName = fileName, let url = URL(string: fileName) else { return nil }
+        let ext = "." + url.pathExtension
         return MediaType(name: name, defaultExtension: ext)
     }
 
+    /**
+     Gets the MediaType based on the file extension.
+     */
+    static func mediaType(byFileName fileName: String) -> MediaType? {
+        let ext = "." + (fileName as NSString).pathExtension
+        return mediatypes.filter({ $0.extensions.contains(ext) }).first
+    }
+    
     /**
      Compare if the resource is a image.
 
@@ -104,19 +111,5 @@ class FRMediaType: NSObject {
      */
     static func isBitmapImage(_ mediaType: MediaType) -> Bool {
         return mediaType == JPG || mediaType == PNG || mediaType == GIF
-    }
-
-
-    /**
-     Gets the MediaType based on the file extension.
-     */
-    static func determineMediaType(_ fileName: String) -> MediaType? {
-        for mediatype in mediatypes {
-            let ext = "."+(fileName as NSString).pathExtension
-            if mediatype.extensions.contains(ext) {
-                return mediatype
-            }
-        }
-        return nil
     }
 }
