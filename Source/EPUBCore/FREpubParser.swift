@@ -75,7 +75,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         }
 
         // Unzip if necessary
-        let needsUnzip = fileManager.fileExists(atPath: bookBasePath, isDirectory:&isDir) && !isDir.boolValue
+        let needsUnzip = !fileManager.fileExists(atPath: bookBasePath, isDirectory:&isDir) || !isDir.boolValue
 
         if needsUnzip {
             SSZipArchive.unzipFile(atPath: withEpubPath, toDestination: bookBasePath, delegate: self)
