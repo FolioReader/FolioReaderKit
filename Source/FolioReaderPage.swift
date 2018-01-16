@@ -255,8 +255,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
             let anchorFromURL = url.fragment
 
             // Handle internal url
-            if ((url.path as NSString).pathExtension != "") {
-
+            if !url.pathExtension.isEmpty {
                 var pathComponent = (self.book.opfResource.href as? NSString)?.deletingLastPathComponent
                 guard let base = ((pathComponent == nil || pathComponent?.isEmpty == true) ? self.book.name : pathComponent) else {
                     return true
@@ -282,7 +281,6 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
                 } else {
                     self.folioReader.readerCenter?.changePageWith(href: href, animated: true)
                 }
-
                 return false
             }
 

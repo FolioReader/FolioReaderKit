@@ -303,7 +303,7 @@ extension Highlight {
             let highlight = Highlight()
             highlight.highlightId = matchingHighlight.id
             highlight.type = HighlightStyle.styleForClass(str.substring(with: match.range(at: 1))).rawValue
-            highlight.date = Foundation.Date()
+            highlight.date = Date()
             highlight.content = Highlight.removeSentenceSpam(str.substring(with: match.range(at: 2)))
             highlight.contentPre = Highlight.removeSentenceSpam(contentPre)
             highlight.contentPost = Highlight.removeSentenceSpam(contentPost)

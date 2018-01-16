@@ -41,7 +41,7 @@ struct Identifier {
 /**
  A date and his event.
  */
-struct Date {
+struct EventDate {
     var date: String
     var event: String?
 
@@ -81,14 +81,14 @@ struct Meta {
 class FRMetadata {
     var creators = [Author]()
     var contributors = [Author]()
-    var dates = [Date]()
+    var dates = [EventDate]()
     var language = "en-US"
     var titles = [String]()
     var identifiers = [Identifier]()
     var subjects = [String]()
     var descriptions = [String]()
     var publishers = [String]()
-    var format = FRMediaType.EPUB.name
+    var format = MediaType.epub.name
     var rights = [String]()
     var metaAttributes = [Meta]()
 
