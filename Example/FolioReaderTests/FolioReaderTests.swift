@@ -15,25 +15,65 @@ class FolioReaderTests: QuickSpec {
     override func spec() {
         context("epub parsing") {
             var subject: FREpubParser!
+            var epubPath: String!
 
             beforeEach {
                 guard let path = Bundle.main.path(forResource: "The Silver Chair", ofType: "epub") else {
                     fail("Could not read the epub file")
                     return
                 }
+
                 subject = FREpubParser()
+                epubPath = path
+
                 do {
-                    let book = try subject.readEpub(epubPath: path)
-                    print(book!.tableOfContents.first!.title)
-                } catch let e as FolioReaderError {
-                    print(e.localizedDescription)
+                    let book = try subject.readEpub(epubPath: epubPath)
+                    print(book.tableOfContents.first!.title)
                 } catch {
-                    print("Unknown error")
+                    fail("Error: \(error.localizedDescription)")
                 }
             }
 
-            it("correctly parses a properly formatted document") {
+            it("flat table of contents") {
+                expect(subject.flatTOC.count).to(equal(17))
+            }
+
+            it("parses table of contents") {
                 expect(subject.book.tableOfContents.count).to(equal(17))
+            }
+
+            it("parses cover image") {
+                guard let coverImage = subject.book.coverImage, let fromFileImage = UIImage(contentsOfFile: coverImage.fullHref) else {
+                    fail("Could not read the cover image")
+                    return
+                }
+
+                do {
+                    let parsedImage = try subject.parseCoverImage(epubPath)
+                    let data1 = UIImagePNGRepresentation(parsedImage)
+                    let data2 = UIImagePNGRepresentation(fromFileImage)
+                    expect(data1).to(equal(data2))
+                } catch {
+                    fail("Error: \(error.localizedDescription)")
+                }
+            }
+
+            it("parses book title") {
+                do {
+                    let title = try subject.parseTitle(epubPath)
+                    expect(title).to(equal("The Silver Chair"))
+                } catch {
+                    fail("Error: \(error.localizedDescription)")
+                }
+            }
+
+            it("parses author name") {
+                do {
+                    let name = try subject.parseAuthorName(epubPath)
+                    expect(name).to(equal("C. S. Lewis"))
+                } catch {
+                    fail("Error: \(error.localizedDescription)")
+                }
             }
         }
     }

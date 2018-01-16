@@ -178,10 +178,8 @@ open class FolioReaderContainer: UIViewController {
                     self.folioReader.isReaderReady = true
                     self.folioReader.delegate?.folioReader?(self.folioReader, didFinishedLoading: self.book)
                 }
-            } catch let e as FolioReaderError {
-                self.alert(message: e.localizedDescription)
             } catch {
-                self.alert(message: "Unknown Error")
+                self.alert(message: error.localizedDescription)
             }
         }
     }

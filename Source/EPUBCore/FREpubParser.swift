@@ -16,7 +16,7 @@ import AEXML
 
 class FREpubParser: NSObject, SSZipArchiveDelegate {
 
-    private let book = FRBook()
+    let book = FRBook()
     private var resourcesBasePath = ""
     private var shouldRemoveEpub = true
     private var epubPathToRemove: String?
@@ -24,10 +24,11 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     /// Parse the Cover Image from an epub file.
     ///
     /// - Parameters:
-    ///   - epubPath: Epub path on the disk
+    ///   - epubPath: Epub path on the disk.
     ///   - unzipPath: Path to unzip the compressed epub.
-    /// - Returns: An UIImage object
-    func parseCoverImage(_ epubPath: String, unzipPath: String? = nil) throws -> UIImage? {
+    /// - Returns: The book cover as UIImage object
+    /// - Throws: `FolioReaderError`
+    func parseCoverImage(_ epubPath: String, unzipPath: String? = nil) throws -> UIImage {
         guard let book = try? readEpub(epubPath: epubPath, removeEpub: false, unzipPath: unzipPath),
             let coverImage = book.coverImage else {
                 throw FolioReaderError(kind: .coverNotAvailable)
@@ -37,14 +38,14 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
 
     func parseTitle(_ epubPath: String) throws -> String {
         guard let book = try? readEpub(epubPath: epubPath, removeEpub: false), let title = book.title else {
-             throw FolioReaderError(kind: .titleNotAvailable)
+             throw FolioReaderError.titleNotAvailable
         }
         return title
     }
 
     func parseAuthorName(_ epubPath: String) throws -> String {
         guard let book = try? readEpub(epubPath: epubPath, removeEpub: false), let authorName = book.authorName else {
-            throw FolioReaderError(kind: .authorNameNotAvailable)
+            throw FolioReaderError.authorNameNotAvailable
         }
         return authorName
     }
@@ -71,7 +72,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         bookBasePath = (bookBasePath as NSString).appendingPathComponent(bookName)
 
         guard fileManager.fileExists(atPath: withEpubPath) else {
-            throw FolioReaderError(kind: .bookNotAvailable)
+            throw FolioReaderError.bookNotAvailable
         }
 
         // Unzip if necessary
@@ -100,7 +101,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         let opfResource = FRResource()
         opfResource.href = xmlDoc.root["rootfiles"]["rootfile"].attributes["full-path"]
         guard let fullPath = xmlDoc.root["rootfiles"]["rootfile"].attributes["full-path"] else {
-            throw FolioReaderError(kind: .fullPathEmpty)
+            throw FolioReaderError.fullPathEmpty
         }
         opfResource.mediaType = FRMediaType.mediaType(byFileName: fullPath)
         book.opfResource = opfResource

@@ -23,21 +23,18 @@ internal let kCurrentTOCMenu = "com.folioreader.kCurrentTOCMenu"
 internal let kHighlightRange = 30
 internal let kReuseCellIdentifier = "com.folioreader.Cell.ReuseIdentifier"
 
-public struct FolioReaderError: Error {
-    enum ErrorKind {
-        case bookNotAvailable
-        case errorInContainer
-        case errorInOpf
-        case authorNameNotAvailable
-        case coverNotAvailable
-        case titleNotAvailable
-        case fullPathEmpty
-    }
+public enum FolioReaderError: Error, LocalizedError {
+    case bookNotAvailable
+    case errorInContainer
+    case errorInOpf
+    case authorNameNotAvailable
+    case coverNotAvailable
+    case invalidImage(path: String)
+    case titleNotAvailable
+    case fullPathEmpty
 
-    let kind: ErrorKind
-
-    var localizedDescription: String {
-        switch self.kind {
+    public var errorDescription: String? {
+        switch self {
         case .bookNotAvailable:
             return "Book not found"
         case .errorInContainer, .errorInOpf:
@@ -46,6 +43,8 @@ public struct FolioReaderError: Error {
             return "Author name not available"
         case .coverNotAvailable:
             return "Cover image not available"
+        case let .invalidImage(path):
+            return "Invalid image at path: " + path
         case .titleNotAvailable:
             return "Book title not available"
         case .fullPathEmpty:
