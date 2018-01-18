@@ -308,7 +308,7 @@ extension FolioReader {
     }
 }
 
-// MARK: - Image Cover
+// MARK: - Metadata
 
 extension FolioReader {
 
@@ -322,12 +322,12 @@ extension FolioReader {
         return try FREpubParser().parseCoverImage(epubPath, unzipPath: unzipPath)
     }
 
-    open class func getTitle(_ epubPath: String) throws -> String? {
-        return try FREpubParser().parseTitle(epubPath)
+    open class func getTitle(_ epubPath: String, unzipPath: String? = nil) throws -> String? {
+        return try FREpubParser().parseTitle(epubPath, unzipPath: unzipPath)
     }
 
-    open class func getAuthorName(_ epubPath: String) throws-> String? {
-        return try FREpubParser().parseAuthorName(epubPath)
+    open class func getAuthorName(_ epubPath: String, unzipPath: String? = nil) throws-> String? {
+        return try FREpubParser().parseAuthorName(epubPath, unzipPath: unzipPath)
     }
 }
 
