@@ -43,11 +43,13 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
 
     /// Parse the book title from an epub file.
     ///
-    /// - Parameter epubPath: Epub path on the disk
+    /// - Parameters:
+    ///   - epubPath: Epub path on the disk.
+    ///   - unzipPath: Path to unzip the compressed pub.
     /// - Returns: The book title
     /// - Throws: `FolioReaderError`
-    func parseTitle(_ epubPath: String) throws -> String {
-        guard let book = try? readEpub(epubPath: epubPath, removeEpub: false), let title = book.title else {
+    func parseTitle(_ epubPath: String, unzipPath: String? = nil) throws -> String {
+        guard let book = try? readEpub(epubPath: epubPath, removeEpub: false, unzipPath: unzipPath), let title = book.title else {
              throw FolioReaderError.titleNotAvailable
         }
         return title
@@ -56,11 +58,13 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
 
     /// Parse the book Author name from an epub file.
     ///
-    /// - Parameter epubPath: Epub path on the disk
-    /// - Returns: Author name
+    /// - Parameters:
+    ///   - epubPath: Epub path on the disk.
+    ///   - unzipPath: Path to unzip the compressed pub.
+    /// - Returns: The author name
     /// - Throws: `FolioReaderError`
-    func parseAuthorName(_ epubPath: String) throws -> String {
-        guard let book = try? readEpub(epubPath: epubPath, removeEpub: false), let authorName = book.authorName else {
+    func parseAuthorName(_ epubPath: String, unzipPath: String? = nil) throws -> String {
+        guard let book = try? readEpub(epubPath: epubPath, removeEpub: false, unzipPath: unzipPath), let authorName = book.authorName else {
             throw FolioReaderError.authorNameNotAvailable
         }
         return authorName
