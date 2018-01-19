@@ -310,6 +310,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
     
     func tapGesture() {
         dismiss()
+        self.folioReader.readerCenter?.showBehindView(false)
         
         if (self.readerConfig.shouldHideNavigationOnTap == false) {
             self.folioReader.readerCenter?.showBars()
