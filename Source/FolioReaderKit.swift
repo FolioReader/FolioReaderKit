@@ -318,15 +318,15 @@ extension FolioReader {
     /**
      Read Cover Image and Return an `UIImage`
      */
-    open class func getCoverImage(_ epubPath: String, unzipPath: String? = nil) throws -> UIImage? {
+    open class func getCoverImage(_ epubPath: String, unzipPath: String? = nil) throws -> UIImage {
         return try FREpubParser().parseCoverImage(epubPath, unzipPath: unzipPath)
     }
 
-    open class func getTitle(_ epubPath: String, unzipPath: String? = nil) throws -> String? {
+    open class func getTitle(_ epubPath: String, unzipPath: String? = nil) throws -> String {
         return try FREpubParser().parseTitle(epubPath, unzipPath: unzipPath)
     }
 
-    open class func getAuthorName(_ epubPath: String, unzipPath: String? = nil) throws-> String? {
+    open class func getAuthorName(_ epubPath: String, unzipPath: String? = nil) throws-> String {
         return try FREpubParser().parseAuthorName(epubPath, unzipPath: unzipPath)
     }
 }
