@@ -132,12 +132,14 @@ class StoryboardFolioReaderContrainer: FolioReaderContainer {
     }
 }
 ```
+
 Go to your storyboard file, choose or create the view controller that should present the epub reader. In the identity inspector set StoryboardFolioReaderContrainer as class.
 
 ## Documentation
 Checkout [Example](/Example) and [API Documentation](http://cocoadocs.org/docsets/FolioReaderKit)
 
 You can always use the header-doc. (use **alt+click** in Xcode)
+
 <img src="https://raw.githubusercontent.com/FolioReader/FolioReaderKit/assets/header-doc.png" width="521px"/>
 
 ### Migration
