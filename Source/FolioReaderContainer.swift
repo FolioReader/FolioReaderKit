@@ -35,7 +35,7 @@ open class FolioReaderContainer: UIViewController {
     ///   - config: Current Folio Reader configuration
     ///   - folioReader: Current instance of the FolioReader kit.
     ///   - path: The ePub path on system. Must not be nil nor empty string.
-    ///   - removeEpub:  Should delete the original file after unzip? Default to `true` so the ePub will be unziped only once.
+    ///   - removeEpub: Should delete the original file after unzip? Default to `true` so the ePub will be unziped only once.
     public init(withConfig config: FolioReaderConfig, folioReader: FolioReader, epubPath path: String, removeEpub: Bool = true) {
         self.readerConfig = config
         self.folioReader = folioReader
