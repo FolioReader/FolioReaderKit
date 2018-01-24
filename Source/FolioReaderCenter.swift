@@ -70,6 +70,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     fileprivate var isFirstLoad = true
     fileprivate var currentWebViewScrollPositions = [Int: CGPoint]()
     fileprivate var currentOrientation: UIInterfaceOrientation?
+    fileprivate var behindView: UIView?
 
     fileprivate var readerConfig: FolioReaderConfig {
         guard let readerContainer = readerContainer else { return FolioReaderConfig() }
@@ -1114,19 +1115,37 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     /**
+     Show behindView in fonts mode
+     */
+    func showBehindView(_ show: Bool) {
+        if (show) {
+            behindView = UIView(frame: view.frame)
+            behindView?.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            behindView?.alpha = 0.6
+            view.addSubview(behindView!)
+        }
+        else {
+            UIView.animate(withDuration: 0, animations: {
+                self.behindView?.removeFromSuperview()
+            })
+        }
+    }
+    
+    /**
      Present fonts and settings menu
      */
     func presentFontsMenu() {
         folioReader.saveReaderState()
         hideBars()
-
+        showBehindView(true)
+        
         let menu = FolioReaderFontsMenu(folioReader: folioReader, readerConfig: readerConfig)
         menu.modalPresentationStyle = .custom
 
         animator = ZFModalTransitionAnimator(modalViewController: menu)
         animator.isDragable = false
         animator.bounces = false
-        animator.behindViewAlpha = 0.4
+        animator.behindViewAlpha = 1
         animator.behindViewScale = 1
         animator.transitionDuration = 0.6
         animator.direction = ZFModalTransitonDirection.bottom
@@ -1144,7 +1163,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
         let menu = FolioReaderPlayerMenu(folioReader: folioReader, readerConfig: readerConfig)
         menu.modalPresentationStyle = .custom
-
+  
         animator = ZFModalTransitionAnimator(modalViewController: menu)
         animator.isDragable = true
         animator.bounces = false
