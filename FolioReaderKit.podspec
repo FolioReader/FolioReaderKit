@@ -13,8 +13,9 @@ Pod::Spec.new do |s|
   s.source           = { :git => "https://github.com/FolioReader/FolioReaderKit.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/hebertialmeida'
 
-  s.platform     = :ios, '8.0'
-  s.requires_arc = true
+  s.swift_version = '4.0'
+  s.platform      = :ios, '8.0'
+  s.requires_arc  = true
 
   s.source_files = [
     'Source/*.{h,swift}',
