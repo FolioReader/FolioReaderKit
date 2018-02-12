@@ -28,7 +28,7 @@ open class FolioReaderWebView: UIWebView {
 
     fileprivate var folioReader: FolioReader {
         guard let readerContainer = readerContainer else { return FolioReader() }
-        return self.readerContainer!.folioReader
+        return readerContainer.folioReader
     }
 
     override init(frame: CGRect) {
@@ -150,7 +150,7 @@ open class FolioReaderWebView: UIWebView {
             guard
                 let html = js("getHTML()"),
                 let identifier = dic["id"],
-                let bookId = (self.book.name as? NSString)?.deletingPathExtension else {
+                let bookId = (self.book.name as NSString?)?.deletingPathExtension else {
                     return
             }
 

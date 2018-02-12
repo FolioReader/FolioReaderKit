@@ -60,7 +60,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
     fileprivate var folioReader: FolioReader {
         guard let readerContainer = readerContainer else { return FolioReader() }
-        return self.readerContainer!.folioReader
+        return readerContainer.folioReader
     }
 
     // MARK: - View life cicle
@@ -133,14 +133,12 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         let paddingTop: CGFloat = 20
         let paddingBottom: CGFloat = 30
 
-        var frame = CGRect(
+        return CGRect(
             x: bounds.origin.x,
             y: self.readerConfig.isDirection(bounds.origin.y + navTotal, bounds.origin.y + navTotal + paddingTop, bounds.origin.y + navTotal),
             width: bounds.width,
             height: self.readerConfig.isDirection(bounds.height - navTotal, bounds.height - navTotal - paddingTop - paddingBottom, bounds.height - navTotal)
         )
-        
-        return frame
     }
 
     func loadHTMLString(_ htmlContent: String!, baseURL: URL!) {
@@ -156,7 +154,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     fileprivate func htmlContentWithInsertHighlights(_ htmlContent: String) -> String {
         var tempHtmlContent = htmlContent as NSString
         // Restore highlights
-        guard let bookId = (self.book.name as? NSString)?.deletingPathExtension else {
+        guard let bookId = (self.book.name as NSString?)?.deletingPathExtension else {
             return tempHtmlContent as String
         }
 
@@ -172,7 +170,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
                 let range: NSRange = tempHtmlContent.range(of: locator, options: .literal)
 
                 if range.location != NSNotFound {
-                    let newRange = NSRange(location: range.location + item.contentPre.characters.count, length: item.content.characters.count)
+                    let newRange = NSRange(location: range.location + item.contentPre.count, length: item.content.count)
                     tempHtmlContent = tempHtmlContent.replacingCharacters(in: newRange, with: tag) as NSString
                 } else {
                     print("highlight range not found")
@@ -234,7 +232,8 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
             shouldShowBar = false
 
             guard let decoded = url.absoluteString.removingPercentEncoding else { return false }
-            let rect = CGRectFromString(decoded.substring(from: decoded.index(decoded.startIndex, offsetBy: 12)))
+            let index = decoded.index(decoded.startIndex, offsetBy: 12)
+            let rect = CGRectFromString(String(decoded[index...]))
 
             webView.createMenu(options: true)
             webView.setMenuVisible(true, andRect: rect)
@@ -242,9 +241,9 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
             return false
         } else if scheme == "play-audio" {
-
             guard let decoded = url.absoluteString.removingPercentEncoding else { return false }
-            let playID = decoded.substring(from: decoded.index(decoded.startIndex, offsetBy: 13))
+            let index = decoded.index(decoded.startIndex, offsetBy: 13)
+            let playID = String(decoded[index...])
             let chapter = self.folioReader.readerCenter?.getCurrentChapter()
             let href = chapter?.href ?? ""
             self.folioReader.readerAudioPlayer?.playAudio(href, fragmentID: playID)
@@ -256,7 +255,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
             // Handle internal url
             if !url.pathExtension.isEmpty {
-                var pathComponent = (self.book.opfResource.href as? NSString)?.deletingLastPathComponent
+                let pathComponent = (self.book.opfResource.href as NSString?)?.deletingLastPathComponent
                 guard let base = ((pathComponent == nil || pathComponent?.isEmpty == true) ? self.book.name : pathComponent) else {
                     return true
                 }
@@ -312,12 +311,11 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
             var isClassBasedOnClickListenerScheme = false
             for listener in self.readerConfig.classBasedOnClickListeners {
 
-                if
-                    (scheme == listener.schemeName),
+                if scheme == listener.schemeName,
                     let absoluteURLString = request.url?.absoluteString,
                     let range = absoluteURLString.range(of: "/clientX=") {
-                    let baseURL = absoluteURLString.substring(to: range.lowerBound)
-                    let positionString = absoluteURLString.substring(from: range.lowerBound)
+                    let baseURL = String(absoluteURLString[..<range.lowerBound])
+                    let positionString = String(absoluteURLString[range.lowerBound...])
                     if let point = getEventTouchPoint(fromPositionParameterString: positionString) {
                         let attributeContentString = (baseURL.replacingOccurrences(of: "\(scheme)://", with: "").removingPercentEncoding)
                         // Call the on click action block

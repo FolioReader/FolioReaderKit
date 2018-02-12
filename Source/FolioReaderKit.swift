@@ -162,7 +162,7 @@ extension FolioReader {
     ///   - animated: Pass true to animate the presentation; otherwise, pass false.
     open func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, unzipPath: String? = nil, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated:
         Bool = true) {
-        var readerContainer = FolioReaderContainer(withConfig: config, folioReader: self, epubPath: epubPath, unzipPath: unzipPath, removeEpub: shouldRemoveEpub)
+        let readerContainer = FolioReaderContainer(withConfig: config, folioReader: self, epubPath: epubPath, unzipPath: unzipPath, removeEpub: shouldRemoveEpub)
         self.readerContainer = readerContainer
         parentViewController.present(readerContainer, animated: animated, completion: nil)
         addObservers()
@@ -342,9 +342,7 @@ extension FolioReader {
             return
         }
 
-        guard let bookId = self.readerContainer?.book.name,
-            let currentPage = self.readerCenter?.currentPage,
-            let webView = currentPage.webView else {
+        guard let currentPage = self.readerCenter?.currentPage, let webView = currentPage.webView else {
             return
         }
 

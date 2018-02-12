@@ -86,7 +86,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
 
         slider = UISlider()
         slider.layer.anchorPoint = CGPoint(x: 0, y: 0)
-        slider.transform = CGAffineTransform(rotationAngle: CGFloat(M_PI_2))
+        slider.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
         slider.alpha = 0
         self.reloadColors()
 

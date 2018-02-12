@@ -291,20 +291,16 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
     func reloadData() {
         self.loadingView.stopAnimating()
-        self.totalPages = (self.book.spine.spineReferences.count ?? 0)
+        self.totalPages = book.spine.spineReferences.count
 
         self.collectionView.reloadData()
         self.configureNavBarButtons()
         self.setCollectionViewProgressiveDirection()
 
         if self.readerConfig.loadSavedPositionForCurrentBook {
-            guard
-                let bookId = self.book.name,
-                let position = folioReader.savedPositionForCurrentBook as? NSDictionary,
-                let pageNumber = position["pageNumber"] as? Int,
-                (pageNumber > 0) else {
-                    self.currentPageNumber = 1
-                    return
+            guard let position = folioReader.savedPositionForCurrentBook, let pageNumber = position["pageNumber"] as? Int, pageNumber > 0 else {
+                self.currentPageNumber = 1
+                return
             }
 
             self.changePageWith(page: pageNumber)
@@ -437,7 +433,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        var reuseableCell = collectionView.dequeueReusableCell(withReuseIdentifier: kReuseCellIdentifier, for: indexPath) as? FolioReaderPage
+        let reuseableCell = collectionView.dequeueReusableCell(withReuseIdentifier: kReuseCellIdentifier, for: indexPath) as? FolioReaderPage
         return self.configure(readerPageCell: reuseableCell, atIndexPath: indexPath)
     }
 
@@ -875,7 +871,6 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         // Need check page orientation (v/h) and make correct calc for vertical
         guard
             let cell = collectionView.cellForItem(at: getCurrentIndexPath()) as? FolioReaderPage,
-            let contentOffset = cell.webView?.scrollView.contentOffset,
             let contentSize = cell.webView?.scrollView.contentSize else {
                 completion?()
                 return
@@ -902,7 +897,6 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         // Need check page orientation (v/h) and make correct calc for vertical
         guard
             let cell = collectionView.cellForItem(at: getCurrentIndexPath()) as? FolioReaderPage,
-            let contentOffset = cell.webView?.scrollView.contentOffset,
             let contentSize = cell.webView?.scrollView.contentSize else {
                 delegate?.pageItemChanged?(getCurrentPageItemNumber())
                 completion?()
@@ -1366,9 +1360,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 extension FolioReaderCenter: FolioReaderPageDelegate {
 
     public func pageDidLoad(_ page: FolioReaderPage) {
-        if self.readerConfig.loadSavedPositionForCurrentBook,
-            let bookId = self.book.name,
-            let position = folioReader.savedPositionForCurrentBook as? NSDictionary {
+        if self.readerConfig.loadSavedPositionForCurrentBook, let position = folioReader.savedPositionForCurrentBook {
             let pageNumber = position["pageNumber"] as? Int
             let offset = self.readerConfig.isDirection(position["pageOffsetY"], position["pageOffsetX"], position["pageOffsetY"]) as? CGFloat
             let pageOffset = offset

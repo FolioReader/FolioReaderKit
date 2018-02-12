@@ -319,7 +319,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             }
 
             guard let reference = navpointElement["content"].attributes["src"] else { return nil }
-            let hrefSplit = reference.characters.split {$0 == "#"}.map { String($0) }
+            let hrefSplit = reference.split {$0 == "#"}.map { String($0) }
             let fragmentID = hrefSplit.count > 1 ? hrefSplit[1] : ""
             let href = hrefSplit[0]
 
@@ -340,7 +340,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             }
 
             guard let reference = navpointElement["a"].attributes["href"] else { return nil }
-            let hrefSplit = reference.characters.split {$0 == "#"}.map { String($0) }
+            let hrefSplit = reference.split {$0 == "#"}.map { String($0) }
             let fragmentID = hrefSplit.count > 1 ? hrefSplit[1] : ""
             let href = hrefSplit[0]
 

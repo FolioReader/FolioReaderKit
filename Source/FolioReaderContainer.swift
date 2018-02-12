@@ -132,7 +132,7 @@ open class FolioReaderContainer: UIViewController {
             self.readerConfig.scrollDirection = scrollDirection
         }
 
-        let hideBars = (self.readerConfig.hideBars ?? false)
+        let hideBars = readerConfig.hideBars
         self.readerConfig.shouldHideNavigationOnTap = ((hideBars == true) ? true : self.readerConfig.shouldHideNavigationOnTap)
 
         self.centerViewController = FolioReaderCenter(withContainer: self)
@@ -164,17 +164,12 @@ open class FolioReaderContainer: UIViewController {
         DispatchQueue.global(qos: .userInitiated).async {
 
             do {
-                guard let parsedBook = try? FREpubParser().readEpub(epubPath: self.epubPath, removeEpub: self.shouldRemoveEpub, unzipPath: self.unzipPath) else {
-                    self.errorOnLoad = true
-                    return
-                }
-
+                let parsedBook = try FREpubParser().readEpub(epubPath: self.epubPath, removeEpub: self.shouldRemoveEpub, unzipPath: self.unzipPath)
                 self.book = parsedBook
                 self.folioReader.isReaderOpen = true
 
                 // Reload data
                 DispatchQueue.main.async {
-
                     // Add audio player if needed
                     if self.book.hasAudio || self.readerConfig.enableTTS {
                         self.addAudioPlayer()
@@ -184,6 +179,7 @@ open class FolioReaderContainer: UIViewController {
                     self.folioReader.delegate?.folioReader?(self.folioReader, didFinishedLoading: self.book)
                 }
             } catch {
+                self.errorOnLoad = true
                 self.alert(message: error.localizedDescription)
             }
         }

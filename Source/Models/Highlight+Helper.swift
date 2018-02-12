@@ -322,7 +322,7 @@ extension Highlight {
         var updatedContent = content
         if updatedContent.range(of: rangeString) != nil {
             let regex = try? NSRegularExpression(pattern: pattern, options: [])
-            let searchString = regex?.firstMatch(in: updatedContent, options: .reportProgress, range: NSRange(location: 0, length: updatedContent.characters.count))
+            let searchString = regex?.firstMatch(in: updatedContent, options: .reportProgress, range: NSRange(location: 0, length: updatedContent.count))
 
             if let string = searchString, (string.range.location != NSNotFound) {
                 updatedContent = (updatedContent as NSString).substring(with: string.range)
