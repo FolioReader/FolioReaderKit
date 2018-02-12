@@ -10,74 +10,26 @@ import Foundation
 import UIKit
 
 extension UICollectionViewScrollDirection {
-
-    @available(*, deprecated, message: "Use 'direction(withConfiguration:)' instead.")
-    static func direction() -> UICollectionViewScrollDirection {
-        guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
-            return .vertical
-        }
-
-        return UICollectionViewScrollDirection.direction(withConfiguration: readerConfig)
-    }
-
     static func direction(withConfiguration readerConfig: FolioReaderConfig) -> UICollectionViewScrollDirection {
         return readerConfig.isDirection(.vertical, .horizontal, .horizontal)
     }
 }
 
 extension UICollectionViewScrollPosition {
-
-    @available(*, deprecated, message: "Use 'direction(withConfiguration:)' instead.")
-    static func direction() -> UICollectionViewScrollPosition {
-        guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
-            return .top
-        }
-
-        return UICollectionViewScrollPosition.direction(withConfiguration: readerConfig)
-    }
-
     static func direction(withConfiguration readerConfig: FolioReaderConfig) -> UICollectionViewScrollPosition {
         return readerConfig.isDirection(.top, .left, .left)
     }
 }
 
 extension CGPoint {
-
-    @available(*, deprecated, message: "Use 'forDirection(withConfiguration:)' instead.")
-    func forDirection() -> CGFloat {
-        guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
-            return self.y
-        }
-
-        return self.forDirection(withConfiguration: readerConfig)
-    }
-
     func forDirection(withConfiguration readerConfig: FolioReaderConfig, scrollType: ScrollType = .page) -> CGFloat {
         return readerConfig.isDirection(self.y, self.x, ((scrollType == .page) ? self.y : self.x))
     }
 }
 
 extension CGSize {
-
-    @available(*, deprecated, message: "Use 'forDirection(withConfiguration:)' instead.")
-    func forDirection() -> CGFloat {
-        guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
-            return self.height
-        }
-        return self.forDirection(withConfiguration: readerConfig)
-    }
-
     func forDirection(withConfiguration readerConfig: FolioReaderConfig) -> CGFloat {
         return readerConfig.isDirection(height, width, height)
-    }
-
-    @available(*, deprecated, message: "Use 'forReverseDirection(withConfiguration:)' instead.")
-    func forReverseDirection() -> CGFloat {
-        guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
-            return self.width
-        }
-
-        return self.forReverseDirection(withConfiguration: readerConfig)
     }
 
     func forReverseDirection(withConfiguration readerConfig: FolioReaderConfig) -> CGFloat {
@@ -86,43 +38,14 @@ extension CGSize {
 }
 
 extension CGRect {
-
-    @available(*, deprecated, message: "Use 'forDirection(withConfiguration:)' instead.")
-    func forDirection() -> CGFloat {
-        guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
-            return self.height
-        }
-
-        return self.forDirection(withConfiguration: readerConfig)
-    }
-
     func forDirection(withConfiguration readerConfig: FolioReaderConfig) -> CGFloat {
         return readerConfig.isDirection(height, width, height)
     }
 }
 
 extension ScrollDirection {
-
-    @available(*, deprecated, message: "Use 'negative(withConfiguration:)' instead.")
-    static func negative() -> ScrollDirection {
-        guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
-            return self.down
-        }
-
-        return self.negative(withConfiguration: readerConfig)
-    }
-
     static func negative(withConfiguration readerConfig: FolioReaderConfig, scrollType: ScrollType = .page) -> ScrollDirection {
         return readerConfig.isDirection(.down, .right, .right)
-    }
-
-    @available(*, deprecated, message: "Use 'positive(withConfiguration:)' instead.")
-    static func positive() -> ScrollDirection {
-        guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
-            return self.up
-        }
-
-        return self.positive(withConfiguration: readerConfig)
     }
 
     static func positive(withConfiguration readerConfig: FolioReaderConfig, scrollType: ScrollType = .page) -> ScrollDirection {
@@ -418,18 +341,6 @@ internal extension UIImage {
 
     /// Forces the image to be colored with Reader Config tintColor
     ///
-    /// - Returns: Returns a colored image
-    @available(*, deprecated, message: "Use 'ignoreSystemTint(withConfiguration:)' instead.")
-    func ignoreSystemTint() -> UIImage? {
-        guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
-            return nil
-        }
-
-        return self.ignoreSystemTint(withConfiguration: readerConfig)
-    }
-
-    /// Forces the image to be colored with Reader Config tintColor
-    ///
     /// - Parameter readerConfig: Current folio reader configuration.
     /// - Returns: Returns a colored image
     func ignoreSystemTint(withConfiguration readerConfig: FolioReaderConfig) -> UIImage? {
@@ -518,15 +429,6 @@ internal extension UIImage {
 }
 
 internal extension UIViewController {
-
-    @available(*, deprecated, message: "Use 'setCloseButton(withConfiguration:)' instead.")
-    func setCloseButton() {
-        guard let config = FolioReader.shared.readerContainer?.readerConfig else {
-            return
-        }
-
-        self.setCloseButton(withConfiguration: config)
-    }
 
     func setCloseButton(withConfiguration readerConfig: FolioReaderConfig) {
         let closeImage = UIImage(readerImageNamed: "icon-navbar-close")?.ignoreSystemTint(withConfiguration: readerConfig)

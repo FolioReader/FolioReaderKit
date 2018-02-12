@@ -235,6 +235,8 @@
 			isa = PBXGroup;
 			children = (
 				1A958F041D397BE900D56699 /* EPUBCore */,
+				1A958F1D1D397BE900D56699 /* Models */,
+				1A958F251D397BE900D56699 /* Resources */,
 				3A27F08B1FD9BE5800D84A57 /* Extensions.swift */,
 				1A958F0F1D397BE900D56699 /* FolioReaderAudioPlayer.swift */,
 				1A958F101D397BE900D56699 /* FolioReaderCenter.swift */,
@@ -253,10 +255,8 @@
 				1A958F1C1D397BE900D56699 /* FolioReaderSharingProvider.swift */,
 				3A27F08A1FD9BE5800D84A57 /* FolioReaderUserDefaults.swift */,
 				3AD5EEB81D9433C100E42810 /* FolioReaderWebView.swift */,
-				1A958F1D1D397BE900D56699 /* Models */,
 				1A958F241D397BE900D56699 /* PageViewController.swift */,
 				1A65DDD41DA744410033C277 /* QuoteImage.swift */,
-				1A958F251D397BE900D56699 /* Resources */,
 				1A958F901D397BE900D56699 /* ScrollScrubber.swift */,
 			);
 			path = Source;

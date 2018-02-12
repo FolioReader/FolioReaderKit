@@ -166,9 +166,6 @@ extension FolioReader {
         self.readerContainer = readerContainer
         parentViewController.present(readerContainer, animated: animated, completion: nil)
         addObservers()
-
-        // Set the shared instance to support old version.
-        FolioReader.shared = self
     }
 }
 
@@ -363,94 +360,5 @@ extension FolioReader {
         self.readerAudioPlayer?.stop(immediate: true)
         self.defaults.set(0, forKey: kCurrentTOCMenu)
         self.delegate?.folioReaderDidClose?(self)
-        self.delegate?.folioReaderDidClosed?()
     }
-}
-
-// MARK: - Public static functions. All Deprecated function
-
-@available(*, deprecated, message: "Shared instance removed. Use a local instance instead.")
-extension FolioReader {
-
-    private static var _sharedInstance = FolioReader()
-    open static var shared : FolioReader {
-        get { return _sharedInstance }
-        set { _sharedInstance = newValue }
-    }
-
-    /// Check the current Media Overlay or TTS style
-    static var currentMediaOverlayStyle: MediaOverlayStyle {
-        return FolioReader.shared.currentMediaOverlayStyle
-    }
-
-    /// Check if current theme is Night mode
-    open class var nightMode: Bool {
-        get { return FolioReader.shared.nightMode }
-        set { FolioReader.shared.nightMode = newValue }
-    }
-
-    /// Check current font name
-    open class var currentFont: FolioReaderFont {
-        get { return FolioReader.shared.currentFont }
-        set { FolioReader.shared.currentFont = newValue }
-    }
-
-    /// Check current font size
-    open class var currentFontSize: FolioReaderFontSize {
-        get { return FolioReader.shared.currentFontSize }
-        set { FolioReader.shared.currentFontSize = newValue }
-    }
-
-    /// Check the current scroll direction
-    open class var currentScrollDirection: Int {
-        get { return FolioReader.shared.currentScrollDirection }
-        set { FolioReader.shared.currentScrollDirection = newValue }
-    }
-
-    /// Check current audio rate, the speed of speech voice
-    open class var currentAudioRate: Int {
-        get { return FolioReader.shared.currentAudioRate }
-        set { FolioReader.shared.currentAudioRate = newValue }
-    }
-
-    /// Check if reader is open and ready
-    open class var isReaderReady : Bool {
-        return FolioReader.shared.isReaderReady
-    }
-
-    /// Save Reader state, book, page and scroll are saved
-    @available(*, deprecated, message: "You no longer need to call `saveReaderState` for `applicationWillResignActive` and `applicationWillTerminate`. FolioReader Already handle that.")
-    open class func saveReaderState() {
-        FolioReader.shared.saveReaderState()
-    }
-
-    /// Closes and save the reader current instance
-    open class func close() {
-        FolioReader.shared.close()
-    }
-
-    /// Check the current highlight style
-    open class var currentHighlightStyle: Int {
-        get { return FolioReader.shared.currentHighlightStyle }
-        set { FolioReader.shared.currentHighlightStyle = newValue }
-    }
-
-    /// Check if layout needs to change to fit Right To Left
-    open class var needsRTLChange: Bool {
-        return FolioReader.shared.needsRTLChange
-    }
-}
-
-// MARK: - Global Functions
-
-@available(*, deprecated, message: "Shared instance removed. Use a local instance instead.")
-func isNight<T> (_ f: T, _ l: T) -> T {
-    return FolioReader.shared.isNight(f, l)
-}
-
-// MARK: - Scroll Direction Functions
-
-@available(*, deprecated, message: "Shared instance removed. Use a local instance instead.")
-func isDirection<T> (_ vertical: T, _ horizontal: T, _ horizontalContentVertical: T) -> T {
-    return FolioReader.shared.readerContainer!.readerConfig.isDirection(vertical, horizontal, horizontalContentVertical)
 }
