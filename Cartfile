@@ -1,7 +1,7 @@
-github "ZipArchive/ZipArchive" ~> 1.6
-github "cxa/MenuItemKit" == 2.0
+github "ZipArchive/ZipArchive" == 2.1.1
+github "cxa/MenuItemKit" == 3.0.0
 github "alexpopov/ZFDragableModalTransition" "merge-carthage-into-zoonooz"
-github "tadija/AEXML" == 4.0
-github "ArtSabintsev/FontBlaster" == 3.0.0
-github "jessesquires/JSQWebViewController" ~> 5.0
-github "realm/realm-cocoa" ~> 3.0.2
+github "tadija/AEXML" == 4.2.2
+github "ArtSabintsev/FontBlaster" == 4.0.1
+github "jessesquires/JSQWebViewController" == 6.0.0
+github "realm/realm-cocoa" == 3.1.1
