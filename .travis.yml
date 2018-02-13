@@ -1,14 +1,13 @@
-osx_image: xcode8.1
+osx_image: xcode9.2
 language: objective-c
-cache:
-  - cocoapods
-
+cache: cocoapods
 podfile: Example/Podfile
+
 before_install:
   - gem install cocoapods # Since Travis is not always on latest version
   - pod repo update
   - pod install --project-directory=Example
 
 script:
-- set -o pipefail && xcodebuild test -workspace Example/Example.xcworkspace -scheme Example -destination 'platform=iOS Simulator,name=iPhone 6s,OS=10.1' | xcpretty
+- set -o pipefail && xcodebuild test -workspace Example/Example.xcworkspace -scheme Example -destination 'platform=iOS Simulator,name=iPhone 7,OS=11.2' | xcpretty
 # - pod lib lint --allow-warnings

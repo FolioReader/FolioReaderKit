@@ -1,5 +1,74 @@
 # Change Log
 
+## [Unreleased](https://github.com/FolioReader/FolioReaderKit/tree/HEAD)
+
+[Full Changelog](https://github.com/FolioReader/FolioReaderKit/compare/1.3.0...HEAD)
+
+**Closed issues:**
+
+- Version 1.3.0 is not available in Cocoapods [\#311](https://github.com/FolioReader/FolioReaderKit/issues/311)
+
+## [1.3.0](https://github.com/FolioReader/FolioReaderKit/tree/1.3.0) (2018-02-12)
+[Full Changelog](https://github.com/FolioReader/FolioReaderKit/compare/1.2.0...1.3.0)
+
+**Fixed bugs:**
+
+- shouldHideNavigationOnTap not working [\#268](https://github.com/FolioReader/FolioReaderKit/issues/268)
+- Can't change UIWebView backgroundColor correctly when `paginationBreakingMode` is `.page` on night mode in iOS 10.3 [\#227](https://github.com/FolioReader/FolioReaderKit/issues/227)
+
+**Closed issues:**
+
+- Can't compile after updating to Xcode 9 - errors in dependencies? [\#298](https://github.com/FolioReader/FolioReaderKit/issues/298)
+- Latest Realm Dependency [\#294](https://github.com/FolioReader/FolioReaderKit/issues/294)
+- How to add FolioReader as a subview in my custom view [\#293](https://github.com/FolioReader/FolioReaderKit/issues/293)
+- Not installed by Carthage [\#291](https://github.com/FolioReader/FolioReaderKit/issues/291)
+- Pod installation not compatible with swift 3/4 [\#288](https://github.com/FolioReader/FolioReaderKit/issues/288)
+- Problems when use it with Carthage [\#286](https://github.com/FolioReader/FolioReaderKit/issues/286)
+- text to speech for other languages  [\#285](https://github.com/FolioReader/FolioReaderKit/issues/285)
+- Build failure? [\#280](https://github.com/FolioReader/FolioReaderKit/issues/280)
+- Realm version update [\#278](https://github.com/FolioReader/FolioReaderKit/issues/278)
+- Pod error [\#273](https://github.com/FolioReader/FolioReaderKit/issues/273)
+- Layout Issue After Integrating in Swift 4 [\#271](https://github.com/FolioReader/FolioReaderKit/issues/271)
+- Unable to start with iOS Folio Reader /Swift3/Xcode 9 [\#266](https://github.com/FolioReader/FolioReaderKit/issues/266)
+- Will FolioReaderKit support Swift 4.0? [\#263](https://github.com/FolioReader/FolioReaderKit/issues/263)
+-  'FolioReader' initializer is inaccessible due to 'fileprivate' protection level [\#262](https://github.com/FolioReader/FolioReaderKit/issues/262)
+- Error building for iOS 10 with MenuItemKit [\#260](https://github.com/FolioReader/FolioReaderKit/issues/260)
+- whose view is not in the window hierarchy [\#259](https://github.com/FolioReader/FolioReaderKit/issues/259)
+- not supporting swift 3.1  [\#256](https://github.com/FolioReader/FolioReaderKit/issues/256)
+- Laggy on ios 9.3 \(iPhone 6s Plus\) [\#254](https://github.com/FolioReader/FolioReaderKit/issues/254)
+-  SemiNightmode  [\#253](https://github.com/FolioReader/FolioReaderKit/issues/253)
+- How to build the example? [\#252](https://github.com/FolioReader/FolioReaderKit/issues/252)
+- audio voices [\#251](https://github.com/FolioReader/FolioReaderKit/issues/251)
+- Has FolioReaderKit support read file from path local ? [\#250](https://github.com/FolioReader/FolioReaderKit/issues/250)
+- Perform direct action instead of showing UIMenuController? [\#249](https://github.com/FolioReader/FolioReaderKit/issues/249)
+- How to change default Green color in Folio UI [\#248](https://github.com/FolioReader/FolioReaderKit/issues/248)
+- Problem with missing declarations  [\#247](https://github.com/FolioReader/FolioReaderKit/issues/247)
+- Is there a way to read the epub file from URL instead of from local ? [\#246](https://github.com/FolioReader/FolioReaderKit/issues/246)
+- Core text replace WebView [\#245](https://github.com/FolioReader/FolioReaderKit/issues/245)
+- Hi man, do u have objective-c Version? :\) [\#244](https://github.com/FolioReader/FolioReaderKit/issues/244)
+- Search Feature not found -- Feature Request [\#243](https://github.com/FolioReader/FolioReaderKit/issues/243)
+- Could you please plan FolioReader for iOS written in Objective-C？ [\#242](https://github.com/FolioReader/FolioReaderKit/issues/242)
+- Why my NightMode cant change BGColor [\#231](https://github.com/FolioReader/FolioReaderKit/issues/231)
+- epub responsive layout support [\#230](https://github.com/FolioReader/FolioReaderKit/issues/230)
+- A white background at the bottom when set to horizontal scrolling  [\#224](https://github.com/FolioReader/FolioReaderKit/issues/224)
+- Access ePub metadata [\#182](https://github.com/FolioReader/FolioReaderKit/issues/182)
+
+**Merged pull requests:**
+
+- Update CocoaPods to version 1.4.0 [\#309](https://github.com/FolioReader/FolioReaderKit/pull/309) ([tschob](https://github.com/tschob))
+- Add custom unzip path setting to FolioReaderContainer [\#306](https://github.com/FolioReader/FolioReaderKit/pull/306) ([revolter](https://github.com/revolter))
+- Fix horizontal scroll direction not working [\#305](https://github.com/FolioReader/FolioReaderKit/pull/305) ([revolter](https://github.com/revolter))
+- Remove superfluous optional wrapping from metadata getters [\#304](https://github.com/FolioReader/FolioReaderKit/pull/304) ([revolter](https://github.com/revolter))
+- Add unzip path to title and author name getters [\#303](https://github.com/FolioReader/FolioReaderKit/pull/303) ([revolter](https://github.com/revolter))
+- Fixed issue \#268 showing/hiding navigation on tap in iOS 11. [\#301](https://github.com/FolioReader/FolioReaderKit/pull/301) ([ryan-w](https://github.com/ryan-w))
+- Fixed logic issue when checking if ePub shoud be unzipped. [\#300](https://github.com/FolioReader/FolioReaderKit/pull/300) ([ryan-w](https://github.com/ryan-w))
+- Removing forced unwrapping [\#297](https://github.com/FolioReader/FolioReaderKit/pull/297) ([rodrigorsa](https://github.com/rodrigorsa))
+- Replaced `func` with `var` on FRbook [\#296](https://github.com/FolioReader/FolioReaderKit/pull/296) ([rodrigorsa](https://github.com/rodrigorsa))
+- Swift 4, iPhone X support and Carthage fixes [\#287](https://github.com/FolioReader/FolioReaderKit/pull/287) ([prsolucoes](https://github.com/prsolucoes))
+- Feature/epub title in navbar [\#281](https://github.com/FolioReader/FolioReaderKit/pull/281) ([noxsicarius](https://github.com/noxsicarius))
+- Update realm to 3.0.2 [\#279](https://github.com/FolioReader/FolioReaderKit/pull/279) ([noxsicarius](https://github.com/noxsicarius))
+- update Podfile.lock [\#277](https://github.com/FolioReader/FolioReaderKit/pull/277) ([EmersonCarpes](https://github.com/EmersonCarpes))
+
 ## [1.2.0](https://github.com/FolioReader/FolioReaderKit/tree/1.2.0) (2017-05-31)
 [Full Changelog](https://github.com/FolioReader/FolioReaderKit/compare/1.1.0...1.2.0)
 
@@ -72,7 +141,7 @@
 - Fixed code style [\#191](https://github.com/FolioReader/FolioReaderKit/pull/191) ([revolter](https://github.com/revolter))
 - Swift 3 syntax && Carthage hint [\#189](https://github.com/FolioReader/FolioReaderKit/pull/189) ([piechart](https://github.com/piechart))
 - Add custom ePub unzip path option [\#181](https://github.com/FolioReader/FolioReaderKit/pull/181) ([revolter](https://github.com/revolter))
-- Add methods returning Epub's title and Author [\#179](https://github.com/FolioReader/FolioReaderKit/pull/179) ([Vandeth](https://github.com/Vandeth))
+- Add methods returning Epub's title and Author [\#179](https://github.com/FolioReader/FolioReaderKit/pull/179) ([Vandetho](https://github.com/Vandetho))
 - Fix scroll direction being ignored on first run [\#178](https://github.com/FolioReader/FolioReaderKit/pull/178) ([revolter](https://github.com/revolter))
 - Fix incorrect menu on second highlight attempt [\#177](https://github.com/FolioReader/FolioReaderKit/pull/177) ([revolter](https://github.com/revolter))
 - Fix warnings about exceding UIColor range [\#176](https://github.com/FolioReader/FolioReaderKit/pull/176) ([revolter](https://github.com/revolter))

@@ -28,7 +28,7 @@ open class FolioReaderWebView: UIWebView {
 
     fileprivate var folioReader: FolioReader {
         guard let readerContainer = readerContainer else { return FolioReader() }
-        return self.readerContainer!.folioReader
+        return readerContainer.folioReader
     }
 
     override init(frame: CGRect) {
@@ -48,7 +48,7 @@ open class FolioReaderWebView: UIWebView {
     // MARK: - UIMenuController
 
     open override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        guard (self.readerConfig.useReaderMenuController == true) else {
+        guard readerConfig.useReaderMenuController else {
             return super.canPerformAction(action, withSender: sender)
         }
 
@@ -59,9 +59,9 @@ open class FolioReaderWebView: UIWebView {
         } else {
             if action == #selector(highlight(_:))
                 || (action == #selector(define(_:)) && isOneWord)
-                || (action == #selector(play(_:)) && (self.book.hasAudio() == true || self.readerConfig.enableTTS == true))
-                || (action == #selector(share(_:)) && self.readerConfig.allowSharing == true)
-                || (action == #selector(copy(_:)) && self.readerConfig.allowSharing == true) {
+                || (action == #selector(play(_:)) && (book.hasAudio || readerConfig.enableTTS))
+                || (action == #selector(share(_:)) && readerConfig.allowSharing)
+                || (action == #selector(copy(_:)) && readerConfig.allowSharing) {
                 return true
             }
             return false
@@ -70,7 +70,7 @@ open class FolioReaderWebView: UIWebView {
 
     // MARK: - UIMenuController - Actions
 
-    func share(_ sender: UIMenuController) {
+    @objc func share(_ sender: UIMenuController) {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
         let shareImage = UIAlertAction(title: self.readerConfig.localizedShareImageQuote, style: .default, handler: { (action) -> Void in
@@ -128,7 +128,7 @@ open class FolioReaderWebView: UIWebView {
         setMenuVisible(false)
     }
 
-    func highlight(_ sender: UIMenuController?) {
+    @objc func highlight(_ sender: UIMenuController?) {
         let highlightAndReturn = js("highlightString('\(HighlightStyle.classForStyle(self.folioReader.currentHighlightStyle))')")
         let jsonData = highlightAndReturn?.data(using: String.Encoding.utf8)
 
@@ -150,7 +150,7 @@ open class FolioReaderWebView: UIWebView {
             guard
                 let html = js("getHTML()"),
                 let identifier = dic["id"],
-                let bookId = (self.book.name as? NSString)?.deletingPathExtension else {
+                let bookId = (self.book.name as NSString?)?.deletingPathExtension else {
                     return
             }
 
@@ -164,7 +164,7 @@ open class FolioReaderWebView: UIWebView {
         }
     }
 
-    func define(_ sender: UIMenuController?) {
+    @objc func define(_ sender: UIMenuController?) {
         guard let selectedText = js("getSelectedText()") else {
             return
         }
@@ -178,7 +178,7 @@ open class FolioReaderWebView: UIWebView {
         readerContainer.show(vc, sender: nil)
     }
 
-    func play(_ sender: UIMenuController?) {
+    @objc func play(_ sender: UIMenuController?) {
         self.folioReader.readerAudioPlayer?.play()
 
         self.clearTextSelection()
@@ -275,7 +275,7 @@ open class FolioReaderWebView: UIWebView {
             // default menu
             menuItems = [highlightItem, defineItem, shareItem]
 
-            if (self.book.hasAudio() == true || self.readerConfig.enableTTS == true) {
+            if self.book.hasAudio || self.readerConfig.enableTTS {
                 menuItems.insert(playAudioItem, at: 0)
             }
 
@@ -304,7 +304,7 @@ open class FolioReaderWebView: UIWebView {
     
     // MARK: - Java Script Bridge
     
-    @discardableResult func js(_ script: String) -> String? {
+    @discardableResult open func js(_ script: String) -> String? {
         let callback = self.stringByEvaluatingJavaScript(from: script)
         if callback!.isEmpty { return nil }
         return callback

@@ -10,74 +10,26 @@ import Foundation
 import UIKit
 
 extension UICollectionViewScrollDirection {
-
-    @available(*, deprecated, message: "Use 'direction(withConfiguration:)' instead.")
-    static func direction() -> UICollectionViewScrollDirection {
-        guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
-            return .vertical
-        }
-
-        return UICollectionViewScrollDirection.direction(withConfiguration: readerConfig)
-    }
-
     static func direction(withConfiguration readerConfig: FolioReaderConfig) -> UICollectionViewScrollDirection {
         return readerConfig.isDirection(.vertical, .horizontal, .horizontal)
     }
 }
 
 extension UICollectionViewScrollPosition {
-
-    @available(*, deprecated, message: "Use 'direction(withConfiguration:)' instead.")
-    static func direction() -> UICollectionViewScrollPosition {
-        guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
-            return .top
-        }
-
-        return UICollectionViewScrollPosition.direction(withConfiguration: readerConfig)
-    }
-
     static func direction(withConfiguration readerConfig: FolioReaderConfig) -> UICollectionViewScrollPosition {
         return readerConfig.isDirection(.top, .left, .left)
     }
 }
 
 extension CGPoint {
-
-    @available(*, deprecated, message: "Use 'forDirection(withConfiguration:)' instead.")
-    func forDirection() -> CGFloat {
-        guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
-            return self.y
-        }
-
-        return self.forDirection(withConfiguration: readerConfig)
-    }
-
     func forDirection(withConfiguration readerConfig: FolioReaderConfig, scrollType: ScrollType = .page) -> CGFloat {
         return readerConfig.isDirection(self.y, self.x, ((scrollType == .page) ? self.y : self.x))
     }
 }
 
 extension CGSize {
-
-    @available(*, deprecated, message: "Use 'forDirection(withConfiguration:)' instead.")
-    func forDirection() -> CGFloat {
-        guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
-            return self.height
-        }
-        return self.forDirection(withConfiguration: readerConfig)
-    }
-
     func forDirection(withConfiguration readerConfig: FolioReaderConfig) -> CGFloat {
         return readerConfig.isDirection(height, width, height)
-    }
-
-    @available(*, deprecated, message: "Use 'forReverseDirection(withConfiguration:)' instead.")
-    func forReverseDirection() -> CGFloat {
-        guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
-            return self.width
-        }
-
-        return self.forReverseDirection(withConfiguration: readerConfig)
     }
 
     func forReverseDirection(withConfiguration readerConfig: FolioReaderConfig) -> CGFloat {
@@ -86,43 +38,14 @@ extension CGSize {
 }
 
 extension CGRect {
-
-    @available(*, deprecated, message: "Use 'forDirection(withConfiguration:)' instead.")
-    func forDirection() -> CGFloat {
-        guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
-            return self.height
-        }
-
-        return self.forDirection(withConfiguration: readerConfig)
-    }
-
     func forDirection(withConfiguration readerConfig: FolioReaderConfig) -> CGFloat {
         return readerConfig.isDirection(height, width, height)
     }
 }
 
 extension ScrollDirection {
-
-    @available(*, deprecated, message: "Use 'negative(withConfiguration:)' instead.")
-    static func negative() -> ScrollDirection {
-        guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
-            return self.down
-        }
-
-        return self.negative(withConfiguration: readerConfig)
-    }
-
     static func negative(withConfiguration readerConfig: FolioReaderConfig, scrollType: ScrollType = .page) -> ScrollDirection {
         return readerConfig.isDirection(.down, .right, .right)
-    }
-
-    @available(*, deprecated, message: "Use 'positive(withConfiguration:)' instead.")
-    static func positive() -> ScrollDirection {
-        guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
-            return self.up
-        }
-
-        return self.positive(withConfiguration: readerConfig)
     }
 
     static func positive(withConfiguration readerConfig: FolioReaderConfig, scrollType: ScrollType = .page) -> ScrollDirection {
@@ -160,12 +83,12 @@ internal extension UIColor {
         var alpha: CGFloat = 1.0
 
         if rgba.hasPrefix("#") {
-            let index   = rgba.characters.index(rgba.startIndex, offsetBy: 1)
-            let hex     = rgba.substring(from: index)
+            let index = rgba.index(rgba.startIndex, offsetBy: 1)
+            let hex = String(rgba[index...])
             let scanner = Scanner(string: hex)
             var hexValue: CUnsignedLongLong = 0
             if scanner.scanHexInt64(&hexValue) {
-                switch (hex.characters.count) {
+                switch (hex.count) {
                 case 3:
                     red   = CGFloat((hexValue & 0xF00) >> 8)       / 15.0
                     green = CGFloat((hexValue & 0x0F0) >> 4)       / 15.0
@@ -284,8 +207,9 @@ internal extension String {
     /// Truncates the string to length number of characters and
     /// appends optional trailing string if longer
     func truncate(_ length: Int, trailing: String? = nil) -> String {
-        if self.characters.count > length {
-            return self.substring(to: self.characters.index(self.startIndex, offsetBy: length)) + (trailing ?? "")
+        if count > length {
+            let indexOfText = index(startIndex, offsetBy: length)
+            return String(self[..<indexOfText])
         } else {
             return self
         }
@@ -377,24 +301,42 @@ internal extension String {
 
         return String(format: "%02.f:%02.f", min, sec)
     }
+
+    // MARK: - NSString helpers
+
+    var lastPathComponent: String {
+        return (self as NSString).lastPathComponent
+    }
+
+    var deletingLastPathComponent: String {
+        return (self as NSString).deletingLastPathComponent
+    }
+
+    var deletingPathExtension: String {
+        return (self as NSString).deletingPathExtension
+    }
+
+    var pathExtension: String {
+        return (self as NSString).pathExtension
+    }
+
+    var abbreviatingWithTildeInPath: String {
+        return (self as NSString).abbreviatingWithTildeInPath
+    }
+
+    func appendingPathComponent(_ str: String) -> String {
+        return (self as NSString).appendingPathComponent(str)
+    }
+
+    func appendingPathExtension(_ str: String) -> String {
+        return (self as NSString).appendingPathExtension(str) ?? self+"."+str
+    }
 }
 
 internal extension UIImage {
 
     convenience init?(readerImageNamed: String) {
         self.init(named: readerImageNamed, in: Bundle.frameworkBundle(), compatibleWith: nil)
-    }
-
-    /// Forces the image to be colored with Reader Config tintColor
-    ///
-    /// - Returns: Returns a colored image
-    @available(*, deprecated, message: "Use 'ignoreSystemTint(withConfiguration:)' instead.")
-    func ignoreSystemTint() -> UIImage? {
-        guard let readerConfig = FolioReader.shared.readerContainer?.readerConfig else {
-            return nil
-        }
-
-        return self.ignoreSystemTint(withConfiguration: readerConfig)
     }
 
     /// Forces the image to be colored with Reader Config tintColor
@@ -488,21 +430,12 @@ internal extension UIImage {
 
 internal extension UIViewController {
 
-    @available(*, deprecated, message: "Use 'setCloseButton(withConfiguration:)' instead.")
-    func setCloseButton() {
-        guard let config = FolioReader.shared.readerContainer?.readerConfig else {
-            return
-        }
-
-        self.setCloseButton(withConfiguration: config)
-    }
-
     func setCloseButton(withConfiguration readerConfig: FolioReaderConfig) {
         let closeImage = UIImage(readerImageNamed: "icon-navbar-close")?.ignoreSystemTint(withConfiguration: readerConfig)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: closeImage, style: .plain, target: self, action: #selector(dismiss as (Void) -> Void))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: closeImage, style: .plain, target: self, action: #selector(dismiss as () -> Void))
     }
 
-    func dismiss() {
+    @objc func dismiss() {
         self.dismiss(nil)
     }
 
@@ -529,7 +462,7 @@ internal extension UIViewController {
         navBar?.showBottomHairline()
         navBar?.isTranslucent = translucent
         navBar?.tintColor = tintColor
-        navBar?.titleTextAttributes = [NSForegroundColorAttributeName: titleColor, NSFontAttributeName: font]
+        navBar?.titleTextAttributes = [NSAttributedStringKey.foregroundColor: titleColor, NSAttributedStringKey.font: font]
     }
 }
 

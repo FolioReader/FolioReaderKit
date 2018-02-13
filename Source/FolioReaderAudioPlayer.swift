@@ -136,7 +136,7 @@ open class FolioReaderAudioPlayer: NSObject {
         completion?()
     }
 
-    func pause() {
+    @objc func pause() {
         playing = false
 
         if !isTextToSpeech {
@@ -150,12 +150,12 @@ open class FolioReaderAudioPlayer: NSObject {
         }
     }
 
-    func togglePlay() {
+    @objc func togglePlay() {
         isPlaying() ? pause() : play()
     }
 
-    func play() {
-        if (self.book.hasAudio() == true) {
+    @objc func play() {
+        if book.hasAudio {
             guard let currentPage = self.folioReader.readerCenter?.currentPage else { return }
             currentPage.webView?.js("playAudio()")
         } else {
@@ -178,7 +178,7 @@ open class FolioReaderAudioPlayer: NSObject {
 
         self.stop()
 
-        let smilFile = self.book.smilFileForHref(href)
+        let smilFile = book.smilFile(forHref: href)
 
         // if no smil file for this href and the same href is being requested, we've hit the end. stop playing
         if smilFile == nil && currentHref != nil && href == currentHref {
@@ -205,13 +205,13 @@ open class FolioReaderAudioPlayer: NSObject {
         }
     }
 
-    func _autoPlayNextChapter() {
+    @objc func _autoPlayNextChapter() {
         // if user has stopped playing, dont play the next chapter
         if isPlaying() == false { return }
         playNextChapter()
     }
 
-    func playPrevChapter() {
+    @objc func playPrevChapter() {
         stopPlayerTimer()
         // Wait for "currentPage" to update, then request to play audio
         self.folioReader.readerCenter?.changePageToPrevious {
@@ -223,7 +223,7 @@ open class FolioReaderAudioPlayer: NSObject {
         }
     }
 
-    func playNextChapter() {
+    @objc func playNextChapter() {
         stopPlayerTimer()
         // Wait for "currentPage" to update, then request to play audio
         self.folioReader.readerCenter?.changePageToNext {
@@ -308,7 +308,7 @@ open class FolioReaderAudioPlayer: NSObject {
      */
     fileprivate func nextAudioFragment() -> FRSmilElement? {
 
-        guard let smilFile = self.book.smilFileForHref(currentHref) else {
+        guard let smilFile = book.smilFile(forHref: currentHref) else {
             return nil
         }
 
@@ -362,7 +362,7 @@ open class FolioReaderAudioPlayer: NSObject {
                 return
         }
 
-        let playbackActiveClass = self.book.playbackActiveClass()
+        let playbackActiveClass = book.playbackActiveClass
         guard let sentence = currentPage.webView?.js("getSentenceWithIndex('\(playbackActiveClass)')") else {
             if (readerCenter.isLastPage() == true) {
                 self.stop()
@@ -416,7 +416,7 @@ open class FolioReaderAudioPlayer: NSObject {
         }
     }
 
-    func playerTimerObserver() {
+    @objc func playerTimerObserver() {
         guard let player = player else { return }
 
         if currentEndTime != nil && currentEndTime > 0 && player.currentTime > currentEndTime {
@@ -441,7 +441,7 @@ open class FolioReaderAudioPlayer: NSObject {
         }
 
         // Get book title
-        if let title = self.book.title() {
+        if let title = self.book.title {
             songInfo[MPMediaItemPropertyAlbumTitle] = title as AnyObject?
         }
 

@@ -33,6 +33,7 @@ class ViewController: UIViewController {
         // See more at FolioReaderConfig.swift
 //        config.canChangeScrollDirection = false
 //        config.enableTTS = false
+//        config.displayTitle = true
 //        config.allowSharing = false
 //        config.tintColor = UIColor.blueColor()
 //        config.toolBarTintColor = UIColor.redColor()
@@ -74,13 +75,11 @@ class ViewController: UIViewController {
         }
 
         do {
-            if let image = try FolioReader.getCoverImage(bookPath) {
-                button?.setBackgroundImage(image, for: .normal)
-            }
-        } catch let e as FolioReaderError {
-            print(e.localizedDescription)
+            let image = try FolioReader.getCoverImage(bookPath)
+
+            button?.setBackgroundImage(image, for: .normal)
         } catch {
-            print("Unkown error")
+            print(error.localizedDescription)
         }
     }
 }

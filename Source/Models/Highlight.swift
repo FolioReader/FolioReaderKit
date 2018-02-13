@@ -11,16 +11,16 @@ import RealmSwift
 
 /// A Highlight object
 open class Highlight: Object {
-    open dynamic var bookId: String!
-    open dynamic var content: String!
-    open dynamic var contentPost: String!
-    open dynamic var contentPre: String!
-    open dynamic var date: Foundation.Date!
-    open dynamic var highlightId: String!
-    open dynamic var page: Int = 0
-    open dynamic var type: Int = 0
-    open dynamic var startOffset: Int = -1
-    open dynamic var endOffset: Int = -1
+    @objc open dynamic var bookId: String!
+    @objc open dynamic var content: String!
+    @objc open dynamic var contentPost: String!
+    @objc open dynamic var contentPre: String!
+    @objc open dynamic var date: Date!
+    @objc open dynamic var highlightId: String!
+    @objc open dynamic var page: Int = 0
+    @objc open dynamic var type: Int = 0
+    @objc open dynamic var startOffset: Int = -1
+    @objc open dynamic var endOffset: Int = -1
 
     override open class func primaryKey()-> String {
         return "highlightId"

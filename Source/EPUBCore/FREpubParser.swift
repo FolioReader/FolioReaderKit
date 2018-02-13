@@ -7,205 +7,219 @@
 //
 
 import UIKit
-#if COCOAPODS
-    import SSZipArchive
-#else
-    import ZipArchive
-#endif
 import AEXML
+#if COCOAPODS
+import SSZipArchive
+#else
+import ZipArchive
+#endif
 
 class FREpubParser: NSObject, SSZipArchiveDelegate {
 
     let book = FRBook()
-    var bookBasePath: String!
-    var resourcesBasePath: String!
-    var shouldRemoveEpub = true
-
-    fileprivate var epubPathToRemove: String?
+    private var resourcesBasePath = ""
+    private var shouldRemoveEpub = true
+    private var epubPathToRemove: String?
 
     /// Parse the Cover Image from an epub file.
     ///
     /// - Parameters:
-    ///   - epubPath: Epub path on the disk
+    ///   - epubPath: Epub path on the disk.
     ///   - unzipPath: Path to unzip the compressed epub.
-    /// - Returns: An UIImage object
-    func parseCoverImage(_ epubPath: String, unzipPath: String? = nil) throws -> UIImage? {
-        guard
-            let book = try readEpub(epubPath: epubPath, removeEpub: false, unzipPath: unzipPath),
+    /// - Returns: The book cover as UIImage object
+    /// - Throws: `FolioReaderError`
+    func parseCoverImage(_ epubPath: String, unzipPath: String? = nil) throws -> UIImage {
+        guard let book = try? readEpub(epubPath: epubPath, removeEpub: false, unzipPath: unzipPath),
             let coverImage = book.coverImage else {
-                throw FolioReaderError(kind: .CoverNotAvailable)
+                throw FolioReaderError.coverNotAvailable
         }
-        return UIImage(contentsOfFile: coverImage.fullHref)
+
+        guard let image = UIImage(contentsOfFile: coverImage.fullHref) else {
+            throw FolioReaderError.invalidImage(path: coverImage.fullHref)
+        }
+
+        return image
     }
 
-    func parseTitle(_ epubPath: String) throws -> String? {
-        guard let book = try readEpub(epubPath: epubPath, removeEpub: false), let title = book.title() else {
-             throw FolioReaderError(kind: .TitleNotAvailable)
+    /// Parse the book title from an epub file.
+    ///
+    /// - Parameters:
+    ///   - epubPath: Epub path on the disk.
+    ///   - unzipPath: Path to unzip the compressed epub.
+    /// - Returns: The book title
+    /// - Throws: `FolioReaderError`
+    func parseTitle(_ epubPath: String, unzipPath: String? = nil) throws -> String {
+        guard let book = try? readEpub(epubPath: epubPath, removeEpub: false, unzipPath: unzipPath), let title = book.title else {
+             throw FolioReaderError.titleNotAvailable
         }
         return title
     }
 
-    func parseAuthorName(_ epubPath: String) throws -> String? {
-        guard let book = try readEpub(epubPath: epubPath, removeEpub: false), let authorName = book.authorName() else {
-            throw FolioReaderError(kind: .AuthorNameNotAvailable)
+
+    /// Parse the book Author name from an epub file.
+    ///
+    /// - Parameters:
+    ///   - epubPath: Epub path on the disk.
+    ///   - unzipPath: Path to unzip the compressed epub.
+    /// - Returns: The author name
+    /// - Throws: `FolioReaderError`
+    func parseAuthorName(_ epubPath: String, unzipPath: String? = nil) throws -> String {
+        guard let book = try? readEpub(epubPath: epubPath, removeEpub: false, unzipPath: unzipPath), let authorName = book.authorName else {
+            throw FolioReaderError.authorNameNotAvailable
         }
         return authorName
     }
 
-    /**
-     Unzip, delete and read an epub file.
-     Returns a FRBook.
-     */
-    func readEpub(epubPath withEpubPath: String, removeEpub: Bool = true, unzipPath: String? = nil) throws -> FRBook? {
+    /// Unzip, delete and read an epub file.
+    ///
+    /// - Parameters:
+    ///   - withEpubPath: Epub path on the disk
+    ///   - removeEpub: Should remove the original file?
+    ///   - unzipPath: Path to unzip the compressed epub.
+    /// - Returns: `FRBook` Object
+    /// - Throws: `FolioReaderError`
+    func readEpub(epubPath withEpubPath: String, removeEpub: Bool = true, unzipPath: String? = nil) throws -> FRBook {
         epubPathToRemove = withEpubPath
         shouldRemoveEpub = removeEpub
 
         var isDir: ObjCBool = false
         let fileManager = FileManager.default
-        let bookName = (withEpubPath as NSString).lastPathComponent
+        let bookName = withEpubPath.lastPathComponent
+        var bookBasePath = ""
 
-        if let path = unzipPath, (fileManager.fileExists(atPath: path) == true) {
+        if let path = unzipPath, fileManager.fileExists(atPath: path) {
             bookBasePath = path
         } else {
             bookBasePath = kApplicationDocumentsDirectory
         }
 
-        bookBasePath = (bookBasePath as NSString).appendingPathComponent(bookName)
+        bookBasePath = bookBasePath.appendingPathComponent(bookName)
 
         guard fileManager.fileExists(atPath: withEpubPath) else {
-            throw FolioReaderError(kind: .BookNotAvailable)
+            throw FolioReaderError.bookNotAvailable
         }
 
         // Unzip if necessary
-        var needsUnzip = false
-        if fileManager.fileExists(atPath: bookBasePath, isDirectory:&isDir) {
-            if !isDir.boolValue { needsUnzip = true }
-        } else {
-            needsUnzip = true
-        }
+        let needsUnzip = !fileManager.fileExists(atPath: bookBasePath, isDirectory:&isDir) || !isDir.boolValue
 
         if needsUnzip {
             SSZipArchive.unzipFile(atPath: withEpubPath, toDestination: bookBasePath, delegate: self)
         }
 
         // Skip from backup this folder
-        addSkipBackupAttributeToItemAtURL(URL(fileURLWithPath: bookBasePath, isDirectory: true))
+        try addSkipBackupAttributeToItemAtURL(URL(fileURLWithPath: bookBasePath, isDirectory: true))
 
-        self.book.name = bookName
-        try readContainer()
-        try readOpf()
+        book.name = bookName
+        try readContainer(with: bookBasePath)
+        try readOpf(with: bookBasePath)
         return self.book
     }
 
-    /**
-     Read and parse container.xml file.
-     */
-    fileprivate func readContainer() throws {
+    /// Read and parse container.xml file.
+    ///
+    /// - Parameter bookBasePath: The base book path
+    /// - Throws: `FolioReaderError`
+    private func readContainer(with bookBasePath: String) throws {
         let containerPath = "META-INF/container.xml"
-        do {
-            let containerData = try Data(contentsOf: URL(fileURLWithPath: (bookBasePath as NSString).appendingPathComponent(containerPath)), options: .alwaysMapped)
-            let xmlDoc = try AEXMLDocument(xml: containerData)
-            let opfResource = FRResource()
-            opfResource.href = xmlDoc.root["rootfiles"]["rootfile"].attributes["full-path"]
-            opfResource.mediaType = FRMediaType.determineMediaType(xmlDoc.root["rootfiles"]["rootfile"].attributes["full-path"]!)
-            book.opfResource = opfResource
-            resourcesBasePath = (bookBasePath as NSString).appendingPathComponent((book.opfResource.href as NSString).deletingLastPathComponent)
-
-        } catch {
-            throw FolioReaderError(kind : .ErrorInContainer)
+        let containerData = try Data(contentsOf: URL(fileURLWithPath: bookBasePath.appendingPathComponent(containerPath)), options: .alwaysMapped)
+        let xmlDoc = try AEXMLDocument(xml: containerData)
+        let opfResource = FRResource()
+        opfResource.href = xmlDoc.root["rootfiles"]["rootfile"].attributes["full-path"]
+        guard let fullPath = xmlDoc.root["rootfiles"]["rootfile"].attributes["full-path"] else {
+            throw FolioReaderError.fullPathEmpty
         }
+        opfResource.mediaType = MediaType.by(fileName: fullPath)
+        book.opfResource = opfResource
+        resourcesBasePath = bookBasePath.appendingPathComponent(book.opfResource.href.deletingLastPathComponent)
     }
 
-    /**
-     Read and parse .opf file.
-     */
-    fileprivate func readOpf() throws {
-        let opfPath = (bookBasePath as NSString).appendingPathComponent(book.opfResource.href)
+    /// Read and parse .opf file.
+    ///
+    /// - Parameter bookBasePath: The base book path
+    /// - Throws: `FolioReaderError`
+    private func readOpf(with bookBasePath: String) throws {
+        let opfPath = bookBasePath.appendingPathComponent(book.opfResource.href)
         var identifier: String?
 
-        do {
-            let opfData = try Data(contentsOf: URL(fileURLWithPath: opfPath), options: .alwaysMapped)
-            let xmlDoc = try AEXMLDocument(xml: opfData)
+        let opfData = try Data(contentsOf: URL(fileURLWithPath: opfPath), options: .alwaysMapped)
+        let xmlDoc = try AEXMLDocument(xml: opfData)
 
-            // Base OPF info
-            if let package = xmlDoc.children.first {
-                identifier = package.attributes["unique-identifier"]
+        // Base OPF info
+        if let package = xmlDoc.children.first {
+            identifier = package.attributes["unique-identifier"]
 
-                if let version = package.attributes["version"] {
-                    book.version = Double(version)
-                }
+            if let version = package.attributes["version"] {
+                book.version = Double(version)
+            }
+        }
+
+        // Parse and save each "manifest item"
+        xmlDoc.root["manifest"]["item"].all?.forEach {
+            let resource = FRResource()
+            resource.id = $0.attributes["id"]
+            resource.properties = $0.attributes["properties"]
+            resource.href = $0.attributes["href"]
+            resource.fullHref = resourcesBasePath.appendingPathComponent(resource.href).removingPercentEncoding
+            resource.mediaType = MediaType.by(name: $0.attributes["media-type"] ?? "", fileName: resource.href)
+            resource.mediaOverlay = $0.attributes["media-overlay"]
+
+            // if a .smil file is listed in resources, go parse that file now and save it on book model
+            if (resource.mediaType != nil && resource.mediaType == .smil) {
+                readSmilFile(resource)
             }
 
-            // Parse and save each "manifest item"
-            for item in xmlDoc.root["manifest"]["item"].all! {
-                let resource = FRResource()
-                resource.id = item.attributes["id"]
-                resource.properties = item.attributes["properties"]
-                resource.href = item.attributes["href"]
-                resource.fullHref = (resourcesBasePath as NSString).appendingPathComponent(resource.href).removingPercentEncoding
-                resource.mediaType = FRMediaType.mediaTypeByName(item.attributes["media-type"]!, fileName: resource.href)
-                resource.mediaOverlay = item.attributes["media-overlay"]
+            book.resources.add(resource)
+        }
 
-                // if a .smil file is listed in resources, go parse that file now and save it on book model
-                if (resource.mediaType != nil && resource.mediaType == FRMediaType.SMIL) {
-                    readSmilFile(resource)
-                }
+        book.smils.basePath = resourcesBasePath
 
-                book.resources.add(resource)
-            }
+        // Read metadata
+        book.metadata = readMetadata(xmlDoc.root["metadata"].children)
 
-            book.smils.basePath = resourcesBasePath
+        // Read the book unique identifier
+        if let identifier = identifier, let uniqueIdentifier = book.metadata.find(identifierById: identifier) {
+            book.uniqueIdentifier = uniqueIdentifier.value
+        }
 
-            // Read metadata
-            book.metadata = readMetadata(xmlDoc.root["metadata"].children)
+        // Read the cover image
+        let coverImageId = book.metadata.find(byName: "cover")?.content
+        if let coverImageId = coverImageId, let coverResource = book.resources.findById(coverImageId) {
+            book.coverImage = coverResource
+        } else if let coverResource = book.resources.findByProperty("cover-image") {
+            book.coverImage = coverResource
+        }
 
-            // Read the book unique identifier
-            if let uniqueIdentifier = book.metadata.findIdentifierById(identifier) {
-                book.uniqueIdentifier = uniqueIdentifier
-            }
+        // Specific TOC for ePub 2 and 3
+        // Get the first resource with the NCX mediatype
+        if let tocResource = book.resources.findByMediaType(MediaType.ncx) {
+            book.tocResource = tocResource
+        } else if let tocResource = book.resources.findByExtension(MediaType.ncx.defaultExtension) {
+            // Non-standard books may use wrong mediatype, fallback with extension
+            book.tocResource = tocResource
+        } else if let tocResource = book.resources.findByProperty("nav") {
+            book.tocResource = tocResource
+        }
 
-            // Read the cover image
-            let coverImageId = book.metadata.findMetaByName("cover")
-            if let coverResource = book.resources.findById(coverImageId) {
-                book.coverImage = coverResource
-            } else if let coverResource = book.resources.findByProperty("cover-image") {
-                book.coverImage = coverResource
-            }
+        precondition(book.tocResource != nil, "ERROR: Could not find table of contents resource. The book don't have a TOC resource.")
 
-            // Specific TOC for ePub 2 and 3
-            // Get the first resource with the NCX mediatype
-            if let tocResource = book.resources.findByMediaType(FRMediaType.NCX) {
-                book.tocResource = tocResource
-            } else if let tocResource = book.resources.findByExtension(FRMediaType.NCX.defaultExtension) {
-                // Non-standard books may use wrong mediatype, fallback with extension
-                book.tocResource = tocResource
-            } else if let tocResource = book.resources.findByProperty("nav") {
-                book.tocResource = tocResource
-            }
+        // The book TOC
+        book.tableOfContents = findTableOfContents()
+        book.flatTableOfContents = flatTOC
 
-            assert(book.tocResource != nil, "ERROR: Could not find table of contents resource. The book don't have a TOC resource.")
+        // Read Spine
+        let spine = xmlDoc.root["spine"]
+        book.spine = readSpine(spine.children)
 
-            // The book TOC
-            book.tableOfContents = findTableOfContents()
-            book.flatTableOfContents = createFlatTOC()
-
-            // Read Spine
-            let spine = xmlDoc.root["spine"]
-            book.spine = readSpine(spine.children)
-
-            // Page progress direction `ltr` or `rtl`
-            if let pageProgressionDirection = spine.attributes["page-progression-direction"] {
-                book.spine.pageProgressionDirection = pageProgressionDirection
-            }
-        } catch {
-            throw FolioReaderError(kind: .ErrorInOpf)
+        // Page progress direction `ltr` or `rtl`
+        if let pageProgressionDirection = spine.attributes["page-progression-direction"] {
+            book.spine.pageProgressionDirection = pageProgressionDirection
         }
     }
 
-    /**
-     Reads and parses a .smil file
-     */
-    fileprivate func readSmilFile(_ resource: FRResource) {
+    /// Reads and parses a .smil file.
+    ///
+    /// - Parameter resource: A `FRResource` to read the smill
+    private func readSmilFile(_ resource: FRResource) {
         do {
             let smilData = try Data(contentsOf: URL(fileURLWithPath: resource.fullHref), options: .alwaysMapped)
             var smilFile = FRSmilFile(resource: resource)
@@ -223,17 +237,16 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         }
     }
 
-    fileprivate func readSmilFileElements(_ children:[AEXMLElement]) -> [FRSmilElement] {
+    private func readSmilFileElements(_ children: [AEXMLElement]) -> [FRSmilElement] {
         var data = [FRSmilElement]()
 
         // convert each smil element to a FRSmil object
-        for item in children {
-
-            let smil = FRSmilElement(name: item.name, attributes: item.attributes)
+        children.forEach{
+            let smil = FRSmilElement(name: $0.name, attributes: $0.attributes)
 
             // if this element has children, convert them to objects too
-            if item.children.count > 0 {
-                smil.children.append(contentsOf: readSmilFileElements(item.children))
+            if $0.children.count > 0 {
+                smil.children.append(contentsOf: readSmilFileElements($0.children))
             }
 
             data.append(smil)
@@ -242,17 +255,17 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         return data
     }
 
-    /**
-     Read and parse the Table of Contents.
-     */
-    fileprivate func findTableOfContents() -> [FRTocReference] {
+    /// Read and parse the Table of Contents.
+    ///
+    /// - Returns: A list of toc references
+    private func findTableOfContents() -> [FRTocReference] {
         var tableOfContent = [FRTocReference]()
         var tocItems: [AEXMLElement]?
         guard let tocResource = book.tocResource else { return tableOfContent }
-        let tocPath = (resourcesBasePath as NSString).appendingPathComponent(tocResource.href)
+        let tocPath = resourcesBasePath.appendingPathComponent(tocResource.href)
 
         do {
-            if tocResource.mediaType == FRMediaType.NCX {
+            if tocResource.mediaType == MediaType.ncx {
                 let ncxData = try Data(contentsOf: URL(fileURLWithPath: tocPath), options: .alwaysMapped)
                 let xmlDoc = try AEXMLDocument(xml: ncxData)
                 if let itemsList = xmlDoc.root["navMap"]["navPoint"].all {
@@ -275,18 +288,17 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         guard let items = tocItems else { return tableOfContent }
 
         for item in items {
-            tableOfContent.append(readTOCReference(item))
+            guard let ref = readTOCReference(item) else { continue }
+            tableOfContent.append(ref)
         }
 
         return tableOfContent
     }
 
-    /**
-     Recursively finds a `<nav>` tag on html
-
-     - parameter element: A `AEXMLElement`, usually the `<body>`
-     - returns: If found the `<nav>` `AEXMLElement`
-     */
+    /// Recursively finds a `<nav>` tag on html.
+    ///
+    /// - Parameter element: An `AEXMLElement`, usually the `<body>`
+    /// - Returns: If found the `<nav>` `AEXMLElement`
     @discardableResult func findNavTag(_ element: AEXMLElement) -> AEXMLElement? {
         for element in element.children {
             if let nav = element["nav"].first {
@@ -298,16 +310,16 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         return nil
     }
 
-    fileprivate func readTOCReference(_ navpointElement: AEXMLElement) -> FRTocReference {
+    fileprivate func readTOCReference(_ navpointElement: AEXMLElement) -> FRTocReference? {
         var label = ""
 
-        if book.tocResource!.mediaType == FRMediaType.NCX {
+        if book.tocResource?.mediaType == MediaType.ncx {
             if let labelText = navpointElement["navLabel"]["text"].value {
                 label = labelText
             }
 
-            let reference = navpointElement["content"].attributes["src"]
-            let hrefSplit = reference!.characters.split {$0 == "#"}.map { String($0) }
+            guard let reference = navpointElement["content"].attributes["src"] else { return nil }
+            let hrefSplit = reference.split {$0 == "#"}.map { String($0) }
             let fragmentID = hrefSplit.count > 1 ? hrefSplit[1] : ""
             let href = hrefSplit[0]
 
@@ -317,7 +329,8 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             // Recursively find child
             if let navPoints = navpointElement["navPoint"].all {
                 for navPoint in navPoints {
-                    toc.children.append(readTOCReference(navPoint))
+                    guard let item = readTOCReference(navPoint) else { continue }
+                    toc.children.append(item)
                 }
             }
             return toc
@@ -326,8 +339,8 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
                 label = labelText
             }
 
-            let reference = navpointElement["a"].attributes["href"]
-            let hrefSplit = reference!.characters.split {$0 == "#"}.map { String($0) }
+            guard let reference = navpointElement["a"].attributes["href"] else { return nil }
+            let hrefSplit = reference.split {$0 == "#"}.map { String($0) }
             let fragmentID = hrefSplit.count > 1 ? hrefSplit[1] : ""
             let href = hrefSplit[0]
 
@@ -335,9 +348,10 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             let toc = FRTocReference(title: label, resource: resource, fragmentID: fragmentID)
 
             // Recursively find child
-            if let nav = navpointElement["ol"]["li"].all {
-                for item in nav {
-                    toc.children.append(readTOCReference(item))
+            if let navPoints = navpointElement["ol"]["li"].all {
+                for navPoint in navPoints {
+                    guard let item = readTOCReference(navPoint) else { continue }
+                    toc.children.append(item)
                 }
             }
             return toc
@@ -346,7 +360,7 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
 
     // MARK: - Recursive add items to a list
 
-    func createFlatTOC() -> [FRTocReference] {
+    var flatTOC: [FRTocReference] {
         var tocItems = [FRTocReference]()
 
         for item in book.tableOfContents {
@@ -359,17 +373,16 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
     func countTocChild(_ item: FRTocReference) -> [FRTocReference] {
         var tocItems = [FRTocReference]()
 
-        if item.children.count > 0 {
-            for item in item.children {
-                tocItems.append(item)
-            }
+        item.children.forEach {
+            tocItems.append($0)
         }
         return tocItems
     }
 
-    /**
-     Read and parse <metadata>.
-     */
+    /// Read and parse <metadata>.
+    ///
+    /// - Parameter tags: XHTML tags
+    /// - Returns: Metadata object
     fileprivate func readMetadata(_ tags: [AEXMLElement]) -> FRMetadata {
         let metadata = FRMetadata()
 
@@ -413,36 +426,35 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             }
 
             if tag.name == "dc:date" {
-                metadata.dates.append(Date(date: tag.value ?? "", event: tag.attributes["opf:event"] ?? ""))
+                metadata.dates.append(EventDate(date: tag.value ?? "", event: tag.attributes["opf:event"] ?? ""))
             }
 
             if tag.name == "meta" {
                 if tag.attributes["name"] != nil {
-                    metadata.metaAttributes.append(Meta(name: tag.attributes["name"]!, content: (tag.attributes["content"] ?? "")))
+                    metadata.metaAttributes.append(Meta(name: tag.attributes["name"], content: tag.attributes["content"]))
                 }
 
                 if tag.attributes["property"] != nil && tag.attributes["id"] != nil {
-                    metadata.metaAttributes.append(Meta(id: tag.attributes["id"]!, property: tag.attributes["property"]!, value: tag.value ?? ""))
+                    metadata.metaAttributes.append(Meta(id: tag.attributes["id"], property: tag.attributes["property"], value: tag.value))
                 }
 
                 if tag.attributes["property"] != nil {
-                    metadata.metaAttributes.append(Meta(property: tag.attributes["property"]!, value: tag.value != nil ? tag.value! : "", refines: tag.attributes["refines"] != nil ? tag.attributes["refines"] : nil))
+                    metadata.metaAttributes.append(Meta(property: tag.attributes["property"], value: tag.value, refines: tag.attributes["refines"]))
                 }
-
             }
         }
-
         return metadata
     }
 
-    /**
-     Read and parse <spine>.
-     */
+    /// Read and parse <spine>.
+    ///
+    /// - Parameter tags: XHTML tags
+    /// - Returns: Spine object
     fileprivate func readSpine(_ tags: [AEXMLElement]) -> FRSpine {
         let spine = FRSpine()
 
         for tag in tags {
-            let idref = tag.attributes["idref"]!
+            guard let idref = tag.attributes["idref"] else { continue }
             var linear = true
 
             if tag.attributes["linear"] != nil {
@@ -450,36 +462,31 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
             }
 
             if book.resources.containsById(idref) {
-                spine.spineReferences.append(Spine(resource: book.resources.findById(idref)!, linear: linear))
+                guard let resource = book.resources.findById(idref) else { continue }
+                spine.spineReferences.append(Spine(resource: resource, linear: linear))
             }
         }
         return spine
     }
 
-    /**
-     Add skip to backup file.
-     */
-    @discardableResult fileprivate func addSkipBackupAttributeToItemAtURL(_ URL: Foundation.URL) -> Bool {
-        assert(FileManager.default.fileExists(atPath: URL.path))
+    /// Skip a file from iCloud backup.
+    ///
+    /// - Parameter url: File URL
+    /// - Throws: Error if not possible
+    fileprivate func addSkipBackupAttributeToItemAtURL(_ url: URL) throws {
+        assert(FileManager.default.fileExists(atPath: url.path))
 
-        do {
-            try (URL as NSURL).setResourceValue(true, forKey: URLResourceKey.isExcludedFromBackupKey)
-            return true
-        } catch let error as NSError {
-            print("Error excluding \(URL.lastPathComponent) from backup \(error)")
-            return false
-        }
+        var urlToExclude = url
+        var resourceValues = URLResourceValues()
+        resourceValues.isExcludedFromBackup = true
+        try urlToExclude.setResourceValues(resourceValues)
     }
 
     // MARK: - SSZipArchive delegate
 
     func zipArchiveWillUnzipArchive(atPath path: String, zipInfo: unz_global_info) {
-        if shouldRemoveEpub {
-            do {
-                try FileManager.default.removeItem(atPath: epubPathToRemove!)
-            } catch let error as NSError {
-                print(error)
-            }
-        }
+        guard shouldRemoveEpub else { return }
+        guard let epubPathToRemove = epubPathToRemove else { return }
+        try? FileManager.default.removeItem(atPath: epubPathToRemove)
     }
 }

@@ -11,15 +11,18 @@ import FontBlaster
 
 /// Reader container
 open class FolioReaderContainer: UIViewController {
-    var centerNavigationController: UINavigationController?
-    var centerViewController: FolioReaderCenter?
-    var audioPlayer: FolioReaderAudioPlayer?
     var shouldHideStatusBar = true
     var shouldRemoveEpub = true
-    var epubPath: String
-    var book: FRBook
-
+    
     // Mark those property as public so they can accessed from other classes/subclasses.
+    public var epubPath: String
+	public var unzipPath: String?
+    public var book: FRBook
+    
+    public var centerNavigationController: UINavigationController?
+    public var centerViewController: FolioReaderCenter?
+    public var audioPlayer: FolioReaderAudioPlayer?
+    
     public var readerConfig: FolioReaderConfig
     public var folioReader: FolioReader
 
@@ -33,11 +36,13 @@ open class FolioReaderContainer: UIViewController {
     ///   - config: Current Folio Reader configuration
     ///   - folioReader: Current instance of the FolioReader kit.
     ///   - path: The ePub path on system. Must not be nil nor empty string.
-    ///   - removeEpub:  Should delete the original file after unzip? Default to `true` so the ePub will be unziped only once.
-    public init(withConfig config: FolioReaderConfig, folioReader: FolioReader, epubPath path: String, removeEpub: Bool = true) {
+	///   - unzipPath: Path to unzip the compressed epub.
+    ///   - removeEpub: Should delete the original file after unzip? Default to `true` so the ePub will be unziped only once.
+    public init(withConfig config: FolioReaderConfig, folioReader: FolioReader, epubPath path: String, unzipPath: String? = nil, removeEpub: Bool = true) {
         self.readerConfig = config
         self.folioReader = folioReader
         self.epubPath = path
+		self.unzipPath = unzipPath
         self.shouldRemoveEpub = removeEpub
         self.book = FRBook()
 
@@ -67,9 +72,6 @@ open class FolioReaderContainer: UIViewController {
 
         // Configure the folio reader.
         self.folioReader.readerContainer = self
-
-        // Set the shared instance to support old version.
-        FolioReader.shared = self.folioReader
     }
 
     /// Common Initialization
@@ -95,16 +97,15 @@ open class FolioReaderContainer: UIViewController {
     /// - Parameters:
     ///   - config: Current Folio Reader configuration
     ///   - path: The ePub path on system. Must not be nil nor empty string.
+	///   - unzipPath: Path to unzip the compressed epub.
     ///   - removeEpub: Should delete the original file after unzip? Default to `true` so the ePub will be unziped only once.
-    open func setupConfig(_ config: FolioReaderConfig, epubPath path: String, removeEpub: Bool = true) {
+    open func setupConfig(_ config: FolioReaderConfig, epubPath path: String, unzipPath: String? = nil, removeEpub: Bool = true) {
         self.readerConfig = config
         self.folioReader = FolioReader()
         self.folioReader.readerContainer = self
         self.epubPath = path
+		self.unzipPath = unzipPath
         self.shouldRemoveEpub = removeEpub
-
-        // Set the shared instance to support old version.
-        FolioReader.shared = self.folioReader
     }
 
     // MARK: - View life cicle
@@ -125,7 +126,7 @@ open class FolioReaderContainer: UIViewController {
             self.readerConfig.scrollDirection = scrollDirection
         }
 
-        let hideBars = (self.readerConfig.hideBars ?? false)
+        let hideBars = readerConfig.hideBars
         self.readerConfig.shouldHideNavigationOnTap = ((hideBars == true) ? true : self.readerConfig.shouldHideNavigationOnTap)
 
         self.centerViewController = FolioReaderCenter(withContainer: self)
@@ -157,29 +158,23 @@ open class FolioReaderContainer: UIViewController {
         DispatchQueue.global(qos: .userInitiated).async {
 
             do {
-                guard let parsedBook = try FREpubParser().readEpub(epubPath: self.epubPath, removeEpub: self.shouldRemoveEpub) else {
-                    self.errorOnLoad = true
-                    return
-                }
-
+                let parsedBook = try FREpubParser().readEpub(epubPath: self.epubPath, removeEpub: self.shouldRemoveEpub, unzipPath: self.unzipPath)
                 self.book = parsedBook
                 self.folioReader.isReaderOpen = true
 
                 // Reload data
                 DispatchQueue.main.async {
-
                     // Add audio player if needed
-                    if (self.book.hasAudio() == true || self.readerConfig.enableTTS == true) {
+                    if self.book.hasAudio || self.readerConfig.enableTTS {
                         self.addAudioPlayer()
                     }
                     self.centerViewController?.reloadData()
                     self.folioReader.isReaderReady = true
                     self.folioReader.delegate?.folioReader?(self.folioReader, didFinishedLoading: self.book)
                 }
-            } catch let e as FolioReaderError {
-                self.alert(message: e.localizedDescription)
             } catch {
-                self.alert(message: "Unknown Error")
+                self.errorOnLoad = true
+                self.alert(message: error.localizedDescription)
             }
         }
     }

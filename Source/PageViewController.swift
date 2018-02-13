@@ -82,7 +82,7 @@ class PageViewController: UIPageViewController {
 
     // MARK: - Segmented control changes
 
-    func didSwitchMenu(_ sender: UISegmentedControl) {
+    @objc func didSwitchMenu(_ sender: UISegmentedControl) {
         self.index = sender.selectedSegmentIndex
         let direction: UIPageViewControllerNavigationDirection = (index == 0 ? .reverse : .forward)
         setViewControllers([viewList[index]], direction: direction, animated: true, completion: nil)
