@@ -43,7 +43,12 @@ open class FolioReaderAudioPlayer: NSObject {
         // this is needed to the audio can play even when the "silent/vibrate" toggle is on
         let session = AVAudioSession.sharedInstance()
         try? session.setCategory(AVAudioSessionCategoryPlayback)
-        try? session.setActive(true)
+
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(pause),
+            name: .AVAudioSessionInterruption,
+            object: session
+        )
 
         self.updateNowPlayingInfo()
     }
