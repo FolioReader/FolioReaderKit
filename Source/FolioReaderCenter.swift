@@ -959,15 +959,23 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
      Find and return the current chapter resource.
      */
     public func getCurrentChapter() -> FRResource? {
-        for item in self.book.flatTableOfContents {
-            if
-                let reference = self.book.spine.spineReferences[safe: (self.currentPageNumber - 1)],
-                let resource = item.resource,
-                (resource == reference.resource) {
-                return item.resource
+        var foundResource: FRResource?
+
+        func search(_ items: [FRTocReference]) {
+            for item in items {
+                guard foundResource == nil else { break }
+
+                if let reference = book.spine.spineReferences[safe: (currentPageNumber - 1)], let resource = item.resource, resource == reference.resource {
+                    foundResource = resource
+                    break
+                } else if let children = item.children, children.isEmpty == false {
+                    search(children)
+                }
             }
         }
-        return nil
+        search(book.flatTableOfContents)
+
+        return foundResource
     }
 
     /**
