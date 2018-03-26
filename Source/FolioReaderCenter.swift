@@ -1114,17 +1114,12 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 //        let match = Bookmark.MatchingBookmark(id: "", bookId: bookId, currentPage: pageNumber)
 //        let bookmark = Bookmark.matchBookmark(match, withConfiguration: readerConfig)
 
-        let identifier = self
-        print(identifier)
+        if sender.isHighlighed {
+            sender.isHighlighed = false
 
-//        if sender.isHighlighed {
-//            sender.isHighlighed = false
-//            bookmark?.remove(withConfiguration: readerConfig)
-//
-//        } else {
-//            sender.isHighlighed = true
-//            bookmark?.persist(withConfiguration: readerConfig)
-//        }
+        } else {
+            sender.isHighlighed = true
+        }
     }
     
     /**
