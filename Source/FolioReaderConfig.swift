@@ -138,6 +138,9 @@ open class FolioReaderConfig: NSObject {
     /// Allow sharing option, if `false` will hide all sharing icons and options
     open var allowSharing = true
 
+    /// Allow bookmarking option, if `false` will hide all bookmarking icons and options
+    open var allowBookmarking = true
+
     /// Enable TTS (Text To Speech)
     open var enableTTS = true
     
@@ -167,6 +170,9 @@ open class FolioReaderConfig: NSObject {
     open var realmConfiguration         = Realm.Configuration()
 
     // MARK: Localized strings
+
+    /// Localizes Bookmarks title
+    open var localizedBookmarksTitle   = NSLocalizedString("Bookmarks", comment: "")
 
     /// Localizes Highlight title
     open var localizedHighlightsTitle   = NSLocalizedString("Highlights", comment: "")

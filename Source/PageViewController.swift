@@ -15,6 +15,7 @@ class PageViewController: UIPageViewController {
     var segmentedControlItems = [String]()
     var viewControllerOne: UIViewController!
     var viewControllerTwo: UIViewController!
+    var viewControllerThree: UIViewController!
     var index: Int
     fileprivate var readerConfig: FolioReaderConfig
     fileprivate var folioReader: FolioReader
@@ -43,12 +44,21 @@ class PageViewController: UIPageViewController {
         segmentedControl.selectedSegmentIndex = index
         segmentedControl.setWidth(100, forSegmentAt: 0)
         segmentedControl.setWidth(100, forSegmentAt: 1)
+        segmentedControl.setWidth(100, forSegmentAt: 2)
         self.navigationItem.titleView = segmentedControl
 
         viewList = [viewControllerOne, viewControllerTwo]
 
+        if readerConfig.allowBookmarking {
+            viewList.append(viewControllerThree)
+        }
+
         viewControllerOne.didMove(toParentViewController: self)
         viewControllerTwo.didMove(toParentViewController: self)
+
+        if readerConfig.allowBookmarking {
+            viewControllerThree.didMove(toParentViewController: self)
+        }
 
         self.delegate = self
         self.dataSource = self
