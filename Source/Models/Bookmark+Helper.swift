@@ -3,6 +3,7 @@
 //  FolioReaderKit
 //
 //  Created by Omar Albeik on 26.03.2018.
+//  Copyright (c) 2015 Folio Reader. All rights reserved.
 //
 
 import Foundation
@@ -121,8 +122,8 @@ extension Bookmark {
         do {
             let realm = try Realm(configuration: readerConfig.realmConfiguration)
             bookmarks = realm.objects(Bookmark.self).toArray(Bookmark.self)
-            return (bookmarks ?? [])
-        } catch let error as NSError {
+            return bookmarks ?? []
+        } catch let error {
             print("Error on fetch all: \(error)")
             return []
         }

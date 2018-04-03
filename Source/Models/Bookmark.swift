@@ -3,6 +3,7 @@
 //  FolioReaderKit
 //
 //  Created by Omar Albeik on 26.03.2018.
+//  Copyright (c) 2015 Folio Reader. All rights reserved.
 //
 
 import Foundation

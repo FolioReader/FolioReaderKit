@@ -3,6 +3,7 @@
 //  FolioReaderKit
 //
 //  Created by Omar Albeik on 26.03.2018.
+//  Copyright (c) 2015 Folio Reader. All rights reserved.
 //
 
 import UIKit
@@ -27,24 +28,20 @@ class FolioReaderBookmarkList: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: kReuseCellIdentifier)
-        self.tableView.separatorInset = UIEdgeInsets.zero
-        self.tableView.backgroundColor = self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, self.readerConfig.menuBackgroundColor)
-        self.tableView.separatorColor = self.folioReader.isNight(self.readerConfig.nightModeSeparatorColor, self.readerConfig.menuSeparatorColor)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: kReuseCellIdentifier)
+        tableView.separatorInset = UIEdgeInsets.zero
+        tableView.backgroundColor = folioReader.isNight(readerConfig.nightModeMenuBackground, readerConfig.menuBackgroundColor)
+        tableView.separatorColor = folioReader.isNight(readerConfig.nightModeSeparatorColor, readerConfig.menuSeparatorColor)
 
-        guard let bookId = (self.folioReader.readerContainer?.book.name as NSString?)?.deletingPathExtension else {
-            self.bookmarks = []
+        guard let bookId = (folioReader.readerContainer?.book.name as NSString?)?.deletingPathExtension else {
+            bookmarks = []
             return
         }
 
-        self.bookmarks = Bookmark.allByBookId(withConfiguration: self.readerConfig, bookId: bookId)
+        bookmarks = Bookmark.allByBookId(withConfiguration: readerConfig, bookId: bookId)
     }
 
     // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return bookmarks.count
@@ -52,13 +49,13 @@ class FolioReaderBookmarkList: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: kReuseCellIdentifier, for: indexPath)
-        cell.backgroundColor = UIColor.clear
+        cell.backgroundColor = .clear
 
-        let bookmark = bookmarks[(indexPath as NSIndexPath).row]
+        let bookmark = bookmarks[indexPath.row]
 
         // Format date
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = self.readerConfig.localizedHighlightsDateFormat
+        dateFormatter.dateFormat = readerConfig.localizedHighlightsDateFormat
         let dateString = dateFormatter.string(from: bookmark.date)
 
         cell.textLabel?.text = "Page \(bookmark.page)"
@@ -70,19 +67,19 @@ class FolioReaderBookmarkList: UITableViewController {
     // MARK: - Table view delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let bookmark = bookmarks[safe: (indexPath as NSIndexPath).row] else {
+        guard let bookmark = bookmarks[safe: indexPath.row] else {
             return
         }
 
-        self.folioReader.readerCenter?.changePageWith(page: bookmark.page, andFragment: bookmark.bookmarkId)
-        self.dismiss()
+        folioReader.readerCenter?.changePageWith(page: bookmark.page, andFragment: bookmark.bookmarkId)
+        dismiss()
     }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let bookmark = bookmarks[(indexPath as NSIndexPath).row]
-            bookmark.remove(withConfiguration: self.readerConfig) // Remove from Database
-            bookmarks.remove(at: (indexPath as NSIndexPath).row)
+            let bookmark = bookmarks[indexPath.row]
+            bookmark.remove(withConfiguration: readerConfig) // Remove from Database
+            bookmarks.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
