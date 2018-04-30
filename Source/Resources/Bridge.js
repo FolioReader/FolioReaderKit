@@ -615,3 +615,53 @@ var onClassBasedListenerClick = function(schemeName, attributeContent) {
 	// Set the custom link URL to the event
 	window.location = schemeName + "://" + attributeContent + positionParameterString;
 }
+
+//Get Read Position Implementation 
+function isAfter(el, isHorizontal) {
+    var rect = el.getBoundingClientRect();
+    
+    var isAfter;
+    if(isHorizontal)
+        isAfter = rect.left > 0;
+    else
+        isAfter = rect.top > 0;
+    
+    return isAfter;
+}
+
+function getLineId(isHorizontal){
+    var lines = document.body.getElementsByTagName("p");
+    var visibleSpanId = 0;
+    var visibleLine;
+    
+    //var orientation = isHorizontal === "true" ? true:false
+    //var orientation = isHorizontal.length === 4 ? true:false
+    
+    console.log(isHorizontal === true)
+    
+    for (var i = 0, max = lines.length; i < max; i++) {
+        if (isAfter(lines[i], isHorizontal)){
+            console.log("entrou no if")
+            visibleSpanId = i;
+            visibleLine = lines[i]
+            break;
+        }
+    }
+    var usingId = visibleLine.id != 'undefined' && visibleLine.id != "";
+    
+    return JSON.stringify({
+                          usingId: usingId,
+                          value: usingId ? visibleLine.id : visibleSpanId
+                          });
+}
+
+function goToLine(usingId, value){
+    var el;
+    if(usingId == 1){
+        el = document.getElementById(value);
+    } else {
+        el = document.getElementsByTagName("p")[value];
+    }
+    goToEl(el);
+}
+

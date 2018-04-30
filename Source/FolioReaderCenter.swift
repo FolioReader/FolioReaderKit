@@ -297,15 +297,15 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         self.configureNavBarButtons()
         self.setCollectionViewProgressiveDirection()
 
-        if self.readerConfig.loadSavedPositionForCurrentBook {
-            guard let position = folioReader.savedPositionForCurrentBook, let pageNumber = position["pageNumber"] as? Int, pageNumber > 0 else {
-                self.currentPageNumber = 1
-                return
-            }
-
-            self.changePageWith(page: pageNumber)
-            self.currentPageNumber = pageNumber
-        }
+//        if self.readerConfig.loadSavedPositionForCurrentBook {
+//            guard let position = folioReader.savedPositionForCurrentBook, let pageNumber = position["pageNumber"] as? Int, pageNumber > 0 else {
+//                self.currentPageNumber = 1
+//                return
+//            }
+//
+//            self.changePageWith(page: pageNumber)
+//            self.currentPageNumber = pageNumber
+//        }
     }
 
     // MARK: Change page progressive direction
@@ -1379,6 +1379,25 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
 
                 if (self.currentPageNumber == pageNumber && pageOffset > 0) {
                     page.scrollPageToOffset(pageOffset!, animated: false)
+                }
+                if self.readerConfig.loadSavedPositionForCurrentBook {
+                    guard let position = folioReader.savedPositionForCurrentBook else {
+                        return
+                    }
+                    if let chapterHref = position["chapterHref"] as? String {
+                        self.changePageWith(page: findPageByHref(chapterHref) + 1)
+                        if let value = position["value"] as? Int, let usingId = position["usingId"] as? Int {
+                            var timer = Timer()
+                            timer.invalidate()
+                            if #available(iOS 10.0, *) {
+                                timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { (_) in
+                                    self.currentPage!.webView?.js("goToLine('\(usingId)', '\(value)')")
+                                })
+                            } else {
+                                // Fallback on earlier versions
+                            }
+                        }
+                    }
                 }
             } else if (self.isScrolling == false && folioReader.needsRTLChange == true) {
                 page.scrollPageToBottom()
