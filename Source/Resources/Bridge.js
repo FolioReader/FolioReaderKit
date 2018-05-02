@@ -164,6 +164,14 @@ function getReadingTime() {
     return readingTimeMinutes;
 }
 
+// Get Element offset in the page
+var getElementOffset = function(target, horizontal) {
+    if (horizontal) {
+        return document.body.clientWidth * Math.floor(target.offsetTop / window.innerHeight);
+    }
+    return target.offsetTop;
+}
+
 /**
  Get Vertical or Horizontal paged #anchor offset
  */
@@ -174,11 +182,7 @@ var getAnchorOffset = function(target, horizontal) {
         elem = document.getElementsByName(target)[0];
     }
     
-    if (horizontal) {
-        return document.body.clientWidth * Math.floor(elem.offsetTop / window.innerHeight);
-    }
-    
-    return elem.offsetTop;
+    return getElementOffset(elem, horizontal);
 }
 
 function findElementWithID(node) {
@@ -655,13 +659,13 @@ function getLineId(isHorizontal){
                           });
 }
 
-function goToLine(usingId, value){
-    var el;
-    if(usingId == 1){
-        el = document.getElementById(value);
+function getReadingPositionOffset(usingId, value, isHorizontal) {
+    var elm;
+    if (usingId) {
+        elm = document.getElementById(value);
     } else {
-        el = document.getElementsByTagName("p")[value];
+        elm = document.getElementsByTagName("p")[value];
     }
-    goToEl(el);
+    return getElementOffset(elm, isHorizontal);
 }
 
