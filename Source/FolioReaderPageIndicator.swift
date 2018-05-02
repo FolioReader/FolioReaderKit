@@ -87,26 +87,24 @@ class FolioReaderPageIndicator: UIView {
     }
 
     fileprivate func reloadViewWithPage(_ page: Int) {
-        if totalPages != nil && totalMinutes != nil {
-            let pagesRemaining = self.folioReader.needsRTLChange ? totalPages-(totalPages-page+1) : totalPages-page
+        let pagesRemaining = self.folioReader.needsRTLChange ? totalPages-(totalPages-page+1) : totalPages-page
 
-            if pagesRemaining == 1 {
-                pagesLabel.text = " " + self.readerConfig.localizedReaderOnePageLeft
-            } else {
-                pagesLabel.text = " \(pagesRemaining) " + self.readerConfig.localizedReaderManyPagesLeft
-            }
-
-            let minutesRemaining = Int(ceil(CGFloat((pagesRemaining * totalMinutes)/totalPages)))
-            if minutesRemaining > 1 {
-                minutesLabel.text = "\(minutesRemaining) " + self.readerConfig.localizedReaderManyMinutes+" ·"
-            } else if minutesRemaining == 1 {
-                minutesLabel.text = self.readerConfig.localizedReaderOneMinute+" ·"
-            } else {
-                minutesLabel.text = self.readerConfig.localizedReaderLessThanOneMinute+" ·"
-            }
-
-            reloadView(updateShadow: false)
+        if pagesRemaining == 1 {
+            pagesLabel.text = " " + self.readerConfig.localizedReaderOnePageLeft
+        } else {
+            pagesLabel.text = " \(pagesRemaining) " + self.readerConfig.localizedReaderManyPagesLeft
         }
+
+        let minutesRemaining = Int(ceil(CGFloat((pagesRemaining * totalMinutes)/totalPages)))
+        if minutesRemaining > 1 {
+            minutesLabel.text = "\(minutesRemaining) " + self.readerConfig.localizedReaderManyMinutes+" ·"
+        } else if minutesRemaining == 1 {
+            minutesLabel.text = self.readerConfig.localizedReaderOneMinute+" ·"
+        } else {
+            minutesLabel.text = self.readerConfig.localizedReaderLessThanOneMinute+" ·"
+        }
+
+        reloadView(updateShadow: false)
     }
 }
 
