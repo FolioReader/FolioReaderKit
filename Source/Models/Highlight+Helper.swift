@@ -133,6 +133,25 @@ extension Highlight {
             print("Error on remove highlight by id: \(error)")
         }
     }
+    
+    /// Return a Highlight by ID
+    ///
+    /// - Parameter:
+    ///   - readerConfig: Current folio reader configuration.
+    ///   - highlightId: The ID to be removed
+    ///   - page: Page number
+    /// - Returns: Return a Highlight
+    public static func getById(withConfiguration readerConfig: FolioReaderConfig, highlightId: String) -> Highlight {
+        var highlight: Highlight?
+        let predicate = NSPredicate(format:"highlightId = %@", highlightId)
+        do {
+            let realm = try! Realm(configuration: readerConfig.realmConfiguration)
+            highlight = realm.objects(Highlight.self).filter(predicate).toArray(Highlight.self).first
+            return highlight!
+        } catch let error as NSError {
+            print("Error getting Highlight : \(error)")
+        }
+    }
 
     /// Update a Highlight by ID
     ///
@@ -210,6 +229,7 @@ extension Highlight {
         var endOffset: String
         var bookId: String
         var currentPage: Int
+        var noteForHighlight: String?
     }
 
     /**
@@ -240,6 +260,7 @@ extension Highlight {
             highlight.bookId = matchingHighlight.bookId
             highlight.startOffset = (Int(matchingHighlight.startOffset) ?? -1)
             highlight.endOffset = (Int(matchingHighlight.endOffset) ?? -1)
+            highlight.noteForHighlight = matchingHighlight.noteForHighlight
 
             return highlight
         }
