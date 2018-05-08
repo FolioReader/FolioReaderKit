@@ -235,25 +235,13 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
         guard let url = request.url else { return false }
 
-        if scheme == "highlight" {
+        if scheme == "highlight" || scheme == "highlight-with-note" {
             shouldShowBar = false
 
             guard let decoded = url.absoluteString.removingPercentEncoding else { return false }
             let index = decoded.index(decoded.startIndex, offsetBy: 12)
             let rect = CGRectFromString(String(decoded[index...]))
 
-            webView.createMenu(options: true)
-            webView.setMenuVisible(true, andRect: rect)
-            menuIsVisible = true
-
-            return false
-        } else if scheme == "highlight-with-note" {
-            shouldShowBar = false
-            
-            guard let decoded = url.absoluteString.removingPercentEncoding else { return false }
-            let index = decoded.index(decoded.startIndex, offsetBy: 12)
-            let rect = CGRectFromString(String(decoded[index...]))
-            
             webView.createMenu(options: true)
             webView.setMenuVisible(true, andRect: rect)
             menuIsVisible = true

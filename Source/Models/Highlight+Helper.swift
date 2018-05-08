@@ -229,7 +229,6 @@ extension Highlight {
         var endOffset: String
         var bookId: String
         var currentPage: Int
-        var noteForHighlight: String?
     }
 
     /**
@@ -260,7 +259,6 @@ extension Highlight {
             highlight.bookId = matchingHighlight.bookId
             highlight.startOffset = (Int(matchingHighlight.startOffset) ?? -1)
             highlight.endOffset = (Int(matchingHighlight.endOffset) ?? -1)
-            highlight.noteForHighlight = matchingHighlight.noteForHighlight
 
             return highlight
         }

@@ -157,7 +157,7 @@ open class FolioReaderWebView: UIWebView {
             }
 
             let pageNumber = folioReader.readerCenter?.currentPageNumber ?? 0
-            let match = Highlight.MatchingHighlight(text: html, id: identifier, startOffset: startOffset, endOffset: endOffset, bookId: bookId, currentPage: pageNumber, noteForHighlight: nil)
+            let match = Highlight.MatchingHighlight(text: html, id: identifier, startOffset: startOffset, endOffset: endOffset, bookId: bookId, currentPage: pageNumber)
             let highlight = Highlight.matchHighlight(match)
             highlight?.persist(withConfiguration: self.readerConfig)
 
@@ -184,7 +184,7 @@ open class FolioReaderWebView: UIWebView {
             guard let bookId = (self.book.name as NSString?)?.deletingPathExtension else { return }
             
             let pageNumber = folioReader.readerCenter?.currentPageNumber ?? 0
-            let match = Highlight.MatchingHighlight(text: html, id: identifier, startOffset: startOffset, endOffset: endOffset, bookId: bookId, currentPage: pageNumber, noteForHighlight: nil)
+            let match = Highlight.MatchingHighlight(text: html, id: identifier, startOffset: startOffset, endOffset: endOffset, bookId: bookId, currentPage: pageNumber)
             if let highlight = Highlight.matchHighlight(match) {
                 self.folioReader.readerCenter?.presentAddHighlightNote(highlight, edit: false)
             }
