@@ -17,6 +17,8 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        folioReader.tryOutDelegate = self
 
         self.bookOne?.tag = Epub.bookOne.rawValue
         self.bookTwo?.tag = Epub.bookTwo.rawValue
@@ -94,5 +96,36 @@ extension ViewController {
         }
 
         self.open(epub: epub)
+    }
+}
+
+extension ViewController: FolioReaderTryOutDelegate {
+    func accessoryView(for toc: FRTocReference, atIndex index: Int) -> UIView? {
+        guard index < 3 else {
+            return nil
+        }
+        
+        let view = UIImageView(image: UIImage(named: "free"))
+        view.translatesAutoresizingMaskIntoConstraints = false
+
+        let constraint = NSLayoutConstraint(item: view, attribute: .width, relatedBy: .equal, toItem: view, attribute: .height, multiplier: 1, constant: 0)
+        constraint.isActive = true
+        view.addConstraint(constraint)
+
+        return view
+    }
+    
+    func isAllowedOpenChapter(atIndex index: Int, givenTotalOfChapters totalOfChapters: Int) -> Bool {
+        return index < 3
+    }
+    
+    func handleAccessToNotAllowedChapter(atIndex index: Int, from viewController: UIViewController) {
+        let alertController = UIAlertController(title: "Este capítulo não está liberado", message: "", preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: "Ok", style: .default)
+        
+        alertController.addAction(okAction)
+        
+        viewController.present(alertController, animated: true, completion: nil)
     }
 }
