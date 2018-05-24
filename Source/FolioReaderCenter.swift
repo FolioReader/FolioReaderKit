@@ -157,6 +157,10 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         enableScrollBetweenChapters(scrollEnabled: true)
         view.addSubview(collectionView)
 
+        if #available(iOS 11.0, *) {
+            collectionView.contentInsetAdjustmentBehavior = .never
+        }
+
         // Activity Indicator
         self.activityIndicator.activityIndicatorViewStyle = .gray
         self.activityIndicator.hidesWhenStopped = true
