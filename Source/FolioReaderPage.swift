@@ -163,12 +163,20 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         if (highlights.count > 0) {
             for item in highlights {
                 let style = HighlightStyle.classForStyle(item.type)
-                let tag = "<highlight id=\"\(item.highlightId!)\" onclick=\"callHighlightURL(this);\" class=\"\(style)\">\(item.content!)</highlight>"
+                
+                var tag = ""
+                if let _ = item.noteForHighlight {
+                    tag = "<highlight id=\"\(item.highlightId!)\" onclick=\"callHighlightWithNoteURL(this);\" class=\"\(style)\">\(item.content!)</highlight>"
+                } else {
+                    tag = "<highlight id=\"\(item.highlightId!)\" onclick=\"callHighlightURL(this);\" class=\"\(style)\">\(item.content!)</highlight>"
+                }
+                
                 var locator = item.contentPre + item.content
                 locator += item.contentPost
                 locator = Highlight.removeSentenceSpam(locator) /// Fix for Highlights
+                
                 let range: NSRange = tempHtmlContent.range(of: locator, options: .literal)
-
+                
                 if range.location != NSNotFound {
                     let newRange = NSRange(location: range.location + item.contentPre.count, length: item.content.count)
                     tempHtmlContent = tempHtmlContent.replacingCharacters(in: newRange, with: tag) as NSString
@@ -227,8 +235,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
         guard let url = request.url else { return false }
 
-        if scheme == "highlight" {
-
+        if scheme == "highlight" || scheme == "highlight-with-note" {
             shouldShowBar = false
 
             guard let decoded = url.absoluteString.removingPercentEncoding else { return false }
