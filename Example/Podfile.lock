@@ -26,9 +26,22 @@ DEPENDENCIES:
   - Nimble (= 7.0.2)
   - Quick (= 1.2.0)
 
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - AEXML
+    - FontBlaster
+    - JSQWebViewController
+    - MenuItemKit
+    - Nimble
+    - Quick
+    - Realm
+    - RealmSwift
+    - SSZipArchive
+    - ZFDragableModalTransition
+
 EXTERNAL SOURCES:
   FolioReaderKit:
-    :path: ../
+    :path: "../"
 
 SPEC CHECKSUMS:
   AEXML: 5ebafc1b75e0bcf0f1b09b8ca8fed2d5a199479b
@@ -45,4 +58,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: d5e64429a71bc13b6eceb790b04656d8082e4d66
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.2
