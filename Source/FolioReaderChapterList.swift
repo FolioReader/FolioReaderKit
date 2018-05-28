@@ -75,7 +75,7 @@ class FolioReaderChapterList: UITableViewController {
 
         cell.setup(withConfiguration: self.readerConfig)
         
-        if let accessoryView = tryOutDelegate?.accessoryView(for: tocItems[indexPath.row], atIndex: indexPath.row) {
+        if let accessoryView = tryOutDelegate?.accessoryView(for: tocItems[indexPath.row], atIndex: indexPath.row, totalOfChapters: tocItems.count) {
             cell.add(accessoryView: accessoryView)
         }
         
@@ -118,8 +118,10 @@ class FolioReaderChapterList: UITableViewController {
         
         tableView.deselectRow(at: indexPath, animated: true)
 
-        if let delegate = tryOutDelegate, !delegate.isAllowedOpenChapter(atIndex: indexPath.row, givenTotalOfChapters: tocItems.count) {
-            tryOutDelegate?.handleAccessToNotAllowedChapter(atIndex: indexPath.row, from: self)
+        if let delegate = tryOutDelegate, indexPath.row >= delegate.numberOfAccessibleChapters(givenTotalOfChapters: tocItems.count) {
+            tryOutDelegate?.handleAccessToInaccessibleChapter(atIndex: indexPath.row, from: self, onFinishHandle: { [weak tableView] in
+                tableView?.reloadData()
+            })
             return
         }
         

@@ -93,11 +93,13 @@ public enum MediaOverlayStyle: Int {
 }
 
 public protocol FolioReaderTryOutDelegate: class {
-    func accessoryView(for toc: FRTocReference, atIndex index: Int) -> UIView?
+    func numberOfAccessibleChapters(givenTotalOfChapters totalOfChapters: Int) -> Int
     
-    func isAllowedOpenChapter(atIndex index: Int, givenTotalOfChapters totalOfChapters: Int) -> Bool
+    func accessoryView(for toc: FRTocReference, atIndex index: Int, totalOfChapters: Int) -> UIView?
     
-    func handleAccessToNotAllowedChapter(atIndex index: Int, from viewController: UIViewController)
+    func handleAccessToInaccessibleChapter(atIndex index: Int, from viewController: UIViewController, onFinishHandle: @escaping () -> Void)
+    
+    func didTryScrollToInaccessibleChapter(from viewController: UIViewController)
 }
 
 /// Main Library class with some useful constants and methods

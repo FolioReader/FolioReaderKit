@@ -94,6 +94,10 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         return readerContainer.folioReader
     }
 
+    private var tryOutDelegate: FolioReaderTryOutDelegate? {
+        return readerContainer?.tryOutDelegate
+    }
+
     // MARK: - Init
 
     init(withContainer readerContainer: FolioReaderContainer) {
@@ -1297,7 +1301,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     @objc func presentChapterList(_ sender: UIBarButtonItem) {
         folioReader.saveReaderState()
 
-        let chapter = FolioReaderChapterList(folioReader: folioReader, readerConfig: readerConfig, book: book, delegate: self, tryOutDelegate: readerContainer?.tryOutDelegate)
+        let chapter = FolioReaderChapterList(folioReader: folioReader, readerConfig: readerConfig, book: book, delegate: self, tryOutDelegate: tryOutDelegate)
         let highlight = FolioReaderHighlightList(folioReader: folioReader, readerConfig: readerConfig)
         let pageController = PageViewController(folioReader: folioReader, readerConfig: readerConfig)
 
@@ -1376,6 +1380,27 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         nav.modalPresentationStyle = .formSheet
         
         present(nav, animated: true, completion: nil)
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+
+        let tocs = book.flatTableOfContents ?? []
+        
+        guard let availableChaptersCount = tryOutDelegate?.numberOfAccessibleChapters(givenTotalOfChapters: tocs.count) else {
+            return
+        }
+
+        let lastAvailableToc = tocs[availableChaptersCount-1]
+        let lastAvailableChapterNumber = findPageByResource(lastAvailableToc)
+        
+        guard indexPath.row > lastAvailableChapterNumber else {
+            return
+        }
+
+        let previousIndexPath = IndexPath(row: lastAvailableChapterNumber, section: indexPath.section)
+        collectionView.scrollToItem(at: previousIndexPath, at: .bottom, animated: false)
+        
+        tryOutDelegate?.didTryScrollToInaccessibleChapter(from: self)
     }
 }
 
