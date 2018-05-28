@@ -28,11 +28,13 @@ class FolioReaderChapterList: UITableViewController {
     fileprivate var book: FRBook
     fileprivate var readerConfig: FolioReaderConfig
     fileprivate var folioReader: FolioReader
+    private weak var tryOutDelegate: FolioReaderTryOutDelegate?
 
-    init(folioReader: FolioReader, readerConfig: FolioReaderConfig, book: FRBook, delegate: FolioReaderChapterListDelegate?) {
+    init(folioReader: FolioReader, readerConfig: FolioReaderConfig, book: FRBook, delegate: FolioReaderChapterListDelegate?, tryOutDelegate: FolioReaderTryOutDelegate?) {
         self.readerConfig = readerConfig
         self.folioReader = folioReader
         self.delegate = delegate
+        self.tryOutDelegate = tryOutDelegate
         self.book = book
 
         super.init(style: UITableViewStyle.plain)
@@ -72,6 +74,11 @@ class FolioReaderChapterList: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: kReuseCellIdentifier, for: indexPath) as! FolioReaderChapterListCell
 
         cell.setup(withConfiguration: self.readerConfig)
+        
+        if let accessoryView = tryOutDelegate?.accessoryView(for: tocItems[indexPath.row], atIndex: indexPath.row, totalOfChapters: tocItems.count) {
+            cell.add(accessoryView: accessoryView)
+        }
+        
         let tocReference = tocItems[(indexPath as NSIndexPath).row]
         let isSection = tocReference.children.count > 0
 
@@ -108,11 +115,20 @@ class FolioReaderChapterList: UITableViewController {
     // MARK: - Table view delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        tableView.deselectRow(at: indexPath, animated: true)
+
+        if let delegate = tryOutDelegate, indexPath.row >= delegate.numberOfAccessibleChapters(givenTotalOfChapters: tocItems.count) {
+            tryOutDelegate?.handleAccessToInaccessibleChapter(atIndex: indexPath.row, from: self, onFinishHandle: { [weak tableView] in
+                tableView?.reloadData()
+            })
+            return
+        }
+        
         let tocReference = tocItems[(indexPath as NSIndexPath).row]
         delegate?.chapterList(self, didSelectRowAtIndexPath: indexPath, withTocReference: tocReference)
         
-        tableView.deselectRow(at: indexPath, animated: true)
-        dismiss { 
+        dismiss {
             self.delegate?.chapterList(didDismissedChapterList: self)
         }
     }

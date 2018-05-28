@@ -92,6 +92,16 @@ public enum MediaOverlayStyle: Int {
     @objc optional func folioReaderDidClosed()
 }
 
+public protocol FolioReaderTryOutDelegate: class {
+    func numberOfAccessibleChapters(givenTotalOfChapters totalOfChapters: Int) -> Int
+    
+    func accessoryView(for toc: FRTocReference, atIndex index: Int, totalOfChapters: Int) -> UIView?
+    
+    func handleAccessToInaccessibleChapter(atIndex index: Int, from viewController: UIViewController, onFinishHandle: @escaping () -> Void)
+    
+    func didTryScrollToInaccessibleChapter(from viewController: UIViewController)
+}
+
 /// Main Library class with some useful constants and methods
 open class FolioReader: NSObject {
 
@@ -106,7 +116,8 @@ open class FolioReader: NSObject {
 
     /// FolioReaderDelegate
     open weak var delegate: FolioReaderDelegate?
-    
+    open weak var tryOutDelegate: FolioReaderTryOutDelegate?
+
     open weak var readerContainer: FolioReaderContainer?
     open weak var readerAudioPlayer: FolioReaderAudioPlayer?
     open weak var readerCenter: FolioReaderCenter? {
@@ -162,7 +173,7 @@ extension FolioReader {
     ///   - animated: Pass true to animate the presentation; otherwise, pass false.
     open func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, unzipPath: String? = nil, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated:
         Bool = true) {
-        let readerContainer = FolioReaderContainer(withConfig: config, folioReader: self, epubPath: epubPath, unzipPath: unzipPath, removeEpub: shouldRemoveEpub)
+        let readerContainer = FolioReaderContainer(withConfig: config, folioReader: self, epubPath: epubPath, unzipPath: unzipPath, removeEpub: shouldRemoveEpub, tryOutDelegate: tryOutDelegate)
         self.readerContainer = readerContainer
         parentViewController.present(readerContainer, animated: animated, completion: nil)
         addObservers()

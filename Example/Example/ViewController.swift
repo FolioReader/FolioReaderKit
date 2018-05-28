@@ -17,6 +17,8 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        folioReader.tryOutDelegate = self
 
         self.bookOne?.tag = Epub.bookOne.rawValue
         self.bookTwo?.tag = Epub.bookTwo.rawValue
@@ -94,5 +96,51 @@ extension ViewController {
         }
 
         self.open(epub: epub)
+    }
+}
+
+extension ViewController: FolioReaderTryOutDelegate {
+    func numberOfAccessibleChapters(givenTotalOfChapters totalOfChapters: Int) -> Int {
+        return 3
+    }
+    
+    func accessoryView(for toc: FRTocReference, atIndex index: Int, totalOfChapters: Int) -> UIView? {
+        guard index < 3 else {
+            return nil
+        }
+        
+        let view = UIImageView(image: UIImage(named: "free"))
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        let constraint = NSLayoutConstraint(item: view, attribute: .width, relatedBy: .equal, toItem: view, attribute: .height, multiplier: 1, constant: 0)
+        constraint.isActive = true
+        view.addConstraint(constraint)
+        
+        return view
+    }
+    
+    func handleAccessToInaccessibleChapter(atIndex index: Int, from viewController: UIViewController, onFinishHandle: @escaping () -> Void) {
+        let alertController = UIAlertController(title: "Este capítulo não está liberado", message: "", preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: "Ok", style: .default)
+        
+        alertController.addAction(okAction)
+        
+        viewController.present(alertController, animated: true, completion: nil)
+    }
+    
+    func didTryScrollToInaccessibleChapter(from viewController: UIViewController) {
+        
+        guard viewController.presentedViewController == nil else {
+            return
+        }
+        
+        let alertController = UIAlertController(title: "Este capítulo não está liberado", message: "", preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: "Ok", style: .default)
+        
+        alertController.addAction(okAction)
+        
+        viewController.present(alertController, animated: true, completion: nil)
     }
 }
