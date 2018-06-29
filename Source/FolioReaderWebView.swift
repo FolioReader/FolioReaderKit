@@ -374,8 +374,42 @@ open class FolioReaderWebView: UIWebView {
         case .horizontal:
             scrollView.isPagingEnabled = true
             paginationMode = .leftToRight
-            paginationBreakingMode = .page
             scrollView.bounces = false
+            
+            var enableTwoColumns = false
+            if readerConfig.twoColumnsMode != .disabled {
+                let isIpad = UIDevice.current.userInterfaceIdiom == .pad
+                let isIphone = UIDevice.current.userInterfaceIdiom == .phone
+                let orientation = UIApplication.shared.statusBarOrientation
+                let isLandscape = orientation == .landscapeLeft || orientation == .landscapeRight
+                
+                switch readerConfig.twoColumnsMode {
+                case .alwaysEnabled:
+                    enableTwoColumns = true
+                    break
+                case .onlyLandscape:
+                    enableTwoColumns = isLandscape
+                    break
+                case .onlyIpad:
+                    enableTwoColumns = isIpad
+                    break
+                case .onlyIpadLandscape:
+                    enableTwoColumns = isIpad && isLandscape
+                    break
+                case .onlyIphone:
+                    enableTwoColumns = isIphone
+                    break
+                case .onlyIphoneLandscape:
+                    enableTwoColumns = isIphone && isLandscape
+                    break
+                default:
+                    break
+                }
+            }
+            
+            paginationBreakingMode = enableTwoColumns ? .column : .page
+            pageLength = enableTwoColumns ? bounds.size.width/2 : bounds.size.width
+            
             break
         }
     }

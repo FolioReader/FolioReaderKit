@@ -37,6 +37,29 @@ public enum FolioReaderScrollDirection: Int {
     }
 }
 
+///Show book content in two columns side by side. Note: Only for `horizontal scroll direction`.
+public enum FolioReaderTwoColumnsMode {
+    case disabled
+    
+    ///Enabled in any situation, iPhone or iPad, portrait or landscape orientation.
+    case alwaysEnabled
+    
+    ///Enabled in any device, only landscape orientation.
+    case onlyLandscape
+    
+    ///Enabled only on iPad, portrait or landscape orientation.
+    case onlyIpad
+    
+    ///Enabled only on iPad, only landscape orientation.
+    case onlyIpadLandscape
+    
+    ///Enabled only on iPhone, portrait or landscape orientation.
+    case onlyIphone
+    
+    ///Enabled only on iPhone, only landscape orientation.
+    case onlyIphoneLandscape
+}
+
 // MARK: - ClassBasedOnClickListener
 
 /**
@@ -128,6 +151,9 @@ open class FolioReaderConfig: NSObject {
 
     /// If `canChangeScrollDirection` is `true` it will be overrided by user's option.
     open var scrollDirection: FolioReaderScrollDirection = .defaultVertical
+    
+    /// Show book content in two columns side by side. Note: Only for `horizontal scroll direction`. The default is 'disabled'.
+    open var twoColumnsMode = FolioReaderTwoColumnsMode.disabled
 
     /// Enable or disable hability to user change scroll direction on menu.
     open var canChangeScrollDirection = true
