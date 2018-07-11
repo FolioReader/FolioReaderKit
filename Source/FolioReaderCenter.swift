@@ -156,7 +156,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         collectionView.decelerationRate = UIScrollViewDecelerationRateFast
         enableScrollBetweenChapters(scrollEnabled: true)
         view.addSubview(collectionView)
-        
+
         // Activity Indicator
         self.activityIndicator.activityIndicatorViewStyle = .gray
         self.activityIndicator.hidesWhenStopped = true
@@ -164,6 +164,10 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         self.activityIndicator.backgroundColor = UIColor.gray
         self.view.addSubview(self.activityIndicator)
         self.view.bringSubview(toFront: self.activityIndicator)
+      
+        if #available(iOS 11.0, *) {
+            collectionView.contentInsetAdjustmentBehavior = .never
+        }
         
         if #available(iOS 10.0, *) {
             collectionView.isPrefetchingEnabled = false
@@ -1386,6 +1390,18 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         if UIDevice.current.userInterfaceIdiom == .pad {
             nav.modalPresentationStyle = .formSheet
         }
+        present(nav, animated: true, completion: nil)
+    }
+    
+    /**
+     Present add highlight note
+     */
+    func presentAddHighlightNote(_ highlight: Highlight, edit: Bool) {
+        let addHighlightView = FolioReaderAddHighlightNote(withHighlight: highlight, folioReader: folioReader, readerConfig: readerConfig)
+        addHighlightView.isEditHighlight = edit
+        let nav = UINavigationController(rootViewController: addHighlightView)
+        nav.modalPresentationStyle = .formSheet
+        
         present(nav, animated: true, completion: nil)
     }
 }

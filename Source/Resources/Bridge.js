@@ -103,6 +103,32 @@ function highlightString(style) {
     return JSON.stringify(params);
 }
 
+function highlightStringWithNote(style) {
+    var range = window.getSelection().getRangeAt(0);
+    var startOffset = range.startOffset;
+    var endOffset = range.endOffset;
+    var selectionContents = range.extractContents();
+    var elm = document.createElement("highlight");
+    var id = guid();
+    
+    elm.appendChild(selectionContents);
+    elm.setAttribute("id", id);
+    elm.setAttribute("onclick","callHighlightWithNoteURL(this);");
+    elm.setAttribute("class", style);
+    
+    range.insertNode(elm);
+    thisHighlight = elm;
+    
+    var params = [];
+    params.push({id: id, rect: getRectForSelectedText(elm), startOffset: startOffset.toString(), endOffset: endOffset.toString()});
+    
+    return JSON.stringify(params);
+}
+
+function getHighlightId() {
+    return thisHighlight.id;
+}
+
 // Menu colors
 function setHighlightStyle(style) {
     thisHighlight.className = style;
@@ -147,6 +173,17 @@ var getRectForSelectedText = function(elm) {
 var callHighlightURL = function(elm) {
 	event.stopPropagation();
 	var URLBase = "highlight://";
+    var currentHighlightRect = getRectForSelectedText(elm);
+    thisHighlight = elm;
+    
+    window.location = URLBase + encodeURIComponent(currentHighlightRect);
+}
+
+// Method that call that a hightlight with note was clicked
+// with URL scheme and rect informations
+var callHighlightWithNoteURL = function(elm) {
+    event.stopPropagation();
+    var URLBase = "highlight-with-note://";
     var currentHighlightRect = getRectForSelectedText(elm);
     thisHighlight = elm;
     
