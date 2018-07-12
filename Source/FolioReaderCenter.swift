@@ -206,6 +206,23 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         pageIndicatorView?.reloadView(updateShadow: true)
     }
 
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+
+        if #available(iOS 9, *), !highlightShown {
+            highlightShown = true
+            let chaptersList = FolioNavigationItemHighlighterContent(data: .chaptersList,
+                                                                     item: navigationItem.rightBarButtonItems![1],
+                                                                     side: .right)
+            let fontOptions = FolioNavigationItemHighlighterContent(data: .fontOptions,
+                                                                    item: navigationItem.rightBarButtonItems![0],
+                                                                    side: .right)
+            FolioNavigationItemHighlighterViewController.present(self,
+                                                                 content: [chaptersList, fontOptions])
+        }
+    }
+
     override open func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
