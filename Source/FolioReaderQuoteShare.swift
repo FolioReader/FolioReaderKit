@@ -53,7 +53,7 @@ class FolioReaderQuoteShare: UIViewController {
         self.setCloseButton(withConfiguration: self.readerConfig)
         configureNavBar()
 
-        let titleAttrs = [NSForegroundColorAttributeName: self.readerConfig.tintColor]
+        let titleAttrs = [NSAttributedStringKey.foregroundColor: self.readerConfig.tintColor]
         let share = UIBarButtonItem(title: self.readerConfig.localizedShare, style: .plain, target: self, action: #selector(shareQuote(_:)))
         share.setTitleTextAttributes(titleAttrs, for: UIControlState())
         navigationItem.rightBarButtonItem = share
@@ -81,13 +81,13 @@ class FolioReaderQuoteShare: UIViewController {
         quoteLabel.translatesAutoresizingMaskIntoConstraints = false
         quoteLabel.adjustsFontSizeToFitWidth = true
         quoteLabel.minimumScaleFactor = 0.3
-        quoteLabel.setContentCompressionResistancePriority(100, for: .vertical)
+        quoteLabel.setContentCompressionResistancePriority(UILayoutPriority(100), for: .vertical)
         filterImage.addSubview(quoteLabel)
 
         var bookTitle = ""
         var authorName = ""
 
-        if let title = self.book.title() {
+        if let title = self.book.title {
             bookTitle = title
         }
 
@@ -104,14 +104,14 @@ class FolioReaderQuoteShare: UIViewController {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.8
-        titleLabel.setContentCompressionResistancePriority(600, for: .vertical)
+        titleLabel.setContentCompressionResistancePriority(UILayoutPriority(600), for: .vertical)
         filterImage.addSubview(titleLabel)
 
         // Attributed author
-        let attrs = [NSFontAttributeName: UIFont(name: "Lato-Italic", size: 15)!]
+        let attrs = [NSAttributedStringKey.font: UIFont(name: "Lato-Italic", size: 15)!]
         let attributedString = NSMutableAttributedString(string:"\(self.readerConfig.localizedShareBy) ", attributes: attrs)
 
-        let attrs1 = [NSFontAttributeName: UIFont(name: "Lato-Regular", size: 15)!]
+        let attrs1 = [NSAttributedStringKey.font: UIFont(name: "Lato-Regular", size: 15)!]
         let boldString = NSMutableAttributedString(string: authorName, attributes:attrs1)
         attributedString.append(boldString)
 
@@ -254,7 +254,7 @@ class FolioReaderQuoteShare: UIViewController {
 
     // MARK: Share
 
-    func shareQuote(_ sender: UIBarButtonItem) {
+    @objc func shareQuote(_ sender: UIBarButtonItem) {
         var subject = self.readerConfig.localizedShareHighlightSubject
         var text = ""
         var bookTitle = ""
@@ -262,7 +262,7 @@ class FolioReaderQuoteShare: UIViewController {
         var shareItems = [AnyObject]()
 
         // Get book title
-        if let title = self.book.title() {
+        if let title = self.book.title {
             bookTitle = title
             subject += " “\(title)”"
         }

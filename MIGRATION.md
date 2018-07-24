@@ -65,7 +65,7 @@ public init(withConfig config: FolioReaderConfig, folioReader: FolioReader, epub
 ### Class: FolioReaderDelegate
 
 The function `folioReaderDidClosed` has been renamed `folioReaderDidClose`.
-It also has a new `FolioReader parameter.
+It also has a new `FolioReader` parameter.
 
 ```
 func folioReaderDidClose(_ folioReader: FolioReader)
@@ -97,7 +97,7 @@ func parseCoverImage(_ epubPath: String, unzipPath: String? = nil) -> UIImage?
 
 ### Class: UIKit classes extensions
 
-The following functions now need a FolioReaderConfig object as parameter:
+The following functions now need a `FolioReaderConfig` object as parameter:
 
 ```
 UICollectionViewScrollDirection.direction(withConfiguration readerConfig: FolioReaderConfig) -> UICollectionViewScrollDirection

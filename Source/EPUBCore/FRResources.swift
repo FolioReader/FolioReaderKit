@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FRResources: NSObject {
+open class FRResources: NSObject {
     
     var resources = [String: FRResource]()
 

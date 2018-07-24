@@ -57,6 +57,7 @@ body {
 table {
     border-collapse: collapse;
     border-spacing: 0;
+    word-break: normal;
 }
 tbody, tfoot, thead {
     vertical-align: middle !important;

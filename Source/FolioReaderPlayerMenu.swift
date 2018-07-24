@@ -161,14 +161,14 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
         style1.titleLabel!.font = UIFont(name: "Avenir-Light", size: 17)
         style1.setTitleColor(normalColor, for: UIControlState())
         style1.setAttributedTitle(NSAttributedString(string: "Style", attributes: [
-            NSForegroundColorAttributeName: normalColor,
-            NSUnderlineStyleAttributeName: NSUnderlineStyle.patternDot.rawValue|NSUnderlineStyle.styleSingle.rawValue,
-            NSUnderlineColorAttributeName: normalColor
+            NSAttributedStringKey.foregroundColor: normalColor,
+            NSAttributedStringKey.underlineStyle: NSUnderlineStyle.patternDot.rawValue|NSUnderlineStyle.styleSingle.rawValue,
+            NSAttributedStringKey.underlineColor: normalColor
             ]), for: UIControlState())
         style1.setAttributedTitle(NSAttributedString(string: self.readerConfig.localizedPlayerMenuStyle, attributes: [
-            NSForegroundColorAttributeName: self.folioReader.isNight(UIColor.white, UIColor.black),
-            NSUnderlineStyleAttributeName: NSUnderlineStyle.patternDot.rawValue|NSUnderlineStyle.styleSingle.rawValue,
-            NSUnderlineColorAttributeName: selectedColor
+            NSAttributedStringKey.foregroundColor: self.folioReader.isNight(UIColor.white, UIColor.black),
+            NSAttributedStringKey.underlineStyle: NSUnderlineStyle.patternDot.rawValue|NSUnderlineStyle.styleSingle.rawValue,
+            NSAttributedStringKey.underlineColor: selectedColor
             ]), for: .selected)
         menuView.addSubview(style1);
 
@@ -239,21 +239,21 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
         }
     }
 
-    func prevChapter(_ sender: UIButton!) {
+    @objc func prevChapter(_ sender: UIButton!) {
         self.folioReader.readerAudioPlayer?.playPrevChapter()
     }
 
-    func nextChapter(_ sender: UIButton!) {
+    @objc func nextChapter(_ sender: UIButton!) {
         self.folioReader.readerAudioPlayer?.playNextChapter()
     }
 
-    func togglePlay(_ sender: UIButton!) {
+    @objc func togglePlay(_ sender: UIButton!) {
         sender.isSelected = sender.isSelected != true
         self.folioReader.readerAudioPlayer?.togglePlay()
         closeView()
     }
 
-    func changeStyle(_ sender: UIButton!) {
+    @objc func changeStyle(_ sender: UIButton!) {
         self.folioReader.currentMediaOverlayStyle = MediaOverlayStyle(rawValue: sender.tag)!
 
         // select the proper style button
@@ -281,7 +281,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
     
     // MARK: - Gestures
     
-    func tapGesture() {
+    @objc func tapGesture() {
         closeView()
     }
     
