@@ -103,7 +103,7 @@ class FolioReaderPageIndicator: UIView {
         } else {
             minutesLabel.text = self.readerConfig.localizedReaderLessThanOneMinute+" ·"
         }
-
+        
         reloadView(updateShadow: false)
     }
 }

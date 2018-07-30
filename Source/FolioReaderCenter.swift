@@ -658,7 +658,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
         delegate?.pageDidAppear?(currentPage)
         delegate?.pageItemChanged?(self.getCurrentPageItemNumber())
-
+        
         completion?()
     }
 
@@ -846,6 +846,26 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         let webViewPage = pageForOffset(pageOffSet, pageHeight: pageSize)
         
         return webViewPage
+    }
+    
+    public func getCurrentPageProgress() -> Float {
+        guard let page = currentPage, let webView = page.webView else { return 0 }
+        
+        let pageSize = self.readerConfig.isDirection(pageHeight, self.pageWidth, pageHeight)
+        let contentSize = page.webView?.scrollView.contentSize.forDirection(withConfiguration: self.readerConfig) ?? 0
+        let totalPages = ((pageSize != 0) ? Int(ceil(contentSize / pageSize)) : 0)
+        let currentPageItem = getCurrentPageItemNumber()
+        
+        if totalPages > 0 {
+            var progress = Float((currentPageItem * 100) / totalPages)
+            
+            if progress < 0 { progress = 0 }
+            if progress > 100 { progress = 100 }
+            
+            return progress
+        }
+        
+        return 0
     }
 
     public func changePageItemToPrevious(_ completion: (() -> Void)? = nil) {
