@@ -141,7 +141,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
         dayNight.tag = 1
         dayNight.addSegmentWithTitle(self.readerConfig.localizedFontMenuDay, onSelectionImage: sunSelected, offSelectionImage: sunNormal)
         dayNight.addSegmentWithTitle(self.readerConfig.localizedFontMenuNight, onSelectionImage: moonSelected, offSelectionImage: moonNormal)
-        dayNight.selectSegmentAtIndex(self.folioReader.nightMode.hashValue)
+        dayNight.selectSegmentAtIndex(self.folioReader.nightMode ? 1 : 0)
         menuView.addSubview(dayNight)
 
 
