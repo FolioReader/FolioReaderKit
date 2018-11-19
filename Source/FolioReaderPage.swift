@@ -494,6 +494,8 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
     // MARK: UIMenu visibility
 
+    #warning("Share feature disable")
+
     override open func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         guard let webView = webView else { return false }
 
@@ -501,8 +503,9 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
             webView.isColors = false
             webView.createMenu(options: false)
         }
+        #warning("Share feature disable")
 
-        if !webView.isShare && !webView.isColors {
+        if /*!webView.isShare && */ !webView.isColors {
             if let result = webView.js("getSelectedText()") , result.components(separatedBy: " ").count == 1 {
                 webView.isOneWord = true
                 webView.createMenu(options: false)
