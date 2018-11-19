@@ -334,11 +334,12 @@ open class FolioReaderWebView: UIWebView {
         
         menuController.menuItems = menuItems
     }
-    
+    #warning("Share feature disable")
+
     open func setMenuVisible(_ menuVisible: Bool, animated: Bool = true, andRect rect: CGRect = CGRect.zero) {
-        if !menuVisible && isShare || !menuVisible && isColors {
+        if /*!menuVisible && isShare ||*/ !menuVisible && isColors {
             isColors = false
-            isShare = false
+           /* isShare = false */
         }
         
         if menuVisible  {
