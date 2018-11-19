@@ -327,10 +327,11 @@ open class FolioReaderWebView: UIWebView {
             if self.book.hasAudio || self.readerConfig.enableTTS {
                 menuItems.insert(playAudioItem, at: 0)
             }
-
+/*
             if (self.readerConfig.allowSharing == true) {
                 menuItems.append(shareItem)
             }
+            */
         }
         
         menuController.menuItems = menuItems
