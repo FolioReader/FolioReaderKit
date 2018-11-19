@@ -5,8 +5,10 @@
 //  Created by Heberti Almeida on 8/11/16.
 //  Copyright (c) 2016 Folio Reader. All rights reserved.
 //
-
+#warning("Share feature disable")
+/*
 import UIKit
+
 
 class FolioReaderQuoteShare: UIViewController {
     var quoteText: String!
@@ -425,3 +427,5 @@ extension FolioReaderQuoteShare: UIImagePickerControllerDelegate, UINavigationCo
         self.dismiss(animated: true, completion: nil)
     }
 }
+
+ */

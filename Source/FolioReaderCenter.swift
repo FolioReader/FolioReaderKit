@@ -256,11 +256,12 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         let font = UIFont(name: "Avenir-Light", size: 17)!
         setTranslucentNavigation(color: navBackground, tintColor: tintColor, titleColor: navText, andFont: font)
     }
+    #warning("Share feature disable")
 
     func configureNavBarButtons() {
 
         // Navbar buttons
-        let shareIcon = UIImage(readerImageNamed: "icon-navbar-share")?.ignoreSystemTint(withConfiguration: self.readerConfig)
+       // let shareIcon = UIImage(readerImageNamed: "icon-navbar-share")?.ignoreSystemTint(withConfiguration: self.readerConfig)
         let audioIcon = UIImage(readerImageNamed: "icon-navbar-tts")?.ignoreSystemTint(withConfiguration: self.readerConfig) //man-speech-icon
         let closeIcon = UIImage(readerImageNamed: "icon-navbar-close")?.ignoreSystemTint(withConfiguration: self.readerConfig)
         let tocIcon = UIImage(readerImageNamed: "icon-navbar-toc")?.ignoreSystemTint(withConfiguration: self.readerConfig)
@@ -273,11 +274,11 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         navigationItem.leftBarButtonItems = [menu, toc]
 
         var rightBarIcons = [UIBarButtonItem]()
-
+/*
         if (self.readerConfig.allowSharing == true) {
             rightBarIcons.append(UIBarButtonItem(image: shareIcon, style: .plain, target: self, action:#selector(shareChapter(_:))))
         }
-
+*/
         if self.book.hasAudio || self.readerConfig.enableTTS {
             rightBarIcons.append(UIBarButtonItem(image: audioIcon, style: .plain, target: self, action:#selector(presentPlayerMenu(_:))))
         }
@@ -1072,6 +1073,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     /**
      Sharing chapter method.
      */
+    #warning("Share feature disable")
+/*
     @objc func shareChapter(_ sender: UIBarButtonItem) {
         guard let currentPage = currentPage else { return }
 
@@ -1189,7 +1192,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
         present(activityViewController, animated: true, completion: nil)
     }
-
+*/
     // MARK: - ScrollView Delegate
 
     open func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -1382,6 +1385,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     /**
      Present Quote Share
      */
+    #warning("Share feature disable")
+/*
     func presentQuoteShare(_ string: String) {
         let quoteShare = FolioReaderQuoteShare(initWithText: string, readerConfig: readerConfig, folioReader: folioReader, book: book)
         let nav = UINavigationController(rootViewController: quoteShare)
@@ -1391,7 +1396,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         }
         present(nav, animated: true, completion: nil)
     }
-    
+    */
     /**
      Present add highlight note
      */

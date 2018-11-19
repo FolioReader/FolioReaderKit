@@ -11,7 +11,8 @@ import UIKit
 /// The custom WebView used in each page
 open class FolioReaderWebView: UIWebView {
     var isColors = false
-    var isShare = false
+    #warning("Share feature disable")
+  //  var isShare = false
     var isOneWord = false
 
     fileprivate weak var readerContainer: FolioReaderContainer?
@@ -46,15 +47,15 @@ open class FolioReaderWebView: UIWebView {
     }
 
     // MARK: - UIMenuController
-
+#warning("Share feature disable")
     open override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         guard readerConfig.useReaderMenuController else {
             return super.canPerformAction(action, withSender: sender)
         }
 
-        if isShare {
+      /*  if isShare {
             return false
-        } else if isColors {
+        } else */if isColors {
             return false
         } else {
             if action == #selector(highlight(_:))
@@ -62,7 +63,7 @@ open class FolioReaderWebView: UIWebView {
                 || action == #selector(updateHighlightNote(_:))
                 || (action == #selector(define(_:)) && isOneWord)
                 || (action == #selector(play(_:)) && (book.hasAudio || readerConfig.enableTTS))
-                || (action == #selector(share(_:)) && readerConfig.allowSharing)
+             //   || (action == #selector(share(_:)) && readerConfig.allowSharing)
                 || (action == #selector(copy(_:)) && readerConfig.allowSharing) {
                 return true
             }
@@ -71,7 +72,9 @@ open class FolioReaderWebView: UIWebView {
     }
 
     // MARK: - UIMenuController - Actions
+    #warning("Share feature disable")
 
+/*
     @objc func share(_ sender: UIMenuController) {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
@@ -117,6 +120,7 @@ open class FolioReaderWebView: UIWebView {
         self.folioReader.readerCenter?.present(alertController, animated: true, completion: nil)
     }
 
+    */
     func colors(_ sender: UIMenuController?) {
         isColors = true
         createMenu(options: false)
@@ -252,13 +256,13 @@ open class FolioReaderWebView: UIWebView {
     }
 
     // MARK: - Create and show menu
-
+#warning("Share feature disable")
     func createMenu(options: Bool) {
         guard (self.readerConfig.useReaderMenuController == true) else {
             return
         }
 
-        isShare = options
+      //  isShare = options
 
         let colors = UIImage(readerImageNamed: "colors-marker")
         let share = UIImage(readerImageNamed: "share-marker")
@@ -304,7 +308,7 @@ open class FolioReaderWebView: UIWebView {
         var menuItems: [UIMenuItem] = []
 
         // menu on existing highlight
-        if isShare {
+     /*   if isShare {
             menuItems = [colorsItem, editNoteItem, removeItem]
             
             if (self.readerConfig.allowSharing == true) {
@@ -312,7 +316,7 @@ open class FolioReaderWebView: UIWebView {
             }
             
             isShare = false
-        } else if isColors {
+        } else */ if isColors {
             // menu for selecting highlight color
             menuItems = [yellowItem, greenItem, blueItem, pinkItem, underlineItem]
         } else {
