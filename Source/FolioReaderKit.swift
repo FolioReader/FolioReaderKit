@@ -161,11 +161,14 @@ extension FolioReader {
     ///   - shouldRemoveEpub: Boolean to remove the epub or not. Default true.
     ///   - animated: Pass true to animate the presentation; otherwise, pass false.
     open func presentReader(parentViewController: UIViewController, withEpubPath epubPath: String, unzipPath: String? = nil, andConfig config: FolioReaderConfig, shouldRemoveEpub: Bool = true, animated:
-        Bool = true) {
+        Bool = true,serverId: String? = nil) {
         let readerContainer = FolioReaderContainer(withConfig: config, folioReader: self, epubPath: epubPath, unzipPath: unzipPath, removeEpub: shouldRemoveEpub)
         self.readerContainer = readerContainer
+         self.readerContainer?.serverId = serverId
         parentViewController.present(readerContainer, animated: animated, completion: nil)
         addObservers()
+        // Set the shared instance to support old version.
+        FolioReader.shared = self
     }
 }
 
