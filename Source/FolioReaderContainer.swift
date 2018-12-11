@@ -13,7 +13,7 @@ import FontBlaster
 open class FolioReaderContainer: UIViewController {
     var shouldHideStatusBar = true
     var shouldRemoveEpub = true
-    
+    var shouldHideStatusBarSH = false
     // Mark those property as public so they can accessed from other classes/subclasses.
     public var epubPath: String
 	public var unzipPath: String?
