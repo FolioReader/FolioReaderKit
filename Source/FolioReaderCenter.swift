@@ -70,6 +70,14 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     var currentPageNumber: Int = 0
     var pageWidth: CGFloat = 0.0
     var pageHeight: CGFloat = 0.0
+    var titleShLabel:UILabel?
+    var isAnimating:Bool = false
+    var hasMadeInteraction:Bool = false
+    var timer: Timer?
+    var lastUserInteractionTime:Date?
+    let statusView = UIView(frame: CGRect(x: 0, y: 20, width: UIScreen.main.nativeBounds.width, height: 44))
+    let dummyNavbar = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.nativeBounds.width, height: 64))
+    
 
     fileprivate var screenBounds: CGRect!
     fileprivate var pointNow = CGPoint.zero
@@ -124,10 +132,15 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         loadingView.hidesWhenStopped = true
         loadingView.startAnimating()
         self.view.addSubview(loadingView)
+       
+        
     }
 
     // MARK: - View life cicle
 
+    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print("touch")
+    }
     override open func viewDidLoad() {
         super.viewDidLoad()
 
@@ -196,6 +209,48 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         if let scrollScrubber = scrollScrubber {
             view.addSubview(scrollScrubber.slider)
         }
+        
+       self.configureLabelSh()
+       self.lastUserInteractionTime = Date()
+       self.startTimer()
+       self.setStatusView()
+        
+    }
+    
+    func setStatusView()
+    {
+        let window = UIApplication.shared.keyWindow!
+       self.statusView.backgroundColor = UIColor.clear
+       self.dummyNavbar.backgroundColor = UIColor.white
+        self.dummyNavbar.addSubview(self.statusView)
+       // window.addSubview(dummyNavbar)
+        //window.windowLevel = UIWindowLevelStatusBar+1
+       //self.dummyNavbar.addSubview(self.statusView)
+       //UIApplication.shared.keyWindow?.addSubview(self.statusView)
+      // UIApplication.shared.keyWindow?.addSubview( self.dummyNavbar)
+      self.dummyNavbar.backgroundColor = .clear
+    }
+    
+    func configureLabelSh(){
+
+        
+        var safeArea = 0
+        if UIScreen.main.nativeBounds.height >= 2436{
+            safeArea = 34
+            dummyNavbar.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.nativeBounds.width), height: 64 + safeArea)
+        }
+        self.titleShLabel = UILabel(frame: CGRect(x: 20, y:-10 + safeArea, width: Int(UIScreen.main.bounds.width-40), height: 60))
+ 
+        self.titleShLabel?.textAlignment = .center
+        self.titleShLabel?.numberOfLines = 2
+        self.titleShLabel?.minimumScaleFactor = 0.7
+        self.titleShLabel?.text = self.book.title
+        //self.view.addSubview(self.titleShLabel!)
+        //self.view.bringSubview(toFront: self.titleShLabel!)
+//         let window = UIApplication.shared.keyWindow!
+//         window.addSubview(self.titleShLabel!)
+//        window.bringSubview(toFront: self.titleShLabel!)
+        self.statusView.addSubview(self.titleShLabel!)
     }
 
     override open func viewWillAppear(_ animated: Bool) {
@@ -254,7 +309,12 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         let tintColor = readerConfig.tintColor
         let navText = folioReader.isNight(UIColor.white, UIColor.black)
         let font = UIFont(name: "Avenir-Light", size: 17)!
+        let fontSH = UIFont(name: "HelveticaNeue-Medium", size: 15)!
         setTranslucentNavigation(color: navBackground, tintColor: tintColor, titleColor: navText, andFont: font)
+        self.titleShLabel?.font = fontSH
+        //self.titleShLabel?.textColor =  navText
+        self.titleShLabel?.textColor = UIColor(red: 181/255.0, green: 182/255.0, blue: 181/255.0, alpha: 1.0)
+        self.titleShLabel?.alpha = 0.0
     }
 
     func configureNavBarButtons() {
@@ -287,14 +347,18 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
         rightBarIcons.append(contentsOf: [font])
         navigationItem.rightBarButtonItems = rightBarIcons
+        self.titleShLabel?.text = book.title
         
         if(self.readerConfig.displayTitle){
             navigationItem.title = book.title
+            self.titleShLabel?.text = book.title
+            
         }
     }
 
     func reloadData() {
         self.loadingView.stopAnimating()
+        self.totalPages = (self.book.spine.spineReferences.count ?? 0)
         self.totalPages = book.spine.spineReferences.count
 
         self.collectionView.reloadData()
@@ -302,9 +366,13 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         self.setCollectionViewProgressiveDirection()
 
         if self.readerConfig.loadSavedPositionForCurrentBook {
+            guard let position = folioReader.savedPositionForCurrentBook else {
             guard let position = folioReader.savedPositionForCurrentBook, let pageNumber = position["pageNumber"] as? Int, pageNumber > 0 else {
                 self.currentPageNumber = 1
                 return
+            }
+            if let chapterHref = position["chapterHref"] as? String {
+                self.changePageWith(page: findPageByHref(chapterHref) + 1)
             }
 
             self.changePageWith(page: pageNumber)
@@ -385,6 +453,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
     // MARK: Status bar and Navigation bar
 
+    open func hideBars() {
     func hideBars() {
         guard self.readerConfig.shouldHideNavigationOnTap == true else {
             return
@@ -392,12 +461,23 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
         self.updateBarsStatus(true)
     }
+   open func toggleBarsSH() {
+  
+        let shouldHide = !self.navigationController!.isNavigationBarHidden
+        if shouldHide == false {
+            self.configureNavBar()
+        }
+        
+        self.updateBarsStatusSH(shouldHide)
+    }
 
+   open func showBars() {
     func showBars() {
         self.configureNavBar()
         self.updateBarsStatus(false)
     }
 
+   open func toggleBars() {
     func toggleBars() {
         guard self.readerConfig.shouldHideNavigationOnTap == true else {
             return
@@ -410,6 +490,71 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
         self.updateBarsStatus(shouldHide)
     }
+    private func updateBarsStatusSH(_ shouldHide: Bool, shouldShowIndicator: Bool = false) {
+        guard let readerContainer = readerContainer else { return }
+        readerContainer.shouldHideStatusBar = shouldHide
+        
+        guard !self.isAnimating else {
+            return
+        }
+        
+        UIView.animate(withDuration: 0.25, animations: {
+            //readerContainer.setNeedsStatusBarAppearanceUpdate()
+            
+            // Show minutes indicator
+            if (shouldShowIndicator == true) {
+                self.pageIndicatorView?.minutesLabel.alpha = shouldHide ? 0 : 1
+            }
+        })
+
+        
+      
+        
+       
+      
+        
+        UIView.animate(withDuration: 0.3, delay: 0, options: .allowUserInteraction, animations: {
+            self.isAnimating = true
+            if self.navigationController?.navigationBar.alpha == 1.0{
+               // self.readerContainer?.shouldHideStatusBarSH = true
+                //self.collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: -64, right: 0)
+               // let currentIndexPath = self.getCurrentIndexPath()
+//                self.currentPage = self.collectionView.cellForItem(at: currentIndexPath) as? FolioReaderPage
+//                self.currentPage?.webView?.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: -50, right: 0)
+                
+                //self.readerContainer?.setNeedsStatusBarAppearanceUpdate()
+            }else{
+               // self.readerContainer?.shouldHideStatusBarSH = false
+//                let currentIndexPath = self.getCurrentIndexPath()
+//                self.currentPage = self.collectionView.cellForItem(at: currentIndexPath) as? FolioReaderPage
+//                self.currentPage?.webView?.scrollView.contentInset = UIEdgeInsets.zero
+               // self.readerContainer?.setNeedsStatusBarAppearanceUpdate()
+            }
+            
+            
+            if self.dummyNavbar.backgroundColor == .white {
+               // self.navigationController?.navigationBar.alpha = 0
+                self.dummyNavbar.backgroundColor = .clear
+                let window = UIApplication.shared.keyWindow!
+                window.windowLevel = UIWindowLevelStatusBar-1
+                self.titleShLabel?.alpha = 0.0
+                self.dummyNavbar.removeFromSuperview()
+            }else{
+               // self.navigationController?.navigationBar.alpha = 1.0
+                self.dummyNavbar.backgroundColor = .white
+                let window = UIApplication.shared.keyWindow!
+                window.windowLevel = UIWindowLevelStatusBar+1
+                window.addSubview(self.dummyNavbar)
+                self.titleShLabel?.alpha = 1.0
+            }
+        }) { (true) in
+            self.isAnimating = false
+          //  self.readerContainer?.setNeedsStatusBarAppearanceUpdate()
+        }
+        
+    }
+    
+   
 
     private func updateBarsStatus(_ shouldHide: Bool, shouldShowIndicator: Bool = false) {
         guard let readerContainer = readerContainer else { return }
@@ -437,8 +582,10 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        var reuseableCell = collectionView.dequeueReusableCell(withReuseIdentifier: kReuseCellIdentifier, for: indexPath) as? FolioReaderPage
         let reuseableCell = collectionView.dequeueReusableCell(withReuseIdentifier: kReuseCellIdentifier, for: indexPath) as? FolioReaderPage
         return self.configure(readerPageCell: reuseableCell, atIndexPath: indexPath)
+       
     }
 
     private func configure(readerPageCell cell: FolioReaderPage?, atIndexPath indexPath: IndexPath) -> UICollectionViewCell {
@@ -463,6 +610,9 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         let resource = self.book.spine.spineReferences[indexPath.row].resource
         guard var html = try? String(contentsOfFile: resource.fullHref, encoding: String.Encoding.utf8) else {
             return cell
+        guard let resource = self.book.spine.spineReferences[indexPath.row].resource,
+            var html = try? String(contentsOfFile: resource.fullHref, encoding: String.Encoding.utf8) else {
+                return cell
         }
 
         let mediaOverlayStyleColors = "\"\(self.readerConfig.mediaOverlayColor.hexString(false))\", \"\(self.readerConfig.mediaOverlayColor.highlightColor().hexString(false))\""
@@ -497,6 +647,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         }
 
         cell.loadHTMLString(html, baseURL: URL(fileURLWithPath: resource.fullHref.deletingLastPathComponent))
+        cell.loadHTMLString(html, baseURL: URL(fileURLWithPath: (resource.fullHref as NSString).deletingLastPathComponent))
         return cell
     }
 
@@ -895,6 +1046,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         // Need check page orientation (v/h) and make correct calc for vertical
         guard
             let cell = collectionView.cellForItem(at: getCurrentIndexPath()) as? FolioReaderPage,
+            let contentOffset = cell.webView?.scrollView.contentOffset,
             let contentSize = cell.webView?.scrollView.contentSize else {
                 completion?()
                 return
@@ -921,6 +1073,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         // Need check page orientation (v/h) and make correct calc for vertical
         guard
             let cell = collectionView.cellForItem(at: getCurrentIndexPath()) as? FolioReaderPage,
+            let contentOffset = cell.webView?.scrollView.contentOffset,
             let contentSize = cell.webView?.scrollView.contentSize else {
                 delegate?.pageItemChanged?(getCurrentPageItemNumber())
                 completion?()
@@ -995,11 +1148,18 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
                 } else if let children = item.children, children.isEmpty == false {
                     search(children)
                 }
+        for item in self.book.flatTableOfContents {
+            if
+                let reference = self.book.spine.spineReferences[safe: (self.currentPageNumber - 1)],
+                let resource = item.resource,
+                (resource == reference.resource) {
+                return item.resource
             }
         }
         search(book.flatTableOfContents)
 
         return foundResource
+        return nil
     }
 
     /**
@@ -1034,11 +1194,22 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
                 } else if let children = item.children, children.isEmpty == false {
                     search(children)
                 }
+        for item in self.book.flatTableOfContents {
+            guard
+                let reference = self.book.spine.spineReferences[safe: (self.currentPageNumber - 1)],
+                let resource = item.resource,
+                (resource == reference.resource),
+                let title = item.title else {
+                    continue
             }
+
+            return title
         }
         search(self.book.flatTableOfContents)
         
         return foundChapterName
+
+        return nil
     }
 
     // MARK: Public page methods
@@ -1294,6 +1465,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     open func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        self.hasMadeInteraction = true
+        self.lastUserInteractionTime = Date()
         recentlyScrolledTimer = Timer(timeInterval:recentlyScrolledDelay, target: self, selector: #selector(FolioReaderCenter.clearRecentlyScrolled), userInfo: nil, repeats: false)
         RunLoop.current.add(recentlyScrolledTimer, forMode: RunLoopMode.commonModes)
     }
@@ -1313,6 +1486,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     // MARK: NavigationBar Actions
 
     @objc func closeReader(_ sender: UIBarButtonItem) {
+        self.stopTimer()
         dismiss()
         folioReader.close()
     }
@@ -1392,6 +1566,20 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         present(nav, animated: true, completion: nil)
     }
     
+    //MARK: Timer
+    
+    func startTimer() {
+        guard timer == nil else { return }
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(checkForInteraction), userInfo: nil, repeats: true)
+    }
+    
+    func stopTimer() {
+        guard timer != nil else { return }
+        timer?.invalidate()
+        timer = nil
+    }
+    
+    @objc func checkForInteraction() {
     /**
      Present add highlight note
      */
@@ -1401,6 +1589,28 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         let nav = UINavigationController(rootViewController: addHighlightView)
         nav.modalPresentationStyle = .formSheet
         
+        let duration = Date().timeIntervalSince(self.lastUserInteractionTime!)
+        if duration >= 7 {
+        if !hasMadeInteraction{
+            if let sub = self.dummyNavbar.superview  {
+           
+           // self.lastUserInteractionTime = Date()
+            }else{
+                //self.lastUserInteractionTime = Date()
+                 self.toggleBarsSH()
+            }
+            
+        }else{
+            self.hasMadeInteraction = false
+           // self.lastUserInteractionTime = Date()
+        }
+        }else if hasMadeInteraction{
+            self.hasMadeInteraction = false
+            self.lastUserInteractionTime = Date()
+        }
+        if duration > 7 {
+            self.lastUserInteractionTime = Date()
+        }
         present(nav, animated: true, completion: nil)
     }
 }
@@ -1453,6 +1663,8 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
     public func pageTap(_ recognizer: UITapGestureRecognizer) {
         // Pass the event to the centers `pageDelegate`
         pageDelegate?.pageTap?(recognizer)
+       // self.hasMadeInteraction = true
+        self.lastUserInteractionTime = Date()
     }
     
 }
