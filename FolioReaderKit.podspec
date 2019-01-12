@@ -36,6 +36,6 @@ Pod::Spec.new do |s|
   s.dependency 'AEXML', '4.3.3'
   s.dependency 'FontBlaster', '4.1.0'
   s.dependency 'JSQWebViewController', '6.0.0'
-  s.dependency 'RealmSwift', '3.13.0'
+  s.dependency 'RealmSwift', '3.13.1'
 
 end

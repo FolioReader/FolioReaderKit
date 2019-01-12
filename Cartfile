@@ -4,4 +4,4 @@ github "alexpopov/ZFDragableModalTransition" "merge-carthage-into-zoonooz"
 github "tadija/AEXML" == 4.3.3
 github "ArtSabintsev/FontBlaster" == 4.1.0
 github "jessesquires/JSQWebViewController" == 6.0.0
-github "realm/realm-cocoa" == 3.13.0
+github "realm/realm-cocoa" == 3.13.1
