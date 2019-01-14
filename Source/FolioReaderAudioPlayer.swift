@@ -42,13 +42,9 @@ open class FolioReaderAudioPlayer: NSObject {
 
         // this is needed to the audio can play even when the "silent/vibrate" toggle is on
         let session = AVAudioSession.sharedInstance()
-        try? session.setCategory(AVAudioSessionCategoryPlayback)
+        try? session.setCategory(.playback, mode: .default)
 
-        NotificationCenter.default.addObserver(self,
-            selector: #selector(pause),
-            name: .AVAudioSessionInterruption,
-            object: session
-        )
+        NotificationCenter.default.addObserver(self,selector: #selector(pause),name: AVAudioSession.interruptionNotification,object: session )
 
         self.updateNowPlayingInfo()
     }
@@ -411,7 +407,7 @@ open class FolioReaderAudioPlayer: NSObject {
     fileprivate func startPlayerTimer() {
         // we must add the timer in this mode in order for it to continue working even when the user is scrolling a webview
         playingTimer = Timer(timeInterval: 0.01, target: self, selector: #selector(playerTimerObserver), userInfo: nil, repeats: true)
-        RunLoop.current.add(playingTimer, forMode: RunLoopMode.commonModes)
+        RunLoop.current.add(playingTimer, forMode: RunLoop.Mode.common)
     }
 
     fileprivate func stopPlayerTimer() {

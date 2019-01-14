@@ -136,14 +136,14 @@ open class FolioReader: NSObject {
     // Add necessary observers
     fileprivate func addObservers() {
         removeObservers()
-        NotificationCenter.default.addObserver(self, selector: #selector(saveReaderState), name: .UIApplicationWillResignActive, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(saveReaderState), name: .UIApplicationWillTerminate, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(saveReaderState), name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(saveReaderState), name: UIApplication.willTerminateNotification, object: nil)
     }
 
     /// Remove necessary observers
     fileprivate func removeObservers() {
-        NotificationCenter.default.removeObserver(self, name: .UIApplicationWillResignActive, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .UIApplicationWillTerminate, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.willTerminateNotification, object: nil)
     }
 }
 

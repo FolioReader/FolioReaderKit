@@ -18,7 +18,7 @@ class FolioReaderHighlightList: UITableViewController {
         self.readerConfig = readerConfig
         self.folioReader = folioReader
 
-        super.init(style: UITableViewStyle.plain)
+        super.init(style: UITableView.Style.plain)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -67,7 +67,7 @@ class FolioReaderHighlightList: UITableViewController {
         if cell.contentView.viewWithTag(456) == nil {
             dateLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width-40, height: 16))
             dateLabel.tag = 456
-            dateLabel.autoresizingMask = UIViewAutoresizing.flexibleWidth
+            dateLabel.autoresizingMask = UIView.AutoresizingMask.flexibleWidth
             dateLabel.font = UIFont(name: "Avenir-Medium", size: 12)
             cell.contentView.addSubview(dateLabel)
         } else {
@@ -86,16 +86,16 @@ class FolioReaderHighlightList: UITableViewController {
         paragraph.lineSpacing = 3
         let textColor = self.folioReader.isNight(self.readerConfig.menuTextColor, UIColor.black)
 
-        text.addAttribute(NSAttributedStringKey.paragraphStyle, value: paragraph, range: range)
-        text.addAttribute(NSAttributedStringKey.font, value: UIFont(name: "Avenir-Light", size: 16)!, range: range)
-        text.addAttribute(NSAttributedStringKey.foregroundColor, value: textColor, range: range)
+        text.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraph, range: range)
+        text.addAttribute(NSAttributedString.Key.font, value: UIFont(name: "Avenir-Light", size: 16)!, range: range)
+        text.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor, range: range)
 
         if (highlight.type == HighlightStyle.underline.rawValue) {
-            text.addAttribute(NSAttributedStringKey.backgroundColor, value: UIColor.clear, range: range)
-            text.addAttribute(NSAttributedStringKey.underlineColor, value: HighlightStyle.colorForStyle(highlight.type, nightMode: self.folioReader.nightMode), range: range)
-            text.addAttribute(NSAttributedStringKey.underlineStyle, value: NSNumber(value: NSUnderlineStyle.styleSingle.rawValue as Int), range: range)
+            text.addAttribute(NSAttributedString.Key.backgroundColor, value: UIColor.clear, range: range)
+            text.addAttribute(NSAttributedString.Key.underlineColor, value: HighlightStyle.colorForStyle(highlight.type, nightMode: self.folioReader.nightMode), range: range)
+            text.addAttribute(NSAttributedString.Key.underlineStyle, value: NSNumber(value: NSUnderlineStyle.single.rawValue as Int), range: range)
         } else {
-            text.addAttribute(NSAttributedStringKey.backgroundColor, value: HighlightStyle.colorForStyle(highlight.type, nightMode: self.folioReader.nightMode), range: range)
+            text.addAttribute(NSAttributedString.Key.backgroundColor, value: HighlightStyle.colorForStyle(highlight.type, nightMode: self.folioReader.nightMode), range: range)
         }
 
         // Text
@@ -103,7 +103,7 @@ class FolioReaderHighlightList: UITableViewController {
         if cell.contentView.viewWithTag(123) == nil {
             highlightLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width-40, height: 0))
             highlightLabel.tag = 123
-            highlightLabel.autoresizingMask = UIViewAutoresizing.flexibleWidth
+            highlightLabel.autoresizingMask = UIView.AutoresizingMask.flexibleWidth
             highlightLabel.numberOfLines = 0
             highlightLabel.textColor = UIColor.black
             cell.contentView.addSubview(highlightLabel)
@@ -122,7 +122,7 @@ class FolioReaderHighlightList: UITableViewController {
                 noteLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width-40, height: 0))
                 noteLabel.tag = 789
                 noteLabel.font = UIFont.systemFont(ofSize: 14)
-                noteLabel.autoresizingMask = UIViewAutoresizing.flexibleWidth
+                noteLabel.autoresizingMask = UIView.AutoresizingMask.flexibleWidth
                 noteLabel.numberOfLines = 3
                 noteLabel.textColor = UIColor.gray
                 cell.contentView.addSubview(noteLabel)
@@ -151,8 +151,8 @@ class FolioReaderHighlightList: UITableViewController {
         let range = NSRange(location: 0, length: text.length)
         let paragraph = NSMutableParagraphStyle()
         paragraph.lineSpacing = 3
-        text.addAttribute(NSAttributedStringKey.paragraphStyle, value: paragraph, range: range)
-        text.addAttribute(NSAttributedStringKey.font, value: UIFont(name: "Avenir-Light", size: 16)!, range: range)
+        text.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraph, range: range)
+        text.addAttribute(NSAttributedString.Key.font, value: UIFont(name: "Avenir-Light", size: 16)!, range: range)
 
         let s = text.boundingRect(with: CGSize(width: view.frame.width-40, height: CGFloat.greatestFiniteMagnitude),
                                   options: [NSStringDrawingOptions.usesLineFragmentOrigin, NSStringDrawingOptions.usesFontLeading],
@@ -184,7 +184,7 @@ class FolioReaderHighlightList: UITableViewController {
         self.dismiss()
     }
 
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             guard let highlight = highlights[safe: indexPath.row] else { return }
 

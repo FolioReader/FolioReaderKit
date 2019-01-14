@@ -9,14 +9,14 @@
 import Foundation
 import UIKit
 
-extension UICollectionViewScrollDirection {
-    static func direction(withConfiguration readerConfig: FolioReaderConfig) -> UICollectionViewScrollDirection {
+extension UICollectionView.ScrollDirection {
+    static func direction(withConfiguration readerConfig: FolioReaderConfig) -> UICollectionView.ScrollDirection {
         return readerConfig.isDirection(.vertical, .horizontal, .horizontal)
     }
 }
 
-extension UICollectionViewScrollPosition {
-    static func direction(withConfiguration readerConfig: FolioReaderConfig) -> UICollectionViewScrollPosition {
+extension UICollectionView.ScrollPosition {
+    static func direction(withConfiguration readerConfig: FolioReaderConfig) -> UICollectionView.ScrollPosition {
         return readerConfig.isDirection(.top, .left, .left)
     }
 }
@@ -462,20 +462,20 @@ internal extension UIViewController {
         navBar?.showBottomHairline()
         navBar?.isTranslucent = translucent
         navBar?.tintColor = tintColor
-        navBar?.titleTextAttributes = [NSAttributedStringKey.foregroundColor: titleColor, NSAttributedStringKey.font: font]
+        navBar?.titleTextAttributes = [NSAttributedString.Key.foregroundColor: titleColor, NSAttributedString.Key.font: font]
     }
 }
 
 internal extension UINavigationBar {
 
     func hideBottomHairline() {
-        let navigationBarImageView = hairlineImageViewInNavigationBar(self)
-        navigationBarImageView!.isHidden = true
+        guard let navigationBarImageView = hairlineImageViewInNavigationBar(self) else {return}
+        navigationBarImageView.isHidden = true
     }
 
     func showBottomHairline() {
-        let navigationBarImageView = hairlineImageViewInNavigationBar(self)
-        navigationBarImageView!.isHidden = false
+        guard let navigationBarImageView = hairlineImageViewInNavigationBar(self) else {return}
+        navigationBarImageView.isHidden = false
     }
 
     fileprivate func hairlineImageViewInNavigationBar(_ view: UIView) -> UIImageView? {

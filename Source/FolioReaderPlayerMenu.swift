@@ -78,16 +78,16 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
 
         // prev button
         let prevBtn = UIButton(frame: CGRect(x: gutterX + padX, y: 0, width: size, height: size))
-        prevBtn.setImage(prevNormal, for: UIControlState())
+        prevBtn.setImage(prevNormal, for: UIControl.State())
         prevBtn.setImage(prevSelected, for: .selected)
         prevBtn.addTarget(self, action: #selector(FolioReaderPlayerMenu.prevChapter(_:)), for: .touchUpInside)
         menuView.addSubview(prevBtn)
 
         // play / pause button
         let playPauseBtn = UIButton(frame: CGRect(x: Int(prevBtn.frame.origin.x) + padX + size, y: 0, width: size, height: size))
-        playPauseBtn.setTitleColor(selectedColor, for: UIControlState())
+        playPauseBtn.setTitleColor(selectedColor, for: UIControl.State())
         playPauseBtn.setTitleColor(selectedColor, for: .selected)
-        playPauseBtn.setImage(playSelected, for: UIControlState())
+        playPauseBtn.setImage(playSelected, for: UIControl.State())
         playPauseBtn.setImage(pauseSelected, for: .selected)
         playPauseBtn.titleLabel!.font = UIFont(name: "Avenir", size: 22)!
         playPauseBtn.addTarget(self, action: #selector(FolioReaderPlayerMenu.togglePlay(_:)), for: .touchUpInside)
@@ -99,7 +99,7 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
 
         // next button
         let nextBtn = UIButton(frame: CGRect(x: Int(playPauseBtn.frame.origin.x) + padX + size, y: 0, width: size, height: size))
-        nextBtn.setImage(nextNormal, for: UIControlState())
+        nextBtn.setImage(nextNormal, for: UIControl.State())
         nextBtn.setImage(nextSelected, for: .selected)
         nextBtn.addTarget(self, action: #selector(FolioReaderPlayerMenu.nextChapter(_:)), for: .touchUpInside)
         menuView.addSubview(nextBtn)
@@ -142,9 +142,9 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
         let style0 = UIButton(frame: CGRect(x: 0, y: line2.frame.height+line2.frame.origin.y, width: view.frame.width/3, height: 55))
         style0.titleLabel!.textAlignment = .center
         style0.titleLabel!.font = UIFont(name: "Avenir-Light", size: 17)
-        style0.setTitleColor(self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, UIColor.white), for: UIControlState())
+        style0.setTitleColor(self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, UIColor.white), for: UIControl.State())
         style0.setTitleColor(self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, UIColor.white), for: .selected)
-        style0.setTitle(self.readerConfig.localizedPlayerMenuStyle, for: UIControlState())
+        style0.setTitle(self.readerConfig.localizedPlayerMenuStyle, for: UIControl.State())
         menuView.addSubview(style0);
         style0.titleLabel?.sizeToFit()
         let style0Bgd = UIView(frame: style0.titleLabel!.frame)
@@ -159,25 +159,25 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
         let style1 = UIButton(frame: CGRect(x: view.frame.width/3, y: line2.frame.height+line2.frame.origin.y, width: view.frame.width/3, height: 55))
         style1.titleLabel!.textAlignment = .center
         style1.titleLabel!.font = UIFont(name: "Avenir-Light", size: 17)
-        style1.setTitleColor(normalColor, for: UIControlState())
+        style1.setTitleColor(normalColor, for: UIControl.State())
         style1.setAttributedTitle(NSAttributedString(string: "Style", attributes: [
-            NSAttributedStringKey.foregroundColor: normalColor,
-            NSAttributedStringKey.underlineStyle: NSUnderlineStyle.patternDot.rawValue|NSUnderlineStyle.styleSingle.rawValue,
-            NSAttributedStringKey.underlineColor: normalColor
-            ]), for: UIControlState())
+            NSAttributedString.Key.foregroundColor: normalColor,
+            NSAttributedString.Key.underlineStyle: NSUnderlineStyle.patternDot.rawValue|NSUnderlineStyle.single.rawValue,
+            NSAttributedString.Key.underlineColor: normalColor
+            ]), for: UIControl.State())
         style1.setAttributedTitle(NSAttributedString(string: self.readerConfig.localizedPlayerMenuStyle, attributes: [
-            NSAttributedStringKey.foregroundColor: self.folioReader.isNight(UIColor.white, UIColor.black),
-            NSAttributedStringKey.underlineStyle: NSUnderlineStyle.patternDot.rawValue|NSUnderlineStyle.styleSingle.rawValue,
-            NSAttributedStringKey.underlineColor: selectedColor
+            NSAttributedString.Key.foregroundColor: self.folioReader.isNight(UIColor.white, UIColor.black),
+            NSAttributedString.Key.underlineStyle: NSUnderlineStyle.patternDot.rawValue|NSUnderlineStyle.single.rawValue,
+            NSAttributedString.Key.underlineColor: selectedColor
             ]), for: .selected)
         menuView.addSubview(style1);
 
         let style2 = UIButton(frame: CGRect(x: view.frame.width/1.5, y: line2.frame.height+line2.frame.origin.y, width: view.frame.width/3, height: 55))
         style2.titleLabel!.textAlignment = .center
         style2.titleLabel!.font = UIFont(name: "Avenir-Light", size: 17)
-        style2.setTitleColor(normalColor, for: UIControlState())
+        style2.setTitleColor(normalColor, for: UIControl.State())
         style2.setTitleColor(selectedColor, for: .selected)
-        style2.setTitle(self.readerConfig.localizedPlayerMenuStyle, for: UIControlState())
+        style2.setTitle(self.readerConfig.localizedPlayerMenuStyle, for: UIControl.State())
         menuView.addSubview(style2);
 
         // add line dividers between style buttons

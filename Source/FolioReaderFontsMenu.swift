@@ -198,7 +198,7 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
         slider.tintColor = self.readerConfig.nightModeSeparatorColor
         slider.minimumValue = 0
         slider.value = CGFloat(self.folioReader.currentFontSize.rawValue)
-        slider.addTarget(self, action: #selector(FolioReaderFontsMenu.sliderValueChanged(_:)), for: UIControlEvents.valueChanged)
+        slider.addTarget(self, action: #selector(FolioReaderFontsMenu.sliderValueChanged(_:)), for: UIControl.Event.valueChanged)
 
         // Force remove fill color
         slider.layer.sublayers?.forEach({ layer in
@@ -210,12 +210,12 @@ class FolioReaderFontsMenu: UIViewController, SMSegmentViewDelegate, UIGestureRe
         // Font icons
         let fontSmallView = UIImageView(frame: CGRect(x: 20, y: line2.frame.origin.y+14, width: 30, height: 30))
         fontSmallView.image = fontSmallNormal
-        fontSmallView.contentMode = UIViewContentMode.center
+        fontSmallView.contentMode = UIView.ContentMode.center
         menuView.addSubview(fontSmallView)
 
         let fontBigView = UIImageView(frame: CGRect(x: view.frame.width-50, y: line2.frame.origin.y+14, width: 30, height: 30))
         fontBigView.image = fontBigNormal
-        fontBigView.contentMode = UIViewContentMode.center
+        fontBigView.contentMode = UIView.ContentMode.center
         menuView.addSubview(fontBigView)
 
         // Only continues if user can change scroll direction

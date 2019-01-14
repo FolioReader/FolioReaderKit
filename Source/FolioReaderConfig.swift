@@ -27,7 +27,7 @@ public enum FolioReaderScrollDirection: Int {
     /// The current scroll direction
     ///
     /// - Returns: Returns `UICollectionViewScrollDirection`
-    func collectionViewScrollDirection() -> UICollectionViewScrollDirection {
+    func collectionViewScrollDirection() -> UICollectionView.ScrollDirection {
         switch self {
         case .vertical, .defaultVertical:
             return .vertical

@@ -75,11 +75,11 @@ class FolioReaderPageIndicator: UIView {
         let currentColor = UIColor(cgColor: layer.shadowColor!)
         animation.fromValue = currentColor.cgColor
         animation.toValue = color.cgColor
-        animation.fillMode = kCAFillModeForwards
+        animation.fillMode = CAMediaTimingFillMode.forwards
         animation.isRemovedOnCompletion = false
         animation.duration = 0.6
         animation.delegate = self
-        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
         layer.add(animation, forKey: "shadowColor")
 
         minutesLabel.textColor = self.folioReader.isNight(UIColor(white: 1, alpha: 0.3), UIColor(white: 0, alpha: 0.6))
