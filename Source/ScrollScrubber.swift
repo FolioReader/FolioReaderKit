@@ -93,7 +93,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
         // less obtrusive knob and fixes jump: http://stackoverflow.com/a/22301039/484780
         let thumbImg = UIImage(readerImageNamed: "knob")
         let thumbImgColor = thumbImg?.imageTintColor(readerConfig.tintColor)?.withRenderingMode(.alwaysOriginal)
-        slider.setThumbImage(thumbImgColor, for: UIControlState())
+        slider.setThumbImage(thumbImgColor, for: UIControl.State())
         slider.setThumbImage(thumbImgColor, for: .selected)
         slider.setThumbImage(thumbImgColor, for: .highlighted)
 
@@ -221,7 +221,7 @@ class ScrollScrubber: NSObject, UIScrollViewDelegate {
 
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         scrollDeltaTimer = Timer(timeInterval:0.5, target: self, selector: #selector(ScrollScrubber.resetScrollDelta), userInfo: nil, repeats: false)
-        RunLoop.current.add(scrollDeltaTimer, forMode: RunLoopMode.commonModes)
+        RunLoop.current.add(scrollDeltaTimer, forMode: RunLoop.Mode.common)
     }
 
     @objc func resetScrollDelta() {

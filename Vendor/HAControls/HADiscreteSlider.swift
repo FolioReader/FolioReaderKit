@@ -160,7 +160,7 @@ class HADiscreteSlider : UIControl {
 	}
 	
 	func sendActionsForControlEvents() {
-        self.sendActions(for: UIControlEvents.valueChanged)
+        self.sendActions(for: UIControl.Event.valueChanged)
 	}
 	
 	// MARK: HADiscreteSlider

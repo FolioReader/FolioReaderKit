@@ -41,12 +41,26 @@ open class FolioReaderAudioPlayer: NSObject {
         UIApplication.shared.beginReceivingRemoteControlEvents()
 
         // this is needed to the audio can play even when the "silent/vibrate" toggle is on
+        // Fix for AVudioSession https://stackoverflow.com/questions/51010390/avaudiosession-setcategory-swift-4-2-ios-12-play-sound-on-silent
+        
         let session = AVAudioSession.sharedInstance()
-        try? session.setCategory(AVAudioSessionCategoryPlayback)
+        do {
+            if #available(iOS 10.0, *) {
+                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+            } else {
+                // Fallback on earlier versions
+//                Workaround until https://forums.swift.org/t/using-methods-marked-unavailable-in-swift-4-2/14949 isn't fixed
+                AVAudioSession.sharedInstance().perform(NSSelectorFromString("setCategory:error:"), with: AVAudioSession.Category.playback)
+            }
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print(error)
+        }
+//        try? session.setCategory(convertFromAVAudioSessionCategory(AVAudioSession.Category.playback))
 
         NotificationCenter.default.addObserver(self,
             selector: #selector(pause),
-            name: .AVAudioSessionInterruption,
+            name: AVAudioSession.interruptionNotification,
             object: session
         )
 
@@ -411,7 +425,7 @@ open class FolioReaderAudioPlayer: NSObject {
     fileprivate func startPlayerTimer() {
         // we must add the timer in this mode in order for it to continue working even when the user is scrolling a webview
         playingTimer = Timer(timeInterval: 0.01, target: self, selector: #selector(playerTimerObserver), userInfo: nil, repeats: true)
-        RunLoop.current.add(playingTimer, forMode: RunLoopMode.commonModes)
+        RunLoop.current.add(playingTimer, forMode: RunLoop.Mode.common)
     }
 
     fileprivate func stopPlayerTimer() {
@@ -537,4 +551,9 @@ extension FolioReaderAudioPlayer: AVAudioPlayerDelegate {
     public func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         _playFragment(self.nextAudioFragment())
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromAVAudioSessionCategory(_ input: AVAudioSession.Category) -> String {
+	return input.rawValue
 }
