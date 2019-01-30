@@ -53,7 +53,7 @@ To integrate FolioReaderKit into your Xcode project using CocoaPods, specify it 
 
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '8.0'
+platform :ios, '9.0'
 use_frameworks!
 
 target '<Your Target Name>' do
@@ -91,7 +91,7 @@ Then, follow the steps as described in Carthage's [README](https://github.com/Ca
 
 ## Requirements
 
-- iOS 8.0+
+- iOS 9.0+
 - Xcode 10.1+
 
 ## Basic Usage

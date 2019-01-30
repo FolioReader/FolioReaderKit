@@ -9,7 +9,6 @@
 import UIKit
 import SafariServices
 import MenuItemKit
-import JSQWebViewControllerMod42
 
 /// Protocol which is used from `FolioReaderPage`s.
 @objc public protocol FolioReaderPageDelegate: class {
@@ -301,17 +300,9 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
             print("Email")
             return true
         } else if url.absoluteString != "about:blank" && scheme.contains("http") && navigationType == .linkClicked {
-
-            if #available(iOS 9.0, *) {
-                let safariVC = SFSafariViewController(url: request.url!)
-                safariVC.view.tintColor = self.readerConfig.tintColor
-                self.folioReader.readerCenter?.present(safariVC, animated: true, completion: nil)
-            } else {
-                let webViewController = WebViewController(url: request.url!)
-                let nav = UINavigationController(rootViewController: webViewController)
-                nav.view.tintColor = self.readerConfig.tintColor
-                self.folioReader.readerCenter?.present(nav, animated: true, completion: nil)
-            }
+            let safariVC = SFSafariViewController(url: request.url!)
+            safariVC.view.tintColor = self.readerConfig.tintColor
+            self.folioReader.readerCenter?.present(safariVC, animated: true, completion: nil)
             return false
         } else {
             // Check if the url is a custom class based onClick listerner
