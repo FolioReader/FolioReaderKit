@@ -75,7 +75,7 @@ class FolioReaderAddHighlightNote: UIViewController {
     
     private func prepareScrollView(){
         scrollView = UIScrollView()
-        scrollView.delegate = self as! UIScrollViewDelegate
+        scrollView.delegate = self as UIScrollViewDelegate
         scrollView.contentSize = CGSize.init(width: view.frame.width, height: view.frame.height )
         scrollView.bounces = false
         

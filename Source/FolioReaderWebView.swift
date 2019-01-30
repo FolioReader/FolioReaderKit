@@ -173,7 +173,6 @@ open class FolioReaderWebView: UIWebView {
         do {
             let json = try JSONSerialization.jsonObject(with: jsonData!, options: []) as! NSArray
             let dic = json.firstObject as! [String: String]
-            let rect = NSCoder.cgRect(for: dic["rect"]!)
             guard let startOffset = dic["startOffset"] else { return }
             guard let endOffset = dic["endOffset"] else { return }
             
@@ -194,10 +193,9 @@ open class FolioReaderWebView: UIWebView {
     }
     
     @objc func updateHighlightNote (_ sender: UIMenuController?) {
-        if let highlightId = js("getHighlightId()") {
-            let highlightNote = Highlight.getById(withConfiguration: readerConfig, highlightId: highlightId)
-            self.folioReader.readerCenter?.presentAddHighlightNote(highlightNote, edit: true)
-        }
+        guard let highlightId = js("getHighlightId()") else { return }
+        guard let highlightNote = Highlight.getById(withConfiguration: readerConfig, highlightId: highlightId) else { return }
+        self.folioReader.readerCenter?.presentAddHighlightNote(highlightNote, edit: true)
     }
 
     @objc func define(_ sender: UIMenuController?) {

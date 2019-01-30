@@ -849,7 +849,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     }
     
     public func getCurrentPageProgress() -> Float {
-        guard let page = currentPage, let webView = page.webView else { return 0 }
+        guard let page = currentPage else { return 0 }
         
         let pageSize = self.readerConfig.isDirection(pageHeight, self.pageWidth, pageHeight)
         let contentSize = page.webView?.scrollView.contentSize.forDirection(withConfiguration: self.readerConfig) ?? 0

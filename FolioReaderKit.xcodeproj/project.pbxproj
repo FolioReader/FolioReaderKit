@@ -60,6 +60,11 @@
 		1A9590131D397BE900D56699 /* ScrollScrubber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A958F901D397BE900D56699 /* ScrollScrubber.swift */; };
 		1A9590151D397C1300D56699 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A9590141D397C1300D56699 /* Images.xcassets */; };
 		1A9590171D397CAF00D56699 /* FolioReaderKit.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 1A9590161D397CAF00D56699 /* FolioReaderKit.podspec */; };
+		1AC255CF220217DF00841FA2 /* MediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A41E8902031E22300A8F70C /* MediaType.swift */; };
+		1AC255D22202191F00841FA2 /* SMSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D69C471D0387F7003B4CCD /* SMSegmentView.swift */; };
+		1AC255D32202193700841FA2 /* SMSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D69C461D0387F7003B4CCD /* SMSegment.swift */; };
+		1AC255D42202195200841FA2 /* HADiscreteSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D69C441D0387F7003B4CCD /* HADiscreteSlider.swift */; };
+		1AC255D52202196D00841FA2 /* FolioReaderAddHighlightNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 256AE60A20A1D4DD00EAD746 /* FolioReaderAddHighlightNote.swift */; };
 		256AE60B20A1D4DD00EAD746 /* FolioReaderAddHighlightNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 256AE60A20A1D4DD00EAD746 /* FolioReaderAddHighlightNote.swift */; };
 		3A27F08C1FD9BE5800D84A57 /* FolioReaderUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A27F08A1FD9BE5800D84A57 /* FolioReaderUserDefaults.swift */; };
 		3A27F08E1FD9BE5800D84A57 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A27F08B1FD9BE5800D84A57 /* Extensions.swift */; };
@@ -105,7 +110,6 @@
 		B0D69CCA1D0387F7003B4CCD /* SMSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D69C471D0387F7003B4CCD /* SMSegmentView.swift */; };
 		B0D69CD11D0388EF003B4CCD /* AEXML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0D69CCB1D0388EF003B4CCD /* AEXML.framework */; };
 		B0D69CD21D0388EF003B4CCD /* FontBlaster.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0D69CCC1D0388EF003B4CCD /* FontBlaster.framework */; };
-		B0D69CD31D0388EF003B4CCD /* JSQWebViewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0D69CCD1D0388EF003B4CCD /* JSQWebViewController.framework */; };
 		B0D69CD51D0388EF003B4CCD /* ZFDragableModalTransition.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0D69CCF1D0388EF003B4CCD /* ZFDragableModalTransition.framework */; };
 		B0D69CD61D0388EF003B4CCD /* ZipArchive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0D69CD01D0388EF003B4CCD /* ZipArchive.framework */; };
 /* End PBXBuildFile section */
@@ -202,7 +206,6 @@
 				1A65DDCC1DA73F8E0033C277 /* MenuItemKit.framework in Frameworks */,
 				B0D69CD11D0388EF003B4CCD /* AEXML.framework in Frameworks */,
 				B0D69CD21D0388EF003B4CCD /* FontBlaster.framework in Frameworks */,
-				B0D69CD31D0388EF003B4CCD /* JSQWebViewController.framework in Frameworks */,
 				B0D69CD51D0388EF003B4CCD /* ZFDragableModalTransition.framework in Frameworks */,
 				B0D69CD61D0388EF003B4CCD /* ZipArchive.framework in Frameworks */,
 				1A65DDD21DA744190033C277 /* Realm.framework in Frameworks */,
@@ -495,7 +498,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = FolioReader;
 				TargetAttributes = {
 					B0D6990A1D035FA2003B4CCD = {
@@ -621,6 +624,8 @@
 				3A27F0BD1FD9C25500D84A57 /* FolioReaderSharingProvider.swift in Sources */,
 				B0D6991B1D035FA2003B4CCD /* FolioReaderKitTests.swift in Sources */,
 				3A27F0BF1FD9C25500D84A57 /* FolioReaderWebView.swift in Sources */,
+				1AC255CF220217DF00841FA2 /* MediaType.swift in Sources */,
+				1AC255D22202191F00841FA2 /* SMSegmentView.swift in Sources */,
 				3A27F0BA1FD9C25500D84A57 /* FolioReaderPageIndicator.swift in Sources */,
 				3A27F0A51FD9C24A00D84A57 /* FRSpine.swift in Sources */,
 				3A27F0B81FD9C25500D84A57 /* FolioReaderKit.swift in Sources */,
@@ -638,11 +643,14 @@
 				3A27F0BE1FD9C25500D84A57 /* FolioReaderUserDefaults.swift in Sources */,
 				3A27F0B91FD9C25500D84A57 /* FolioReaderPage.swift in Sources */,
 				3A27F09D1FD9C24A00D84A57 /* FRBook.swift in Sources */,
+				1AC255D42202195200841FA2 /* HADiscreteSlider.swift in Sources */,
 				3A27F0BB1FD9C25500D84A57 /* FolioReaderPlayerMenu.swift in Sources */,
+				1AC255D52202196D00841FA2 /* FolioReaderAddHighlightNote.swift in Sources */,
 				3A27F0C41FD9C25C00D84A57 /* ScrollScrubber.swift in Sources */,
 				3A27F0C31FD9C25C00D84A57 /* QuoteImage.swift in Sources */,
 				3A27F0B71FD9C25500D84A57 /* FolioReaderHighlightList.swift in Sources */,
 				3A27F09E1FD9C24A00D84A57 /* FREpubParser.swift in Sources */,
+				1AC255D32202193700841FA2 /* SMSegment.swift in Sources */,
 				3A27F0A21FD9C24A00D84A57 /* FRResources.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -671,12 +679,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -709,7 +719,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -729,12 +739,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -760,7 +772,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -771,6 +783,7 @@
 		B0D699201D035FA2003B4CCD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
@@ -783,17 +796,19 @@
 				);
 				INFOPLIST_FILE = FolioReaderKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.folioreader.FolioReaderKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
 		B0D699211D035FA2003B4CCD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
@@ -806,11 +821,12 @@
 				);
 				INFOPLIST_FILE = FolioReaderKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.folioreader.FolioReaderKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -827,6 +843,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.folioreader.FolioReaderKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -843,6 +860,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.folioreader.FolioReaderKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};

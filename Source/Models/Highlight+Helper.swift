@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Folio Reader. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import RealmSwift
 
 /**
@@ -141,16 +141,19 @@ extension Highlight {
     ///   - highlightId: The ID to be removed
     ///   - page: Page number
     /// - Returns: Return a Highlight
-    public static func getById(withConfiguration readerConfig: FolioReaderConfig, highlightId: String) -> Highlight {
+    public static func getById(withConfiguration readerConfig: FolioReaderConfig, highlightId: String) -> Highlight? {
         var highlight: Highlight?
         let predicate = NSPredicate(format:"highlightId = %@", highlightId)
+
         do {
-            let realm = try! Realm(configuration: readerConfig.realmConfiguration)
+            let realm = try Realm(configuration: readerConfig.realmConfiguration)
             highlight = realm.objects(Highlight.self).filter(predicate).toArray(Highlight.self).first
-            return highlight!
+            return highlight
         } catch let error as NSError {
             print("Error getting Highlight : \(error)")
         }
+
+        return highlight
     }
 
     /// Update a Highlight by ID

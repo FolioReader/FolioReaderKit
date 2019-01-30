@@ -71,7 +71,7 @@ class FolioReaderHighlightList: UITableViewController {
             dateLabel.font = UIFont(name: "Avenir-Medium", size: 12)
             cell.contentView.addSubview(dateLabel)
         } else {
-            dateLabel = cell.contentView.viewWithTag(456) as! UILabel
+            dateLabel = cell.contentView.viewWithTag(456) as? UILabel
         }
 
         dateLabel.text = dateString.uppercased()
@@ -108,7 +108,7 @@ class FolioReaderHighlightList: UITableViewController {
             highlightLabel.textColor = UIColor.black
             cell.contentView.addSubview(highlightLabel)
         } else {
-            highlightLabel = cell.contentView.viewWithTag(123) as! UILabel
+            highlightLabel = cell.contentView.viewWithTag(123) as? UILabel
         }
 
         highlightLabel.attributedText = text
@@ -127,7 +127,7 @@ class FolioReaderHighlightList: UITableViewController {
                 noteLabel.textColor = UIColor.gray
                 cell.contentView.addSubview(noteLabel)
             } else {
-                noteLabel = cell.contentView.viewWithTag(789) as! UILabel
+                noteLabel = cell.contentView.viewWithTag(789) as? UILabel
             }
             
             noteLabel.text = note
