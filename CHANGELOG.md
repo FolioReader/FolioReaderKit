@@ -1,12 +1,18 @@
 # Change Log
 
-## [Unreleased](https://github.com/FolioReader/FolioReaderKit/tree/HEAD)
+## [1.4.0](https://github.com/FolioReader/FolioReaderKit/tree/1.4.0) (2019-01-30)
+[Full Changelog](https://github.com/FolioReader/FolioReaderKit/compare/1.3.0...1.4.0)
 
-[Full Changelog](https://github.com/FolioReader/FolioReaderKit/compare/1.3.0...HEAD)
+**Merged pull requests:**
 
-**Closed issues:**
-
-- Version 1.3.0 is not available in Cocoapods [\#311](https://github.com/FolioReader/FolioReaderKit/issues/311)
+- Changed dependencies to work with iOS 12.1 and Xcode 10.1 [\#377](https://github.com/FolioReader/FolioReaderKit/pull/377) ([fantim](https://github.com/fantim))
+- Fix crash on select segment at index. Swift 4.2 [\#361](https://github.com/FolioReader/FolioReaderKit/pull/361) ([akantsevoi](https://github.com/akantsevoi))
+- Method to get current progress between 0 and 100 [\#348](https://github.com/FolioReader/FolioReaderKit/pull/348) ([prsolucoes](https://github.com/prsolucoes))
+- FolioReaderCenter.getCurrentChapterName\(\) issue, applied recursive search for toc reference. [\#342](https://github.com/FolioReader/FolioReaderKit/pull/342) ([wesleycgs](https://github.com/wesleycgs))
+- Fixed highlight and colors menu controller [\#339](https://github.com/FolioReader/FolioReaderKit/pull/339) ([wesleycgs](https://github.com/wesleycgs))
+- Add Note function [\#335](https://github.com/FolioReader/FolioReaderKit/pull/335) ([ngo275](https://github.com/ngo275))
+- Reader takes over the audio control [\#322](https://github.com/FolioReader/FolioReaderKit/pull/322) ([arthurlataks](https://github.com/arthurlataks))
+- fix problems with table rendering \#225 [\#320](https://github.com/FolioReader/FolioReaderKit/pull/320) ([christian2denker](https://github.com/christian2denker))
 
 ## [1.3.0](https://github.com/FolioReader/FolioReaderKit/tree/1.3.0) (2018-02-12)
 [Full Changelog](https://github.com/FolioReader/FolioReaderKit/compare/1.2.0...1.3.0)
