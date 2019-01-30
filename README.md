@@ -3,8 +3,6 @@
 FolioReaderKit is an ePub reader and parser framework for iOS written in Swift.
 
 ![Version](https://img.shields.io/cocoapods/v/FolioReaderKit.svg)
-![Downloads](https://img.shields.io/cocoapods/dt/FolioReaderKit.svg)
-![Apps using](https://img.shields.io/cocoapods/at/FolioReaderKit.svg)
 ![License](https://img.shields.io/cocoapods/l/FolioReaderKit.svg)
 
 ## Features
@@ -94,7 +92,7 @@ Then, follow the steps as described in Carthage's [README](https://github.com/Ca
 ## Requirements
 
 - iOS 8.0+
-- Xcode 9+
+- Xcode 10.1+
 
 ## Basic Usage
 
