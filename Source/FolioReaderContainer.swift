@@ -138,9 +138,9 @@ open class FolioReaderContainer: UIViewController {
         self.centerNavigationController?.setNavigationBarHidden(self.readerConfig.shouldHideNavigationOnTap, animated: false)
         if let _centerNavigationController = self.centerNavigationController {
             self.view.addSubview(_centerNavigationController.view)
-            self.addChildViewController(_centerNavigationController)
+            self.addChild(_centerNavigationController)
         }
-        self.centerNavigationController?.didMove(toParentViewController: self)
+        self.centerNavigationController?.didMove(toParent: self)
 
         if (self.readerConfig.hideBars == true) {
             self.readerConfig.shouldHideNavigationOnTap = false
@@ -215,9 +215,9 @@ extension FolioReaderContainer {
         let alertController = UIAlertController(
             title: "Error",
             message: message,
-            preferredStyle: UIAlertControllerStyle.alert
+            preferredStyle: UIAlertController.Style.alert
         )
-        let action = UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel) { [weak self]
+        let action = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel) { [weak self]
             (result : UIAlertAction) -> Void in
             self?.dismiss()
         }

@@ -9,7 +9,7 @@
 import UIKit
 import SafariServices
 import MenuItemKit
-import JSQWebViewController
+import JSQWebViewControllerMod42
 
 /// Protocol which is used from `FolioReaderPage`s.
 @objc public protocol FolioReaderPageDelegate: class {
@@ -226,7 +226,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         delegate?.pageDidLoad?(self)
     }
 
-    open func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+    open func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebView.NavigationType) -> Bool {
         guard
             let webView = webView as? FolioReaderWebView,
             let scheme = request.url?.scheme else {
@@ -240,7 +240,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
             guard let decoded = url.absoluteString.removingPercentEncoding else { return false }
             let index = decoded.index(decoded.startIndex, offsetBy: 12)
-            let rect = CGRectFromString(String(decoded[index...]))
+            let rect = NSCoder.cgRect(for: String(decoded[index...]))
 
             webView.createMenu(options: true)
             webView.setMenuVisible(true, andRect: rect)

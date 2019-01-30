@@ -50,8 +50,8 @@ class FolioReaderTests: QuickSpec {
 
                 do {
                     let parsedImage = try subject.parseCoverImage(epubPath)
-                    let data1 = UIImagePNGRepresentation(parsedImage)
-                    let data2 = UIImagePNGRepresentation(fromFileImage)
+                    let data1 = parsedImage.pngData()
+                    let data2 = fromFileImage.pngData()
                     expect(data1).to(equal(data2))
                 } catch {
                     fail("Error: \(error.localizedDescription)")

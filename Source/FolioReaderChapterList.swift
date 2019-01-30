@@ -35,7 +35,7 @@ class FolioReaderChapterList: UITableViewController {
         self.delegate = delegate
         self.book = book
 
-        super.init(style: UITableViewStyle.plain)
+        super.init(style: UITableView.Style.plain)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -51,7 +51,7 @@ class FolioReaderChapterList: UITableViewController {
         self.tableView.backgroundColor = self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, self.readerConfig.menuBackgroundColor)
         self.tableView.separatorColor = self.folioReader.isNight(self.readerConfig.nightModeSeparatorColor, self.readerConfig.menuSeparatorColor)
 
-        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.rowHeight = UITableView.automaticDimension
         self.tableView.estimatedRowHeight = 50
 
         // Create TOC list
