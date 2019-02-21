@@ -1,8 +1,19 @@
-module_name: FolioReaderKit
-author_name: Heberti Almeida
-author_url: https://folioreader.com
+module: FolioReaderKit
+author: Heberti Almeida
+author_url: https://twitter.com/hebertialmeida
 github_url: https://github.com/FolioReader/FolioReaderKit
+root_url: https://folioReader.github.io/FolioReaderKit/
 clean: true
-output: Documentation
+output: docs/
+theme: fullwidth
+undocumented_text: ""
+hide_documentation_coverage: true
 
-podspec: FolioReaderKit.podspec
+min_acl: public
+# exclude: ["Source/Core/Helpers/*", "Source/Core/Keychain.swift"]
+
+xcodebuild_arguments:
+    - "-project"
+    - "FolioReaderKit.xcodeproj"
+    - "-scheme"
+    - "FolioReaderKit"

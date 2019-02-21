@@ -76,7 +76,7 @@ public enum HighlightStyle: Int {
     }
 }
 
-/// Completion block
+/// :nodoc:
 public typealias Completion = (_ error: NSError?) -> ()
 
 extension Highlight {

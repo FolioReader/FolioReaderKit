@@ -1,0 +1,1251 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/EPUBCore/FRBook.swift",
+      "line": 12,
+      "symbol": "FRBook",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/EPUBCore/FRBook.swift",
+      "line": 18,
+      "symbol": "FRBook.opfResource",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/EPUBCore/FRBook.swift",
+      "line": 19,
+      "symbol": "FRBook.tocResource",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/EPUBCore/FRBook.swift",
+      "line": 20,
+      "symbol": "FRBook.uniqueIdentifier",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/EPUBCore/FRBook.swift",
+      "line": 21,
+      "symbol": "FRBook.coverImage",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/EPUBCore/FRBook.swift",
+      "line": 22,
+      "symbol": "FRBook.name",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/EPUBCore/FRBook.swift",
+      "line": 23,
+      "symbol": "FRBook.resources",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/EPUBCore/FRBook.swift",
+      "line": 24,
+      "symbol": "FRBook.tableOfContents",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/EPUBCore/FRBook.swift",
+      "line": 25,
+      "symbol": "FRBook.flatTableOfContents",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/EPUBCore/FRResource.swift",
+      "line": 11,
+      "symbol": "FRResource",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/EPUBCore/FRResource.swift",
+      "line": 17,
+      "symbol": "FRResource.href",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/EPUBCore/FRResource.swift",
+      "line": 18,
+      "symbol": "FRResource.fullHref",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/EPUBCore/FRResources.swift",
+      "line": 11,
+      "symbol": "FRResources",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/EPUBCore/FRTocReference.swift",
+      "line": 11,
+      "symbol": "FRTocReference",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/EPUBCore/FRTocReference.swift",
+      "line": 14,
+      "symbol": "FRTocReference.title",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/EPUBCore/FRTocReference.swift",
+      "line": 15,
+      "symbol": "FRTocReference.resource",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/EPUBCore/FRTocReference.swift",
+      "line": 16,
+      "symbol": "FRTocReference.fragmentID",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/EPUBCore/MediaType.swift",
+      "line": 17,
+      "symbol": "MediaType.name",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/EPUBCore/MediaType.swift",
+      "line": 18,
+      "symbol": "MediaType.defaultExtension",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/EPUBCore/MediaType.swift",
+      "line": 19,
+      "symbol": "MediaType.extensions",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/EPUBCore/MediaType.swift",
+      "line": 21,
+      "symbol": "MediaType.init(name:defaultExtension:extensions:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/Extensions.swift",
+      "line": 513,
+      "symbol": "UIAlertController.supportedInterfaceOrientations",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/Extensions.swift",
+      "line": 517,
+      "symbol": "UIAlertController.shouldAutorotate",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderAudioPlayer.swift",
+      "line": null,
+      "symbol": "FolioReaderAudioPlayer",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderAudioPlayer.swift",
+      "line": null,
+      "symbol": "FolioReaderAudioPlayer",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderAudioPlayer.swift",
+      "line": 13,
+      "symbol": "FolioReaderAudioPlayer",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderAudioPlayer.swift",
+      "line": 537,
+      "symbol": "FolioReaderAudioPlayer.speechSynthesizer(_:didCancel:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderAudioPlayer.swift",
+      "line": 541,
+      "symbol": "FolioReaderAudioPlayer.speechSynthesizer(_:didFinish:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderAudioPlayer.swift",
+      "line": 551,
+      "symbol": "FolioReaderAudioPlayer.audioPlayerDidFinishPlaying(_:successfully:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 106,
+      "symbol": "FolioReaderCenter.init(coder:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 131,
+      "symbol": "FolioReaderCenter.viewDidLoad()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 201,
+      "symbol": "FolioReaderCenter.viewWillAppear(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 211,
+      "symbol": "FolioReaderCenter.viewDidLayoutSubviews()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 431,
+      "symbol": "FolioReaderCenter.numberOfSections(in:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 435,
+      "symbol": "FolioReaderCenter.collectionView(_:numberOfItemsInSection:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 439,
+      "symbol": "FolioReaderCenter.collectionView(_:cellForItemAt:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 503,
+      "symbol": "FolioReaderCenter.collectionView(_:layout:sizeForItemAt:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 521,
+      "symbol": "FolioReaderCenter.willRotate(to:duration:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 569,
+      "symbol": "FolioReaderCenter.didRotate(from:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 593,
+      "symbol": "FolioReaderCenter.willAnimateRotation(to:duration:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 724,
+      "symbol": "FolioReaderCenter.changePageWith(page:andFragment:animated:completion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 740,
+      "symbol": "FolioReaderCenter.changePageWith(href:animated:completion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 750,
+      "symbol": "FolioReaderCenter.changePageWith(href:andAudioMarkID:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 768,
+      "symbol": "FolioReaderCenter.changePageWith(indexPath:animated:completion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 782,
+      "symbol": "FolioReaderCenter.changePageWith(href:pageItem:animated:completion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 802,
+      "symbol": "FolioReaderCenter.isLastPage()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 806,
+      "symbol": "FolioReaderCenter.changePageToNext(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 812,
+      "symbol": "FolioReaderCenter.changePageToPrevious(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 818,
+      "symbol": "FolioReaderCenter.changePageItemToNext(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 841,
+      "symbol": "FolioReaderCenter.getCurrentPageItemNumber()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 851,
+      "symbol": "FolioReaderCenter.getCurrentPageProgress()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 871,
+      "symbol": "FolioReaderCenter.changePageItemToPrevious(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 893,
+      "symbol": "FolioReaderCenter.changePageItemToLast(animated:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 919,
+      "symbol": "FolioReaderCenter.changePageItem(to:animated:completion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 1195,
+      "symbol": "FolioReaderCenter.scrollViewWillBeginDragging(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 1213,
+      "symbol": "FolioReaderCenter.scrollViewDidScroll(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 1274,
+      "symbol": "FolioReaderCenter.scrollViewDidEndDecelerating(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 1304,
+      "symbol": "FolioReaderCenter.scrollViewDidEndDragging(_:willDecelerate:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderCenter.swift",
+      "line": 1317,
+      "symbol": "FolioReaderCenter.scrollViewDidEndScrollingAnimation(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 22,
+      "symbol": "FolioReaderScrollDirection.vertical",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 23,
+      "symbol": "FolioReaderScrollDirection.horizontal",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 24,
+      "symbol": "FolioReaderScrollDirection.horizontalWithVerticalContent",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 25,
+      "symbol": "FolioReaderScrollDirection.defaultVertical",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 185,
+      "symbol": "FolioReaderConfig.localizedHighlightMenu",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 186,
+      "symbol": "FolioReaderConfig.localizedDefineMenu",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 187,
+      "symbol": "FolioReaderConfig.localizedPlayMenu",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 188,
+      "symbol": "FolioReaderConfig.localizedPauseMenu",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 189,
+      "symbol": "FolioReaderConfig.localizedFontMenuNight",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 190,
+      "symbol": "FolioReaderConfig.localizedPlayerMenuStyle",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 191,
+      "symbol": "FolioReaderConfig.localizedFontMenuDay",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 192,
+      "symbol": "FolioReaderConfig.localizedLayoutHorizontal",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 193,
+      "symbol": "FolioReaderConfig.localizedLayoutVertical",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 194,
+      "symbol": "FolioReaderConfig.localizedReaderOnePageLeft",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 195,
+      "symbol": "FolioReaderConfig.localizedReaderManyPagesLeft",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 196,
+      "symbol": "FolioReaderConfig.localizedReaderManyMinutes",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 197,
+      "symbol": "FolioReaderConfig.localizedReaderOneMinute",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 198,
+      "symbol": "FolioReaderConfig.localizedReaderLessThanOneMinute",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 199,
+      "symbol": "FolioReaderConfig.localizedShareWebLink",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 200,
+      "symbol": "FolioReaderConfig.localizedShareChapterSubject",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 201,
+      "symbol": "FolioReaderConfig.localizedShareHighlightSubject",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 202,
+      "symbol": "FolioReaderConfig.localizedShareAllExcerptsFrom",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 203,
+      "symbol": "FolioReaderConfig.localizedShareBy",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 204,
+      "symbol": "FolioReaderConfig.localizedCancel",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 205,
+      "symbol": "FolioReaderConfig.localizedShare",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 206,
+      "symbol": "FolioReaderConfig.localizedChooseExisting",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 207,
+      "symbol": "FolioReaderConfig.localizedTakePhoto",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 208,
+      "symbol": "FolioReaderConfig.localizedShareImageQuote",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 209,
+      "symbol": "FolioReaderConfig.localizedShareTextQuote",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 210,
+      "symbol": "FolioReaderConfig.localizedSave",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 211,
+      "symbol": "FolioReaderConfig.localizedHighlightNote",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderConfig.swift",
+      "line": 213,
+      "symbol": "FolioReaderConfig.init(withIdentifier:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderContainer.swift",
+      "line": 18,
+      "symbol": "FolioReaderContainer.epubPath",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderContainer.swift",
+      "line": 19,
+      "symbol": "FolioReaderContainer.unzipPath",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderContainer.swift",
+      "line": 20,
+      "symbol": "FolioReaderContainer.book",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderContainer.swift",
+      "line": 22,
+      "symbol": "FolioReaderContainer.centerNavigationController",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderContainer.swift",
+      "line": 23,
+      "symbol": "FolioReaderContainer.centerViewController",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderContainer.swift",
+      "line": 24,
+      "symbol": "FolioReaderContainer.audioPlayer",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderContainer.swift",
+      "line": 26,
+      "symbol": "FolioReaderContainer.readerConfig",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderContainer.swift",
+      "line": 27,
+      "symbol": "FolioReaderContainer.folioReader",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderContainer.swift",
+      "line": 60,
+      "symbol": "FolioReaderContainer.init(coder:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderContainer.swift",
+      "line": 113,
+      "symbol": "FolioReaderContainer.viewDidLoad()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderContainer.swift",
+      "line": 182,
+      "symbol": "FolioReaderContainer.viewDidAppear(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderContainer.swift",
+      "line": 200,
+      "symbol": "FolioReaderContainer.prefersStatusBarHidden",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderContainer.swift",
+      "line": 204,
+      "symbol": "FolioReaderContainer.preferredStatusBarUpdateAnimation",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderContainer.swift",
+      "line": 208,
+      "symbol": "FolioReaderContainer.preferredStatusBarStyle",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderFontsMenu.swift",
+      "line": 11,
+      "symbol": "FolioReaderFont",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderFontsMenu.swift",
+      "line": 12,
+      "symbol": "FolioReaderFont.andada",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderFontsMenu.swift",
+      "line": 13,
+      "symbol": "FolioReaderFont.lato",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderFontsMenu.swift",
+      "line": 14,
+      "symbol": "FolioReaderFont.lora",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderFontsMenu.swift",
+      "line": 15,
+      "symbol": "FolioReaderFont.raleway",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderFontsMenu.swift",
+      "line": 17,
+      "symbol": "FolioReaderFont.folioReaderFont(fontName:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderFontsMenu.swift",
+      "line": 29,
+      "symbol": "FolioReaderFont.cssIdentifier",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderFontsMenu.swift",
+      "line": 39,
+      "symbol": "FolioReaderFontSize",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderFontsMenu.swift",
+      "line": 40,
+      "symbol": "FolioReaderFontSize.xs",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderFontsMenu.swift",
+      "line": 41,
+      "symbol": "FolioReaderFontSize.s",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderFontsMenu.swift",
+      "line": 42,
+      "symbol": "FolioReaderFontSize.m",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderFontsMenu.swift",
+      "line": 43,
+      "symbol": "FolioReaderFontSize.l",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderFontsMenu.swift",
+      "line": 44,
+      "symbol": "FolioReaderFontSize.xl",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderFontsMenu.swift",
+      "line": 46,
+      "symbol": "FolioReaderFontSize.folioReaderFontSize(fontSizeStringRepresentation:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderFontsMenu.swift",
+      "line": 59,
+      "symbol": "FolioReaderFontSize.cssIdentifier",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderKit.swift",
+      "line": 26,
+      "symbol": "FolioReaderError",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderKit.swift",
+      "line": 27,
+      "symbol": "FolioReaderError.bookNotAvailable",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderKit.swift",
+      "line": 28,
+      "symbol": "FolioReaderError.errorInContainer",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderKit.swift",
+      "line": 29,
+      "symbol": "FolioReaderError.errorInOpf",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderKit.swift",
+      "line": 30,
+      "symbol": "FolioReaderError.authorNameNotAvailable",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderKit.swift",
+      "line": 31,
+      "symbol": "FolioReaderError.coverNotAvailable",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderKit.swift",
+      "line": 32,
+      "symbol": "FolioReaderError.invalidImage(path:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderKit.swift",
+      "line": 33,
+      "symbol": "FolioReaderError.titleNotAvailable",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderKit.swift",
+      "line": 34,
+      "symbol": "FolioReaderError.fullPathEmpty",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderKit.swift",
+      "line": 62,
+      "symbol": "MediaOverlayStyle.default",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderKit.swift",
+      "line": 63,
+      "symbol": "MediaOverlayStyle.underline",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderKit.swift",
+      "line": 64,
+      "symbol": "MediaOverlayStyle.textColor",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderKit.swift",
+      "line": 98,
+      "symbol": "FolioReader.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderKit.swift",
+      "line": 110,
+      "symbol": "FolioReader.readerContainer",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderKit.swift",
+      "line": 111,
+      "symbol": "FolioReader.readerAudioPlayer",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderKit.swift",
+      "line": 112,
+      "symbol": "FolioReader.readerCenter",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderKit.swift",
+      "line": 176,
+      "symbol": "FolioReader.register(defaults:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderKit.swift",
+      "line": 286,
+      "symbol": "FolioReader.currentMenuIndex",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderKit.swift",
+      "line": 293,
+      "symbol": "FolioReader.savedPositionForCurrentBook",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderKit.swift",
+      "line": 323,
+      "symbol": "FolioReader.getTitle(_:unzipPath:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderKit.swift",
+      "line": 327,
+      "symbol": "FolioReader.getAuthorName(_:unzipPath:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderPage.swift",
+      "line": 38,
+      "symbol": "FolioReaderPage",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderPage.swift",
+      "line": 44,
+      "symbol": "FolioReaderPage.webView",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderPage.swift",
+      "line": 67,
+      "symbol": "FolioReaderPage.init(frame:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderPage.swift",
+      "line": 76,
+      "symbol": "FolioReaderPage.setup(withReaderContainer:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderPage.swift",
+      "line": 107,
+      "symbol": "FolioReaderPage.init(coder:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderPage.swift",
+      "line": 117,
+      "symbol": "FolioReaderPage.layoutSubviews()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderPage.swift",
+      "line": 192,
+      "symbol": "FolioReaderPage.webViewDidFinishLoad(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderPage.swift",
+      "line": 228,
+      "symbol": "FolioReaderPage.webView(_:shouldStartLoadWith:navigationType:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderPage.swift",
+      "line": 359,
+      "symbol": "FolioReaderPage.gestureRecognizer(_:shouldRecognizeSimultaneouslyWith:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderPage.swift",
+      "line": 372,
+      "symbol": "FolioReaderPage.handleTapGesture(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderPage.swift",
+      "line": 488,
+      "symbol": "FolioReaderPage.canPerformAction(_:withSender:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderWebView.swift",
+      "line": 44,
+      "symbol": "FolioReaderWebView.init(coder:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderWebView.swift",
+      "line": 50,
+      "symbol": "FolioReaderWebView.canPerformAction(_:withSender:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderWebView.swift",
+      "line": 332,
+      "symbol": "FolioReaderWebView.setMenuVisible(_:animated:andRect:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/FolioReaderWebView.swift",
+      "line": 349,
+      "symbol": "FolioReaderWebView.js(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/Models/Highlight+Helper.swift",
+      "line": 16,
+      "symbol": "HighlightStyle.yellow",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/Models/Highlight+Helper.swift",
+      "line": 17,
+      "symbol": "HighlightStyle.green",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/Models/Highlight+Helper.swift",
+      "line": 18,
+      "symbol": "HighlightStyle.blue",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/Models/Highlight+Helper.swift",
+      "line": 19,
+      "symbol": "HighlightStyle.pink",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/Models/Highlight+Helper.swift",
+      "line": 20,
+      "symbol": "HighlightStyle.underline",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/Models/Highlight+Helper.swift",
+      "line": 22,
+      "symbol": "HighlightStyle.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/Models/Highlight+Helper.swift",
+      "line": 228,
+      "symbol": "Highlight.MatchingHighlight",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/Models/Highlight.swift",
+      "line": 14,
+      "symbol": "Highlight.bookId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/Models/Highlight.swift",
+      "line": 15,
+      "symbol": "Highlight.content",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/Models/Highlight.swift",
+      "line": 16,
+      "symbol": "Highlight.contentPost",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/Models/Highlight.swift",
+      "line": 17,
+      "symbol": "Highlight.contentPre",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/Models/Highlight.swift",
+      "line": 18,
+      "symbol": "Highlight.date",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/Models/Highlight.swift",
+      "line": 19,
+      "symbol": "Highlight.highlightId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/Models/Highlight.swift",
+      "line": 20,
+      "symbol": "Highlight.page",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/Models/Highlight.swift",
+      "line": 21,
+      "symbol": "Highlight.type",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/Models/Highlight.swift",
+      "line": 22,
+      "symbol": "Highlight.startOffset",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/Models/Highlight.swift",
+      "line": 23,
+      "symbol": "Highlight.endOffset",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/Models/Highlight.swift",
+      "line": 24,
+      "symbol": "Highlight.noteForHighlight",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/QuoteImage.swift",
+      "line": 15,
+      "symbol": "QuoteImage.image",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/QuoteImage.swift",
+      "line": 16,
+      "symbol": "QuoteImage.alpha",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/QuoteImage.swift",
+      "line": 17,
+      "symbol": "QuoteImage.textColor",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit/Source/QuoteImage.swift",
+      "line": 18,
+      "symbol": "QuoteImage.backgroundColor",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/hebertialmeida/Projetos/Open Source/FolioReaderKit"
+}

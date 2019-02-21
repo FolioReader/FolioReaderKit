@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>FolioReaderConfig Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Class/FolioReaderConfig" class="dashAnchor"></a>
+
+    <a title="FolioReaderConfig Class Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../index.html">
+          FolioReaderKit Docs
+        </a>
+        
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/FolioReader/FolioReaderKit">
+            <img class="header-icon" src="../img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="dash-feed://https%3A%2F%2FfolioReader%2Egithub%2Eio%2FFolioReaderKit%2Fdocsets%2FFolioReaderKit%2Exml">
+            <img class="header-icon" src="../img/dash.png"/>
+            Install in Dash
+          </a>
+        </p>
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../index.html">FolioReaderKit Reference</a>
+      <img class="carat" src="../img/carat.png" />
+      FolioReaderConfig Class Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/FRBook.html">FRBook</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/FRResource.html">FRResource</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes.html#/c:@M@FolioReaderKit@objc(cs)FRResources">FRResources</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/FRTocReference.html">FRTocReference</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/FolioReader.html">FolioReader</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/FolioReaderAudioPlayer.html">FolioReaderAudioPlayer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/FolioReaderCenter.html">FolioReaderCenter</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/FolioReaderConfig.html">FolioReaderConfig</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/FolioReaderContainer.html">FolioReaderContainer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/FolioReaderPage.html">FolioReaderPage</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/FolioReaderWebView.html">FolioReaderWebView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Highlight.html">Highlight</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Highlight.html#/s:14FolioReaderKit9HighlightC08MatchingD0V">– MatchingHighlight</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/FolioReaderError.html">FolioReaderError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/FolioReaderFont.html">FolioReaderFont</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/FolioReaderFontSize.html">FolioReaderFontSize</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/FolioReaderScrollDirection.html">FolioReaderScrollDirection</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/HighlightStyle.html">HighlightStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/MediaOverlayStyle.html">MediaOverlayStyle</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/UIAlertController.html">UIAlertController</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/FolioReaderCenterDelegate.html">FolioReaderCenterDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/FolioReaderDelegate.html">FolioReaderDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/FolioReaderPageDelegate.html">FolioReaderPageDelegate</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ClassBasedOnClickListener.html">ClassBasedOnClickListener</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/MediaType.html">MediaType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/QuoteImage.html">QuoteImage</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            <h1>FolioReaderConfig</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">FolioReaderConfig</span> <span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+
+                </div>
+              </div>
+            <p>Defines the Reader custom configuration</p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/ClassBasedOnClickListener"></a>
+                <a name="//apple_ref/swift/Section/ClassBasedOnClickListener" class="dashAnchor"></a>
+                <a href="#/ClassBasedOnClickListener">
+                  <h3 class="section-name">ClassBasedOnClickListener</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC26classBasedOnClickListenersSayAA05ClassfgH8ListenerVGvp"></a>
+                    <a name="//apple_ref/swift/Property/classBasedOnClickListeners" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC26classBasedOnClickListenersSayAA05ClassfgH8ListenerVGvp">classBasedOnClickListeners</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Array of <code><a href="../Structs/ClassBasedOnClickListener.html">ClassBasedOnClickListener</a></code> objects. A <code><a href="../Structs/ClassBasedOnClickListener.html">ClassBasedOnClickListener</a></code> takes a closure which is performed if a given html <code>class</code> is clicked. The closure will reveice the content of the specified parameter.</p>
+
+<p>Eg. A ClassBasedOnClickListener with the className <code>quote</code> and parameterName <code>id</code> with the given epub html content <code>&lt;section class=&quot;quote&quot; id=&quot;12345&quot;&gt;</code> would call the given closure on a click on this section with the String <code>12345</code> as parameter.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">classBasedOnClickListeners</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/ClassBasedOnClickListener.html">ClassBasedOnClickListener</a></span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Colors"></a>
+                <a name="//apple_ref/swift/Section/Colors" class="dashAnchor"></a>
+                <a href="#/Colors">
+                  <h3 class="section-name">Colors</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC9tintColorSo7UIColorCvp"></a>
+                    <a name="//apple_ref/swift/Property/tintColor" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC9tintColorSo7UIColorCvp">tintColor</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Base header custom TintColor</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">tintColor</span><span class="p">:</span> <span class="kt">UIColor</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC19menuBackgroundColorSo7UIColorCvp"></a>
+                    <a name="//apple_ref/swift/Property/menuBackgroundColor" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC19menuBackgroundColorSo7UIColorCvp">menuBackgroundColor</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Menu background color</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">menuBackgroundColor</span><span class="p">:</span> <span class="kt">UIColor</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC18menuSeparatorColorSo7UIColorCvp"></a>
+                    <a name="//apple_ref/swift/Property/menuSeparatorColor" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC18menuSeparatorColorSo7UIColorCvp">menuSeparatorColor</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Menu separator Color</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">menuSeparatorColor</span><span class="p">:</span> <span class="kt">UIColor</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC13menuTextColorSo7UIColorCvp"></a>
+                    <a name="//apple_ref/swift/Property/menuTextColor" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC13menuTextColorSo7UIColorCvp">menuTextColor</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Menu text color</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">menuTextColor</span><span class="p">:</span> <span class="kt">UIColor</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC19nightModeBackgroundSo7UIColorCvp"></a>
+                    <a name="//apple_ref/swift/Property/nightModeBackground" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC19nightModeBackgroundSo7UIColorCvp">nightModeBackground</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Night mode background color</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">nightModeBackground</span><span class="p">:</span> <span class="kt">UIColor</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC23nightModeMenuBackgroundSo7UIColorCvp"></a>
+                    <a name="//apple_ref/swift/Property/nightModeMenuBackground" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC23nightModeMenuBackgroundSo7UIColorCvp">nightModeMenuBackground</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Night mode menu background color</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">nightModeMenuBackground</span><span class="p">:</span> <span class="kt">UIColor</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC23nightModeSeparatorColorSo7UIColorCvp"></a>
+                    <a name="//apple_ref/swift/Property/nightModeSeparatorColor" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC23nightModeSeparatorColorSo7UIColorCvp">nightModeSeparatorColor</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Night mode separator color</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">nightModeSeparatorColor</span><span class="p">:</span> <span class="kt">UIColor</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC17mediaOverlayColorSo7UIColorCSgvp"></a>
+                    <a name="//apple_ref/swift/Property/mediaOverlayColor" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC17mediaOverlayColorSo7UIColorCSgvp">mediaOverlayColor</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Media overlay or TTS selection color</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">lazy</span> <span class="k">var</span> <span class="nv">mediaOverlayColor</span><span class="p">:</span> <span class="kt">UIColor</span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Custom%20actions"></a>
+                <a name="//apple_ref/swift/Section/Custom actions" class="dashAnchor"></a>
+                <a href="#/Custom%20actions">
+                  <h3 class="section-name">Custom actions</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC8hideBarsSbvp"></a>
+                    <a name="//apple_ref/swift/Property/hideBars" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC8hideBarsSbvp">hideBars</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>hide the navigation bar and the bottom status view</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">hideBars</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC15scrollDirectionAA0ab6ScrollF0Ovp"></a>
+                    <a name="//apple_ref/swift/Property/scrollDirection" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC15scrollDirectionAA0ab6ScrollF0Ovp">scrollDirection</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If <code><a href="../Classes/FolioReaderConfig.html#/s:14FolioReaderKit0aB6ConfigC24canChangeScrollDirectionSbvp">canChangeScrollDirection</a></code> is <code>true</code> it will be overrided by user&rsquo;s option.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">scrollDirection</span><span class="p">:</span> <span class="kt"><a href="../Enums/FolioReaderScrollDirection.html">FolioReaderScrollDirection</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC24canChangeScrollDirectionSbvp"></a>
+                    <a name="//apple_ref/swift/Property/canChangeScrollDirection" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC24canChangeScrollDirectionSbvp">canChangeScrollDirection</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Enable or disable hability to user change scroll direction on menu.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">canChangeScrollDirection</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC25shouldHideNavigationOnTapSbvp"></a>
+                    <a name="//apple_ref/swift/Property/shouldHideNavigationOnTap" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC25shouldHideNavigationOnTapSbvp">shouldHideNavigationOnTap</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Should hide navigation bar on user tap</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">shouldHideNavigationOnTap</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC12allowSharingSbvp"></a>
+                    <a name="//apple_ref/swift/Property/allowSharing" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC12allowSharingSbvp">allowSharing</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allow sharing option, if <code>false</code> will hide all sharing icons and options</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">allowSharing</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC9enableTTSSbvp"></a>
+                    <a name="//apple_ref/swift/Property/enableTTS" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC9enableTTSSbvp">enableTTS</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Enable TTS (Text To Speech)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">enableTTS</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC12displayTitleSbvp"></a>
+                    <a name="//apple_ref/swift/Property/displayTitle" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC12displayTitleSbvp">displayTitle</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Display book title in navbar</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">displayTitle</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC17hidePageIndicatorSbvp"></a>
+                    <a name="//apple_ref/swift/Property/hidePageIndicator" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC17hidePageIndicatorSbvp">hidePageIndicator</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Hide the page indicator</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">hidePageIndicator</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC31loadSavedPositionForCurrentBookSbvp"></a>
+                    <a name="//apple_ref/swift/Property/loadSavedPositionForCurrentBook" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC31loadSavedPositionForCurrentBookSbvp">loadSavedPositionForCurrentBook</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Go to saved position when open a book</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">loadSavedPositionForCurrentBook</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Quote%20image%20share"></a>
+                <a name="//apple_ref/swift/Section/Quote image share" class="dashAnchor"></a>
+                <a href="#/Quote%20image%20share">
+                  <h3 class="section-name">Quote image share</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC20quoteCustomLogoImageSo7UIImageCSgvp"></a>
+                    <a name="//apple_ref/swift/Property/quoteCustomLogoImage" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC20quoteCustomLogoImageSo7UIImageCSgvp">quoteCustomLogoImage</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Custom Quote logo</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">quoteCustomLogoImage</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC22quoteCustomBackgroundsSayAA10QuoteImageVGvp"></a>
+                    <a name="//apple_ref/swift/Property/quoteCustomBackgrounds" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC22quoteCustomBackgroundsSayAA10QuoteImageVGvp">quoteCustomBackgrounds</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Add custom backgrounds and font colors to Quote Images</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">quoteCustomBackgrounds</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/QuoteImage.html">QuoteImage</a></span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC31quotePreserveDefaultBackgroundsSbvp"></a>
+                    <a name="//apple_ref/swift/Property/quotePreserveDefaultBackgrounds" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC31quotePreserveDefaultBackgroundsSbvp">quotePreserveDefaultBackgrounds</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Enable or disable default Quote Image backgrounds</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">quotePreserveDefaultBackgrounds</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Realm"></a>
+                <a name="//apple_ref/swift/Section/Realm" class="dashAnchor"></a>
+                <a href="#/Realm">
+                  <h3 class="section-name">Realm</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC18realmConfiguration10RealmSwift0G0C0F0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/realmConfiguration" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC18realmConfiguration10RealmSwift0G0C0F0Vvp">realmConfiguration</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Realm configuration for storing highlights</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">realmConfiguration</span><span class="p">:</span> <span class="kt">Realm</span><span class="o">.</span><span class="kt">Configuration</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Localized%20strings"></a>
+                <a name="//apple_ref/swift/Section/Localized strings" class="dashAnchor"></a>
+                <a href="#/Localized%20strings">
+                  <h3 class="section-name">Localized strings</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC24localizedHighlightsTitleSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedHighlightsTitle" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC24localizedHighlightsTitleSSvp">localizedHighlightsTitle</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Localizes Highlight title</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedHighlightsTitle</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC22localizedContentsTitleSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedContentsTitle" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC22localizedContentsTitleSSvp">localizedContentsTitle</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Localizes Content title</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedContentsTitle</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC03useB14MenuControllerSbvp"></a>
+                    <a name="//apple_ref/swift/Property/useReaderMenuController" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC03useB14MenuControllerSbvp">useReaderMenuController</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Use the readers <code>UIMenuController</code> which enables the highlighting etc. The default is <code>true</code>. If set to false it&rsquo;s possible to modify the shared <code>UIMenuController</code> for yourself. Note: This doesn&rsquo;t disable the text selection in the web view.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">useReaderMenuController</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC10identifierSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/identifier" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC10identifierSSSgvp">identifier</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Used to distinguish between multiple or different reader instances. The content of the user defaults (font settings etc.) depends on this identifier. The default is <code>nil</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">identifier</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC29localizedHighlightsDateFormatSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedHighlightsDateFormat" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC29localizedHighlightsDateFormatSSvp">localizedHighlightsDateFormat</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Localizes Highlight date format. This is a <code>dateFormat</code> from <code>NSDateFormatter</code>, so be careful 🤔</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedHighlightsDateFormat</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC22localizedHighlightMenuSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedHighlightMenu" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC22localizedHighlightMenuSSvp">localizedHighlightMenu</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedHighlightMenu</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC19localizedDefineMenuSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedDefineMenu" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC19localizedDefineMenuSSvp">localizedDefineMenu</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedDefineMenu</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC17localizedPlayMenuSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedPlayMenu" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC17localizedPlayMenuSSvp">localizedPlayMenu</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedPlayMenu</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC18localizedPauseMenuSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedPauseMenu" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC18localizedPauseMenuSSvp">localizedPauseMenu</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedPauseMenu</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC22localizedFontMenuNightSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedFontMenuNight" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC22localizedFontMenuNightSSvp">localizedFontMenuNight</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedFontMenuNight</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC24localizedPlayerMenuStyleSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedPlayerMenuStyle" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC24localizedPlayerMenuStyleSSvp">localizedPlayerMenuStyle</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedPlayerMenuStyle</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC20localizedFontMenuDaySSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedFontMenuDay" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC20localizedFontMenuDaySSvp">localizedFontMenuDay</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedFontMenuDay</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC25localizedLayoutHorizontalSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedLayoutHorizontal" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC25localizedLayoutHorizontalSSvp">localizedLayoutHorizontal</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedLayoutHorizontal</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC23localizedLayoutVerticalSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedLayoutVertical" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC23localizedLayoutVerticalSSvp">localizedLayoutVertical</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedLayoutVertical</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC09localizedB11OnePageLeftSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedReaderOnePageLeft" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC09localizedB11OnePageLeftSSvp">localizedReaderOnePageLeft</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedReaderOnePageLeft</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC09localizedB13ManyPagesLeftSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedReaderManyPagesLeft" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC09localizedB13ManyPagesLeftSSvp">localizedReaderManyPagesLeft</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedReaderManyPagesLeft</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC09localizedB11ManyMinutesSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedReaderManyMinutes" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC09localizedB11ManyMinutesSSvp">localizedReaderManyMinutes</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedReaderManyMinutes</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC09localizedB9OneMinuteSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedReaderOneMinute" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC09localizedB9OneMinuteSSvp">localizedReaderOneMinute</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedReaderOneMinute</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC09localizedB17LessThanOneMinuteSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedReaderLessThanOneMinute" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC09localizedB17LessThanOneMinuteSSvp">localizedReaderLessThanOneMinute</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedReaderLessThanOneMinute</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC21localizedShareWebLink10Foundation3URLVSgvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedShareWebLink" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC21localizedShareWebLink10Foundation3URLVSgvp">localizedShareWebLink</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedShareWebLink</span><span class="p">:</span> <span class="kt">URL</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC28localizedShareChapterSubjectSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedShareChapterSubject" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC28localizedShareChapterSubjectSSvp">localizedShareChapterSubject</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedShareChapterSubject</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC30localizedShareHighlightSubjectSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedShareHighlightSubject" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC30localizedShareHighlightSubjectSSvp">localizedShareHighlightSubject</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedShareHighlightSubject</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC29localizedShareAllExcerptsFromSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedShareAllExcerptsFrom" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC29localizedShareAllExcerptsFromSSvp">localizedShareAllExcerptsFrom</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedShareAllExcerptsFrom</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC16localizedShareBySSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedShareBy" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC16localizedShareBySSvp">localizedShareBy</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedShareBy</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC15localizedCancelSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedCancel" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC15localizedCancelSSvp">localizedCancel</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedCancel</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC14localizedShareSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedShare" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC14localizedShareSSvp">localizedShare</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedShare</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC23localizedChooseExistingSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedChooseExisting" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC23localizedChooseExistingSSvp">localizedChooseExisting</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedChooseExisting</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC18localizedTakePhotoSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedTakePhoto" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC18localizedTakePhotoSSvp">localizedTakePhoto</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedTakePhoto</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC24localizedShareImageQuoteSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedShareImageQuote" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC24localizedShareImageQuoteSSvp">localizedShareImageQuote</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedShareImageQuote</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC23localizedShareTextQuoteSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedShareTextQuote" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC23localizedShareTextQuoteSSvp">localizedShareTextQuote</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedShareTextQuote</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC13localizedSaveSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedSave" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC13localizedSaveSSvp">localizedSave</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedSave</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC22localizedHighlightNoteSSvp"></a>
+                    <a name="//apple_ref/swift/Property/localizedHighlightNote" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC22localizedHighlightNoteSSvp">localizedHighlightNote</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">localizedHighlightNote</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14FolioReaderKit0aB6ConfigC14withIdentifierACSS_tcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(withIdentifier:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14FolioReaderKit0aB6ConfigC14withIdentifierACSS_tcfc">init(withIdentifier:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="n">convenience</span> <span class="nf">init</span><span class="p">(</span><span class="n">withIdentifier</span> <span class="nv">identifier</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2019 <a class="link" href="https://twitter.com/hebertialmeida" target="_blank" rel="external">Heberti Almeida</a>. All rights reserved. (Last updated: 2019-02-21)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>
