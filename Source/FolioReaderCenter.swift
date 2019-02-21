@@ -1197,6 +1197,10 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         clearRecentlyScrolled()
         recentlyScrolled = true
         pointNow = scrollView.contentOffset
+        
+        if (scrollView is UICollectionView) {
+            scrollView.isUserInteractionEnabled = false
+        }
 
         if let currentPage = currentPage {
             currentPage.webView?.createMenu(options: true)
@@ -1269,6 +1273,10 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
     open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         self.isScrolling = false
+        
+        if (scrollView is UICollectionView) {
+            scrollView.isUserInteractionEnabled = true
+        }
 
         // Perform the page after a short delay as the collection view hasn't completed it's transition if this method is called (the index paths aren't right during fast scrolls).
         delay(0.2, closure: { [weak self] in
