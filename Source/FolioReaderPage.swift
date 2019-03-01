@@ -37,7 +37,7 @@ import MenuItemKit
 
 open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate {
     weak var delegate: FolioReaderPageDelegate?
-    weak var readerContainer: FolioReaderContainer?
+    var readerContainer: FolioReaderContainer?
 
     /// The index of the current page. Note: The index start at 1!
     open var pageNumber: Int!
