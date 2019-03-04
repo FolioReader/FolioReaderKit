@@ -190,7 +190,7 @@ class FolioReaderHighlightList: UITableViewController {
 
             if (highlight.page == self.folioReader.readerCenter?.currentPageNumber),
                 let page = self.folioReader.readerCenter?.currentPage {
-                Highlight.removeFromHTMLById(withinPage: page, highlightId: highlight.highlightId) // Remove from HTML
+                Highlight.removeFromHTMLById(withinPage: page, highlightId: highlight.highlightId) { _ in } // Remove from HTML
             }
 
             highlight.remove(withConfiguration: self.readerConfig) // Remove from Database
