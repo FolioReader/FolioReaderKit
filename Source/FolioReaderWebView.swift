@@ -33,12 +33,7 @@ open class FolioReaderWebView: WKWebView {
         guard let readerContainer = readerContainer else { return FolioReader() }
         return readerContainer.folioReader
     }
-
-//    override init(frame: CGRect) {
-//        fatalError("use init(frame:readerConfig:book:) instead.")
-//    }
     
-
     init(frame: CGRect, readerContainer: FolioReaderContainer) {
         self.readerContainer = readerContainer
         
