@@ -42,7 +42,8 @@ class ViewController: UIViewController {
 //        config.menuBackgroundColor = UIColor.lightGrayColor()
 //        config.hidePageIndicator = true
 //        config.realmConfiguration = Realm.Configuration(fileURL: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("highlights.realm"))
-
+//        config.twoColumnsMode = .alwaysEnabled
+        
         // Custom sharing quote background
         config.quoteCustomBackgrounds = []
         if let image = UIImage(named: "demo-bg") {
