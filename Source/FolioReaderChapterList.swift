@@ -61,12 +61,12 @@ class FolioReaderChapterList: UITableViewController {
         DispatchQueue.main.async {
           
             if
-              let currentPageNumber = self.folioReader.readerCenter?.currentPageNumber,
-              let reference = self.book.spine.spineReferences[safe: currentPageNumber - 1],
-              let index = self.tocItems.firstIndex(where: { $0.resource == reference.resource }) {
+                let currentPageNumber = self.folioReader.readerCenter?.currentPageNumber,
+                let reference = self.book.spine.spineReferences[safe: currentPageNumber - 1],
+                let index = self.tocItems.firstIndex(where: { $0.resource == reference.resource }) {
               
-                let indexPath = IndexPath(row: index, section: 0)
-                self.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
+                  let indexPath = IndexPath(row: index, section: 0)
+                  self.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
             }
         }
     }
