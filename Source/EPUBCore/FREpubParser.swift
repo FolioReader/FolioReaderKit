@@ -8,13 +8,9 @@
 
 import UIKit
 import AEXML
-#if COCOAPODS
-import SSZipArchive
-#else
-import ZipArchive
-#endif
+import Zip
 
-class FREpubParser: NSObject, SSZipArchiveDelegate {
+class FREpubParser: NSObject {
 
     let book = FRBook()
     private var resourcesBasePath = ""
@@ -103,7 +99,9 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         let needsUnzip = !fileManager.fileExists(atPath: bookBasePath, isDirectory:&isDir) || !isDir.boolValue
 
         if needsUnzip {
-            SSZipArchive.unzipFile(atPath: withEpubPath, toDestination: bookBasePath, delegate: self)
+            try Zip.unzipFile(NSURL.fileURL(withPath: withEpubPath), destination: NSURL.fileURL(withPath: bookBasePath), overwrite: true, password: nil, progress: { (progress) -> () in
+                print(progress)
+            }) // Unzip
         }
 
         // Skip from backup this folder
@@ -480,13 +478,5 @@ class FREpubParser: NSObject, SSZipArchiveDelegate {
         var resourceValues = URLResourceValues()
         resourceValues.isExcludedFromBackup = true
         try urlToExclude.setResourceValues(resourceValues)
-    }
-
-    // MARK: - SSZipArchive delegate
-
-    func zipArchiveWillUnzipArchive(atPath path: String, zipInfo: unz_global_info) {
-        guard shouldRemoveEpub else { return }
-        guard let epubPathToRemove = epubPathToRemove else { return }
-        try? FileManager.default.removeItem(atPath: epubPathToRemove)
     }
 }

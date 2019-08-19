@@ -85,7 +85,7 @@ class FolioReaderChapterList: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: kReuseCellIdentifier, for: indexPath) as! FolioReaderChapterListCell
 
         cell.setup(withConfiguration: self.readerConfig)
-        let tocReference = tocItems[indexPath.row]
+        let tocReference = tocItems[(indexPath as NSIndexPath).row]
         let isSection = tocReference.children.count > 0
 
         cell.indexLabel?.text = tocReference.title.trimmingCharacters(in: .whitespacesAndNewlines)
