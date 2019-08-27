@@ -652,3 +652,22 @@ var onClassBasedListenerClick = function(schemeName, attributeContent) {
 	// Set the custom link URL to the event
 	window.location = schemeName + "://" + attributeContent + positionParameterString;
 }
+
+
+function getReadingPositionOffset(usingId, value, isHorizontal) {
+    var elm;
+    console.log(new XMLSerializer().serializeToString(document));
+    var elements;
+    elements = document.getElementsByTagName("p");
+    elm = elements[value];
+    console.log(new XMLSerializer().serializeToString(elements));
+    return getElementOffset(elm, isHorizontal);
+}
+
+// Get Element offset in the page
+var getElementOffset = function(target, horizontal) {
+    if (horizontal) {
+        return document.body.clientWidth * Math.floor(target.offsetTop / window.innerHeight);
+    }
+    return target.offsetTop;
+}

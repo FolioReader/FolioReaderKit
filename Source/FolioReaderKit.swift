@@ -290,18 +290,32 @@ extension FolioReader {
         }
     }
 
-    open var savedPositionForCurrentBook: [String: Any]? {
+    open var savedPositionForCurrentBook: CFI? {
         get {
-            guard let bookId = self.readerContainer?.book.name else {
-                return nil
-            }
-            return self.defaults.value(forKey: bookId) as? [String : Any]
+            return EpubCFI.parse(cfi: "#epubcfi(/6/12/4/100)")
+            // TODO: Uncomment below to get CFI from userdefaults
+//            guard let bookId = self.readerContainer?.book.name,
+//                let json = self.defaults.value(forKey: bookId) as? Data else {
+//                return nil
+//            }
+//            do {
+//                let cfi = try JSONDecoder().decode(CFI.self, from: json)
+//                return cfi
+//            } catch {
+//                print("decoding CFI failed")
+//                return nil
+//            }
         }
         set {
             guard let bookId = self.readerContainer?.book.name else {
                 return
             }
-            self.defaults.set(newValue, forKey: bookId)
+            do {
+                let json = try JSONEncoder().encode(newValue)
+                self.defaults.set(json, forKey: bookId)
+            } catch {
+                print("encoding CFI failed")
+            }
         }
     }
 }
@@ -343,13 +357,14 @@ extension FolioReader {
             return
         }
 
-        let position = [
-            "pageNumber": (self.readerCenter?.currentPageNumber ?? 0),
-            "pageOffsetX": webView.scrollView.contentOffset.x,
-            "pageOffsetY": webView.scrollView.contentOffset.y
-            ] as [String : Any]
-
-        self.savedPositionForCurrentBook = position
+        // TODO: fix this using EPUBCFI
+//        let position = [
+//            "pageNumber": (self.readerCenter?.currentPageNumber ?? 0),
+//            "pageOffsetX": webView.scrollView.contentOffset.x,
+//            "pageOffsetY": webView.scrollView.contentOffset.y
+//            ] as [String : Any]
+//
+//        self.savedPositionForCurrentBook = position
     }
 
     /// Closes and save the reader current instance.

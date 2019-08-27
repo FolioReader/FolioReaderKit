@@ -294,21 +294,17 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     func reloadData() {
-        self.loadingView.stopAnimating()
-        self.totalPages = book.spine.spineReferences.count
+        loadingView.stopAnimating()
+        totalPages = book.spine.spineReferences.count
 
-        self.collectionView.reloadData()
-        self.configureNavBarButtons()
-        self.setCollectionViewProgressiveDirection()
+        collectionView.reloadData()
+        configureNavBarButtons()
+        setCollectionViewProgressiveDirection()
 
-        if self.readerConfig.loadSavedPositionForCurrentBook {
-            guard let position = folioReader.savedPositionForCurrentBook, let pageNumber = position["pageNumber"] as? Int, pageNumber > 0 else {
-                self.currentPageNumber = 1
-                return
-            }
-
-            self.changePageWith(page: pageNumber)
-            self.currentPageNumber = pageNumber
+        if readerConfig.loadSavedPositionForCurrentBook, let cfi = folioReader.savedPositionForCurrentBook {
+            let pageNumber = cfi.spine
+            changePageWith(page: pageNumber)
+            currentPageNumber = pageNumber
         }
     }
 
@@ -1404,24 +1400,32 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 extension FolioReaderCenter: FolioReaderPageDelegate {
 
     public func pageDidLoad(_ page: FolioReaderPage) {
-        if self.readerConfig.loadSavedPositionForCurrentBook, let position = folioReader.savedPositionForCurrentBook {
-            let pageNumber = position["pageNumber"] as? Int
-            let offset = self.readerConfig.isDirection(position["pageOffsetY"], position["pageOffsetX"], position["pageOffsetY"]) as? CGFloat
-            let pageOffset = offset
-
-            if isFirstLoad {
-                updateCurrentPage(page)
-                isFirstLoad = false
-
-                if (self.currentPageNumber == pageNumber && pageOffset > 0) {
-                    page.scrollPageToOffset(pageOffset!, animated: false)
-                }
-            } else if (self.isScrolling == false && folioReader.needsRTLChange == true) {
-                page.scrollPageToBottom()
-            }
-        } else if isFirstLoad {
+        if self.readerConfig.loadSavedPositionForCurrentBook, let cfi = folioReader.savedPositionForCurrentBook {
+//            let pageNumber = position["pageNumber"] as? Int
+//            let offset = self.readerConfig.isDirection(position["pageOffsetY"], position["pageOffsetX"], position["pageOffsetY"]) as? CGFloat
+//            let pageOffset = offset
+//
+//            if isFirstLoad {
+//                updateCurrentPage(page)
+//                isFirstLoad = false
+//
+//                if (self.currentPageNumber == pageNumber && pageOffset > 0) {
+//                    page.scrollPageToOffset(pageOffset!, animated: false)
+//                }
+//            } else if (self.isScrolling == false && folioReader.needsRTLChange == true) {
+//                page.scrollPageToBottom()
+//            }
+//        } else if isFirstLoad {
+//            updateCurrentPage(page)
+//            isFirstLoad = false
+            
+            
+            // TODO: temporary override isFirstLoad experience
             updateCurrentPage(page)
-            isFirstLoad = false
+            let usingId = false
+            if let pageOffset = page.getReadingPositionOffset(usingId: usingId, value: cfi.paragraph) {
+                page.scrollPageToOffset(pageOffset, animated: false)
+            }
         }
 
         // Go to fragment if needed
