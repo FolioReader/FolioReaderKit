@@ -161,6 +161,10 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             collectionView.contentInsetAdjustmentBehavior = .never
         }
 
+        if #available(iOS 11.0, *) {
+            collectionView.contentInsetAdjustmentBehavior = .never
+        }
+
         // Activity Indicator
         self.activityIndicator.style = .gray
         self.activityIndicator.hidesWhenStopped = true
@@ -301,15 +305,16 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         self.configureNavBarButtons()
         self.setCollectionViewProgressiveDirection()
 
-        if self.readerConfig.loadSavedPositionForCurrentBook {
-            guard let position = folioReader.savedPositionForCurrentBook, let pageNumber = position["pageNumber"] as? Int, pageNumber > 0 else {
-                self.currentPageNumber = 1
+        guard readerConfig.loadSavedPositionForCurrentBook,
+            let position = folioReader.savedPositionForCurrentBook,
+            let chapterHref = position["chapterHref"] as? String else {
+                currentPageNumber = 1
                 return
-            }
-
-            self.changePageWith(page: pageNumber)
-            self.currentPageNumber = pageNumber
         }
+
+        let pageNumber = findPageByHref(chapterHref) + 1
+        changePageWith(page: pageNumber)
+        currentPageNumber = pageNumber
     }
 
     // MARK: Change page progressive direction
@@ -1418,19 +1423,19 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 extension FolioReaderCenter: FolioReaderPageDelegate {
 
     public func pageDidLoad(_ page: FolioReaderPage) {
-        if self.readerConfig.loadSavedPositionForCurrentBook, let position = folioReader.savedPositionForCurrentBook {
-            let pageNumber = position["pageNumber"] as? Int
-            let offset = self.readerConfig.isDirection(position["pageOffsetY"], position["pageOffsetX"], position["pageOffsetY"]) as? CGFloat
-            let pageOffset = offset
+        if readerConfig.loadSavedPositionForCurrentBook, let position = folioReader.savedPositionForCurrentBook {
+            guard let chapterHref = position["chapterHref"] as? String else { return }
+            guard let value = position["value"] as? Int else { return }
+            guard let usingId = position["usingId"] as? Bool else { return }
 
             if isFirstLoad {
                 updateCurrentPage(page)
                 isFirstLoad = false
 
-                if (self.currentPageNumber == pageNumber && pageOffset > 0) {
-                    page.scrollPageToOffset(pageOffset!, animated: false)
+                if currentPageNumber == findPageByHref(chapterHref) + 1, let pageOffset = page.getReadingPositionOffset(usingId: usingId, value: value) {
+                    page.scrollPageToOffset(pageOffset, animated: false)
                 }
-            } else if (self.isScrolling == false && folioReader.needsRTLChange == true) {
+            } else if !isScrolling && folioReader.needsRTLChange {
                 page.scrollPageToBottom()
             }
         } else if isFirstLoad {

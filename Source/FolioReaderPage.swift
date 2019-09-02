@@ -467,6 +467,22 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         return CGFloat(0)
     }
 
+
+    /// Get reading position offset
+    ///
+    /// - Parameters:
+    ///   - usingId: will remove this....
+    ///   - value: The position of <p> tag
+    /// - Returns: Offset position to scroll to
+    func getReadingPositionOffset(usingId: Bool, value: Int) -> CGFloat? {
+        let horizontal = readerConfig.scrollDirection == .horizontal
+
+        guard let strOffset = webView?.js("getReadingPositionOffset(\(usingId.description), \(value), \(horizontal.description))"), let number = NumberFormatter().number(from: strOffset) else {
+            return nil
+        }
+        return CGFloat(number)
+    }
+
     // MARK: Mark ID
 
     /**
