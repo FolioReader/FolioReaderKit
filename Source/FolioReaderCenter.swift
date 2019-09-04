@@ -301,11 +301,11 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         configureNavBarButtons()
         setCollectionViewProgressiveDirection()
 
-        if readerConfig.loadSavedPositionForCurrentBook, let cfi = folioReader.savedPositionForCurrentBook {
-            let pageNumber = cfi.spine
-            changePageWith(page: pageNumber)
-            currentPageNumber = pageNumber
-        }
+        guard readerConfig.loadSavedPositionForCurrentBook,
+            let cfi = folioReader.savedPositionForCurrentBook, cfi.nodes.count > 2 else { return }
+        let pageNumber = cfi.nodes[1].index / 2
+        changePageWith(page: pageNumber)
+        currentPageNumber = pageNumber
     }
 
     // MARK: Change page progressive direction
@@ -1240,6 +1240,14 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
                 if (pageIndicatorView?.currentPage != webViewPage) {
                     pageIndicatorView?.currentPage = webViewPage
+                    
+                    if let currentPosition = currentPage?.webView?.js("getCurrentPosition()"),
+                        let cfi = EpubCFI.generate(chapterIndex: currentPageNumber - 1, odmStr: currentPosition) {
+                        
+                        // TODO: use local DB and call API to store the CFI data
+                        folioReader.savedPositionForCurrentBook = cfi
+                        print(cfi.standardizedFormat)
+                    }
                 }
                 
                 self.delegate?.pageItemChanged?(webViewPage)
@@ -1401,31 +1409,22 @@ extension FolioReaderCenter: FolioReaderPageDelegate {
 
     public func pageDidLoad(_ page: FolioReaderPage) {
         if self.readerConfig.loadSavedPositionForCurrentBook, let cfi = folioReader.savedPositionForCurrentBook {
-//            let pageNumber = position["pageNumber"] as? Int
-//            let offset = self.readerConfig.isDirection(position["pageOffsetY"], position["pageOffsetX"], position["pageOffsetY"]) as? CGFloat
-//            let pageOffset = offset
-//
-//            if isFirstLoad {
-//                updateCurrentPage(page)
-//                isFirstLoad = false
-//
-//                if (self.currentPageNumber == pageNumber && pageOffset > 0) {
-//                    page.scrollPageToOffset(pageOffset!, animated: false)
-//                }
-//            } else if (self.isScrolling == false && folioReader.needsRTLChange == true) {
-//                page.scrollPageToBottom()
-//            }
-//        } else if isFirstLoad {
-//            updateCurrentPage(page)
-//            isFirstLoad = false
-            
-            
-            // TODO: temporary override isFirstLoad experience
-            updateCurrentPage(page)
-            let usingId = false
-            if let pageOffset = page.getReadingPositionOffset(usingId: usingId, value: cfi.paragraph) {
+            if isFirstLoad {
+                updateCurrentPage(page)
+                isFirstLoad = false
+                
+                guard let nodeJson = try? JSONEncoder().encode(cfi.domIndices),
+                    let nodeStr = String(data: nodeJson, encoding: .utf8),
+                    let pageOffset = page.getReadingPositionOffset(usingId: false, value: nodeStr) else {
+                    return
+                }
                 page.scrollPageToOffset(pageOffset, animated: false)
+            } else if (self.isScrolling == false && folioReader.needsRTLChange == true) {
+                page.scrollPageToBottom()
             }
+        } else if isFirstLoad {
+            updateCurrentPage(page)
+            isFirstLoad = false
         }
 
         // Go to fragment if needed

@@ -89,17 +89,6 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         }
         webView?.delegate = self
         
-        let context = webView!.value(forKeyPath: "documentView.webView.mainFrame.javaScriptContext") as! JSContext
-        
-        let logFunction : @convention(block) (String) -> Void =
-        {
-            (msg: String) in
-            
-            NSLog("Console: %@", msg)
-        }
-        
-        context.objectForKeyedSubscript("console").setObject(unsafeBitCast(logFunction, to: AnyObject.self), forKeyedSubscript: "log" as NSString)
-        
         if colorView == nil {
             colorView = UIView()
             colorView.backgroundColor = self.readerConfig.nightModeBackground
@@ -442,12 +431,12 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
     ///
     /// - Parameters:
     ///   - usingId: will remove this....
-    ///   - value: The position of <p> tag
+    ///   - value: The DOM element array String
     /// - Returns: Offset position to scroll to
-    func getReadingPositionOffset(usingId: Bool, value: Int) -> CGFloat? {
+    func getReadingPositionOffset(usingId: Bool, value: String) -> CGFloat? {
         let horizontal = readerConfig.scrollDirection == .horizontal
         
-        guard let strOffset = webView?.js("getReadingPositionOffset(\(usingId.description), \(value), \(horizontal.description))"), let number = NumberFormatter().number(from: strOffset) else {
+        guard let strOffset = webView?.js("getReadingPositionOffset(\(usingId.description), \(horizontal.description), \(value))"), let number = NumberFormatter().number(from: strOffset) else {
             return nil
         }
         return CGFloat(truncating: number)

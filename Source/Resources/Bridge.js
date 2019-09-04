@@ -654,13 +654,11 @@ var onClassBasedListenerClick = function(schemeName, attributeContent) {
 }
 
 
-function getReadingPositionOffset(usingId, value, isHorizontal) {
-    var elm;
-    console.log(new XMLSerializer().serializeToString(document));
-    var elements;
-    elements = document.getElementsByTagName("p");
-    elm = elements[value];
-    console.log(new XMLSerializer().serializeToString(elements));
+function getReadingPositionOffset(usingId, isHorizontal, tagIndices) {
+    var elm = document.children[0];
+    for (i = 0; i < tagIndices.length; i++) {
+        elm = elm.children[tagIndices[i]];
+    }
     return getElementOffset(elm, isHorizontal);
 }
 
@@ -670,4 +668,43 @@ var getElementOffset = function(target, horizontal) {
         return document.body.clientWidth * Math.floor(target.offsetTop / window.innerHeight);
     }
     return target.offsetTop;
+}
+
+
+//Get Read Position Implementation
+function isAfter(el, isHorizontal) {
+    var rect = el.getBoundingClientRect();
+    var isAfter;
+    if(isHorizontal) {
+        isAfter = rect.left > 0;
+    } else {
+        isAfter = rect.top > 0;
+    }
+    return isAfter;
+}
+
+function getCurrentPosition() {
+    // TODO: we should be able to track not only the p tag.
+    var lines = document.body.getElementsByTagName("p");
+    var visibleSpanId = 0;
+    var visibleLine;
+    
+    for (var i = 0, max = lines.length; i < max; i++) {
+        if (isAfter(lines[i], true)){
+            visibleSpanId = i;
+            visibleLine = lines[i]
+            break;
+        }
+    }
+    
+    var usingId = false;
+    var child = visibleLine, parent = child.parentElement;
+    var parentTags = [];
+    while (parent !== null) {
+        var index = Array.prototype.indexOf.call(parent.children, child);
+        parentTags.push({"tag": child.nodeName, "index": index});
+        child = parent;
+        parent = child.parentElement;
+    }
+    return JSON.stringify(parentTags.reverse());
 }

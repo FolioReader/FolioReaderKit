@@ -292,19 +292,17 @@ extension FolioReader {
 
     open var savedPositionForCurrentBook: CFI? {
         get {
-            return EpubCFI.parse(cfi: "#epubcfi(/6/12/4/100)")
-            // TODO: Uncomment below to get CFI from userdefaults
-//            guard let bookId = self.readerContainer?.book.name,
-//                let json = self.defaults.value(forKey: bookId) as? Data else {
-//                return nil
-//            }
-//            do {
-//                let cfi = try JSONDecoder().decode(CFI.self, from: json)
-//                return cfi
-//            } catch {
-//                print("decoding CFI failed")
-//                return nil
-//            }
+            guard let bookId = self.readerContainer?.book.name,
+                let json = self.defaults.value(forKey: bookId) as? Data else {
+                return nil
+            }
+            do {
+                let cfi = try JSONDecoder().decode(CFI.self, from: json)
+                return cfi
+            } catch {
+                print("decoding CFI failed")
+                return nil
+            }
         }
         set {
             guard let bookId = self.readerContainer?.book.name else {
@@ -353,18 +351,16 @@ extension FolioReader {
             return
         }
 
-        guard let currentPage = self.readerCenter?.currentPage, let webView = currentPage.webView else {
+        guard let currentPage = self.readerCenter?.currentPage,
+            let currentPosition = currentPage.webView?.js("getCurrentPosition()"),
+            let currentPageNumber = readerCenter?.currentPageNumber,
+            let cfi = EpubCFI.generate(chapterIndex: currentPageNumber - 1, odmStr: currentPosition) else {
             return
         }
-
-        // TODO: fix this using EPUBCFI
-//        let position = [
-//            "pageNumber": (self.readerCenter?.currentPageNumber ?? 0),
-//            "pageOffsetX": webView.scrollView.contentOffset.x,
-//            "pageOffsetY": webView.scrollView.contentOffset.y
-//            ] as [String : Any]
-//
-//        self.savedPositionForCurrentBook = position
+            
+        // TODO: use local DB and call API to store the CFI data
+        savedPositionForCurrentBook = cfi
+        print(cfi.standardizedFormat)
     }
 
     /// Closes and save the reader current instance.

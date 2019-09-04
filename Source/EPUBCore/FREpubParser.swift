@@ -150,6 +150,9 @@ class FREpubParser: NSObject {
                 book.version = Double(version)
             }
         }
+        
+        // initialize EpubCFI class
+        parseCFI(xmlDoc)
 
         // Parse and save each "manifest item"
         xmlDoc.root["manifest"]["item"].all?.forEach {
@@ -212,6 +215,11 @@ class FREpubParser: NSObject {
         if let pageProgressionDirection = spine.attributes["page-progression-direction"] {
             book.spine.pageProgressionDirection = pageProgressionDirection
         }
+    }
+    
+    private func parseCFI(_ xmlDoc: AEXMLDocument) {
+        let packageInfo = xmlDoc.root.children.map { $0.name }
+        EpubCFI.setPackageInfo(packageInfo)
     }
 
     /// Reads and parses a .smil file.
