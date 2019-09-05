@@ -73,9 +73,10 @@ class EpubCFI {
     }
     
     private static var _packageInfoDict: [String: Int] = [:]
+    
+    /// 0 based, incremented by 1
     public static var spineIndex: Int {
-        let index = _packageInfoDict["spine"] ?? 0
-        return index.toCFIIndex
+        return _packageInfoDict["spine"] ?? 0
     }
     
     static func setPackageInfo(_ info: [String]) {
