@@ -1,14 +1,54 @@
 PODS:
   - AEXML (4.3.3)
+  - BitByteData (1.2.0)
   - FolioReaderKit (1.4.0):
     - AEXML (= 4.3.3)
     - FontBlaster (= 4.1.0)
     - MenuItemKit (= 3.1.3)
+    - SWCompression (= 4.5.0)
     - Zip (= 1.1)
   - FontBlaster (4.1.0)
   - MenuItemKit (3.1.3)
   - Nimble (7.3.1)
   - Quick (1.3.2)
+  - SWCompression (4.5.0):
+    - BitByteData (~> 1.2.0)
+    - SWCompression/BZip2 (= 4.5.0)
+    - SWCompression/Deflate (= 4.5.0)
+    - SWCompression/GZip (= 4.5.0)
+    - SWCompression/LZMA (= 4.5.0)
+    - SWCompression/LZMA2 (= 4.5.0)
+    - SWCompression/SevenZip (= 4.5.0)
+    - SWCompression/TAR (= 4.5.0)
+    - SWCompression/XZ (= 4.5.0)
+    - SWCompression/ZIP (= 4.5.0)
+    - SWCompression/Zlib (= 4.5.0)
+  - SWCompression/BZip2 (4.5.0):
+    - BitByteData (~> 1.2.0)
+  - SWCompression/Deflate (4.5.0):
+    - BitByteData (~> 1.2.0)
+  - SWCompression/GZip (4.5.0):
+    - BitByteData (~> 1.2.0)
+    - SWCompression/Deflate
+  - SWCompression/LZMA (4.5.0):
+    - BitByteData (~> 1.2.0)
+  - SWCompression/LZMA2 (4.5.0):
+    - BitByteData (~> 1.2.0)
+    - SWCompression/LZMA
+  - SWCompression/SevenZip (4.5.0):
+    - BitByteData (~> 1.2.0)
+    - SWCompression/LZMA2
+  - SWCompression/TAR (4.5.0):
+    - BitByteData (~> 1.2.0)
+  - SWCompression/XZ (4.5.0):
+    - BitByteData (~> 1.2.0)
+    - SWCompression/LZMA2
+  - SWCompression/ZIP (4.5.0):
+    - BitByteData (~> 1.2.0)
+    - SWCompression/Deflate
+  - SWCompression/Zlib (4.5.0):
+    - BitByteData (~> 1.2.0)
+    - SWCompression/Deflate
   - Zip (1.1.0)
 
 DEPENDENCIES:
@@ -19,10 +59,12 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - AEXML
+    - BitByteData
     - FontBlaster
     - MenuItemKit
     - Nimble
     - Quick
+    - SWCompression
     - Zip
 
 EXTERNAL SOURCES:
@@ -31,13 +73,15 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AEXML: 601f41fcaa7bda7605cad153b0f43db9ec006c0f
-  FolioReaderKit: 15da51fd876c68d2e7504bfdf01ad5daef4c3230
+  BitByteData: dac49233436c0ad0714260af31080ac42c8cdf2e
+  FolioReaderKit: cd65c272fd27f12713ec6d8116660f918c5c9b1f
   FontBlaster: 127aa66419478d1c62926c7fdb39841633344a45
   MenuItemKit: 0f850e630b0a3d2bd80fec54db87ce0d2077ada2
   Nimble: 04f732da099ea4d153122aec8c2a88fd0c7219ae
   Quick: 2623cb30d7a7f41ca62f684f679586558f483d46
+  SWCompression: 79459fca0d685be940214f1e87537ba972dcd3bb
   Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
 PODFILE CHECKSUM: f5840071ca5121876c1758f6405302b47804dd07
 
-COCOAPODS: 1.6.1
+COCOAPODS: 1.7.5

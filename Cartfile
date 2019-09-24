@@ -2,3 +2,4 @@ github "marmelroy/Zip" == 1.1
 github "cxa/MenuItemKit" == 3.1.3
 github "tadija/AEXML" == 4.3.3
 github "ArtSabintsev/FontBlaster" == 4.1.0
+github "tsolomko/SWCompression" ~> 4.5

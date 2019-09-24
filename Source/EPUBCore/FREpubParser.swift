@@ -9,6 +9,7 @@
 import UIKit
 import AEXML
 import Zip
+import SWCompression
 
 class FREpubParser: NSObject {
 
@@ -95,21 +96,58 @@ class FREpubParser: NSObject {
             throw FolioReaderError.bookNotAvailable
         }
 
+        if bookName == "accel_encrypted.epub" {
+            do {
+                let bookPath = URL(fileURLWithPath: withEpubPath)
+                let key = "abcdefghijklmnop"
+                let encryptedEpubData = try Data(contentsOf: bookPath)
+                guard let keyData = key.data(using: .utf8) else {
+                    throw NSError(domain: "EPUBCore", code: -1, userInfo: nil)
+                }
+                let keyDataSha = keyData.sha256(data: keyData)
+                let decryptor = ePubDecryptor(with: encryptedEpubData as NSData, and: keyDataSha as NSData)
+                guard let decryptedEpubData = try decryptor.decrypt() else {
+                    throw NSError(domain: "EPUBCore", code: -2, userInfo: nil)
+                }
+                
+                
+                let entries = try ZipContainer.open(container: decryptedEpubData)
+                entries.forEach { (entry) in
+                    print(entry.info.name)
+                }
+                
+                print("parsing finished")
+                
+//                try decryptedEpubData?.write(to: bookPath)
+//
+//                let fileManager = FileManager()
+//                let currentWorkingPath = fileManager.currentDirectoryPath
+//                var archiveURL = URL(fileURLWithPath: currentWorkingPath)
+//                archiveURL.appendPathComponent("archive.zip")
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        
         // Unzip if necessary
         let needsUnzip = !fileManager.fileExists(atPath: bookBasePath, isDirectory:&isDir) || !isDir.boolValue
 
-        if needsUnzip {
-            try Zip.unzipFile(NSURL.fileURL(withPath: withEpubPath), destination: NSURL.fileURL(withPath: bookBasePath), overwrite: true, password: nil, progress: { (progress) -> () in
-                print(progress)
-            }) // Unzip
+        do {
+            if needsUnzip {
+                try Zip.unzipFile(NSURL.fileURL(withPath: withEpubPath), destination: NSURL.fileURL(withPath: bookBasePath), overwrite: true, password: nil, progress: { (progress) -> () in
+                    print(progress)
+                }) // Unzip
+            }
+
+            // Skip from backup this folder
+            try addSkipBackupAttributeToItemAtURL(URL(fileURLWithPath: bookBasePath, isDirectory: true))
+
+            book.name = bookName
+            try readContainer(with: bookBasePath)
+            try readOpf(with: bookBasePath)
+        } catch {
+            
         }
-
-        // Skip from backup this folder
-        try addSkipBackupAttributeToItemAtURL(URL(fileURLWithPath: bookBasePath, isDirectory: true))
-
-        book.name = bookName
-        try readContainer(with: bookBasePath)
-        try readOpf(with: bookBasePath)
         return self.book
     }
 
