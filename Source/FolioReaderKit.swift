@@ -27,6 +27,8 @@ public enum FolioReaderError: Error, LocalizedError {
     case bookNotAvailable
     case errorInContainer
     case errorInOpf
+    case errorInSmil
+    case errorInTOC
     case authorNameNotAvailable
     case coverNotAvailable
     case invalidImage(path: String)
@@ -37,7 +39,7 @@ public enum FolioReaderError: Error, LocalizedError {
         switch self {
         case .bookNotAvailable:
             return "Book not found"
-        case .errorInContainer, .errorInOpf:
+        case .errorInContainer, .errorInOpf, .errorInSmil, .errorInTOC:
             return "Invalid book format"
         case .authorNameNotAvailable:
             return "Author name not available"

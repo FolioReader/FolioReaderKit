@@ -457,7 +457,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
         // Configure the cell
         let resource = self.book.spine.spineReferences[indexPath.row].resource
-        guard var html = try? String(contentsOfFile: resource.fullHref, encoding: String.Encoding.utf8) else {
+        guard var html = String(data: resource.data, encoding: .utf8) else {
             return cell
         }
 
@@ -493,6 +493,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         }
 
         cell.loadHTMLString(html, baseURL: URL(fileURLWithPath: resource.fullHref.deletingLastPathComponent))
+        
+//        cell.loadHTMLString(html, baseURL: URL(fileURLWithPath: "localHost/book/1/"))
         return cell
     }
 
