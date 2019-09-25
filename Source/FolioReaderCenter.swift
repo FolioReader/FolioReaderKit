@@ -85,8 +85,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     fileprivate var book: FRBook {
-        guard let readerContainer = readerContainer else { return FRBook() }
-        return readerContainer.book
+        return BookProvider.shared.currentBook
     }
 
     fileprivate var folioReader: FolioReader {
@@ -492,9 +491,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             html = modifiedHtmlContent
         }
 
-        cell.loadHTMLString(html, baseURL: URL(fileURLWithPath: resource.fullHref.deletingLastPathComponent))
-        
-//        cell.loadHTMLString(html, baseURL: URL(fileURLWithPath: "localHost/book/1/"))
+        cell.loadHTMLString(html, baseURL: URL(fileURLWithPath: resource.fullHref).deletingLastPathComponent())
         return cell
     }
 

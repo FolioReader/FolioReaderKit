@@ -85,41 +85,28 @@ class FREpubParser: NSObject {
 
         let fileManager = FileManager.default
         let bookName = withEpubPath.lastPathComponent
+        book.name = bookName
 
         guard fileManager.fileExists(atPath: withEpubPath) else {
             throw FolioReaderError.bookNotAvailable
         }
-
-        if bookName == "accel_encrypted.epub" {
-            do {
-                let bookPath = URL(fileURLWithPath: withEpubPath)
-                let key = "abcdefghijklmnop"
-                let encryptedEpubData = try Data(contentsOf: bookPath)
-                guard let keyData = key.data(using: .utf8) else {
-                    throw NSError(domain: "EPUBCore", code: -1, userInfo: nil)
-                }
-                let keyDataSha = keyData.sha256(data: keyData)
-                let decryptor = ePubDecryptor(with: encryptedEpubData as NSData, and: keyDataSha as NSData)
-                guard let decryptedEpubData = try decryptor.decrypt() else {
-                    throw NSError(domain: "EPUBCore", code: -2, userInfo: nil)
-                }
-                
-                let startTime = CFAbsoluteTimeGetCurrent()
-                bookZipEntries = try ZipContainer.open(container: decryptedEpubData)
-                let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
-                print("Time elapsed for ZIP: \(timeElapsed) s.")
-                
-                bookZipEntries.forEach { print($0.info.name) }
-                
-                print("parsing finished")
-                
-//                book.name = bookName
-                resourcesBasePath = "/localHostBooks/\(bookName)/"
-                try readContainer()
-                try readOpf()
-            } catch {
-                print(error.localizedDescription)
-            }
+        
+        do {
+            let bookPath = URL(fileURLWithPath: withEpubPath)
+            let key = "abcdefghijklmnop"
+            let encryptedEpubData = try Data(contentsOf: bookPath)
+            guard let keyData = key.data(using: .utf8) else { throw FolioReaderError.decrpytionFailed }
+            let decryptor = ePubDecryptor(with: encryptedEpubData as NSData, and: keyData.sha256(data: keyData) as NSData)
+            guard let decryptedEpubData = try decryptor.decrypt() else { throw FolioReaderError.decrpytionFailed }
+            
+            bookZipEntries = try ZipContainer.open(container: decryptedEpubData)
+            
+            resourcesBasePath = "/localHostBooks/\(bookName)/"
+            book.baseURL = URL(fileURLWithPath: resourcesBasePath)
+            try readContainer()
+            try readOpf()
+        } catch {
+            print(error.localizedDescription)
         }
         
         return self.book
@@ -173,20 +160,19 @@ class FREpubParser: NSObject {
         parseCFI(xmlDoc)
         
         // Parse and save each "manifest item"
-        xmlDoc.root["manifest"]["item"].all?.forEach {
+        xmlDoc.root["manifest"]["item"].all?.forEach { item in
+            guard let entry = self.bookZipEntries.first(where: { $0.info.name.lastPathComponent == item.attributes["href"] }) else { return }
             let resource = FRResource()
-            resource.id = $0.attributes["id"]
-            resource.properties = $0.attributes["properties"]
-            resource.href = $0.attributes["href"]
+            resource.id = item.attributes["id"]
+            resource.properties = item.attributes["properties"]
+            resource.href = entry.info.name
+            resource.data = entry.data
             
             // TODO: check this
             resource.fullHref = resourcesBasePath.appendingPathComponent(resource.href).removingPercentEncoding
-            resource.mediaType = MediaType.by(name: $0.attributes["media-type"] ?? "", fileName: resource.href)
-            resource.mediaOverlay = $0.attributes["media-overlay"]
-            if let entry = self.bookZipEntries.first(where: { $0.info.name == resource.href }),
-                let data = entry.data {
-                resource.data = data
-            }
+            print("fullhref: \(resource.fullHref)")
+            resource.mediaType = MediaType.by(name: item.attributes["media-type"] ?? "", fileName: resource.href)
+            resource.mediaOverlay = item.attributes["media-overlay"]
             
             // if a .smil file is listed in resources, go parse that file now and save it on book model
             if (resource.mediaType != nil && resource.mediaType == .smil) {

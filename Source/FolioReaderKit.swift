@@ -34,6 +34,7 @@ public enum FolioReaderError: Error, LocalizedError {
     case invalidImage(path: String)
     case titleNotAvailable
     case fullPathEmpty
+    case decrpytionFailed
 
     public var errorDescription: String? {
         switch self {
@@ -51,6 +52,8 @@ public enum FolioReaderError: Error, LocalizedError {
             return "Book title not available"
         case .fullPathEmpty:
             return "Book corrupted"
+        case .decrpytionFailed:
+            return "Book decryption failed"
         }
     }
 }
@@ -123,7 +126,7 @@ open class FolioReader: NSObject {
 
     /// Check if layout needs to change to fit Right To Left
     var needsRTLChange: Bool {
-        return (self.readerContainer?.book.spine.isRtl == true && self.readerContainer?.readerConfig.scrollDirection == .horizontal)
+        return (BookProvider.shared.currentBook.spine.isRtl == true && self.readerContainer?.readerConfig.scrollDirection == .horizontal)
     }
 
     func isNight<T>(_ f: T, _ l: T) -> T {
@@ -294,7 +297,7 @@ extension FolioReader {
 
     open var savedPositionForCurrentBook: CFI? {
         get {
-            guard let bookId = self.readerContainer?.book.name,
+            guard let bookId = BookProvider.shared.currentBook.name,
                 let json = self.defaults.value(forKey: bookId) as? Data else {
                 return nil
             }
@@ -307,7 +310,7 @@ extension FolioReader {
             }
         }
         set {
-            guard let bookId = self.readerContainer?.book.name else {
+            guard let bookId = BookProvider.shared.currentBook.name else {
                 return
             }
             do {

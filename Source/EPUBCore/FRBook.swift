@@ -10,6 +10,7 @@
 import UIKit
 
 open class FRBook: NSObject {
+    var baseURL = URL(fileURLWithPath: "")
     var metadata = FRMetadata()
     var spine = FRSpine()
     var smils = FRSmils()
