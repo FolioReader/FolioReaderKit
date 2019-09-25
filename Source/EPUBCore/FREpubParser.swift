@@ -170,7 +170,6 @@ class FREpubParser: NSObject {
             
             // TODO: check this
             resource.fullHref = resourcesBasePath.appendingPathComponent(resource.href).removingPercentEncoding
-            print("fullhref: \(resource.fullHref)")
             resource.mediaType = MediaType.by(name: item.attributes["media-type"] ?? "", fileName: resource.href)
             resource.mediaOverlay = item.attributes["media-overlay"]
             
