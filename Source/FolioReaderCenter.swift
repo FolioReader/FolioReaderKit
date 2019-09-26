@@ -1338,6 +1338,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         let pageController = PageViewController(folioReader: folioReader, readerConfig: readerConfig)
 
         pageController.viewControllerOne = chapter
+        pageController.viewControllerTwo = UIViewController()
         pageController.segmentedControlItems = [readerConfig.localizedContentsTitle, readerConfig.localizedHighlightsTitle]
 
         let nav = UINavigationController(rootViewController: pageController)
