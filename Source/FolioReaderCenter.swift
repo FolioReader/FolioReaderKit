@@ -1340,6 +1340,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         pageController.segmentedControlItems = [readerConfig.localizedContentsTitle, readerConfig.localizedHighlightsTitle]
 
         let nav = UINavigationController(rootViewController: pageController)
+        nav.modalPresentationStyle = .fullScreen
         present(nav, animated: true, completion: nil)
     }
 
@@ -1393,10 +1394,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     func presentQuoteShare(_ string: String) {
         let quoteShare = FolioReaderQuoteShare(initWithText: string, readerConfig: readerConfig, folioReader: folioReader, book: book)
         let nav = UINavigationController(rootViewController: quoteShare)
-
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            nav.modalPresentationStyle = .formSheet
-        }
+        nav.modalPresentationStyle = UIDevice.current.userInterfaceIdiom == .pad ? .formSheet : .fullScreen
         present(nav, animated: true, completion: nil)
     }
     
@@ -1408,7 +1406,6 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         addHighlightView.isEditHighlight = edit
         let nav = UINavigationController(rootViewController: addHighlightView)
         nav.modalPresentationStyle = .formSheet
-        
         present(nav, animated: true, completion: nil)
     }
 }
