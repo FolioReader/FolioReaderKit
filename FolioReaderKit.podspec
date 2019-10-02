@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => "https://github.com/FolioReader/FolioReaderKit.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/hebertialmeida'
 
-  s.swift_version = '4.2'
+  s.swift_version = '5.0'
   s.platform      = :ios, '9.0'
   s.requires_arc  = true
 
@@ -33,7 +33,7 @@ Pod::Spec.new do |s|
   s.dependency 'SSZipArchive', '2.1.1'
   s.dependency 'MenuItemKit', '3.1.3'
   s.dependency 'ZFDragableModalTransition', '0.6'
-  s.dependency 'AEXML', '4.3.3'
+  s.dependency 'AEXML', '4.4'
   s.dependency 'FontBlaster', '4.1.0'
   s.dependency 'RealmSwift', '3.17.3'
 

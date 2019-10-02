@@ -28,7 +28,7 @@ class FolioReaderTests: QuickSpec {
 
                 do {
                     let book = try subject.readEpub(epubPath: epubPath)
-                    print(book.tableOfContents.first!.title)
+                    print(book.tableOfContents.first!.title!)
                 } catch {
                     fail("Error: \(error.localizedDescription)")
                 }
