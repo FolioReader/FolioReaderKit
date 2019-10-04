@@ -598,10 +598,11 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             return
         }
 
-        self.collectionView.scrollToItem(at: IndexPath(row: self.currentPageNumber - 1, section: 0), at: UICollectionView.ScrollPosition(), animated: false)
-        if (self.currentPageNumber + 1) >= totalPages {
-            UIView.animate(withDuration: duration, animations: {
-                self.collectionView.setContentOffset(self.frameForPage(self.currentPageNumber).origin, animated: false)
+        self.collectionView.scrollToItem(at: IndexPath(row: currentPageNumber - 1, section: 0), at: UICollectionView.ScrollPosition(), animated: false)
+        if (currentPageNumber + 1) >= totalPages {
+            UIView.animate(withDuration: duration, animations: { [weak self] in
+                guard let weakSelf = self else { return }
+                weakSelf.collectionView.setContentOffset(weakSelf.frameForPage(weakSelf.currentPageNumber).origin, animated: false)
             })
         }
     }
@@ -611,38 +612,37 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     func setPageSize(_ orientation: UIInterfaceOrientation) {
         guard orientation.isPortrait else {
             if screenBounds.size.width > screenBounds.size.height {
-                self.pageWidth = screenBounds.size.width
-                self.pageHeight = screenBounds.size.height
+                pageWidth = screenBounds.size.width
+                pageHeight = screenBounds.size.height
             } else {
-                self.pageWidth = screenBounds.size.height
-                self.pageHeight = screenBounds.size.width
+                pageWidth = screenBounds.size.height
+                pageHeight = screenBounds.size.width
             }
             return
         }
 
         if screenBounds.size.width < screenBounds.size.height {
-            self.pageWidth = screenBounds.size.width
-            self.pageHeight = screenBounds.size.height
+            pageWidth = screenBounds.size.width
+            pageHeight = screenBounds.size.height
         } else {
-            self.pageWidth = screenBounds.size.height
-            self.pageHeight = screenBounds.size.width
+            pageWidth = screenBounds.size.height
+            pageHeight = screenBounds.size.width
         }
     }
 
     func updateCurrentPage(_ page: FolioReaderPage? = nil, completion: (() -> Void)? = nil) {
         if let page = page {
             currentPage = page
-            self.previousPageNumber = page.pageNumber-1
-            self.currentPageNumber = page.pageNumber
+            previousPageNumber = page.pageNumber-1
+            currentPageNumber = page.pageNumber
         } else {
             let currentIndexPath = getCurrentIndexPath()
             currentPage = collectionView.cellForItem(at: currentIndexPath) as? FolioReaderPage
-
-            self.previousPageNumber = currentIndexPath.row
-            self.currentPageNumber = currentIndexPath.row+1
+            previousPageNumber = currentIndexPath.row
+            currentPageNumber = currentIndexPath.row+1
         }
 
-        self.nextPageNumber = (((self.currentPageNumber + 1) <= totalPages) ? (self.currentPageNumber + 1) : self.currentPageNumber)
+        nextPageNumber = (((currentPageNumber + 1) <= totalPages) ? (currentPageNumber + 1) : currentPageNumber)
 
         // Set pages
         guard let currentPage = currentPage else {
@@ -651,18 +651,24 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         }
 
         scrollScrubber?.setSliderVal()
-
-        if let readingTime = currentPage.webView?.js("getReadingTime()") {
-            pageIndicatorView?.totalMinutes = Int(readingTime)!
-        } else {
-            pageIndicatorView?.totalMinutes = 0
+        guard let webView = currentPage.webView else {
+            return
         }
-        pagesForCurrentPage(currentPage)
-
-        delegate?.pageDidAppear?(currentPage)
-        delegate?.pageItemChanged?(self.getCurrentPageItemNumber())
         
-        completion?()
+        let script = "getReadingTime()"
+        webView.js(script, completion: { [weak self] value in
+            guard let weakSelf = self else {
+                self?.pageIndicatorView?.totalMinutes = 0
+                return
+            }
+            
+            let readingTime = value as? Int ?? 0
+            weakSelf.pageIndicatorView?.totalMinutes = readingTime
+            weakSelf.pagesForCurrentPage(currentPage)
+            weakSelf.delegate?.pageDidAppear?(currentPage)
+            weakSelf.delegate?.pageItemChanged?(weakSelf.getCurrentPageItemNumber())
+            completion?()
+        })
     }
 
     func pagesForCurrentPage(_ page: FolioReaderPage?) {
@@ -1076,11 +1082,13 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
      Sharing chapter method.
      */
     @objc func shareChapter(_ sender: UIBarButtonItem) {
-        guard let currentPage = currentPage else { return }
+        guard let webView = currentPage?.webView else { return }
 
-        if let chapterText = currentPage.webView?.js("getBodyText()") {
+        let script = "getBodyText()"
+        webView.js(script, completion: { [weak self] value in
+            guard let weakSelf = self, let chapterText = value as? String else { return }
             let htmlText = chapterText.replacingOccurrences(of: "[\\n\\r]+", with: "<br />", options: .regularExpression)
-            var subject = readerConfig.localizedShareChapterSubject
+            var subject = weakSelf.readerConfig.localizedShareChapterSubject
             var html = ""
             var text = ""
             var bookTitle = ""
@@ -1089,35 +1097,35 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             var shareItems = [AnyObject]()
 
             // Get book title
-            if let title = self.book.title {
+            if let title = weakSelf.book.title {
                 bookTitle = title
                 subject += " “\(title)”"
             }
 
             // Get chapter name
-            if let chapter = getCurrentChapterName() {
+            if let chapter = weakSelf.getCurrentChapterName() {
                 chapterName = chapter
             }
 
             // Get author name
-            if let author = self.book.metadata.creators.first {
+            if let author = weakSelf.book.metadata.creators.first {
                 authorName = author.name
             }
 
             // Sharing html and text
             html = "<html><body>"
             html += "<br /><hr> <p>\(htmlText)</p> <hr><br />"
-            html += "<center><p style=\"color:gray\">"+readerConfig.localizedShareAllExcerptsFrom+"</p>"
+            html += "<center><p style=\"color:gray\">"+weakSelf.readerConfig.localizedShareAllExcerptsFrom+"</p>"
             html += "<b>\(bookTitle)</b><br />"
-            html += readerConfig.localizedShareBy+" <i>\(authorName)</i><br />"
+            html += weakSelf.readerConfig.localizedShareBy+" <i>\(authorName)</i><br />"
 
-            if let bookShareLink = readerConfig.localizedShareWebLink {
+            if let bookShareLink = weakSelf.readerConfig.localizedShareWebLink {
                 html += "<a href=\"\(bookShareLink.absoluteString)\">\(bookShareLink.absoluteString)</a>"
                 shareItems.append(bookShareLink as AnyObject)
             }
 
             html += "</center></body></html>"
-            text = "\(chapterName)\n\n“\(chapterText)” \n\n\(bookTitle) \n\(readerConfig.localizedShareBy) \(authorName)"
+            text = "\(chapterName)\n\n“\(chapterText)” \n\n\(bookTitle) \n\(weakSelf.readerConfig.localizedShareBy) \(authorName)"
 
             let act = FolioReaderSharingProvider(subject: subject, text: text, html: html)
             shareItems.insert(contentsOf: [act, "" as AnyObject], at: 0)
@@ -1130,8 +1138,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
                 actv.barButtonItem = sender
             }
 
-            present(activityViewController, animated: true, completion: nil)
-        }
+            weakSelf.present(activityViewController, animated: true, completion: nil)
+        })
     }
 
     /**
