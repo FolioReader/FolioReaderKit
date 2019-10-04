@@ -486,11 +486,14 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             classes += " nightMode"
         }
 
+        let viewport = """
+        <head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no shrink-to-fit=no\">
+        """
         // Font Size
         classes += " \(folioReader.currentFontSize.cssIdentifier)"
-
         html = html.replacingOccurrences(of: "<html ", with: "<html class=\"\(classes)\"")
-
+        html = html.replacingOccurrences(of: "<head>", with: viewport)
+        
         // Let the delegate adjust the html string
         if let modifiedHtmlContent = self.delegate?.htmlContentForPage?(cell, htmlContent: html) {
             html = modifiedHtmlContent
