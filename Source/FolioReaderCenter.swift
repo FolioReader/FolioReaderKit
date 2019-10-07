@@ -99,7 +99,6 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     init(withContainer readerContainer: FolioReaderContainer) {
         self.readerContainer = readerContainer
         super.init(nibName: nil, bundle: Bundle.frameworkBundle())
-
         self.initialization()
     }
 
@@ -112,18 +111,18 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
      */
     fileprivate func initialization() {
 
-        if (self.readerConfig.hideBars == true) {
-            self.pageIndicatorHeight = 0
+        if (readerConfig.hideBars == true) {
+            pageIndicatorHeight = 0
         }
         
-        self.totalPages = book.spine.spineReferences.count
-
+        totalPages = book.spine.spineReferences.count
+        
         // Loading indicator
         let style: UIActivityIndicatorView.Style = folioReader.isNight(.white, .gray)
         loadingView = UIActivityIndicatorView(style: style)
         loadingView.hidesWhenStopped = true
         loadingView.startAnimating()
-        self.view.addSubview(loadingView)
+        view.addSubview(loadingView)
     }
 
     // MARK: - View life cicle
@@ -132,16 +131,14 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         super.viewDidLoad()
 
         screenBounds = self.getScreenBounds()
-        
         setPageSize(UIApplication.shared.statusBarOrientation)
 
         // Layout
         collectionViewLayout.sectionInset = UIEdgeInsets.zero
         collectionViewLayout.minimumLineSpacing = 0
         collectionViewLayout.minimumInteritemSpacing = 0
-        collectionViewLayout.scrollDirection = .direction(withConfiguration: self.readerConfig)
-        
-        let background = folioReader.isNight(self.readerConfig.nightModeBackground, UIColor.white)
+        collectionViewLayout.scrollDirection = .direction(withConfiguration: readerConfig)
+        let background = folioReader.isNight(readerConfig.nightModeBackground, UIColor.white)
         view.backgroundColor = background
 
         // CollectionView
@@ -156,11 +153,8 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         collectionView.decelerationRate = UIScrollView.DecelerationRate.fast
         enableScrollBetweenChapters(scrollEnabled: true)
         view.addSubview(collectionView)
+        collectionView.contentInsetAdjustmentBehavior = .never
         
-        if #available(iOS 11.0, *) {
-            collectionView.contentInsetAdjustmentBehavior = .never
-        }
-
         // Activity Indicator
         self.activityIndicator.style = .gray
         self.activityIndicator.hidesWhenStopped = true
@@ -168,10 +162,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         self.activityIndicator.backgroundColor = UIColor.gray
         self.view.addSubview(self.activityIndicator)
         self.view.bringSubviewToFront(self.activityIndicator)
-
-        if #available(iOS 10.0, *) {
-            collectionView.isPrefetchingEnabled = false
-        }
+        collectionView.isPrefetchingEnabled = false
 
         // Register cell classes
         collectionView?.register(FolioReaderPage.self, forCellWithReuseIdentifier: kReuseCellIdentifier)
@@ -236,11 +227,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
     fileprivate func frameForPageIndicatorView() -> CGRect {
         var bounds = CGRect(x: 0, y: screenBounds.size.height-pageIndicatorHeight, width: screenBounds.size.width, height: pageIndicatorHeight)
-        
-        if #available(iOS 11.0, *) {
-            bounds.size.height = bounds.size.height + view.safeAreaInsets.bottom
-        }
-        
+        bounds.size.height = bounds.size.height + view.safeAreaInsets.bottom
         return bounds
     }
 
@@ -503,14 +490,10 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var size = CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
-        
-        if #available(iOS 11.0, *) {
-            let orientation = UIDevice.current.orientation
-            
-            if orientation == .portrait || orientation == .portraitUpsideDown {
-                if readerConfig.scrollDirection == .horizontal {
-                    size.height = size.height - view.safeAreaInsets.bottom
-                }
+        let orientation = UIDevice.current.orientation
+        if orientation == .portrait || orientation == .portraitUpsideDown {
+            if readerConfig.scrollDirection == .horizontal {
+                size.height = size.height - view.safeAreaInsets.bottom
             }
         }
         
@@ -1501,12 +1484,7 @@ extension FolioReaderCenter: FolioReaderChapterListDelegate {
     
     func getScreenBounds() -> CGRect {
         var bounds = view.frame
-        
-        if #available(iOS 11.0, *) {
-            bounds.size.height = bounds.size.height - view.safeAreaInsets.bottom
-        }
-        
+        bounds.size.height = bounds.size.height - view.safeAreaInsets.bottom
         return bounds
     }
-    
 }
