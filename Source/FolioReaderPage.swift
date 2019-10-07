@@ -262,8 +262,9 @@ open class FolioReaderPage: UICollectionViewCell, UIGestureRecognizerDelegate {
         )
 
         if bottomOffset.forDirection(withConfiguration: self.readerConfig) >= 0 {
-            DispatchQueue.main.async {
-                self.webView?.scrollView.setContentOffset(bottomOffset, animated: false)
+            DispatchQueue.main.async { [weak self] in
+                guard let weakSelf = self else { return }
+                weakSelf.webView?.scrollView.setContentOffset(bottomOffset, animated: false)
             }
         }
     }
@@ -406,16 +407,16 @@ extension FolioReaderPage: WKNavigationDelegate {
 
         if self.readerConfig.enableTTS && !self.book.hasAudio {
             webView.js("wrappingSentencesWithinPTags()", completion: { _ in })
-            if let audioPlayer = self.folioReader.readerAudioPlayer, (audioPlayer.isPlaying() == true) {
+            if let audioPlayer = folioReader.readerAudioPlayer, (audioPlayer.isPlaying() == true) {
                 audioPlayer.readCurrentSentence()
             }
         }
 
         let direction: ScrollDirection = self.folioReader.needsRTLChange ? .positive(withConfiguration: self.readerConfig) : .negative(withConfiguration: self.readerConfig)
 
-        if (self.folioReader.readerCenter?.pageScrollDirection == direction &&
-            self.folioReader.readerCenter?.isScrolling == true &&
-            self.readerConfig.scrollDirection != .horizontalWithVerticalContent) {
+        if (folioReader.readerCenter?.pageScrollDirection == direction &&
+            folioReader.readerCenter?.isScrolling == true &&
+            readerConfig.scrollDirection != .horizontalWithVerticalContent) {
             scrollPageToBottom()
         }
 

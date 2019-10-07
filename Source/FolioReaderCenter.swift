@@ -449,9 +449,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         cell.setup(withReaderContainer: readerContainer)
         cell.pageNumber = indexPath.row+1
         cell.webView?.scrollView.delegate = self
-        if #available(iOS 11.0, *) {
-            cell.webView?.scrollView.contentInsetAdjustmentBehavior = .never
-        }
+        cell.webView?.scrollView.contentInsetAdjustmentBehavior = .never
         cell.webView?.setupScrollDirection()
         cell.webView?.frame = cell.webViewFrame()
         cell.delegate = self
@@ -460,7 +458,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         setPageProgressiveDirection(cell)
 
         // Configure the cell
-        let resource = self.book.spine.spineReferences[indexPath.row].resource
+        let resource = book.spine.spineReferences[indexPath.row].resource
         guard var html = try? String(contentsOfFile: resource.fullHref, encoding: String.Encoding.utf8) else {
             return cell
         }
@@ -678,7 +676,9 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         let contentSize = page.webView?.scrollView.contentSize.forDirection(withConfiguration: self.readerConfig) ?? 0
         self.pageIndicatorView?.totalPages = ((pageSize != 0) ? Int(ceil(contentSize / pageSize)) : 0)
 
-        let pageOffSet = self.readerConfig.isDirection(webView.scrollView.contentOffset.x, webView.scrollView.contentOffset.x, webView.scrollView.contentOffset.y)
+        let pageOffSet = self.readerConfig.isDirection(webView.scrollView.contentOffset.x,
+                                                       webView.scrollView.contentOffset.x,
+                                                       webView.scrollView.contentOffset.y)
         let webViewPage = pageForOffset(pageOffSet, pageHeight: pageSize)
 
         self.pageIndicatorView?.currentPage = webViewPage
@@ -1017,11 +1017,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     public func getCurrentChapterProgress() -> CGFloat {
         let total = totalPages
         let current = currentPageNumber
-        
-        if total == 0 {
-            return 0
-        }
-        
+        if total == 0 { return 0 }
         return CGFloat((100 * current) / total)
     }
 

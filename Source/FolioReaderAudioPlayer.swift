@@ -180,7 +180,7 @@ open class FolioReaderAudioPlayer: NSObject {
             let script = "playAudio()"
             webView.js(script, completion: { _ in })
         } else {
-            self.readCurrentSentence()
+            readCurrentSentence()
         }
     }
 

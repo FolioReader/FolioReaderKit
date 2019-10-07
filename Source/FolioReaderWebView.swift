@@ -46,9 +46,8 @@ open class FolioReaderWebView: WKWebView {
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     // MARK: - UIMenuController
-
     open override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         guard readerConfig.useReaderMenuController else {
             return super.canPerformAction(action, withSender: sender)

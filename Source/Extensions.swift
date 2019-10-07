@@ -23,7 +23,7 @@ extension UICollectionView.ScrollPosition {
 
 extension CGPoint {
     func forDirection(withConfiguration readerConfig: FolioReaderConfig, scrollType: ScrollType = .page) -> CGFloat {
-        return readerConfig.isDirection(self.y, self.x, ((scrollType == .page) ? self.y : self.x))
+        return readerConfig.isDirection(y, x, ((scrollType == .page) ? y : x))
     }
 }
 
