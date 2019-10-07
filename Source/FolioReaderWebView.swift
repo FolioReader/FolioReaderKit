@@ -49,6 +49,7 @@ open class FolioReaderWebView: WKWebView {
     
     // MARK: - UIMenuController
     open override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        
         guard readerConfig.useReaderMenuController else {
             return super.canPerformAction(action, withSender: sender)
         }
@@ -76,7 +77,7 @@ open class FolioReaderWebView: WKWebView {
     @objc func share(_ sender: UIMenuController) {
         
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        let shareImage = UIAlertAction(title: self.readerConfig.localizedShareImageQuote, style: .default, handler: { [weak self] (action) -> Void in
+        let shareImage = UIAlertAction(title: readerConfig.localizedShareImageQuote, style: .default, handler: { [weak self] (action) -> Void in
             guard let weakSelf = self else { return }
             if weakSelf.isShare {
                 let script = "getHighlightContent()"
@@ -114,7 +115,6 @@ open class FolioReaderWebView: WKWebView {
         }
 
         let cancel = UIAlertAction(title: self.readerConfig.localizedCancel, style: .cancel, handler: nil)
-
         alertController.addAction(shareImage)
         alertController.addAction(shareText)
         alertController.addAction(cancel)
@@ -390,19 +390,17 @@ open class FolioReaderWebView: WKWebView {
         }
     }
     
-    // MARK: WebView
-    
     func clearTextSelection() {
         // Forces text selection clearing
         // @NOTE: this doesn't seem to always work
         
-        self.isUserInteractionEnabled = false
-        self.isUserInteractionEnabled = true
+        isUserInteractionEnabled = false
+        isUserInteractionEnabled = true
     }
     
     // Warning: - Fix this
     func setupScrollDirection() {
-        switch self.readerConfig.scrollDirection {
+        switch readerConfig.scrollDirection {
         case .vertical, .defaultVertical, .horizontalWithVerticalContent:
             scrollView.isPagingEnabled = false
 //            paginationMode = .unpaginated

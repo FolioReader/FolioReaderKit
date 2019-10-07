@@ -69,8 +69,7 @@ open class FolioReaderPage: UICollectionViewCell, UIGestureRecognizerDelegate {
         // Init explicit attributes with a default value. The `setup` function MUST be called to configure the current object with valid attributes.
         self.readerContainer = FolioReaderContainer(withConfig: FolioReaderConfig(), folioReader: FolioReader(), epubPath: "")
         super.init(frame: frame)
-        self.backgroundColor = UIColor.clear
-
+        backgroundColor = UIColor.clear
         NotificationCenter.default.addObserver(self, selector: #selector(refreshPageMode), name: NSNotification.Name(rawValue: "needRefreshPageMode"), object: nil)
     }
 
@@ -84,7 +83,7 @@ open class FolioReaderPage: UICollectionViewCell, UIGestureRecognizerDelegate {
             webView?.scrollView.showsVerticalScrollIndicator = false
             webView?.scrollView.showsHorizontalScrollIndicator = false
             webView?.backgroundColor = .clear
-            self.contentView.addSubview(webView!)
+            contentView.addSubview(webView!)
         }
         webView?.navigationDelegate = self
 
@@ -134,9 +133,9 @@ open class FolioReaderPage: UICollectionViewCell, UIGestureRecognizerDelegate {
 
         return CGRect(
             x: bounds.origin.x,
-            y: self.readerConfig.isDirection(bounds.origin.y + navTotal, bounds.origin.y + navTotal + paddingTop, bounds.origin.y + navTotal),
+            y: readerConfig.isDirection(bounds.origin.y + navTotal, bounds.origin.y + navTotal + paddingTop, bounds.origin.y + navTotal),
             width: bounds.width,
-            height: self.readerConfig.isDirection(bounds.height - navTotal, bounds.height - navTotal - paddingTop - paddingBottom, bounds.height - navTotal)
+            height: readerConfig.isDirection(bounds.height - navTotal, bounds.height - navTotal - paddingTop - paddingBottom, bounds.height - navTotal)
         )
     }
 
@@ -431,8 +430,8 @@ extension FolioReaderPage: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         
         guard let webView = webView as? FolioReaderWebView,
-            let url = webView.url,
-            let scheme = url.scheme else {
+            let url = navigationAction.request.url,
+            let scheme = navigationAction.request.url?.scheme else {
                 decisionHandler(.allow)
                 return
         }
@@ -474,7 +473,7 @@ extension FolioReaderPage: WKNavigationDelegate {
             // Handle internal url
             if !url.pathExtension.isEmpty {
                 
-                let pathComponent = (self.book.opfResource.href as NSString?)?.deletingLastPathComponent
+                let pathComponent = (book.opfResource.href as NSString?)?.deletingLastPathComponent
                 guard let base = ((pathComponent == nil || pathComponent?.isEmpty == true) ? self.book.name : pathComponent) else {
                     decisionHandler(.allow)
                     return
