@@ -162,6 +162,10 @@ open class FolioReaderConfig: NSObject {
     /// Go to saved position when open a book
     open var loadSavedPositionForCurrentBook = true
     
+    /// Display chapters in the menu
+    open var shouldDisplayChaptersInMenu = false
+    open var shouldAllowHighlight = false
+    
     // MARK: Quote image share
 
     /// Custom Quote logo

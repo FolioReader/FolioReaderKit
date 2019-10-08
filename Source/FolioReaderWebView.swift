@@ -40,6 +40,11 @@ open class FolioReaderWebView: WKWebView {
         self.readerContainer = readerContainer
         let config = WKWebViewConfiguration()
         config.dataDetectorTypes = .link
+        let jsScript = FolioReaderWebView.insertViewportJSScript()
+        let script = WKUserScript(source: jsScript, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+        let controller = WKUserContentController()
+        controller.addUserScript(script)
+        config.userContentController = controller
         super.init(frame: frame, configuration: config)
     }
 
@@ -353,14 +358,18 @@ open class FolioReaderWebView: WKWebView {
             // menu for selecting highlight color
             menuItems = [yellowItem, greenItem, blueItem, pinkItem, underlineItem]
         } else {
-            // default menu
-            menuItems = [highlightItem, defineItem, highlightNoteItem]
-
+            
+            if readerConfig.shouldAllowHighlight {
+                menuItems.append(highlightItem)
+                menuItems.append(highlightNoteItem)
+            }
+            
+            menuItems.append(defineItem)
             if self.book.hasAudio || self.readerConfig.enableTTS {
                 menuItems.insert(playAudioItem, at: 0)
             }
 
-            if (self.readerConfig.allowSharing == true) {
+            if readerConfig.allowSharing {
                 menuItems.append(shareItem)
             }
         }
@@ -413,5 +422,18 @@ open class FolioReaderWebView: WKWebView {
             scrollView.bounces = false
             break
         }
+    }
+}
+
+
+extension FolioReaderWebView {
+    static func insertViewportJSScript() -> String {
+        return """
+        var meta = document.createElement('meta');
+        meta.setAttribute('name', 'viewport');
+        meta.setAttribute('content', 'width=device-width');
+        meta.setAttribute('content', 'initial-scale=1.0');
+        document.getElementsByTagName('head')[0].appendChild(meta);
+        """
     }
 }

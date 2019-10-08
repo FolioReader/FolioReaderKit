@@ -399,17 +399,6 @@ open class FolioReaderPage: UICollectionViewCell, UIGestureRecognizerDelegate {
 // MARK: - WKNavigationDelegate
 extension FolioReaderPage: WKNavigationDelegate {
     // MARK: - UIWebView Delegate
-
-    public func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-        let jscript = """
-        var meta = document.createElement('meta');
-        meta.setAttribute('name', 'viewport');
-        meta.setAttribute('content', 'width=device-width');
-        document.getElementsByTagName('head')[0].appendChild(meta);
-        """
-        webView.evaluateJavaScript(jscript)
-    }
-    
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         guard let webView = webView as? FolioReaderWebView else { return }
         delegate?.pageWillLoad?(self)

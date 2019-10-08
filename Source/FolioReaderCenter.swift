@@ -259,15 +259,20 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         let menu = UIBarButtonItem(image: closeIcon, style: .plain, target: self, action:#selector(closeReader(_:)))
         let toc = UIBarButtonItem(image: tocIcon, style: .plain, target: self, action:#selector(presentChapterList(_:)))
 
-        navigationItem.leftBarButtonItems = [menu, toc]
+        if readerConfig.shouldDisplayChaptersInMenu {
+            navigationItem.leftBarButtonItems = [menu, toc]
+        } else {
+            navigationItem.leftBarButtonItems = [menu]
+        }
+        
 
         var rightBarIcons = [UIBarButtonItem]()
 
-        if (self.readerConfig.allowSharing == true) {
+        if readerConfig.allowSharing {
             rightBarIcons.append(UIBarButtonItem(image: shareIcon, style: .plain, target: self, action:#selector(shareChapter(_:))))
         }
 
-        if self.book.hasAudio || self.readerConfig.enableTTS {
+        if book.hasAudio || readerConfig.enableTTS {
             rightBarIcons.append(UIBarButtonItem(image: audioIcon, style: .plain, target: self, action:#selector(presentPlayerMenu(_:))))
         }
 
@@ -277,7 +282,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         rightBarIcons.append(contentsOf: [font])
         navigationItem.rightBarButtonItems = rightBarIcons
         
-        if(self.readerConfig.displayTitle){
+        if readerConfig.displayTitle {
             navigationItem.title = book.title
         }
     }
