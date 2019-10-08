@@ -440,10 +440,9 @@ internal extension UIViewController {
     }
     
     func dismiss(_ completion: (() -> Void)?) {
-        DispatchQueue.main.async {
-            self.dismiss(animated: true, completion: {
-                completion?()
-            })
+        DispatchQueue.main.async { [weak self] in
+            guard let weakSelf = self else { return }
+            weakSelf.dismiss(animated: true, completion: { completion?() })
         }
     }
     

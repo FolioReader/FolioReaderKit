@@ -120,7 +120,7 @@ open class FolioReaderWebView: WKWebView {
         alertController.addAction(cancel)
 
         if let alert = alertController.popoverPresentationController {
-            alert.sourceView = self.folioReader.readerCenter?.currentPage
+            alert.sourceView = folioReader.readerCenter?.currentPage
             alert.sourceRect = sender.menuFrame
         }
 
@@ -402,7 +402,7 @@ open class FolioReaderWebView: WKWebView {
     func setupScrollDirection() {
         switch readerConfig.scrollDirection {
         case .vertical, .defaultVertical, .horizontalWithVerticalContent:
-            scrollView.isPagingEnabled = false
+            scrollView.isPagingEnabled = true
 //            paginationMode = .unpaginated
             scrollView.bounces = true
             break

@@ -45,7 +45,13 @@ open class FolioReaderAudioPlayer: NSObject {
         
         let session = AVAudioSession.sharedInstance()
         do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+            if #available(iOS 10.0, *) {
+                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+            } else {
+                // Fallback on earlier versions
+//                Workaround until https://forums.swift.org/t/using-methods-marked-unavailable-in-swift-4-2/14949 isn't fixed
+                AVAudioSession.sharedInstance().perform(NSSelectorFromString("setCategory:error:"), with: AVAudioSession.Category.playback)
+            }
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
             print(error)
@@ -89,21 +95,42 @@ open class FolioReaderAudioPlayer: NSObject {
             updateNowPlayingInfo()
         }
         if synthesizer != nil {
-            switch rate {
-            case 0:
-                utteranceRate = 0
-                break
-            case 1:
-                utteranceRate = 0.06
-                break
-            case 2:
-                utteranceRate = 0.15
-                break
-            case 3:
-                utteranceRate = 0.23
-                break
-            default:
-                break
+            // Need to change between version IOS
+            // http://stackoverflow.com/questions/32761786/ios9-avspeechutterance-rate-for-avspeechsynthesizer-issue
+            if #available(iOS 9, *) {
+                switch rate {
+                case 0:
+                    utteranceRate = 0.42
+                    break
+                case 1:
+                    utteranceRate = 0.5
+                    break
+                case 2:
+                    utteranceRate = 0.53
+                    break
+                case 3:
+                    utteranceRate = 0.56
+                    break
+                default:
+                    break
+                }
+            } else {
+                switch rate {
+                case 0:
+                    utteranceRate = 0
+                    break
+                case 1:
+                    utteranceRate = 0.06
+                    break
+                case 2:
+                    utteranceRate = 0.15
+                    break
+                case 3:
+                    utteranceRate = 0.23
+                    break
+                default:
+                    break
+                }
             }
 
             updateNowPlayingInfo()

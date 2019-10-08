@@ -155,26 +155,27 @@ open class FolioReaderContainer: UIViewController {
             return
         }
 
-        DispatchQueue.global(qos: .userInitiated).async {
-
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let weakSelf = self else { return }
             do {
-                let parsedBook = try FREpubParser().readEpub(epubPath: self.epubPath, removeEpub: self.shouldRemoveEpub, unzipPath: self.unzipPath)
-                self.book = parsedBook
-                self.folioReader.isReaderOpen = true
+                let parsedBook = try FREpubParser().readEpub(epubPath: weakSelf.epubPath, removeEpub: weakSelf.shouldRemoveEpub, unzipPath: weakSelf.unzipPath)
+                weakSelf.book = parsedBook
+                weakSelf.folioReader.isReaderOpen = true
 
                 // Reload data
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let weakSelf = self else { return }
                     // Add audio player if needed
-                    if self.book.hasAudio || self.readerConfig.enableTTS {
-                        self.addAudioPlayer()
+                    if weakSelf.book.hasAudio || weakSelf.readerConfig.enableTTS {
+                        weakSelf.addAudioPlayer()
                     }
-                    self.centerViewController?.reloadData()
-                    self.folioReader.isReaderReady = true
-                    self.folioReader.delegate?.folioReader?(self.folioReader, didFinishedLoading: self.book)
+                    weakSelf.centerViewController?.reloadData()
+                    weakSelf.folioReader.isReaderReady = true
+                    weakSelf.folioReader.delegate?.folioReader?(weakSelf.folioReader, didFinishedLoading: weakSelf.book)
                 }
             } catch {
-                self.errorOnLoad = true
-                self.alert(message: error.localizedDescription)
+                weakSelf.errorOnLoad = true
+                weakSelf.alert(message: error.localizedDescription)
             }
         }
     }

@@ -34,12 +34,10 @@ footer, header, hgroup, menu, nav, section {
 html {
     -webkit-text-size-adjust: none; /* Never autoresize text */
     padding: 0 0 !important;
-    overflow: hidden;
 }
 
 body {
     padding: 40px 20px !important;
-    overflow: hidden !important;
 }
 
 * {
