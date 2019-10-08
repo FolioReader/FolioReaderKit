@@ -37,26 +37,15 @@ open class FolioReaderAudioPlayer: NSObject {
         self.folioReader = folioReader
 
         super.init()
-
-        UIApplication.shared.beginReceivingRemoteControlEvents()
-
-        // this is needed to the audio can play even when the "silent/vibrate" toggle is on
-        // Fix for AVudioSession https://stackoverflow.com/questions/51010390/avaudiosession-setcategory-swift-4-2-ios-12-play-sound-on-silent
         
+        UIApplication.shared.beginReceivingRemoteControlEvents()
         let session = AVAudioSession.sharedInstance()
         do {
-            if #available(iOS 10.0, *) {
-                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
-            } else {
-                // Fallback on earlier versions
-//                Workaround until https://forums.swift.org/t/using-methods-marked-unavailable-in-swift-4-2/14949 isn't fixed
-                AVAudioSession.sharedInstance().perform(NSSelectorFromString("setCategory:error:"), with: AVAudioSession.Category.playback)
-            }
-            try AVAudioSession.sharedInstance().setActive(true)
+            try session.setCategory(.playback, mode: .default)
+            try session.setActive(true)
         } catch {
             print(error)
         }
-//        try? session.setCategory(convertFromAVAudioSessionCategory(AVAudioSession.Category.playback))
 
         NotificationCenter.default.addObserver(self,
             selector: #selector(pause),

@@ -135,7 +135,7 @@ open class FolioReaderContainer: UIViewController {
             self.centerNavigationController = UINavigationController(rootViewController: rootViewController)
         }
 
-        self.centerNavigationController?.setNavigationBarHidden(self.readerConfig.shouldHideNavigationOnTap, animated: false)
+        centerNavigationController?.setNavigationBarHidden(readerConfig.shouldHideNavigationOnTap, animated: false)
         if let _centerNavigationController = self.centerNavigationController {
             self.view.addSubview(_centerNavigationController.view)
             self.addChild(_centerNavigationController)

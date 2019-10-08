@@ -372,9 +372,8 @@ open class FolioReaderPage: UICollectionViewCell, UIGestureRecognizerDelegate {
     @objc func refreshPageMode() {
         guard let webView = webView else { return }
 
-        if (self.folioReader.nightMode == true) {
+        if folioReader.nightMode {
             // omit create webView and colorView
-            // TODO: - Fix this
 //            let script = "document.documentElement.offsetHeight"
 //            let contentHeight = webView.stringByEvaluatingJavaScript(from: script)
 //            let frameHeight = webView.frame.height
