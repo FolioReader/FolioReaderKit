@@ -37,26 +37,15 @@ open class FolioReaderAudioPlayer: NSObject {
         self.folioReader = folioReader
 
         super.init()
-
-        UIApplication.shared.beginReceivingRemoteControlEvents()
-
-        // this is needed to the audio can play even when the "silent/vibrate" toggle is on
-        // Fix for AVudioSession https://stackoverflow.com/questions/51010390/avaudiosession-setcategory-swift-4-2-ios-12-play-sound-on-silent
         
+        UIApplication.shared.beginReceivingRemoteControlEvents()
         let session = AVAudioSession.sharedInstance()
         do {
-            if #available(iOS 10.0, *) {
-                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
-            } else {
-                // Fallback on earlier versions
-//                Workaround until https://forums.swift.org/t/using-methods-marked-unavailable-in-swift-4-2/14949 isn't fixed
-                AVAudioSession.sharedInstance().perform(NSSelectorFromString("setCategory:error:"), with: AVAudioSession.Category.playback)
-            }
-            try AVAudioSession.sharedInstance().setActive(true)
+            try session.setCategory(.playback, mode: .default)
+            try session.setActive(true)
         } catch {
             print(error)
         }
-//        try? session.setCategory(convertFromAVAudioSessionCategory(AVAudioSession.Category.playback))
 
         NotificationCenter.default.addObserver(self,
             selector: #selector(pause),
@@ -174,11 +163,13 @@ open class FolioReaderAudioPlayer: NSObject {
     }
 
     @objc func play() {
+        
         if book.hasAudio {
-            guard let currentPage = self.folioReader.readerCenter?.currentPage else { return }
-            currentPage.webView?.js("playAudio()")
+            guard let webView = self.folioReader.readerCenter?.currentPage?.webView else { return }
+            let script = "playAudio()"
+            webView.js(script, completion: { _ in })
         } else {
-            self.readCurrentSentence()
+            readCurrentSentence()
         }
     }
 
@@ -382,22 +373,19 @@ open class FolioReaderAudioPlayer: NSObject {
         }
 
         let playbackActiveClass = book.playbackActiveClass
-        guard let sentence = currentPage.webView?.js("getSentenceWithIndex('\(playbackActiveClass)')") else {
-            if (readerCenter.isLastPage() == true) {
-                self.stop()
-            } else {
-                readerCenter.changePageToNext()
-            }
-
-            return
+        if let webView = currentPage.webView {
+            let script = "getSentenceWithIndex('\(playbackActiveClass)')"
+            webView.js(script, completion: { [weak self] value in
+                guard let sentence = value as? String else {
+                    readerCenter.isLastPage() == true ? self?.stop() : readerCenter.changePageToNext()
+                    return
+                }
+                
+                if let href = readerCenter.getCurrentChapter()?.href {
+                    self?.playText(href, text: sentence)
+                }
+            })
         }
-
-        guard let href = readerCenter.getCurrentChapter()?.href else {
-            return
-        }
-
-        // TODO QUESTION: The previous code made it possible to call `playText` with the parameter `href` being an empty string. Was that valid? should this logic be kept?
-        self.playText(href, text: sentence)
     }
 
     func readCurrentSentence() {
@@ -408,11 +396,11 @@ open class FolioReaderAudioPlayer: NSObject {
             synthesizer.continueSpeaking()
         } else {
             if synthesizer.isSpeaking {
-                stopSynthesizer(immediate: false, completion: {
-                    if let currentPage = self.folioReader.readerCenter?.currentPage {
-                        currentPage.webView?.js("resetCurrentSentenceIndex()")
-                    }
-                    self.speakSentence()
+                stopSynthesizer(immediate: false, completion: { [weak self] in
+                    guard let weakSelf = self else { return }
+                    let script = "resetCurrentSentenceIndex()"
+                    weakSelf.folioReader.readerCenter?.currentPage?.webView?.js(script, completion: { _ in })
+                    weakSelf.speakSentence()
                 })
             } else {
                 speakSentence()

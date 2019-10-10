@@ -180,17 +180,21 @@ extension FolioReader {
 
     /// Check if current theme is Night mode
     open var nightMode: Bool {
-        get { return self.defaults.bool(forKey: kNightMode) }
+        get { return defaults.bool(forKey: kNightMode) }
         set (value) {
-            self.defaults.set(value, forKey: kNightMode)
+            defaults.set(value, forKey: kNightMode)
 
             if let readerCenter = self.readerCenter {
-                UIView.animate(withDuration: 0.6, animations: {
-                    _ = readerCenter.currentPage?.webView?.js("nightMode(\(self.nightMode))")
-                    readerCenter.pageIndicatorView?.reloadColors()
-                    readerCenter.configureNavBar()
-                    readerCenter.scrollScrubber?.reloadColors()
-                    readerCenter.collectionView.backgroundColor = (self.nightMode == true ? self.readerContainer?.readerConfig.nightModeBackground : UIColor.white)
+                UIView.animate(withDuration: 0.6, animations: { [weak self] in
+                    guard let weakSelf = self else { return }
+                    let script = "nightMode(\(weakSelf.nightMode))"
+                    readerCenter.currentPage?.webView?.js(script, completion: { [weak self] _ in
+                        guard let weakSelf = self else { return }
+                        readerCenter.pageIndicatorView?.reloadColors()
+                        readerCenter.configureNavBar()
+                        readerCenter.scrollScrubber?.reloadColors()
+                        readerCenter.collectionView.backgroundColor = (weakSelf.nightMode == true ? weakSelf.readerContainer?.readerConfig.nightModeBackground : UIColor.white)
+                    })
                 }, completion: { (finished: Bool) in
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "needRefreshPageMode"), object: nil)
                 })
@@ -202,7 +206,7 @@ extension FolioReader {
     open var currentFont: FolioReaderFont {
         get {
             guard
-                let rawValue = self.defaults.value(forKey: kCurrentFontFamily) as? Int,
+                let rawValue = defaults.value(forKey: kCurrentFontFamily) as? Int,
                 let font = FolioReaderFont(rawValue: rawValue) else {
                     return .andada
             }
@@ -210,8 +214,9 @@ extension FolioReader {
             return font
         }
         set (font) {
-            self.defaults.set(font.rawValue, forKey: kCurrentFontFamily)
-            _ = self.readerCenter?.currentPage?.webView?.js("setFontName('\(font.cssIdentifier)')")
+            defaults.set(font.rawValue, forKey: kCurrentFontFamily)
+            let script = "setFontName('\(font.cssIdentifier)')"
+            readerCenter?.currentPage?.webView?.js(script, completion: { _ in })
         }
     }
 
@@ -227,13 +232,10 @@ extension FolioReader {
             return size
         }
         set (value) {
-            self.defaults.set(value.rawValue, forKey: kCurrentFontSize)
-
-            guard let currentPage = self.readerCenter?.currentPage else {
-                return
-            }
-
-            currentPage.webView?.js("setFontSize('\(currentFontSize.cssIdentifier)')")
+            defaults.set(value.rawValue, forKey: kCurrentFontSize)
+            guard let currentPage = readerCenter?.currentPage else { return }
+            let script = "setFontSize('\(currentFontSize.cssIdentifier)')"
+            currentPage.webView?.js(script, completion: { _ in })
         }
     }
 

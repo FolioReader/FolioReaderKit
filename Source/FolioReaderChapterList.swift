@@ -58,15 +58,13 @@ class FolioReaderChapterList: UITableViewController {
         self.tocItems = self.book.flatTableOfContents
       
         // Jump to the current chapter
-        DispatchQueue.main.async {
-          
-            if
-                let currentPageNumber = self.folioReader.readerCenter?.currentPageNumber,
-                let reference = self.book.spine.spineReferences[safe: currentPageNumber - 1],
-                let index = self.tocItems.firstIndex(where: { $0.resource == reference.resource }) {
-              
+        DispatchQueue.main.async { [weak self] in
+            guard let weakSelf = self else { return }
+            if let currentPageNumber = weakSelf.folioReader.readerCenter?.currentPageNumber,
+                let reference = weakSelf.book.spine.spineReferences[safe: currentPageNumber - 1],
+                let index = weakSelf.tocItems.firstIndex(where: { $0.resource == reference.resource }) {
                   let indexPath = IndexPath(row: index, section: 0)
-                  self.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
+                  weakSelf.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
             }
         }
     }

@@ -37,13 +37,13 @@ class PageViewController: UIPageViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         segmentedControl = UISegmentedControl(items: segmentedControlItems)
         segmentedControl.addTarget(self, action: #selector(PageViewController.didSwitchMenu(_:)), for: UIControl.Event.valueChanged)
         segmentedControl.selectedSegmentIndex = index
         segmentedControl.setWidth(100, forSegmentAt: 0)
         segmentedControl.setWidth(100, forSegmentAt: 1)
-        self.navigationItem.titleView = segmentedControl
+        navigationItem.titleView = segmentedControl
 
         viewList = [viewControllerOne, viewControllerTwo]
 
@@ -52,7 +52,6 @@ class PageViewController: UIPageViewController {
 
         self.delegate = self
         self.dataSource = self
-
         self.view.backgroundColor = UIColor.white
         self.setViewControllers([viewList[index]], direction: .forward, animated: false, completion: nil)
 

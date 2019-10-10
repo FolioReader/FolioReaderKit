@@ -1,11 +1,18 @@
-platform :ios, '9.0'
+platform :ios, '11.0'
 
 use_frameworks!
 inhibit_all_warnings!
 
+pre_install do |installer|
+  installer.analysis_result.specifications.each do |s|
+    s.swift_version = '5.1'
+    end
+end
+
 def shared_pods
   pod 'FolioReaderKit', path: '../'
 end
+
 
 def testing_pods
   pod 'Quick', '2.2.0'
