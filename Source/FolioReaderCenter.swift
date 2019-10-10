@@ -440,6 +440,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     private func configure(readerPageCell cell: FolioReaderPage?, atIndexPath indexPath: IndexPath) -> UICollectionViewCell {
+        
         guard let cell = cell, let readerContainer = readerContainer else {
             return UICollectionViewCell()
         }
@@ -453,44 +454,11 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         cell.delegate = self
         cell.backgroundColor = .clear
         setPageProgressiveDirection(cell)
-
-        // Configure the cell
+        
         let resource = book.spine.spineReferences[indexPath.row].resource
-        guard var html = try? String(contentsOfFile: resource.fullHref, encoding: String.Encoding.utf8) else {
-            return cell
-        }
-
-        let mediaOverlayStyleColors = "\"\(self.readerConfig.mediaOverlayColor.hexString(false))\", \"\(self.readerConfig.mediaOverlayColor.highlightColor().hexString(false))\""
-
-        // Inject CSS
-        let jsFilePath = Bundle.frameworkBundle().path(forResource: "Bridge", ofType: "js")
-        let cssFilePath = Bundle.frameworkBundle().path(forResource: "Style", ofType: "css")
-        let cssTag = "<link rel=\"stylesheet\" type=\"text/css\" href=\"\(cssFilePath!)\">"
-        let jsTag = "<script type=\"text/javascript\" src=\"\(jsFilePath!)\"></script>" +
-        "<script type=\"text/javascript\">setMediaOverlayStyleColors(\(mediaOverlayStyleColors))</script>"
-
-        let toInject = "\n\(cssTag)\n\(jsTag)\n</head>"
-        html = html.replacingOccurrences(of: "</head>", with: toInject)
-
-        // Font class name
-        var classes = folioReader.currentFont.cssIdentifier
-        classes += " " + folioReader.currentMediaOverlayStyle.className()
-
-        // Night mode
-        if folioReader.nightMode {
-            classes += " nightMode"
-        }
-        
-        // Font Size
-        classes += " \(folioReader.currentFontSize.cssIdentifier)"
-        html = html.replacingOccurrences(of: "<html ", with: "<html class=\"\(classes)\"")
-        
-        // Let the delegate adjust the html string
-        if let modifiedHtmlContent = self.delegate?.htmlContentForPage?(cell, htmlContent: html) {
-            html = modifiedHtmlContent
-        }
-        
-        cell.loadHTMLString(html, baseURL: URL(fileURLWithPath: resource.fullHref.deletingLastPathComponent))
+        let baseURL = URL(fileURLWithPath: resource.fullHref.deletingLastPathComponent)
+        let fileURL = URL(fileURLWithPath: resource.fullHref)
+        cell.loadFileURL(fileURL, allowingReadAccessTo: baseURL)
         return cell
     }
 
@@ -750,11 +718,9 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         let item = findPageByHref(href)
         let pageUpdateNeeded = item+1 != currentPage.pageNumber
         let indexPath = IndexPath(row: item, section: 0)
-        changePageWith(indexPath: indexPath, animated: true) { () -> Void in
+        changePageWith(indexPath: indexPath, animated: true) { [weak self] () -> Void in
             if pageUpdateNeeded {
-                self.updateCurrentPage {
-                    currentPage.audioMarkID(markID)
-                }
+                self?.updateCurrentPage { currentPage.audioMarkID(markID) }
             } else {
                 currentPage.audioMarkID(markID)
             }
@@ -806,7 +772,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     public func changePageToPrevious(_ completion: (() -> Void)? = nil) {
-        changePageWith(page: self.previousPageNumber, animated: true) { () -> Void in
+        changePageWith(page: previousPageNumber, animated: true) { () -> Void in
             completion?()
         }
     }
@@ -833,31 +799,26 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         
         completion?()
     }
-
+    
     public func getCurrentPageItemNumber() -> Int {
         guard let page = currentPage, let webView = page.webView else { return 0 }
-        
         let pageSize = readerConfig.isDirection(pageHeight, pageWidth, pageHeight)
         let pageOffSet = readerConfig.isDirection(webView.scrollView.contentOffset.x, webView.scrollView.contentOffset.x, webView.scrollView.contentOffset.y)
         let webViewPage = pageForOffset(pageOffSet, pageHeight: pageSize)
-        
         return webViewPage
     }
     
     public func getCurrentPageProgress() -> Float {
         guard let page = currentPage else { return 0 }
-        
-        let pageSize = self.readerConfig.isDirection(pageHeight, self.pageWidth, pageHeight)
-        let contentSize = page.webView?.scrollView.contentSize.forDirection(withConfiguration: self.readerConfig) ?? 0
+        let pageSize = readerConfig.isDirection(pageHeight, pageWidth, pageHeight)
+        let contentSize = page.webView?.scrollView.contentSize.forDirection(withConfiguration: readerConfig) ?? 0
         let totalPages = ((pageSize != 0) ? Int(ceil(contentSize / pageSize)) : 0)
         let currentPageItem = getCurrentPageItemNumber()
         
         if totalPages > 0 {
             var progress = Float((currentPageItem * 100) / totalPages)
-            
             if progress < 0 { progress = 0 }
             if progress > 100 { progress = 100 }
-            
             return progress
         }
         
@@ -966,7 +927,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
      */
     public func findPageByHref(_ href: String) -> Int {
         var count = 0
-        for item in self.book.spine.spineReferences {
+        for item in book.spine.spineReferences {
             if item.resource.href == href {
                 return count
             }

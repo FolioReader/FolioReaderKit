@@ -14,40 +14,44 @@ open class FolioReaderWebView: WKWebView {
     var isColors = false
     var isShare = false
     var isOneWord = false
-
+    
     fileprivate weak var readerContainer: FolioReaderContainer?
-
+    
     fileprivate var readerConfig: FolioReaderConfig {
         guard let readerContainer = readerContainer else { return FolioReaderConfig() }
         return readerContainer.readerConfig
     }
-
+    
     fileprivate var book: FRBook {
         guard let readerContainer = readerContainer else { return FRBook() }
         return readerContainer.book
     }
-
+    
     fileprivate var folioReader: FolioReader {
         guard let readerContainer = readerContainer else { return FolioReader() }
         return readerContainer.folioReader
     }
-
+    
     public override init(frame: CGRect, configuration: WKWebViewConfiguration) {
         fatalError("use init(frame:readerConfig:book:) instead.")
     }
-
+    
     init(frame: CGRect, readerContainer: FolioReaderContainer) {
         self.readerContainer = readerContainer
         let config = WKWebViewConfiguration()
-        config.dataDetectorTypes = .link
-        let jsScript = FolioReaderWebView.insertViewportJSScript()
-        let script = WKUserScript(source: jsScript, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
         let controller = WKUserContentController()
-        controller.addUserScript(script)
+        config.dataDetectorTypes = .link
+        
+        if let script = FolioReaderWebView.insertViewportScript() { controller.addUserScript(script) }
+        if let script = FolioReaderWebView.injectCSSScript() { controller.addUserScript(script) }
+        if let script = FolioReaderWebView.injectJSScript() { controller.addUserScript(script) }
+        if let script = FolioReaderWebView.injectHTMLClasses(container: readerContainer) { controller.addUserScript(script) }
+        if let script = FolioReaderWebView.injectColorsScript(container: readerContainer) { controller.addUserScript(script) }
+        
         config.userContentController = controller
         super.init(frame: frame, configuration: config)
     }
-
+    
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -58,7 +62,7 @@ open class FolioReaderWebView: WKWebView {
         guard readerConfig.useReaderMenuController else {
             return super.canPerformAction(action, withSender: sender)
         }
-
+        
         if isShare {
             return false
         } else if isColors {
@@ -76,9 +80,9 @@ open class FolioReaderWebView: WKWebView {
             return false
         }
     }
-
+    
     // MARK: - UIMenuController - Actions
-
+    
     @objc func share(_ sender: UIMenuController) {
         
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -100,7 +104,7 @@ open class FolioReaderWebView: WKWebView {
             }
             weakSelf.setMenuVisible(false)
         })
-
+        
         let shareText = UIAlertAction(title: self.readerConfig.localizedShareTextQuote, style: .default) { [weak self] (action) -> Void in
             guard let weakSelf = self else { return }
             if weakSelf.isShare {
@@ -118,20 +122,20 @@ open class FolioReaderWebView: WKWebView {
                 })
             }
         }
-
+        
         let cancel = UIAlertAction(title: self.readerConfig.localizedCancel, style: .cancel, handler: nil)
         alertController.addAction(shareImage)
         alertController.addAction(shareText)
         alertController.addAction(cancel)
-
+        
         if let alert = alertController.popoverPresentationController {
             alert.sourceView = folioReader.readerCenter?.currentPage
             alert.sourceRect = sender.menuFrame
         }
-
+        
         self.folioReader.readerCenter?.present(alertController, animated: true, completion: nil)
     }
-
+    
     func colors(_ sender: UIMenuController?) {
         isColors = true
         createMenu(options: false)
@@ -146,7 +150,7 @@ open class FolioReaderWebView: WKWebView {
             weakSelf.setMenuVisible(false)
         })
     }
-
+    
     @objc func highlight(_ sender: UIMenuController?) {
         
         let script = "highlightString('\(HighlightStyle.classForStyle(self.folioReader.currentHighlightStyle))')"
@@ -169,7 +173,7 @@ open class FolioReaderWebView: WKWebView {
             let rect = NSCoder.cgRect(for: dic["rect"]!)
             guard let startOffset = dic["startOffset"],
                 let endOffset = dic["endOffset"] else {
-                return
+                    return
             }
             
             weakSelf.createMenu(options: true)
@@ -213,7 +217,7 @@ open class FolioReaderWebView: WKWebView {
             let rect = NSCoder.cgRect(for: dic["rect"]!)
             guard let startOffset = dic["startOffset"],
                 let endOffset = dic["endOffset"] else {
-                return
+                    return
             }
             
             weakSelf.clearTextSelection()
@@ -245,7 +249,7 @@ open class FolioReaderWebView: WKWebView {
             weakSelf.folioReader.readerCenter?.presentAddHighlightNote(highlightNote, edit: true)
         })
     }
-
+    
     @objc func define(_ sender: UIMenuController?) {
         let script = "getSelectedText()"
         js(script, completion: { [weak self] value in
@@ -257,29 +261,29 @@ open class FolioReaderWebView: WKWebView {
             if let readerContainer = weakSelf.readerContainer { readerContainer.show(vc, sender: nil) }
         })
     }
-
+    
     @objc func play(_ sender: UIMenuController?) {
         self.folioReader.readerAudioPlayer?.play()
-
+        
         self.clearTextSelection()
     }
-
+    
     func setYellow(_ sender: UIMenuController?) {
         changeHighlightStyle(sender, style: .yellow)
     }
-
+    
     func setGreen(_ sender: UIMenuController?) {
         changeHighlightStyle(sender, style: .green)
     }
-
+    
     func setBlue(_ sender: UIMenuController?) {
         changeHighlightStyle(sender, style: .blue)
     }
-
+    
     func setPink(_ sender: UIMenuController?) {
         changeHighlightStyle(sender, style: .pink)
     }
-
+    
     func setUnderline(_ sender: UIMenuController?) {
         changeHighlightStyle(sender, style: .underline)
     }
@@ -293,15 +297,15 @@ open class FolioReaderWebView: WKWebView {
             weakSelf.setMenuVisible(false)
         })
     }
-
+    
     // MARK: - Create and show menu
     func createMenu(options: Bool) {
         guard (self.readerConfig.useReaderMenuController == true) else {
             return
         }
-
+        
         isShare = options
-
+        
         let colors = UIImage(readerImageNamed: "colors-marker")
         let share = UIImage(readerImageNamed: "share-marker")
         let remove = UIImage(readerImageNamed: "no-marker")
@@ -310,9 +314,9 @@ open class FolioReaderWebView: WKWebView {
         let blue = UIImage(readerImageNamed: "blue-marker")
         let pink = UIImage(readerImageNamed: "pink-marker")
         let underline = UIImage(readerImageNamed: "underline-marker")
-
+        
         let menuController = UIMenuController.shared
-
+        
         let highlightItem = UIMenuItem(title: self.readerConfig.localizedHighlightMenu, action: #selector(highlight(_:)))
         let highlightNoteItem = UIMenuItem(title: self.readerConfig.localizedHighlightNote, action: #selector(highlightWithNote(_:)))
         let editNoteItem = UIMenuItem(title: self.readerConfig.localizedHighlightNote, action: #selector(updateHighlightNote(_:)))
@@ -342,9 +346,9 @@ open class FolioReaderWebView: WKWebView {
         let underlineItem = UIMenuItem(title: "U", image: underline) { [weak self] _ in
             self?.setUnderline(menuController)
         }
-
+        
         var menuItems: [UIMenuItem] = []
-
+        
         // menu on existing highlight
         if isShare {
             menuItems = [colorsItem, editNoteItem, removeItem]
@@ -368,7 +372,7 @@ open class FolioReaderWebView: WKWebView {
             if self.book.hasAudio || self.readerConfig.enableTTS {
                 menuItems.insert(playAudioItem, at: 0)
             }
-
+            
             if readerConfig.allowSharing {
                 menuItems.append(shareItem)
             }
@@ -412,13 +416,13 @@ open class FolioReaderWebView: WKWebView {
         switch readerConfig.scrollDirection {
         case .vertical, .defaultVertical, .horizontalWithVerticalContent:
             scrollView.isPagingEnabled = true
-//            paginationMode = .unpaginated
+            //            paginationMode = .unpaginated
             scrollView.bounces = true
             break
         case .horizontal:
             scrollView.isPagingEnabled = true
-//            paginationMode = .leftToRight
-//            paginationBreakingMode = .page
+            //            paginationMode = .leftToRight
+            //            paginationBreakingMode = .page
             scrollView.bounces = false
             break
         }
@@ -427,13 +431,78 @@ open class FolioReaderWebView: WKWebView {
 
 
 extension FolioReaderWebView {
-    static func insertViewportJSScript() -> String {
-        return """
+    
+    static func insertViewportScript() -> WKUserScript? {
+        let source =  """
         var meta = document.createElement('meta');
         meta.setAttribute('name', 'viewport');
         meta.setAttribute('content', 'width=device-width');
-        meta.setAttribute('content', 'initial-scale=1.0');
         document.getElementsByTagName('head')[0].appendChild(meta);
         """
+        let script = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+        return script
+    }
+    
+    static func injectCSSScript() -> WKUserScript? {
+        
+        guard let path = Bundle.frameworkBundle().path(forResource: "Style", ofType: "css") else {
+            return nil
+        }
+        
+        let source = """
+        var style = document.createElement("link");
+        style.type = "text/css";
+        style.rel = "stylesheet";
+        style.href = "\(path)";
+        document.head.appendChild(style);
+        """
+        
+        let script = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+        return script
+    }
+    
+    static func injectJSScript() -> WKUserScript? {
+        
+        guard let path = Bundle.frameworkBundle().path(forResource: "Bridge", ofType: "js") else { return nil }
+        let source = """
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "\(path)";
+        document.head.appendChild(script);
+        """
+        
+        let script = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+        return script
+    }
+    
+    static func injectColorsScript(container:FolioReaderContainer) -> WKUserScript? {
+        
+        var mediaOverlayStyleColors = "\"\(container.readerConfig.mediaOverlayColor.hexString(false))\""
+        mediaOverlayStyleColors += ", "
+        mediaOverlayStyleColors += "\"\(container.readerConfig.mediaOverlayColor.highlightColor().hexString(false))\""
+        
+        let source = """
+        var jsScript = document.createElement('script');
+        jsScript.innerHTML = 'setMediaOverlayStyleColors(\(mediaOverlayStyleColors))';
+        document.head.appendChild(jsScript);
+        """
+        
+        let script = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+        return script
+    }
+    
+    static func injectHTMLClasses(container:FolioReaderContainer) -> WKUserScript? {
+        var classes = container.folioReader.currentFont.cssIdentifier
+        classes += " " + container.folioReader.currentMediaOverlayStyle.className()
+        classes += container.folioReader.nightMode ? " nightMode" : ""
+        classes += " \(container.folioReader.currentFontSize.cssIdentifier)"
+        
+        let source = """
+        var root = document.documentElement;
+        root.className += '\(classes)';
+        """
+        
+        let script = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+        return script
     }
 }

@@ -180,9 +180,9 @@ extension FolioReader {
 
     /// Check if current theme is Night mode
     open var nightMode: Bool {
-        get { return self.defaults.bool(forKey: kNightMode) }
+        get { return defaults.bool(forKey: kNightMode) }
         set (value) {
-            self.defaults.set(value, forKey: kNightMode)
+            defaults.set(value, forKey: kNightMode)
 
             if let readerCenter = self.readerCenter {
                 UIView.animate(withDuration: 0.6, animations: { [weak self] in
