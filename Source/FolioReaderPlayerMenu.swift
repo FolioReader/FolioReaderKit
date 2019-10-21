@@ -42,7 +42,8 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
         view.addGestureRecognizer(tapGesture)
 
         // Menu view
-        menuView = UIView(frame: CGRect(x: 0, y: view.frame.height-165, width: view.frame.width, height: view.frame.height))
+        let safeAreaInsetsBottom = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
+        menuView = UIView(frame: CGRect(x: 0, y: view.frame.height - (115 + safeAreaInsetsBottom), width: view.frame.width, height: view.frame.height + safeAreaInsetsBottom))
         menuView.backgroundColor = self.folioReader.isNight(self.readerConfig.nightModeNavBackground, self.readerConfig.daysModeNavBackground)
         menuView.autoresizingMask = .flexibleWidth
         menuView.layer.shadowColor = UIColor.black.cgColor
@@ -136,76 +137,76 @@ class FolioReaderPlayerMenu: UIViewController, SMSegmentViewDelegate, UIGestureR
         let line2 = UIView(frame: CGRect(x: 0, y: playbackRate.frame.height+playbackRate.frame.origin.y, width: view.frame.width, height: 1))
         line2.backgroundColor = self.readerConfig.nightModeSeparatorColor
         menuView.addSubview(line2)
-
-
-        // Media overlay highlight styles
-        let style0 = UIButton(frame: CGRect(x: 0, y: line2.frame.height+line2.frame.origin.y, width: view.frame.width/3, height: 55))
-        style0.titleLabel!.textAlignment = .center
-        style0.titleLabel!.font = UIFont(name: "Avenir-Light", size: 17)
-        style0.setTitleColor(self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, UIColor.white), for: UIControl.State())
-        style0.setTitleColor(self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, UIColor.white), for: .selected)
-        style0.setTitle(self.readerConfig.localizedPlayerMenuStyle, for: UIControl.State())
-        menuView.addSubview(style0);
-        style0.titleLabel?.sizeToFit()
-        let style0Bgd = UIView(frame: style0.titleLabel!.frame)
-        style0Bgd.center = CGPoint(x: style0.frame.size.width  / 2, y: style0.frame.size.height / 2);
-        style0Bgd.frame.size.width += 8
-        style0Bgd.frame.origin.x -= 4
-        style0Bgd.backgroundColor = normalColor;
-        style0Bgd.layer.cornerRadius = 3.0;
-        style0Bgd.isUserInteractionEnabled = false
-        style0.insertSubview(style0Bgd, belowSubview: style0.titleLabel!)
-
-        let style1 = UIButton(frame: CGRect(x: view.frame.width/3, y: line2.frame.height+line2.frame.origin.y, width: view.frame.width/3, height: 55))
-        style1.titleLabel!.textAlignment = .center
-        style1.titleLabel!.font = UIFont(name: "Avenir-Light", size: 17)
-        style1.setTitleColor(normalColor, for: UIControl.State())
-        style1.setAttributedTitle(NSAttributedString(string: "Style", attributes: [
-            NSAttributedString.Key.foregroundColor: normalColor,
-            NSAttributedString.Key.underlineStyle: NSUnderlineStyle.patternDot.rawValue|NSUnderlineStyle.single.rawValue,
-            NSAttributedString.Key.underlineColor: normalColor
-            ]), for: UIControl.State())
-        style1.setAttributedTitle(NSAttributedString(string: self.readerConfig.localizedPlayerMenuStyle, attributes: [
-            NSAttributedString.Key.foregroundColor: self.folioReader.isNight(UIColor.white, UIColor.black),
-            NSAttributedString.Key.underlineStyle: NSUnderlineStyle.patternDot.rawValue|NSUnderlineStyle.single.rawValue,
-            NSAttributedString.Key.underlineColor: selectedColor
-            ]), for: .selected)
-        menuView.addSubview(style1);
-
-        let style2 = UIButton(frame: CGRect(x: view.frame.width/1.5, y: line2.frame.height+line2.frame.origin.y, width: view.frame.width/3, height: 55))
-        style2.titleLabel!.textAlignment = .center
-        style2.titleLabel!.font = UIFont(name: "Avenir-Light", size: 17)
-        style2.setTitleColor(normalColor, for: UIControl.State())
-        style2.setTitleColor(selectedColor, for: .selected)
-        style2.setTitle(self.readerConfig.localizedPlayerMenuStyle, for: UIControl.State())
-        menuView.addSubview(style2);
-
-        // add line dividers between style buttons
-        let style1line = UIView(frame: CGRect(x: style1.frame.origin.x, y: style1.frame.origin.y, width: 1, height: style1.frame.height))
-        style1line.backgroundColor = self.readerConfig.nightModeSeparatorColor
-        menuView.addSubview(style1line)
-        let style2line = UIView(frame: CGRect(x: style2.frame.origin.x, y: style2.frame.origin.y, width: 1, height: style2.frame.height))
-        style2line.backgroundColor = self.readerConfig.nightModeSeparatorColor
-        menuView.addSubview(style2line)
-
-        // select the current style
-        style0.isSelected = (self.folioReader.currentMediaOverlayStyle == .default)
-        style1.isSelected = (self.folioReader.currentMediaOverlayStyle == .underline)
-        style2.isSelected = (self.folioReader.currentMediaOverlayStyle == .textColor)
-        if style0.isSelected { style0Bgd.backgroundColor = selectedColor }
-
-        // hook up button actions
-        style0.tag = MediaOverlayStyle.default.rawValue
-        style1.tag = MediaOverlayStyle.underline.rawValue
-        style2.tag = MediaOverlayStyle.textColor.rawValue
-        style0.addTarget(self, action: #selector(FolioReaderPlayerMenu.changeStyle(_:)), for: .touchUpInside)
-        style1.addTarget(self, action: #selector(FolioReaderPlayerMenu.changeStyle(_:)), for: .touchUpInside)
-        style2.addTarget(self, action: #selector(FolioReaderPlayerMenu.changeStyle(_:)), for: .touchUpInside)
-
-        // store ref to buttons
-        styleOptionBtns.append(style0)
-        styleOptionBtns.append(style1)
-        styleOptionBtns.append(style2)
+//
+//
+//        // Media overlay highlight styles
+//        let style0 = UIButton(frame: CGRect(x: 0, y: line2.frame.height+line2.frame.origin.y, width: view.frame.width/3, height: 55))
+//        style0.titleLabel!.textAlignment = .center
+//        style0.titleLabel!.font = UIFont(name: "Avenir-Light", size: 17)
+//        style0.setTitleColor(self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, UIColor.white), for: UIControl.State())
+//        style0.setTitleColor(self.folioReader.isNight(self.readerConfig.nightModeMenuBackground, UIColor.white), for: .selected)
+//        style0.setTitle(self.readerConfig.localizedPlayerMenuStyle, for: UIControl.State())
+//        menuView.addSubview(style0);
+//        style0.titleLabel?.sizeToFit()
+//        let style0Bgd = UIView(frame: style0.titleLabel!.frame)
+//        style0Bgd.center = CGPoint(x: style0.frame.size.width  / 2, y: style0.frame.size.height / 2);
+//        style0Bgd.frame.size.width += 8
+//        style0Bgd.frame.origin.x -= 4
+//        style0Bgd.backgroundColor = normalColor;
+//        style0Bgd.layer.cornerRadius = 3.0;
+//        style0Bgd.isUserInteractionEnabled = false
+//        style0.insertSubview(style0Bgd, belowSubview: style0.titleLabel!)
+//
+//        let style1 = UIButton(frame: CGRect(x: view.frame.width/3, y: line2.frame.height+line2.frame.origin.y, width: view.frame.width/3, height: 55))
+//        style1.titleLabel!.textAlignment = .center
+//        style1.titleLabel!.font = UIFont(name: "Avenir-Light", size: 17)
+//        style1.setTitleColor(normalColor, for: UIControl.State())
+//        style1.setAttributedTitle(NSAttributedString(string: "Style", attributes: [
+//            NSAttributedString.Key.foregroundColor: normalColor,
+//            NSAttributedString.Key.underlineStyle: NSUnderlineStyle.patternDot.rawValue|NSUnderlineStyle.single.rawValue,
+//            NSAttributedString.Key.underlineColor: normalColor
+//            ]), for: UIControl.State())
+//        style1.setAttributedTitle(NSAttributedString(string: self.readerConfig.localizedPlayerMenuStyle, attributes: [
+//            NSAttributedString.Key.foregroundColor: self.folioReader.isNight(UIColor.white, UIColor.black),
+//            NSAttributedString.Key.underlineStyle: NSUnderlineStyle.patternDot.rawValue|NSUnderlineStyle.single.rawValue,
+//            NSAttributedString.Key.underlineColor: selectedColor
+//            ]), for: .selected)
+//        menuView.addSubview(style1);
+//
+//        let style2 = UIButton(frame: CGRect(x: view.frame.width/1.5, y: line2.frame.height+line2.frame.origin.y, width: view.frame.width/3, height: 55))
+//        style2.titleLabel!.textAlignment = .center
+//        style2.titleLabel!.font = UIFont(name: "Avenir-Light", size: 17)
+//        style2.setTitleColor(normalColor, for: UIControl.State())
+//        style2.setTitleColor(selectedColor, for: .selected)
+//        style2.setTitle(self.readerConfig.localizedPlayerMenuStyle, for: UIControl.State())
+//        menuView.addSubview(style2);
+//
+//        // add line dividers between style buttons
+//        let style1line = UIView(frame: CGRect(x: style1.frame.origin.x, y: style1.frame.origin.y, width: 1, height: style1.frame.height))
+//        style1line.backgroundColor = self.readerConfig.nightModeSeparatorColor
+//        menuView.addSubview(style1line)
+//        let style2line = UIView(frame: CGRect(x: style2.frame.origin.x, y: style2.frame.origin.y, width: 1, height: style2.frame.height))
+//        style2line.backgroundColor = self.readerConfig.nightModeSeparatorColor
+//        menuView.addSubview(style2line)
+//
+//        // select the current style
+//        style0.isSelected = (self.folioReader.currentMediaOverlayStyle == .default)
+//        style1.isSelected = (self.folioReader.currentMediaOverlayStyle == .underline)
+//        style2.isSelected = (self.folioReader.currentMediaOverlayStyle == .textColor)
+//        if style0.isSelected { style0Bgd.backgroundColor = selectedColor }
+//
+//        // hook up button actions
+//        style0.tag = MediaOverlayStyle.default.rawValue
+//        style1.tag = MediaOverlayStyle.underline.rawValue
+//        style2.tag = MediaOverlayStyle.textColor.rawValue
+//        style0.addTarget(self, action: #selector(FolioReaderPlayerMenu.changeStyle(_:)), for: .touchUpInside)
+//        style1.addTarget(self, action: #selector(FolioReaderPlayerMenu.changeStyle(_:)), for: .touchUpInside)
+//        style2.addTarget(self, action: #selector(FolioReaderPlayerMenu.changeStyle(_:)), for: .touchUpInside)
+//
+//        // store ref to buttons
+//        styleOptionBtns.append(style0)
+//        styleOptionBtns.append(style1)
+//        styleOptionBtns.append(style2)
     }
 
 

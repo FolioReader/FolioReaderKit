@@ -30,7 +30,9 @@ class ViewController: UIViewController {
         config.shouldHideNavigationOnTap = epub.shouldHideNavigationOnTap
         config.scrollDirection = epub.scrollDirection
         config.hidePageIndicator = true
-        
+        config.scrollDirection = .vertical
+        config.canChangeScrollDirection = false
+        config.canChangeFontStyle = true
         // See more at FolioReaderConfig.swift
 //        config.canChangeScrollDirection = false
 //        config.enableTTS = false
