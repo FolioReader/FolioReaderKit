@@ -1235,11 +1235,11 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
 
         // Perform the page after a short delay as the collection view hasn't completed it's transition if this method is called (the index paths aren't right during fast scrolls).
         delay(0.2, closure: { [weak self] in
-            if (self?.readerConfig.scrollDirection == .horizontalWithVerticalContent),
-                let cell = ((scrollView.superview as? UIWebView)?.delegate as? FolioReaderPage) {
-                let currentIndexPathRow = cell.pageNumber - 1
-                self?.currentWebViewScrollPositions[currentIndexPathRow] = scrollView.contentOffset
-            }
+//            if (self?.readerConfig.scrollDirection == .horizontalWithVerticalContent),
+//                let cell = ((scrollView.superview as? UIWebView)?.delegate as? FolioReaderPage) {
+//                let currentIndexPathRow = cell.pageNumber - 1
+//                self?.currentWebViewScrollPositions[currentIndexPathRow] = scrollView.contentOffset
+//            }
 
             if (scrollView is UICollectionView) {
                 guard let instance = self else {

@@ -415,7 +415,7 @@ open class FolioReaderWebView: WKWebView {
     func setupScrollDirection() {
         switch readerConfig.scrollDirection {
         case .vertical, .defaultVertical, .horizontalWithVerticalContent:
-            scrollView.isPagingEnabled = true
+            scrollView.isPagingEnabled = false
             //            paginationMode = .unpaginated
             scrollView.bounces = true
             break

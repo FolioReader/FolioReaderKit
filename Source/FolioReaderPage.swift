@@ -391,7 +391,7 @@ open class FolioReaderPage: UICollectionViewCell, UIGestureRecognizerDelegate {
 // MARK: - WKNavigationDelegate
 extension FolioReaderPage: WKNavigationDelegate {
     
-    // MARK: - UIWebView Delegate
+    // MARK: - UKWebView Delegate
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         guard let webView = webView as? FolioReaderWebView else { return }
         delegate?.pageWillLoad?(self)
