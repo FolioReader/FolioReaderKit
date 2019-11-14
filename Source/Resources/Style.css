@@ -7,6 +7,12 @@
  */
 
 /* CSS Reset */
+
+@font-face { font-family:'Andada'; src: local('Andada-Regular'),url('Andada-Regular.otf') format('opentype'); }
+@font-face { font-family:'Lato'; src: local('Lato-Regular'),url('Lato-Regular.ttf') format('opentype'); }
+@font-face { font-family:'Lora'; src: local('Lora-Regular'),url('Lora-Regular.ttf') format('opentype'); }
+@font-face { font-family:'Raleway'; src: local('Raleway-Regular'),url('Raleway-Regular.ttf') format('opentype'); }
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
