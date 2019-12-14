@@ -429,40 +429,40 @@ open class FolioReaderAudioPlayer: NSObject {
      Gets the book and audio information and updates on Now Playing Center
      */
     func updateNowPlayingInfo() {
-        var songInfo = [String: AnyObject]()
-        
-        // Get book Artwork
-        if let coverImage = self.book.coverImage, let artwork = UIImage(contentsOfFile: coverImage.fullHref) {
-            let albumArt = MPMediaItemArtwork(image: artwork)
-            songInfo[MPMediaItemPropertyArtwork] = albumArt
-        }
-        
-        // Get book title
-        if let title = self.book.title {
-            songInfo[MPMediaItemPropertyAlbumTitle] = title as AnyObject?
-        }
-        
-        // Get chapter name
-        if let chapter = getCurrentChapterName() {
-            songInfo[MPMediaItemPropertyTitle] = chapter as AnyObject?
-        }
-        
-        // Get author name
-        if let author = self.book.metadata.creators.first {
-            songInfo[MPMediaItemPropertyArtist] = author.name as AnyObject?
-        }
-        
-        // Set player times
-        if let player = player , !isTextToSpeech {
-            songInfo[MPMediaItemPropertyPlaybackDuration] = player.duration as AnyObject?
-            songInfo[MPNowPlayingInfoPropertyPlaybackRate] = player.rate as AnyObject?
-            songInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime ] = player.currentTime as AnyObject?
-        }
-        
-        // Set Audio Player info
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = songInfo
-        
-        registerCommandsIfNeeded()
+//        var songInfo = [String: AnyObject]()
+//
+//        // Get book Artwork
+//        if let coverImage = self.book.coverImage, let artwork = UIImage(contentsOfFile: coverImage.fullHref) {
+//            let albumArt = MPMediaItemArtwork(image: artwork)
+//            songInfo[MPMediaItemPropertyArtwork] = albumArt
+//        }
+//
+//        // Get book title
+//        if let title = self.book.title {
+//            songInfo[MPMediaItemPropertyAlbumTitle] = title as AnyObject?
+//        }
+//
+//        // Get chapter name
+//        if let chapter = getCurrentChapterName() {
+//            songInfo[MPMediaItemPropertyTitle] = chapter as AnyObject?
+//        }
+//
+//        // Get author name
+//        if let author = self.book.metadata.creators.first {
+//            songInfo[MPMediaItemPropertyArtist] = author.name as AnyObject?
+//        }
+//
+//        // Set player times
+//        if let player = player , !isTextToSpeech {
+//            songInfo[MPMediaItemPropertyPlaybackDuration] = player.duration as AnyObject?
+//            songInfo[MPNowPlayingInfoPropertyPlaybackRate] = player.rate as AnyObject?
+//            songInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime ] = player.currentTime as AnyObject?
+//        }
+//
+//        // Set Audio Player info
+//        MPNowPlayingInfoCenter.default().nowPlayingInfo = songInfo
+//
+//        registerCommandsIfNeeded()
     }
     
     /**
@@ -557,35 +557,15 @@ fileprivate func convertFromAVAudioSessionCategory(_ input: AVAudioSession.Categ
 extension FolioReaderAudioPlayer {
     
     private func activateAudioSession() {
-        
-        let application = UIApplication.shared
-        application.beginReceivingRemoteControlEvents()
-        
-        let session = AVAudioSession.sharedInstance()
-        do {
-            try session.setCategory(.playback, mode: .default)
-            try session.setActive(true)
-        } catch {
-            
-        }
-        
         let center = NotificationCenter.default
+        let session = AVAudioSession.sharedInstance()
         center.addObserver(self, selector: #selector(pause), name: AVAudioSession.interruptionNotification, object: session)
     }
     
     private func deactivateAudioSession() {
-        
-        let application = UIApplication.shared
-        application.endReceivingRemoteControlEvents()
-        
-        let session = AVAudioSession.sharedInstance()
-        do {
-            try session.setActive(false)
-        } catch {
-            
-        }
-        
+        stop(immediate: true)
         let center = NotificationCenter.default
+        let session = AVAudioSession.sharedInstance()
         center.removeObserver(self, name: AVAudioSession.interruptionNotification, object: session)
     }
 }
