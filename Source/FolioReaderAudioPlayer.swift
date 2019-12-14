@@ -27,21 +27,17 @@ open class FolioReaderAudioPlayer: NSObject {
     var registeredCommands = false
     var completionHandler: () -> Void = {}
     var utteranceRate: Float = 0
-    private var isActivatedAudioSession = false
     
     fileprivate var book: FRBook
     fileprivate var folioReader: FolioReader
-    
+    private var isAudioSessionActivated = false
     // MARK: Init
     
     init(withFolioReader folioReader: FolioReader, book: FRBook) {
         self.book = book
         self.folioReader = folioReader
         super.init()
-    }
-    
-    deinit {
-        deactivateAudioSession()
+        updateNowPlayingInfo()
     }
     
     // MARK: Reading speed
@@ -112,7 +108,7 @@ open class FolioReaderAudioPlayer: NSObject {
     
     // MARK: Play, Pause, Stop controls
     
-    func stop(immediate: Bool = false) {
+    public func stop(immediate: Bool = false) {
         playing = false
         if !isTextToSpeech {
             if let player = player , player.isPlaying {
@@ -148,12 +144,10 @@ open class FolioReaderAudioPlayer: NSObject {
     
     @objc func play() {
         
-        if !isActivatedAudioSession {
+        if !isAudioSessionActivated {
             activateAudioSession()
-            isActivatedAudioSession = true
+            isAudioSessionActivated = true
         }
-        
-        updateNowPlayingInfo()
         
         if book.hasAudio {
             guard let webView = self.folioReader.readerCenter?.currentPage?.webView else { return }
@@ -554,36 +548,39 @@ fileprivate func convertFromAVAudioSessionCategory(_ input: AVAudioSession.Categ
     return input.rawValue
 }
 
-//MARK: - Audio Session
+// MARK: - Audio session
 extension FolioReaderAudioPlayer {
     
-    func activateAudioSession() {
+    public func activateAudioSession() {
+        
         let application = UIApplication.shared
         application.beginReceivingRemoteControlEvents()
+        
         let session = AVAudioSession.sharedInstance()
+        let center = NotificationCenter.default
+        center.addObserver(self, selector: #selector(pause), name: AVAudioSession.interruptionNotification, object: session)
+        
         do {
             try session.setCategory(.playback, mode: .default)
             try session.setActive(true)
         } catch {
             os_log("Failed to activate audio session", log: OSLog.default, type: .debug)
         }
-        
-        let center = NotificationCenter.default
-        center.addObserver(self, selector: #selector(pause), name: AVAudioSession.interruptionNotification, object: session)
     }
     
-    func deactivateAudioSession() {
-        stop(immediate: true)
+    public func deactivateAudioSession() {
         
         let application = UIApplication.shared
         application.endReceivingRemoteControlEvents()
+        
         let session = AVAudioSession.sharedInstance()
-        do { try session.setActive(false)
+        let center = NotificationCenter.default
+        center.addObserver(self, selector: #selector(pause), name: AVAudioSession.interruptionNotification, object: session)
+        
+        do {
+            try session.setActive(false)
         } catch {
             os_log("Failed to deactivate audio session", log: OSLog.default, type: .debug)
         }
-        
-        let center = NotificationCenter.default
-        center.removeObserver(self, name: AVAudioSession.interruptionNotification, object: session)
     }
 }

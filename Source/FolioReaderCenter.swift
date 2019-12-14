@@ -1276,7 +1276,6 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     // MARK: NavigationBar Actions
 
     @objc func closeReader(_ sender: UIBarButtonItem) {
-        readerContainer?.audioPlayer?.deactivateAudioSession()
         dismiss()
         folioReader.close()
     }
