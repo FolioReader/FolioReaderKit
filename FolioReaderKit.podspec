@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.social_media_url = 'https://twitter.com/hebertialmeida'
 
   s.swift_version = '4.2'
-  s.platform      = :ios, '9.0'
+  s.platform      = :ios, '10.0'
   s.requires_arc  = true
 
   s.source_files = [

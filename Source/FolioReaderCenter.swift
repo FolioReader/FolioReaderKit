@@ -474,7 +474,12 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         let jsTag = "<script type=\"text/javascript\" src=\"\(jsFilePath!)\"></script>" +
         "<script type=\"text/javascript\">setMediaOverlayStyleColors(\(mediaOverlayStyleColors))</script>"
 
-        let toInject = "\n\(cssTag)\n\(jsTag)\n</head>"
+        // Inject dynamic style
+        let overflow = cell.webView?.cssOverflowProperty ?? "scroll"
+        let htmlList = "html{overflow:\(overflow)}"
+        let styleTag = "<style type=\"text/css\">\(htmlList)</style>"
+
+        let toInject = "\n\(cssTag)\n\(jsTag)\n\(styleTag)\n</head>"
         html = html.replacingOccurrences(of: "</head>", with: toInject)
 
         // Font class name

@@ -6,13 +6,14 @@
 //  Copyright (c) 2016 Folio Reader. All rights reserved.
 //
 
-import UIKit
+import WebKit
 
 /// The custom WebView used in each page
-open class FolioReaderWebView: UIWebView {
+open class FolioReaderWebView: WKWebView {
     var isColors = false
     var isShare = false
     var isOneWord = false
+    fileprivate(set) var cssOverflowProperty = "scroll"
 
     fileprivate weak var readerContainer: FolioReaderContainer?
 
@@ -31,14 +32,12 @@ open class FolioReaderWebView: UIWebView {
         return readerContainer.folioReader
     }
 
-    override init(frame: CGRect) {
-        fatalError("use init(frame:readerConfig:book:) instead.")
-    }
-
     init(frame: CGRect, readerContainer: FolioReaderContainer) {
         self.readerContainer = readerContainer
 
-        super.init(frame: frame)
+        let configuration = WKWebViewConfiguration()
+        configuration.dataDetectorTypes = .link
+        super.init(frame: frame, configuration: configuration)
     }
 
     required public init?(coder aDecoder: NSCoder) {
@@ -347,9 +346,34 @@ open class FolioReaderWebView: UIWebView {
     // MARK: - Java Script Bridge
     
     @discardableResult open func js(_ script: String) -> String? {
-        let callback = self.stringByEvaluatingJavaScript(from: script)
-        if callback!.isEmpty { return nil }
+        var callback: String?
+        let semaphore = DispatchSemaphore(value: 0)
+        jsAsync(script) { result in
+            callback = result
+            semaphore.signal()
+        }
+        semaphore.wait(timeout: .now()+0.0001)
         return callback
+    }
+    
+    open func jsAsync(_ script: String, completion: ((String?) -> ())? = nil) {
+        evaluateJavaScript(script) { result, error in
+            let output: String?
+            if let result = result {
+                let stringResult = "\(result)"
+                if stringResult.isEmpty {
+                    output = nil
+                } else {
+                    output = stringResult
+                }
+            } else {
+                output = nil
+            }
+            if let error = error {
+                debugPrint("evaluateJavaScript returned an error:", error)
+            }
+            completion?(output)
+        }
     }
     
     // MARK: WebView
@@ -366,13 +390,12 @@ open class FolioReaderWebView: UIWebView {
         switch self.readerConfig.scrollDirection {
         case .vertical, .defaultVertical, .horizontalWithVerticalContent:
             scrollView.isPagingEnabled = false
-            paginationMode = .unpaginated
+            cssOverflowProperty = "scroll"
             scrollView.bounces = true
             break
         case .horizontal:
             scrollView.isPagingEnabled = true
-            paginationMode = .leftToRight
-            paginationBreakingMode = .page
+            cssOverflowProperty = "-webkit-paged-x"
             scrollView.bounces = false
             break
         }

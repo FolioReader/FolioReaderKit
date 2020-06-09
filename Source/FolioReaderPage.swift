@@ -9,6 +9,7 @@
 import UIKit
 import SafariServices
 import MenuItemKit
+import WebKit
 
 /// Protocol which is used from `FolioReaderPage`s.
 @objc public protocol FolioReaderPageDelegate: class {
@@ -35,7 +36,7 @@ import MenuItemKit
     @objc optional func pageTap(_ recognizer: UITapGestureRecognizer)
 }
 
-open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate {
+open class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIGestureRecognizerDelegate {
     weak var delegate: FolioReaderPageDelegate?
     weak var readerContainer: FolioReaderContainer?
 
@@ -80,13 +81,12 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         if webView == nil {
             webView = FolioReaderWebView(frame: webViewFrame(), readerContainer: readerContainer)
             webView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            webView?.dataDetectorTypes = .link
             webView?.scrollView.showsVerticalScrollIndicator = false
             webView?.scrollView.showsHorizontalScrollIndicator = false
             webView?.backgroundColor = .clear
             self.contentView.addSubview(webView!)
         }
-        webView?.delegate = self
+        webView?.navigationDelegate = self
 
         if colorView == nil {
             colorView = UIView()
@@ -110,7 +110,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
     deinit {
         webView?.scrollView.delegate = nil
-        webView?.delegate = nil
+        webView?.navigationDelegate = nil
         NotificationCenter.default.removeObserver(self)
     }
 
@@ -145,7 +145,8 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         let tempHtmlContent = htmlContentWithInsertHighlights(htmlContent)
         // Load the html into the webview
         webView?.alpha = 0
-        webView?.loadHTMLString(tempHtmlContent, baseURL: baseURL)
+        let viewportScale = "<meta name=\"viewport\" content=\"initial-scale=1.0\" />"
+        webView?.loadHTMLString(viewportScale + tempHtmlContent, baseURL: baseURL)
     }
 
     // MARK: - Highlights
@@ -187,9 +188,9 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         return tempHtmlContent as String
     }
 
-    // MARK: - UIWebView Delegate
+    // MARK: - WKNavigation Delegate
 
-    open func webViewDidFinishLoad(_ webView: UIWebView) {
+    open func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         guard let webView = webView as? FolioReaderWebView else {
             return
         }
@@ -225,7 +226,14 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         delegate?.pageDidLoad?(self)
     }
 
-    open func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebView.NavigationType) -> Bool {
+    open func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        let handledAction = handlePolicy(for: navigationAction)
+        let policy: WKNavigationActionPolicy = handledAction ? .allow : .cancel
+        decisionHandler(policy)
+    }
+
+    private func handlePolicy(for navigationAction: WKNavigationAction) -> Bool {
+        let request = navigationAction.request
         guard
             let webView = webView as? FolioReaderWebView,
             let scheme = request.url?.scheme else {
@@ -299,7 +307,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         } else if scheme == "mailto" {
             print("Email")
             return true
-        } else if url.absoluteString != "about:blank" && scheme.contains("http") && navigationType == .linkClicked {
+        } else if url.absoluteString != "about:blank" && scheme.contains("http") && navigationAction.navigationType == .linkActivated {
             let safariVC = SFSafariViewController(url: request.url!)
             safariVC.view.tintColor = self.readerConfig.tintColor
             self.folioReader.readerCenter?.present(safariVC, animated: true, completion: nil)
@@ -511,11 +519,12 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
 
         if (self.folioReader.nightMode == true) {
             // omit create webView and colorView
-            let script = "document.documentElement.offsetHeight"
-            let contentHeight = webView.stringByEvaluatingJavaScript(from: script)
-            let frameHeight = webView.frame.height
-            let lastPageHeight = frameHeight * CGFloat(webView.pageCount) - CGFloat(Double(contentHeight!)!)
-            colorView.frame = CGRect(x: webView.frame.width * CGFloat(webView.pageCount-1), y: webView.frame.height - lastPageHeight, width: webView.frame.width, height: lastPageHeight)
+            // let script = "document.documentElement.offsetHeight"
+            // let contentHeight = webView.stringByEvaluatingJavaScript(from: script)
+            // let frameHeight = webView.frame.height
+            // let lastPageHeight = frameHeight * CGFloat(webView.pageCount) - CGFloat(Double(contentHeight!)!)
+            // colorView.frame = CGRect(x: webView.frame.width * CGFloat(webView.pageCount-1), y: webView.frame.height - lastPageHeight, width: webView.frame.width, height: lastPageHeight)
+            colorView.frame = CGRect.zero
         } else {
             colorView.frame = CGRect.zero
         }
