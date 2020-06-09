@@ -653,18 +653,13 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         }
 
         scrollScrubber?.setSliderVal()
-
-        if let readingTime = currentPage.webView?.js("getReadingTime()") {
-            pageIndicatorView?.totalMinutes = Int(readingTime)!
-        } else {
-            pageIndicatorView?.totalMinutes = 0
+        currentPage.webView?.js("getReadingTime()") { readingTime in
+            self.pageIndicatorView?.totalMinutes = Int(readingTime ?? "0")!
+            self.pagesForCurrentPage(currentPage)
+            self.delegate?.pageDidAppear?(currentPage)
+            self.delegate?.pageItemChanged?(self.getCurrentPageItemNumber())
+            completion?()
         }
-        pagesForCurrentPage(currentPage)
-
-        delegate?.pageDidAppear?(currentPage)
-        delegate?.pageItemChanged?(self.getCurrentPageItemNumber())
-        
-        completion?()
     }
 
     func pagesForCurrentPage(_ page: FolioReaderPage?) {
@@ -1080,9 +1075,10 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     @objc func shareChapter(_ sender: UIBarButtonItem) {
         guard let currentPage = currentPage else { return }
 
-        if let chapterText = currentPage.webView?.js("getBodyText()") {
+        currentPage.webView?.js("getBodyText()") { chapterText in
+            guard let chapterText = chapterText else { return }
             let htmlText = chapterText.replacingOccurrences(of: "[\\n\\r]+", with: "<br />", options: .regularExpression)
-            var subject = readerConfig.localizedShareChapterSubject
+            var subject = self.readerConfig.localizedShareChapterSubject
             var html = ""
             var text = ""
             var bookTitle = ""
@@ -1097,7 +1093,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             }
 
             // Get chapter name
-            if let chapter = getCurrentChapterName() {
+            if let chapter = self.getCurrentChapterName() {
                 chapterName = chapter
             }
 
@@ -1109,17 +1105,17 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             // Sharing html and text
             html = "<html><body>"
             html += "<br /><hr> <p>\(htmlText)</p> <hr><br />"
-            html += "<center><p style=\"color:gray\">"+readerConfig.localizedShareAllExcerptsFrom+"</p>"
+            html += "<center><p style=\"color:gray\">"+self.readerConfig.localizedShareAllExcerptsFrom+"</p>"
             html += "<b>\(bookTitle)</b><br />"
-            html += readerConfig.localizedShareBy+" <i>\(authorName)</i><br />"
-
-            if let bookShareLink = readerConfig.localizedShareWebLink {
+            html += self.readerConfig.localizedShareBy+" <i>\(authorName)</i><br />"
+            
+            if let bookShareLink = self.readerConfig.localizedShareWebLink {
                 html += "<a href=\"\(bookShareLink.absoluteString)\">\(bookShareLink.absoluteString)</a>"
                 shareItems.append(bookShareLink as AnyObject)
             }
 
             html += "</center></body></html>"
-            text = "\(chapterName)\n\n“\(chapterText)” \n\n\(bookTitle) \n\(readerConfig.localizedShareBy) \(authorName)"
+            text = "\(chapterName)\n\n“\(chapterText)” \n\n\(bookTitle) \n\(self.readerConfig.localizedShareBy) \(authorName)"
 
             let act = FolioReaderSharingProvider(subject: subject, text: text, html: html)
             shareItems.insert(contentsOf: [act, "" as AnyObject], at: 0)
@@ -1132,7 +1128,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
                 actv.barButtonItem = sender
             }
 
-            present(activityViewController, animated: true, completion: nil)
+           self.present(activityViewController, animated: true, completion: nil)
         }
     }
 
