@@ -376,8 +376,13 @@ open class FolioReaderWebView: WKWebView {
             } else {
                 output = nil
             }
-            if let error = error {
-                debugPrint("evaluateJavaScript returned an error:", error)
+            if  let nsError = error as? NSError,
+                let url = nsError.userInfo["WKJavaScriptExceptionSourceURL"] as? NSURL,
+                url.absoluteString == "undefined"
+            {
+                // skip debugPrint - html hasn't loaded yet
+            } else if let error = error {
+                debugPrint("evaluateJavaScript(\(script)) returned an error:", error)
             }
             completion?(output)
         }

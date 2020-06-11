@@ -465,21 +465,21 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
             return cell
         }
 
-        let mediaOverlayStyleColors = "\"\(self.readerConfig.mediaOverlayColor.hexString(false))\", \"\(self.readerConfig.mediaOverlayColor.highlightColor().hexString(false))\""
-
         // Inject CSS
-        let jsFilePath = Bundle.frameworkBundle().path(forResource: "Bridge", ofType: "js")
         let cssFilePath = Bundle.frameworkBundle().path(forResource: "Style", ofType: "css")
         let cssTag = "<link rel=\"stylesheet\" type=\"text/css\" href=\"\(cssFilePath!)\">"
-        let jsTag = "<script type=\"text/javascript\" src=\"\(jsFilePath!)\"></script>" +
-        "<script type=\"text/javascript\">setMediaOverlayStyleColors(\(mediaOverlayStyleColors))</script>"
+
+        // Inject JavaScript
+        FolioReaderScript.bridgeJS.addIfNeeded(to: cell.webView)
+        let mediaOverlayScript = FolioReaderScript.mediaOverlayStyleColors(from: readerConfig.mediaOverlayColor)
+        mediaOverlayScript.addIfNeeded(to: cell.webView)
 
         // Inject dynamic style
         let overflow = cell.webView?.cssOverflowProperty ?? "scroll"
         let htmlList = "html{overflow:\(overflow)}"
         let styleTag = "<style type=\"text/css\">\(htmlList)</style>"
 
-        let toInject = "\n\(cssTag)\n\(jsTag)\n\(styleTag)\n</head>"
+        let toInject = "\n\(cssTag)\n\(styleTag)\n</head>"
         html = html.replacingOccurrences(of: "</head>", with: toInject)
 
         // Font class name
