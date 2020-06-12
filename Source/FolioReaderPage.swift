@@ -196,6 +196,12 @@ open class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIGestur
         }
 
         delegate?.pageWillLoad?(self)
+    }
+
+    open func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        guard let webView = webView as? FolioReaderWebView else {
+            return
+        }
 
         // Add the custom class based onClick listener
         self.setupClassBasedOnClickListeners()
@@ -222,8 +228,9 @@ open class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIGestur
             webView.isColors = false
             self.webView?.createMenu(options: false)
         })
-
-        delegate?.pageDidLoad?(self)
+        webView.js("document.readyState") { _ in
+            self.delegate?.pageDidLoad?(self)
+        }
     }
 
     open func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
