@@ -469,21 +469,7 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
         // Inject viewport
         let viewportTag = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, shrink-to-fit=no\">"
 
-        // Inject CSS
-        let cssFilePath = Bundle.frameworkBundle().path(forResource: "Style", ofType: "css")
-        let cssTag = "<link rel=\"stylesheet\" type=\"text/css\" href=\"\(cssFilePath!)\">"
-
-        // Inject JavaScript
-        FolioReaderScript.bridgeJS.addIfNeeded(to: cell.webView)
-        let mediaOverlayScript = FolioReaderScript.mediaOverlayStyleColors(from: readerConfig.mediaOverlayColor)
-        mediaOverlayScript.addIfNeeded(to: cell.webView)
-
-        // Inject dynamic style
-        let overflow = cell.webView?.cssOverflowProperty ?? "scroll"
-        let htmlList = "html{overflow:\(overflow)}"
-        let styleTag = "<style type=\"text/css\">\(htmlList)</style>"
-
-        let toInject = "\n\(viewportTag)\n\(cssTag)\n\(styleTag)\n</head>"
+        let toInject = "\n\(viewportTag)\n</head>"
         html = html.replacingOccurrences(of: "</head>", with: toInject)
 
         // Font class name

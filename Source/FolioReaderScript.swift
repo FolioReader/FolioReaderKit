@@ -12,8 +12,8 @@ class FolioReaderScript: WKUserScript {
     
     init(source: String) {
         super.init(source: source,
-                   injectionTime: .atDocumentStart,
-                   forMainFrameOnly: false)
+                   injectionTime: .atDocumentEnd,
+                   forMainFrameOnly: true)
     }
     
     static let bridgeJS: FolioReaderScript = {
@@ -22,10 +22,26 @@ class FolioReaderScript: WKUserScript {
         return FolioReaderScript(source: jsSource)
     }()
     
-    static func mediaOverlayStyleColors(from color: UIColor) -> FolioReaderScript {
-        let colors = "\"\(color.hexString(false))\", \"\(color.highlightColor().hexString(false))\""
-        let scriptSource = "setMediaOverlayStyleColors(\(colors))"
-        return FolioReaderScript(source: scriptSource)
+    static let cssInjection: FolioReaderScript = {
+        let cssURL = Bundle.frameworkBundle().url(forResource: "Style", withExtension: "css")!
+        let cssString = try! String(contentsOf: cssURL)
+        return FolioReaderScript(source: cssInjectionSource(for: cssString))
+    }()
+    
+    static func cssInjection(overflow: String) -> FolioReaderScript {
+        let cssString = "html{overflow:\(overflow)}"
+        return FolioReaderScript(source: cssInjectionSource(for: cssString))
+    }
+    
+    private static func cssInjectionSource(for content: String) -> String {
+        let oneLineContent = content.components(separatedBy: .newlines).joined()
+        let source = """
+        var style = document.createElement('style');
+        style.type = 'text/css'
+        style.innerHTML = '\(oneLineContent)';
+        document.head.appendChild(style);
+        """
+        return source
     }
     
 }

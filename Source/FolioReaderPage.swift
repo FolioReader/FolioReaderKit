@@ -230,6 +230,9 @@ open class FolioReaderPage: UICollectionViewCell, WKNavigationDelegate, UIGestur
         webView.js("document.readyState") { _ in
             self.delegate?.pageDidLoad?(self)
         }
+        let overlayColor = readerConfig.mediaOverlayColor!
+        let colors = "\"\(overlayColor.hexString(false))\", \"\(overlayColor.highlightColor().hexString(false))\""
+        webView.js("setMediaOverlayStyleColors(\(colors))")
     }
 
     open func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {

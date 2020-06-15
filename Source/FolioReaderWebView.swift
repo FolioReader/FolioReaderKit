@@ -15,7 +15,12 @@ open class FolioReaderWebView: WKWebView {
     var isColors = false
     var isShare = false
     var isOneWord = false
-    fileprivate(set) var cssOverflowProperty = "scroll"
+    
+    fileprivate(set) var cssOverflowProperty = "scroll" {
+        didSet {
+            FolioReaderScript.cssInjection(overflow: cssOverflowProperty).addIfNeeded(to: self)
+        }
+    }
 
     fileprivate weak var readerContainer: FolioReaderContainer?
 
@@ -40,6 +45,8 @@ open class FolioReaderWebView: WKWebView {
         let configuration = WKWebViewConfiguration()
         configuration.dataDetectorTypes = .link
         super.init(frame: frame, configuration: configuration)
+        FolioReaderScript.cssInjection.addIfNeeded(to: self)
+        FolioReaderScript.bridgeJS.addIfNeeded(to: self)
     }
 
     required public init?(coder aDecoder: NSCoder) {
