@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "FolioReaderKit"
-  s.version          = "1.4.0"
+  s.version          = "1.4.1"
   s.summary          = "A Swift ePub reader and parser framework for iOS."
   s.description  = <<-DESC
                    Written in Swift.

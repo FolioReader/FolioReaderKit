@@ -1,6 +1,6 @@
 PODS:
   - AEXML (4.3.3)
-  - FolioReaderKit (1.4.0):
+  - FolioReaderKit (1.4.1):
     - AEXML (= 4.3.3)
     - FontBlaster (= 4.1.0)
     - MenuItemKit (= 3.1.3)
