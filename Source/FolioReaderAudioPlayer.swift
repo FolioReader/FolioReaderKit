@@ -514,36 +514,37 @@ open class FolioReaderAudioPlayer: NSObject {
     func registerCommandsIfNeeded() {
 
         guard !registeredCommands else { return }
-
         let command = MPRemoteCommandCenter.shared()
+        command.previousTrackCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+            return .success
+        }
         command.previousTrackCommand.isEnabled = true
-        command.previousTrackCommand.addTarget(handler: { (event) in
-            self.playPrevChapter()
-            return MPRemoteCommandHandlerStatus.success}
-        )
 
-        command.nextTrackCommand.isEnabled = true
         command.nextTrackCommand.addTarget(handler: { (event) in
             self.playNextChapter()
             return MPRemoteCommandHandlerStatus.success}
         )
+        command.nextTrackCommand.isEnabled = true
 
-        command.pauseCommand.isEnabled = true
+
         command.pauseCommand.addTarget(handler: { (event) in
             self.pause()
             return MPRemoteCommandHandlerStatus.success}
         )
+        command.pauseCommand.isEnabled = true
 
-        command.playCommand.isEnabled = true
         command.playCommand.addTarget(handler: { (event) in
             self.play()
             return MPRemoteCommandHandlerStatus.success}
         )
-        command.togglePlayPauseCommand.isEnabled = true
+        command.playCommand.isEnabled = true
+
+
         command.togglePlayPauseCommand.addTarget(handler: { (event) in
             self.togglePlay()
             return MPRemoteCommandHandlerStatus.success}
         )
+        command.togglePlayPauseCommand.isEnabled = true
         registeredCommands = true
     }
 }
