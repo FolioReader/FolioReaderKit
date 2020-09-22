@@ -90,7 +90,7 @@ extension Highlight {
         do {
             let realm = try Realm(configuration: readerConfig.realmConfiguration)
             realm.beginWrite()
-            realm.add(self, update: true)
+            realm.add(self, update: .all)
             try realm.commitWrite()
             completion?(nil)
         } catch let error as NSError {
